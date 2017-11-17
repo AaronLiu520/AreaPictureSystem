@@ -1,0 +1,152 @@
+﻿@charset "utf-8";
+/* CSS Document */
+*{ font-size: 9pt; border:0; margin:0; padding:0;}
+a{text-decoration:none;color:#000000;}
+
+body{background:#F4F4F4;}
+
+/* 列表工具 */
+.mainheader{width:100%;height:26px; line-height:26px;overflow:hidden;margin:5px;}
+.mainheader ul{list-style:none outside none;overflow:hidden;}
+.mainheader ul li{
+	list-style:none outside none;
+	float:left;
+	border-radius: 5px 5px 5px 5px;  
+	background-repeat: repeat-x;
+	color: #444;  
+	background: transparent;  
+	border: 0;  
+	filter: none;  
+	text-decoration: none;
+	display: inline-block;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	cursor: pointer;
+	outline: none;
+	text-align: center;
+	vertical-align: middle;
+}
+.mainheader ul li.mainheader-tools:hover{	
+	background:#eaf2ff;
+	border:1px solid #95b8e7;
+}
+.mainheader-tools-button{
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	vertical-align: top;
+}
+.tools-separator{
+	float: left;
+	height: 20px;
+	border-left: 1px solid #ccc;
+	border-right: 1px solid #fff;
+	margin: 2px 1px;
+}
+.mainheader-tools-button .tools-text{
+	display: inline-block;
+	vertical-align: top;
+	width: auto;
+	line-height: 24px;
+	font-size: 12px;
+	padding: 0;
+	margin: 0 4px 0 24px;
+}
+.tools-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  line-height: 16px;
+  position: absolute;
+  top: 50%;
+  margin-top: -8px;
+  font-size: 1px;
+  left: 4px;
+}
+.icon-add {
+	background: url('../../images/admin/add.png') no-repeat center center;
+}
+.icon-cut {
+	background: url('../../images/admin/cut.png') no-repeat center center;
+}
+.icon-save {
+	background: url('../../images/admin/save.png') no-repeat center center;
+}
+
+.grid-serial{
+	width:26px;
+	overflow: hidden;	
+}
+.grid{
+	color: #000000;
+	border-width: 1px;
+	border-collapse: separate;
+	width:100%;
+}
+.grid tbody td,.grid theader th {
+	border-width: 0 1px 1px 0;
+	border:1px solid #cccccc;
+	margin: 0;
+	padding: 0;  
+	height:26px;
+
+}
+.grid .grid-cell{
+	height:auto;
+	width:100%;
+	margin:2px;
+	
+}
+.grid .cell{
+	background:#ffffff;
+}
+.grid  tfoot{
+	height:34px;
+}
+.grid  tfoot td{
+	
+	height:34px;
+}
+/* Pager */
+.grid .page-list{ width:100%; height:30px;}
+.grid .page-list a
+{
+    margin-left:5px;
+    color:#0063dc;
+    border:1px solid #cccccc;
+    display:block;
+    width:auto;
+    height:22px;
+    padding:0px 3px 0px 3px;
+    min-width:16px;
+    float:left;
+    text-align:center;
+    line-height:22px;
+    text-decoration:none;
+    font-size:12px;
+}
+    
+.grid .page-list a:hover
+{
+    color:#ff6600;
+    border:1px solid #ff6600;
+    text-decoration:none;
+    }
+    
+.grid .page-list .current
+{
+    color:#ff6600;
+    background-color:#ffeee5;
+    border:1px solid #ff6600;
+    font-weight:700;
+}
+    
+    
+.grid .page-list .disabled
+{
+    color:#929598;
+    border:1px solid #cccccc;
+}

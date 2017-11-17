@@ -1,0 +1,10 @@
+-------------------------------------------------------------------------------
+Test set: org.cored.admin.action.AppTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.261 sec <<< FAILURE!
+testCreateIndex(org.cored.admin.action.AppTest)  Time elapsed: 0.243 sec  <<< ERROR!
+java.lang.NullPointerException
+	at org.apache.lucene.index.IndexWriter.<init>(IndexWriter.java:778)
+	at org.app.admin.lucene.Lucene.createIndex(Lucene.java:76)
+	at org.cored.admin.action.AppTest.testCreateIndex(AppTest.java:45)
+

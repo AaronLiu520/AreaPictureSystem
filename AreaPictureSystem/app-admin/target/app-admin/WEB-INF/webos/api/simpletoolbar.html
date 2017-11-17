@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>DataGrid with Toolbar - jQuery EasyUI Demo</title>
+	<link rel="stylesheet" type="text/css" href="../plugin/easyui/themes/default/easyui.css">
+	<link rel="stylesheet" type="text/css" href="../plugin/easyui/themes/icon.css">
+	<link rel="stylesheet" type="text/css" href="../plugin/easyui/demo.css">
+	<script type="text/javascript" src="../js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript" src="../plugin/easyui/jquery.easyui.min.js"></script>
+</head>
+<body>
+	<table class="easyui-datagrid" title="DataGrid with Toolbar" style="width:740px;height:368px"
+			data-options="rownumbers:true,singleSelect:true,autoRowHeight:false,iconCls:'icon-ok',pagination:true,pageSize:10,toolbar:toolbar">
+		<thead>
+			<tr>
+				<th data-options="field:'inv',width:80">inv</th>
+				<th data-options="field:'date',width:100">date</th>
+				<th data-options="field:'name',width:80,align:'right'">name</th>
+				<th data-options="field:'amount',width:80,align:'right'">amount</th>
+				<th data-options="field:'price',width:240">price</th>
+				<th data-options="field:'cost',width:60,align:'center'">cost</th>
+				<th data-options="field:'note',width:60,align:'center'">note</th>
+			</tr>
+		</thead>
+	</table>
+	<script type="text/javascript">
+		var toolbar = [{
+			text:'新增',
+			iconCls:'icon-add',
+			handler:function(){alert('新增')}
+		},{
+			text:'编辑',
+			iconCls:'database_edit',
+			handler:function(){alert('编辑')}
+		},'-',{
+			text:'保存',
+			iconCls:'disk_black',
+			handler:function(){alert('保存')}
+		}];
+		
+		function getData(){
+			var rows = [];
+			for(var i=1; i<=800; i++){
+				var amount = Math.floor(Math.random()*1000);
+				var price = Math.floor(Math.random()*1000);
+				rows.push({
+					inv: 'Inv No '+i,
+					date: $.fn.datebox.defaults.formatter(new Date()),
+					name: 'Name '+i,
+					amount: amount,
+					price: price,
+					cost: amount*price,
+					note: 'Note '+i
+				});
+			}
+			return rows;
+		}
+		
+		function pagerFilter(data){
+			if (typeof data.length == 'number' && typeof data.splice == 'function'){	// is array
+				data = {
+					total: data.length,
+					rows: data
+				}
+			}
+			var dg = $(this);
+			var opts = dg.datagrid('options');
+			var pager = dg.datagrid('getPager');
+			pager.pagination({
+				onSelectPage:function(pageNum, pageSize){
+					opts.pageNumber = pageNum;
+					opts.pageSize = pageSize;
+					pager.pagination('refresh',{
+						pageNumber:pageNum,
+						pageSize:pageSize
+					});
+					dg.datagrid('loadData',data);
+				}
+			});
+			if (!data.originalRows){
+				data.originalRows = (data.rows);
+			}
+			var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+			var end = start + parseInt(opts.pageSize);
+			data.rows = (data.originalRows.slice(start, end));
+			return data;
+		}
+		
+		$(document).ready(function(e){
+			$('.easyui-datagrid').datagrid({loadFilter:pagerFilter}).datagrid('loadData', getData());
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+﻿@charset "utf-8";
+/* CSS Document */
+*{ font-size: 9pt; border:0; margin:0; padding:0;}
+a{text-decoration:none;color:#000000;}
+
+body{margin:5px;}
+
+/* 标题导航 */
+.mainheader{width:100%;height:42px; line-height:42px;overflow:hidden;}
+.mainheader ul{list-style:none outside none;overflow:hidden;}
+.mainheader ul li{list-style:none outside none;float:left;height:18px;width:auto;line-height:18px;vertical-align:middle;margin-right:10px;padding-right:10px;}
+.mainheader ul li.start{width:auto;height:18px;border-right:1px solid #cad5e3;}
+.mainheader ul li.sitemap{background:url(../images/admin/arrow.png) 100% 6px no-repeat;}
+.mainheader ul li a{color:#3083eb;}
+.mainheader ul li.currentpath{color:#7c87a5}
+
+/* 内容 桌面图标 */
+.mainbody{ width:100%;height:auto;margin-right:80px;overflow:hidden;background-image:url('');}
+.mainbody ul{ list-style:none outside none; overflow:hidden;width:100%;height:auto;}
+.mainbody ul li{ width:86px;height:88px; cursor:pointer; overflow:hidden;float:left;}
+.mainbody ul li:hover{ background: url(../images/admin/disk_shortcut_hover.png) no-repeat center center;}
+.mainbody ul li.active{ background: url(../images/admin/disk_shortcut_hover.png) no-repeat center center;}
+.mainbody ul li span{display:block;}
+.mainbody ul li .icon{width: 80px;  height: 50px;  margin: 5px auto;}
+.mainbody ul li .icon img {  width: 50px;  height: 50px; margin-left:12px;}
+.mainbody ul li .text{  display: inline-block;  width: 100%;  height: 22px;  line-height: 22px; text-align: center;  color: #000000;}
