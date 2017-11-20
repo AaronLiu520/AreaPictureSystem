@@ -11,14 +11,7 @@
   <artifactId>app-admin-action</artifactId>
   <name>app-admin-action</name>
   <url>http://maven.apache.org</url>
-<<<<<<< HEAD
-  
-  
-  
-  
-=======
 
->>>>>>> 5e81d51cbcbbd1e8a4b37e8dcb2521288e0189f4
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
