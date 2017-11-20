@@ -8,8 +8,8 @@
     <version>${product.version}</version>
   </parent>
   
-  <artifactId>app_admin_pojo</artifactId>
-  <name>app_admin_pojo</name>
+  <artifactId>app-admin-pojo</artifactId>
+  <name>app-admin-pojo</name>
 
   
   <dependencies>

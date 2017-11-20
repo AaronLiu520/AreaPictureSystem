@@ -35,7 +35,7 @@
     
       <dependency>
 		<groupId>org.cored</groupId>
-		<artifactId>app_admin_pojo</artifactId>
+		<artifactId>app-admin-pojo</artifactId>
 		<version>${product.version}</version>
 	</dependency>
 	

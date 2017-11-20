@@ -21,17 +21,12 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
  * 
  * @category
  * 登录时候的拦截器
+ * @author aaron
  * 
  */
 public class LoginInterceptor extends HandlerInterceptorAdapter {
-	private static final Logger LOG = LoggerFactory
-			.getLogger(LoginInterceptor.class);
-	 
-	static String areaAddress;
-	
-	static{
-	}
-	
+
+	private static final Logger LOG = LoggerFactory.getLogger(LoginInterceptor.class);
 
 	/**
 	 * 在Controller方法前进行拦截<br>
@@ -44,18 +39,23 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	 */
 
 	@Override
-	public boolean preHandle(HttpServletRequest request,
-			HttpServletResponse response, Object handler) throws Exception {
+	public boolean preHandle(HttpServletRequest request,HttpServletResponse response, Object handler) throws Exception {
+
 		String url = request.getRequestURL().toString();
 		LOG.info("app-admin 请求:" + url);
-//		LOG.info("访问者IPss：" + request.getRemoteAddr());
-//		LOG.info("访问者IP：" + request.getRemoteAddr());
+		/**
+		LOG.info("访问者IPss：" + request.getRemoteAddr());
+		LOG.info("访问者IP：" + request.getRemoteAddr());**/
 		HttpSession session = request.getSession();
-		//菜单（选中），Cookie
+
+		//Menu Check，Cookie
 		if(request.getParameter("activeMenu")!=null && !request.getParameter("activeMenu").equals("")){
+			LOG.info("菜单ID ："+request.getParameter("activeMenu"));
+
 			Cookie cookie = new Cookie("activeMenuCookie", request.getParameter("activeMenu"));
 			response.addCookie(cookie);
 		}
+
 		//检查用户是否登录过.
 		if (session.getAttribute(CommonEnum.USERSESSION) != null) {
 			return true;
