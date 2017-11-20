@@ -86,8 +86,8 @@ background-color:blue;
                     </li>
 
                   <c:forEach items="${listMenu}" var="item" varStatus="status">
-                   <!-- 一级菜单，根目录   updateFormValue(id,name,type,icon,url,orderby,remark,pid)-->
 
+                   <!-- 一级菜单，根目录   updateFormValue(id,name,type,icon,url,orderby,remark,pid)-->
                     <c:if test="${item.pid == '0'}">
                     	<c:choose>
                    			<c:when test="${item.type == 'HaveMenu'}"><!-- 有子菜单 -->

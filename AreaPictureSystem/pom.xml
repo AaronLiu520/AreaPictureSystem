@@ -19,9 +19,9 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<!-- Spring -->
-		<spring-framework.version>4.1.1.RELEASE</spring-framework.version>
+		<spring.framework.version>4.1.1.RELEASE</spring.framework.version>
 		<!-- Logging -->
-		<org.slf4j-version>1.6.6</org.slf4j-version>
+		<org.slf4j.version>1.6.6</org.slf4j.version>
 		<!-- Test -->
 		<junit.version>4.11</junit.version>
 	</properties>
@@ -35,4 +35,5 @@
   	<module>app-FileSystem-pojo</module>
   	<module>app-FileSystem-action</module>
   </modules>
+
 </project>

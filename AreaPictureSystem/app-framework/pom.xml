@@ -5,14 +5,13 @@
 	<parent>
     	<groupId>org.cored</groupId>
     	<artifactId>CoredAdmin</artifactId>
-    	<version>${product.version}</version>
+		<version>${product.version}</version>
  	 </parent>
-
-
 
   <artifactId>app-framework</artifactId>
   <packaging>jar</packaging>
   <name>app-framework</name>
+
   
 
   <properties>
@@ -29,7 +28,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${spring-framework.version}</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 	<dependency>
 			<groupId>com.alibaba</groupId>
@@ -39,18 +38,18 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>${spring-framework.version}</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-aop</artifactId>
-			<version>${spring-framework.version}</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
-			<version>${spring-framework.version}</version>
+			<version>${spring.framework.version}</version>
 		</dependency>
 		
 		<!-- mongodb java driver -->
@@ -69,7 +68,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>${spring-framework.version}</version>
+			<version>${spring.framework.version}</version>
 			<scope>test</scope>
 		</dependency>
 		

@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.cored</groupId>
     <artifactId>CoredAdmin</artifactId>
-    <version>${product.version}</version>
+	  <version>${product.version}</version>
   </parent>
   
-  <artifactId>app_admin_pojo</artifactId>
-  <name>app_admin_pojo</name>
+  <artifactId>app-admin-pojo</artifactId>
+  <name>app-admin-pojo</name>
 
   
   <dependencies>
@@ -36,7 +36,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>${org.slf4j-version}</version>
+			<version>${org.slf4j.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 
