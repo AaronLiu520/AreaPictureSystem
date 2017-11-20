@@ -32,5 +32,9 @@ public class Label extends GeneralBean {
 	public void setCompanyid(String companyid) {
 		this.companyid = companyid;
 	}
+	@Override
+	public String toString() {
+		return "Label [labelName=" + labelName + ", userid=" + userid + ", companyid=" + companyid + "]";
+	}
      
 }
