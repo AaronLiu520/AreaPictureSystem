@@ -1,2 +1,13 @@
 target
+.classpath
+.settings
+*.class
+.gitignore
 test
+.settings/
+*.war
+*.ear
+target/
+.project
+*.ipr
+*.iml

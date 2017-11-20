@@ -3,8 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:p="http://www.springframework.org/schema/p"
-	 xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
  		http://www.springframework.org/schema/aop 
@@ -26,7 +25,7 @@
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
-	
+
 
 	<!-- 启动springMVC的注解功能，他会自动注册HandlerMapping,HandlerAdapter,ExceptionResolver的相关实例 -->
 	<mvc:annotation-driven>
@@ -49,39 +48,39 @@
 			</list>
 		</property>
 	</bean>
-	<!--由于web.xml中设置是由springMVC拦截所有请求，于是在读取静态资源文件的时候就会受到影响（说白了就是读不到） 
-	经过下面的配置，该标签的作用就是所有页面中引用/css/**的资源，都会从/resources/styles/ 
+	<!--由于web.xml中设置是由springMVC拦截所有请求，于是在读取静态资源文件的时候就会受到影响（说白了就是读不到） 经过下面的配置，该标签的作用就是所有页面中引用/css/**的资源，都会从/resources/styles/ 
 		里面查找 -->
 	<mvc:resources mapping="/assets/**" location="/WEB-INF/assets/" />
-	<!--
-	<mvc:resources mapping="/files/**" location="/WEB-INF/files/" />
-	<mvc:resources mapping="/uploadmr/**" location="/WEB-INF/uploadmr/" />-->
+	<!-- <mvc:resources mapping="/files/**" location="/WEB-INF/files/" /> <mvc:resources 
+		mapping="/uploadmr/**" location="/WEB-INF/uploadmr/" /> -->
 	<!-- 拦截器 -->
 
 	<!-- 多个拦截器,顺序执行 -->
 	<!-- 如果不配置或/*,将拦截所有的Controller -->
-	<mvc:interceptors> 
+	<mvc:interceptors>
 		<mvc:interceptor>
 			<mvc:mapping path="/*/**" />
 			<mvc:mapping path="/*" />
-		<mvc:exclude-mapping path="/web/**" />
-		<mvc:exclude-mapping path="/files/**" />
-		<mvc:exclude-mapping path="/uploadmr/**" />
-		<mvc:exclude-mapping path="/adminUser/login" /><!-- 访问登录页面 -->
-		<mvc:exclude-mapping path="/adminUser/checkLogin" /><!-- 登录 -->
-		
-		<mvc:exclude-mapping path="/public/top.jsp" />
-		<mvc:exclude-mapping path="/public/left.jsp" />
+			<mvc:exclude-mapping path="/web/**" />
+			<mvc:exclude-mapping path="/files/**" />
+			<mvc:exclude-mapping path="/uploadmr/**" />
+			<mvc:exclude-mapping path="/adminUser/login" /><!-- 
+				访问登录页面 -->
+			<mvc:exclude-mapping path="/adminUser/checkLogin" /><!-- 
+				登录 -->
+
+			<mvc:exclude-mapping path="/public/top.jsp" />
+			<mvc:exclude-mapping path="/public/left.jsp" />
 			<bean class="org.app.admin.interceptor.LoginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-	
-	
-<bean id="viewResolver"
+
+
+	<bean id="viewResolver"
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver"
 		p:prefix="/WEB-INF/" p:suffix=".jsp" />
 	<!-- 文件上传 -->
-		<!-- 文件上传 -->
+	<!-- 文件上传 -->
 	<bean id="multipartResolver"
 		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!-- set the max upload size 100M -->
@@ -92,10 +91,10 @@
 			<value>1024000</value>
 		</property>
 	</bean>
-	
-	
-	
-	
-	
+
+
+
+
+
 </beans>
 
