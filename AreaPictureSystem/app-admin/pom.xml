@@ -65,10 +65,13 @@
 
 	</build>
 
+<<<<<<< HEAD
 
 
 <!--
   <build>
     <finalName>app-admin</finalName>
   </build>-->
+=======
+>>>>>>> a9f63fa1b6847cb76cea080b52ff2c07380768e3
 </project>
