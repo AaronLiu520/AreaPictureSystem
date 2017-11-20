@@ -8,10 +8,14 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
 <<<<<<< HEAD
+<<<<<<< HEAD
         <dependent-module archiveName="app-admin-pojo-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app_admin_pojo/app_admin_pojo">
 =======
         <dependent-module archiveName="app-admin-pojo-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app-admin-pojo/app-admin-pojo">
 >>>>>>> 63c7e4334cc111d239e4196a17d0a6368c06a17d
+=======
+        <dependent-module archiveName="app-admin-pojo-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app-admin-pojo/app-admin-pojo">
+>>>>>>> 2cfbd8f80888de10f06b1691fbd55bb6eba037b1
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="app-framework-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app-framework/app-framework">

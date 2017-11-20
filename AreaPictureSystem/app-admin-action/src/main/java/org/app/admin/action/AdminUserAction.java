@@ -59,6 +59,8 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public ModelAndView editor(HttpSession session,String id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/user/editor");
+
+
 		try {
 			if(id!=null && id!=""){
 				modelAndView.addObject("bean",this.adminUserService.findOneById(id, AdminUser.class));
@@ -99,6 +101,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public ModelAndView checkLogin(HttpSession session,String username,String password) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/index");
+		session.removeAttribute(CommonEnum.WEBMENUSESSION);
 		try {
 			//检查帐号登录
 			//AdminUser au=this.adminUserService.findOneByQuery(super.craeteQueryWhere("username",username,"password",password), AdminUser.class);
@@ -110,6 +113,10 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 				AdminRole ar=this.adminRoleService.findOneById("595c93f777c8267be0b18969",AdminRole.class);
 				session.setAttribute("listMenu",ar.getListMenu());
 				modelAndView.addObject("listMenu",ar.getListMenu());
+				AdminUser au=new AdminUser();
+				au.setName("Aaron");
+				session.setAttribute(CommonEnum.USERSESSION, au);
+
 			//}else{
 				//返回到登录。对应跟目录地址
 				//modelAndView.setViewName("redirect:/adminUser/login");
@@ -131,7 +138,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 		ModelAndView modelAndView = new ModelAndView();
 		//重定向到登录页面。
-		modelAndView.setViewName("redirect:/userAdmin/login");
+		modelAndView.setViewName("redirect:/adminUser/login");
 		//注销session(后台登录）
 		session.removeAttribute(CommonEnum.USERSESSION);
 
