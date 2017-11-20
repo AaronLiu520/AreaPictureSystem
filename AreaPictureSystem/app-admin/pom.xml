@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.cored</groupId>
     <artifactId>CoredAdmin</artifactId>
-    <version>${product.version}</version>
+	  <version>${product.version}</version>
   </parent>
   <artifactId>app-admin</artifactId>
   <packaging>war</packaging>
@@ -65,13 +66,4 @@
 
 	</build>
 
-<<<<<<< HEAD
-
-
-<!--
-  <build>
-    <finalName>app-admin</finalName>
-  </build>-->
-=======
->>>>>>> a9f63fa1b6847cb76cea080b52ff2c07380768e3
 </project>
