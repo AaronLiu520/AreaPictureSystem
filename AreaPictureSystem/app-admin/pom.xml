@@ -65,10 +65,4 @@
 
 	</build>
 
-
-
-
-  <build>
-    <finalName>app-admin</finalName>
-  </build>
 </project>
