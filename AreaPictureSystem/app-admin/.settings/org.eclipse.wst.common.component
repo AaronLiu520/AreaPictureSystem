@@ -7,7 +7,7 @@
         <dependent-module archiveName="app-admin-action-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app-admin-action/app-admin-action">
             <dependency-type>uses</dependency-type>
         </dependent-module>
-        <dependent-module archiveName="app_admin_pojo-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app_admin_pojo/app_admin_pojo">
+        <dependent-module archiveName="app-admin-pojo-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app_admin_pojo/app_admin_pojo">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <dependent-module archiveName="app-framework-0.0.1-SNAPSHOT.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/app-framework/app-framework">
