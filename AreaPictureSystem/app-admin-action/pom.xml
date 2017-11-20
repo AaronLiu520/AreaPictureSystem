@@ -19,9 +19,14 @@
     <artifactId>CoredAdmin</artifactId>
     <version>${product.version}</version>
   </parent>
+  
   <artifactId>app-admin-action</artifactId>
   <name>app-admin-action</name>
   <url>http://maven.apache.org</url>
+  
+  
+  
+  
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>

@@ -32,5 +32,7 @@
   	<module>app-admin-action</module>
   	<module>app-admin-pojo</module>
   	<module>app-admin</module>
+  	<module>app-FileSystem-pojo</module>
+  	<module>app-FileSystem-action</module>
   </modules>
 </project>
