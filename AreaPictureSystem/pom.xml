@@ -8,6 +8,8 @@
   <packaging>pom</packaging>
   <name>CoredAdmin</name>
 
+	git
+
   
     <!-- 全局变量 -->
   <properties>
