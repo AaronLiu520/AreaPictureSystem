@@ -24,7 +24,8 @@ public interface CommonEnum {
 	public  final String WEBSESSION="webSession";//应用前台（session)
 
 	public  final String WECHARSESSION="weCharSession";//微信（session)
-	
+
+	public final String WEBMENUSESSION="webMenuSession";//菜单管理选择中状态。
 	
 	//项目地址
 	public final String PROJECTADDRESS="projectAddress";//不同区域、不公司的项目地址。

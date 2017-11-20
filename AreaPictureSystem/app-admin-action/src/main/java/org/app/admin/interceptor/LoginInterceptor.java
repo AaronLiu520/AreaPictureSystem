@@ -52,8 +52,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		if(request.getParameter("activeMenu")!=null && !request.getParameter("activeMenu").equals("")){
 			LOG.info("菜单ID ："+request.getParameter("activeMenu"));
 
-			Cookie cookie = new Cookie("activeMenuCookie", request.getParameter("activeMenu"));
-			response.addCookie(cookie);
+			session.removeAttribute(CommonEnum.WEBMENUSESSION);
+			session.setAttribute(CommonEnum.WEBMENUSESSION,request.getParameter("activeMenu"));
+
 		}
 
 		//检查用户是否登录过.
@@ -76,7 +77,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		
 		//当session过期时，获取用户问的地址信息。
 		session.setAttribute(CommonEnum.USERSESSION, "登录过期请重新登录" );
-		response.sendRedirect("userAdmin/login");
+		response.sendRedirect("adminUser/login");
 		
 		
 		
