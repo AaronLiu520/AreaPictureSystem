@@ -79,12 +79,12 @@ public class Resource extends GeneralBean {
 	public void setForderActivityId(String forderActivityId) {
 		this.forderActivityId = forderActivityId;
 	}
-	public String getCreateDate() {
+/*	public String getCreateDate() {
 		return createDate;
 	}
 	public void setCreateDate(String createDate) {
 		this.createDate = createDate;
-	}
+	}*/
 	public String getOriginalName() {
 		return originalName;
 	}
@@ -160,8 +160,8 @@ public class Resource extends GeneralBean {
 	private String description;			//描述
 	private String boundId;				//绑定公司或个人Id
 	private String forderActivityId;	//文件夹Id或活动Id
-	private String createDate;			//创建日期
-	private String originalName;		//资源原名
+/*	private String createDate;			//创建日期
+*/	private String originalName;		//资源原名
 	private String originalPath;		//资源路径
 	private String extensionName;		//资源扩展名
 	private String fileType;			//文件类型

@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -56,30 +57,53 @@ public class ForderActivityAction extends GeneralAction<ForderActivity>{
 		
 		
 		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.setViewName("admin/app-admin/fileSystem/list");
+		
 
 		return modelAndView;
 	}
 	
 	
+	
+	//@RequestParam(value="Enumtype",defaultValue="")String Enumtype
 	/**
 	 * 
-	* @Title: addForderActivity 
-	* @Description: TODO(添加活动或者文件夹) 
-	* @param @param id
-	* @param @param session
+	* @Title: createForderActivity 
+	* @Description: TODO(添加文件夹) 
+	* @param @param forderActivity   ForderActivity对象
+	* @param @param Enumtype   接受界面的枚举枚举值
 	* @param @return    设定文件 
 	* @return ModelAndView    返回类型 
 	* @throws
 	 */
-	@RequestMapping("/editor")
-	public ModelAndView addForderActivity(@RequestParam(value="id",defaultValue="")String id,HttpSession session){
-		
+	@RequestMapping("/createForder")
+	public ModelAndView createForderActivity(HttpSession session,@ModelAttribute("forderActivityName") ForderActivity forderActivity,
+			@RequestParam(value="Enumtype",defaultValue="")String Enumtype){
+		log.info("进行编辑文件夹操作");
 		ModelAndView modelAndView = new ModelAndView();
-
+		modelAndView.setViewName("admin/app-admin/fileSystem/list");
+		
+		
+		String message = this.forderActivityService.createForder(forderActivity,Enumtype,session);
+		log.info(message);
 		return modelAndView;
-		
-		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
