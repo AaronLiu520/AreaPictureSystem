@@ -48,31 +48,42 @@
 							<li>
 								<div class="ckbox ckbox-default">
 									<input type="checkbox" id="selectall" value="1" /> <label
-										for="selectall">Select All</label>
+										for="selectall">全选</label>
 								</div>
 							</li>
 							<li><a href="" class="itemopt disabled"><i
 									class="fa fa-envelope-o"></i> Email</a></li>
 							<li><a href="" class="itemopt disabled"><i
-									class="fa fa-download"></i> Download</a></li>
+									class="fa fa-download"></i> 下载</a></li>
 							<li><a href="" class="itemopt disabled"><i
-									class="fa fa-pencil"></i> Edit</a></li>
+									class="fa fa-pencil"></i> 编辑</a></li>
 							<li><a href="" class="itemopt disabled"><i
-									class="fa fa-trash-o"></i> Delete</a></li>
-							<li class="filter-type">Show: <a href="all.html"
+									class="fa fa-trash-o"></i> 删除</a></li>
+									
+									
+									
+							<li class="filter-type">
+							
+							<a href="${pageContext.request.contextPath}/forderActivity/list">根目录</a>/
+							<c:if test="${not empty  parentForderActivity}">
+							<a href="${pageContext.request.contextPath}/forderActivity/list?id=${parentForderActivity.id}&parentId=${parentForderActivity.parentId}">${parentForderActivity.forderActivityName}</a>/
+							</c:if>
+							<c:if test="${not empty  forderActivity}">
+							<a href="#">${forderActivity.forderActivityName}</a>
+							<!-- Show: <a href="all.html"
 								class="active">All</a> <a href="document.html">Documents</a> <a
 								href="audio.html">Audio</a> <a href="image.html">Images</a> <a
-								href="video.html">Videos</a>
+								href="video.html">Videos</a> -->
+							</c:if>
 							</li>
-
 						</ul>
 
 
 						<div class="row">
 							<div class="col-sm-9">
 								<div class="row filemanager">
-
-									<div class="col-xs-6 col-sm-4 col-md-3 image">
+							<c:forEach items="${listForderActivity}" var="items" varStatus="status">
+									<div class="col-xs-6 col-sm-4 col-md-2 document">
 										<div class="thmb">
 											<div class="ckbox ckbox-default">
 												<input type="checkbox" id="check2" value="1" /> <label
@@ -85,34 +96,29 @@
 													<span class="caret"></span>
 												</button>
 												<ul class="dropdown-menu fm-menu" role="menu">
-													<li><a href="#"><i class="fa fa-share"></i> Share</a></li>
-													<li><a href="#"><i class="fa fa-envelope-o"></i>
-															Email</a></li>
-													<li><a href="#"><i class="fa fa-pencil"></i> Edit</a></li>
-													<li><a href="#"><i class="fa fa-download"></i>
-															Download</a></li>
-													<li><a href="#"><i class="fa fa-trash-o"></i>
-															Delete</a></li>
+													<li><a href="#"><i class="fa fa-pencil"></i>修改</a></li>
+													<li><a href="#"><i class="fa fa-download"></i>下载</a></li>
+													<li><a href="#"><i class="fa fa-trash-o"></i>删除</a></li>
 												</ul>
 											</div>
 											<!-- btn-group -->
 											<div class="thmb-prev">
 												<a
-													href="${pageContext.request.contextPath}/assets/images/photos/media1.jpg"
+													href="#" onclick="window.open('${pageContext.request.contextPath}/forderActivity/list?id=${items.id }&parentId=${items.parentId }','_self')" "
 													data-rel="prettyPhoto"> <img
-													src="${pageContext.request.contextPath}/assets/images/photos/media1.jpg"
+													src="${pageContext.request.contextPath}/assets/admin/FileSystem/Pictures_Folder.png"
 													class="img-responsive" alt="" />
 												</a>
 											</div>
 											<h5 class="fm-title">
-												<a href="">Vegetarian.png</a>
+												<a href="">${items.forderActivityName}</a>
 											</h5>
-											<small class="text-muted">Added: Jan 02, 2014</small>
+											<small class="text-muted">${items.activityTime}</small>
 										</div>
 										<!-- thmb -->
 									</div>
 									<!-- col-xs-6 -->
-
+							</c:forEach>
 
 
 								</div>
@@ -126,23 +132,14 @@
 									<div class="mb30"></div>
 
 									<h5 class="subtitle">
-										所有文件夹 <a data-toggle="modal" href="form_basic.html#modal-form"
+										所有文件夹 <a data-toggle="modal" href="#modal-form"
 											class="pull-right">+ 创建活动文件夹</a>
 									</h5>
 									<ul class="folder-list">
-										<li><a href=""><i class="fa fa-folder-o"></i> My
-												Pictures</a></li>
-										<li><a href=""><i class="fa fa-folder-o"></i>
-												Facebook Photos</a></li>
-										<li><a href=""><i class="fa fa-folder-o"></i> My
-												Collection</a></li>
-										<li><a href=""><i class="fa fa-folder-o"></i>
-												Illustrations</a></li>
-										<li><a href=""><i class="fa fa-folder-o"></i> TV
-												Series</a></li>
-										<li><a href=""><i class="fa fa-folder-o"></i>
-												Downloaded Movies</a></li>
-										<li><a href=""><i class="fa fa-folder-o"></i> E-book</a></li>
+									<c:forEach items="${listForderActivity}" var="items" varStatus="status">
+										<li><a href=""><i class="fa fa-folder-o"></i>${items.forderActivityName}</a>
+									</c:forEach>
+										
 									</ul>
 
 									<div class="mb30"></div>
@@ -228,7 +225,7 @@
 									id="description" class="form-control"></textarea>
 							</div>
 							
-						<input type="text" name="parentId" id="parentId">
+						<input type="text" name="parentId" id="parentId" value="${parentId }">
 
 
 
