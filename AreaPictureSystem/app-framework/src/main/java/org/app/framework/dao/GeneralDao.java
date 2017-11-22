@@ -68,7 +68,9 @@ public interface GeneralDao<T> {
 	 * @param T当前删除的对象
 	 */
 	public void remove(T t);
-
+    
+	public void remove(Class<T> classes,Query query);
+	
 	/**
 	 * 修改查询后的第一条记录
 	 * @param query

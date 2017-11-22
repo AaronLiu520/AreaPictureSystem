@@ -34,7 +34,7 @@ public class Label extends GeneralBean {
 	}
 	@Override
 	public String toString() {
-		return "Label [labelName=" + labelName + ", userid=" + userid + ", companyid=" + companyid + "]";
+		return labelName;
 	}
      
 }

@@ -105,4 +105,10 @@ public class GeneralDaoImpl<T> implements GeneralDao<T> {
 		return this.mongoTemplate.exists(query, classes);
 	}
 
+
+	public void remove(Class<T>  classes, Query query) {
+		 this.mongoTemplate.remove(query, classes);
+		
+	}
+
 }
