@@ -41,62 +41,87 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: listForderActivity @Description:
-	 * TODO(根据parentId查询所有文件夹) @param @param parentId @param @return
-	 * 设定文件 @return List<ForderActivity> 返回类型 @throws
+	 *         TODO(根据parentId查询所有文件夹) @param @param parentId @param @return
+	 *         设定文件 @return List<ForderActivity> 返回类型 @throws
 	 */
 	public List<ForderActivity> listForderActivity(String parentId, String id) {
 		Query query = new Query();
 
-		if (Common.isEmpty(parentId)) {
-			parentId = "0";
-		} else if (Common.isNotEmpty(id) && Common.isNotEmpty(parentId)) {
-			parentId = id;
-		}
-		
-		if(Common.isEmpty(id)&&Common.isNotEmpty(parentId)&&parentId!="0"){
-			//获取父文件夹
-			query.addCriteria(Criteria.where("id").is(parentId));
-		}else{
-			//查询属于该父目录Id下的所有文件夹
+		// 如果parentId 为 0 id不为空
+		if (parentId.equals("0") && Common.isNotEmpty(id)) {
+			query.addCriteria(Criteria.where("parentId").is(id));
+		} else if (Common.isNotEmpty(parentId) && Common.isNotEmpty(id)) {
+			// 获取该parentId所有的目录 id为该parentId
+			query.addCriteria(Criteria.where("parentId").is(id));
+		} else if (Common.isEmpty(id) && Common.isEmpty(parentId)) {
+			// 如果parentId跟id同时为空那么查询根目录
+			query.addCriteria(Criteria.where("parentId").is("0"));
+		} else if (Common.isEmpty(id) && Common.isNotEmpty(parentId)) {
 			query.addCriteria(Criteria.where("parentId").is(parentId));
-			
 		}
 
 		List<ForderActivity> listForderActivity = this.find(query, ForderActivity.class);
 
-		if (listForderActivity != null)
+		if (listForderActivity.size() > 0) {
 
 			return listForderActivity;
 
-		else
-			return null;
-	}
-	/**
-	 * 
-	* @Title: findForderById 
-	* @Description: TODO(根据Id查询文件夹信息) 
-	* @param @param id
-	* @param @return    设定文件 
-	* @return ForderActivity    返回类型 
-	* @throws
-	 */
-	public ForderActivity findForderById(String id){
-		
-		ForderActivity forderActivity = null;
-		
-		if(Common.isNotEmpty(id)){
-			
-			forderActivity = this.findOneById(id, ForderActivity.class);
-		
 		}
-		if(forderActivity != null)
-			
-			return forderActivity;
-		
+
 		return null;
 	}
-	
-	
+
+	/**
+	 * 
+	 * @Title: findForderById @Description: TODO(根据Id查询文件夹信息) @param @param
+	 * id @param @return 设定文件 @return ForderActivity 返回类型 @throws
+	 */
+	public ForderActivity findForderById(String id) {
+
+		ForderActivity forderActivity = null;
+
+		if (Common.isNotEmpty(id)) {
+
+			forderActivity = this.findOneById(id, ForderActivity.class);
+
+		}
+		if (forderActivity != null)
+
+			return forderActivity;
+
+		return null;
+	}
+
+	/**
+	 * 
+	* @Title: findForderByParentId 
+	* @Description: TODO(根据parentId查询) 
+	* @param @param parentId
+	* @param @return    设定文件 
+	* @return List<ForderActivity>    返回类型 
+	* @throws
+	 */
+	public List<ForderActivity> findForderListByParentId(String parentId) {
+
+		List<ForderActivity> forderActivitylist = null;
+
+		Query query = new Query();
+
+		if (Common.isNotEmpty(parentId)) {
+
+			query.addCriteria(Criteria.where("parentId").is(parentId));
+
+			forderActivitylist = this.find(query, ForderActivity.class);
+		}
+
+		if (forderActivitylist != null)
+
+			return forderActivitylist;
+
+		return null;
+
+		
+	}
 	
 	
 	
@@ -107,11 +132,11 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: createForder @Description: TODO(创建文件夹，子文件夹等) @param @param
-	 * forderActivity @param @param enumtype @param @param
-	 * session @param @return 设定文件 @return String 返回类型 @throws
+	 *         forderActivity @param @param enumtype @param @param
+	 *         session @param @return 设定文件 @return String 返回类型 @throws
 	 */
 	// TODO
-	public String createForder(ForderActivity forderActivity, String enumtype, HttpSession session) {
+	public String createForder(ForderActivity forderActivity, String enumtype, HttpSession session,String editid) {
 
 		if (Common.isEmpty(forderActivity.getForderActivityName())) {
 
@@ -136,12 +161,12 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				forderActivity.setType(Type.GEREN);
 			}
 
-			if (Common.isEmpty(forderActivity.getParentId())) {
-				forderActivity.setParentId(null);
-			}
-
+			/*
+			 * if (Common.isEmpty(forderActivity.getParentId())) {
+			 * forderActivity.setParentId(null); }
+			 */
 			// 1.parentId=null Id=null 创建父文件夹
-			if (Common.isEmpty(forderActivity.getParentId()) && Common.isEmpty(forderActivity.getId())) {
+			if (Common.isEmpty(forderActivity.getParentId()) && Common.isEmpty(editid)) {
 				forderActivity.setResource(new ArrayList<Resource>());
 				forderActivity.setCreatUser(newAdminUser);
 				forderActivity.setParentId("0");
@@ -150,9 +175,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				this.insert(forderActivity);
 
 				// 2.parentId=null Id!=null 修改父文件夹
-			} else if (Common.isEmpty(forderActivity.getParentId()) && Common.isNotEmpty(forderActivity.getId())) {
+			} else if (Common.isEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid)) {
 				// 根据文件夹的ID进行查询
-				ForderActivity editForderActivity = this.findOneById(forderActivity.getId(), ForderActivity.class);
+				ForderActivity editForderActivity = this.findOneById(editid, ForderActivity.class);
 				if (editForderActivity == null)
 					editForderActivity = new ForderActivity();
 				editForderActivity.setActivityTime(forderActivity.getActivityTime());
@@ -164,7 +189,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				this.save(editForderActivity);
 
 				// 3.parentId!=null Id=null 创建子文件夹
-			} else if (Common.isNotEmpty(forderActivity.getParentId()) && Common.isEmpty(forderActivity.getId())) {
+			} else if (Common.isNotEmpty(forderActivity.getParentId()) && Common.isEmpty(editid)) {
 
 				forderActivity.setResource(new ArrayList<Resource>());
 				forderActivity.setCreatUser(newAdminUser);
@@ -173,10 +198,10 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				this.insert(forderActivity);
 
 				// 4.parentId!=null Id!=null 修改子文件夹
-			} else if (Common.isNotEmpty(forderActivity.getParentId()) && Common.isNotEmpty(forderActivity.getId())) {
+			} else if (Common.isNotEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid)) {
 
 				// 根据文件夹的ID进行查询
-				ForderActivity editForderActivity = this.findOneById(forderActivity.getId(), ForderActivity.class);
+				ForderActivity editForderActivity = this.findOneById(editid, ForderActivity.class);
 				if (editForderActivity == null)
 					editForderActivity = new ForderActivity();
 				editForderActivity.setActivityTime(forderActivity.getActivityTime());
@@ -192,6 +217,49 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 		}
 
 		return null;
+	}
+
+	public String delete(String id) {
+
+		String[] strids = id.split(",");
+		for (String delids : strids) {
+
+			recursion(delids);
+		}
+
+		return "删除成功";
+	}
+
+	/**
+	 * 
+	* @Title: recursion 
+	* @Description: TODO(递归删除) 
+	* @param @param id    设定文件 
+	* @return void    返回类型 
+	* @throws
+	 */
+	public void recursion(String id) {
+		
+		//根据ID查询parentId，如果存在则在查出该parentId的id进行递归查询
+		
+		List<ForderActivity> listForderActivity = this.findForderListByParentId(id);
+		
+			for(ForderActivity forderActivity:listForderActivity){
+				
+				ForderActivity forder = this.findForderById(forderActivity.getId());
+				
+				if(Common.isNotEmpty(forder.getId())){
+					recursion(forder.getId());
+				}
+			
+			}
+			ForderActivity delforder = this.findForderById(id);
+			
+			this.remove(delforder);
+		
+		
+		
+
 	}
 
 }
