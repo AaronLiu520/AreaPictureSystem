@@ -1,36 +1,32 @@
 package org.app.admin.pojo;
 
-import java.util.List;
-
 import org.app.framework.pojo.GeneralBean;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 公司单位（ 企业单位、学校 ）
  * 
- * @author aaron
+ * @author Lau Aaron
  *
  */
 @Document(collection = "AdminCompany")
 public class AdminCompany extends GeneralBean {
 
-	private String name;// 企业名称
+	private String name;
+	// 企业名称
 	private String shorts;// 简称
 	private String address;// 地址
 	private String contacts;// 联系人
 	private String telPhone;// 电话
 	private String email;// 邮箱
 	private String remark;// 备注
-	@Indexed
-	private String namePingYing;// ping ying
-	@Indexed
-	private String userName;// 用户名
-	@Indexed
-	private String password;// 密码
+	//TODO 修改基本类
+	private String nature;//性质（中学、小学、幼儿园、中小学、高中、九年制）
+	//TODO 修改基本类
+	private String type;//类型（基层单位、直属单位）
 	@DBRef
-	private AdminRole adminRole;// 权限
+	private AdminUser adminUser;// 权限
 
 	public String getName() {
 		return name;
@@ -88,46 +84,43 @@ public class AdminCompany extends GeneralBean {
 		this.remark = remark;
 	}
 
-	public AdminRole getAdminRole() {
-		return adminRole;
+	public String getNature() {
+		return nature;
 	}
 
-	public void setAdminRole(AdminRole adminRole) {
-		this.adminRole = adminRole;
+	public void setNature(String nature) {
+		this.nature = nature;
 	}
 
-	public String getUserName() {
-		return userName;
+	public String getType() {
+		return type;
 	}
 
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setType(String type) {
+		this.type = type;
 	}
 
-	public String getPassword() {
-		return password;
+	public AdminUser getAdminUser() {
+		return adminUser;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getNamePingYing() {
-		return namePingYing;
-	}
-
-	public void setNamePingYing(String namePingYing) {
-		this.namePingYing = namePingYing;
+	public void setAdminUser(AdminUser adminUser) {
+		this.adminUser = adminUser;
 	}
 
 	@Override
 	public String toString() {
-		return "AdminCompany [name=" + name + ", shorts=" + shorts + ", address=" + address + ", contacts=" + contacts
-				+ ", telPhone=" + telPhone + ", email=" + email + ", remark=" + remark + ", namePingYing="
-				+ namePingYing + ", userName=" + userName + ", password=" + password
-				+ ", adminRole=" + adminRole + "]";
+		return "AdminCompany{" +
+				"name='" + name + '\'' +
+				", shorts='" + shorts + '\'' +
+				", address='" + address + '\'' +
+				", contacts='" + contacts + '\'' +
+				", telPhone='" + telPhone + '\'' +
+				", email='" + email + '\'' +
+				", remark='" + remark + '\'' +
+				", nature='" + nature + '\'' +
+				", type='" + type + '\'' +
+				", adminUser=" + adminUser +
+				'}';
 	}
-
-	
-
 }
