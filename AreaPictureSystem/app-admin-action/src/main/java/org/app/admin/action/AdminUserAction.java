@@ -63,10 +63,11 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 		try {
 			if(id!=null && id!=""){
+				log.info("come!");
 				modelAndView.addObject("bean",this.adminUserService.findOneById(id, AdminUser.class));
 			}
 			//加载角色信息
-			modelAndView.addObject("role",this.adminRoleService.find(new Query(), AdminRole.class));
+//			modelAndView.addObject("role",this.adminRoleService.find(new Query(), AdminRole.class));
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}

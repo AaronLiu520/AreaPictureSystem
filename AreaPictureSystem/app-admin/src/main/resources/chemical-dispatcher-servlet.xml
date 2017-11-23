@@ -68,7 +68,7 @@
 				访问登录页面 -->
 			<mvc:exclude-mapping path="/adminUser/checkLogin" /><!-- 
 				登录 -->
-
+            <mvc:exclude-mapping path="/label/**"/>
 			<mvc:exclude-mapping path="/public/top.jsp" />
 			<mvc:exclude-mapping path="/public/left.jsp" />
 			<bean class="org.app.admin.interceptor.LoginInterceptor"></bean>

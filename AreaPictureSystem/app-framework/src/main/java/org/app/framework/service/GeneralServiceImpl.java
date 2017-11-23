@@ -110,5 +110,10 @@ public class GeneralServiceImpl<T> implements GeneralService<T> {
 		return this.generalDao.exists(query, classes);
 	}
 
+	public void remove(Class<T> classes, Query query) {
+		this.generalDao.remove(classes, query);
+		
+	}
+
 
 }

@@ -68,6 +68,13 @@ public interface GeneralService<T>{
 	 */
 	public void remove(T t);
 
+	
+	/**
+	 * 根据query删除记录
+	 * @param t
+	 * @param query
+	 */
+	public void remove(Class<T> classes,Query query);
 	/**
 	 * 修改查询后的第一条记录
 	 * @param query

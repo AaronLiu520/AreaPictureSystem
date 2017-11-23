@@ -91,6 +91,7 @@ li_style:hover {
 
 				</li>
 
+
 				<c:forEach items="${listMenu}" var="item" varStatus="status">
 
 					<!-- 一级菜单，根目录   updateFormValue(id,name,type,icon,url,orderby,remark,pid)-->
@@ -100,8 +101,8 @@ li_style:hover {
 								<!-- 有子菜单 -->
 								<!-- active 打开 class="active"-->
 								<c:choose>
-									<c:when
-										test="${fn:contains(cookie.activeMenuCookie.value,item.id)}">
+									<c:when test="${fn:contains(sessionScope.webMenuSession,item.id)}">
+
 										<li class="active">
 									</c:when>
 									<c:otherwise>
@@ -115,13 +116,13 @@ li_style:hover {
 								<!-- 二级菜单，根目录 -->
 								<ul class="nav nav-second-level">
 									<c:forEach items="${listMenu}" var="subitem" varStatus="status">
-										<c:if test="${subitem.pid == item.id}">
-											<c:choose>
-												<c:when test="${subitem.type == 'HaveMenu'}">
-													<!-- 有只子菜单 -->
+											<c:if test="${subitem.pid == item.id}">
+												<c:choose>
+													<c:when test="${subitem.type == 'HaveMenu'}">
+														<!-- 有只子菜单 -->
 													<c:choose>
 														<c:when
-															test="${fn:contains(cookie.activeMenuCookie.value,subitem.id)}">
+															test="${fn:contains(sessionScope.webMenuSession,subitem.id)}">
 															<li class="active">
 														</c:when>
 														<c:otherwise>
@@ -139,7 +140,7 @@ li_style:hover {
 
 																<c:choose>
 																	<c:when
-																		test="${fn:contains(cookie.activeMenuCookie.value,menu.id)}">
+																		test="${fn:contains(sessionScope.webMenuSession,menu.id)}">
 																		<li class="active">
 																	</c:when>
 																	<c:otherwise>
@@ -160,7 +161,7 @@ li_style:hover {
 													<!-- 没有子菜单 -->
 													<c:choose>
 														<c:when
-															test="${fn:contains(cookie.activeMenuCookie.value,subitem.id)}">
+															test="${fn:contains(sessionScope.webMenuSession,subitem.id)}">
 															<li class="active">
 														</c:when>
 														<c:otherwise>
@@ -185,7 +186,7 @@ li_style:hover {
 								<!-- active 打开 class="active"-->
 								<c:choose>
 									<c:when
-										test="${fn:contains(cookie.activeMenuCookie.value,item.id)}">
+										test="${fn:contains(sessionScope.webMenuSession,item.id)}">
 										<li class="active">
 									</c:when>
 									<c:otherwise>

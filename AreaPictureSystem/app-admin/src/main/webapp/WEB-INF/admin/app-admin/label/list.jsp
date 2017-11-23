@@ -5,9 +5,8 @@
 <html lang="en" class="app">
 <head>  
   <meta charset="utf-8" />
-  <title>企业单位</title>
-
-  
+  <title>标签管理</title>
+ 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="description" content="">
   <meta name="keywords" content="index">
@@ -32,7 +31,7 @@
                      <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>企业单位管理</h5>
+                                    <h5>标签管理</h5>
                                     <div class="ibox-tools">
                                         <a class="collapse-link">
                                             <i class="fa fa-chevron-up"></i>
@@ -42,42 +41,36 @@
                                 </div>
                                 <div class="ibox-content">
                                     <p>
-                                    <!-- 添加区域帐号 onclick="addFormValue();"-->
-                                    <a href="editor">
-                                    	<button  class="btn btn-primary " type="button"><i class="fa fa-plus" 
-                                        ></i>&nbsp;添加</button>
-                                    </a>
-                                        
-                       
-
-                            </p>
-
+                                        <a href="editor">
+                                    		<button  class="btn btn-primary " type="button"><i class="fa fa-plus"  ></i>&nbsp;添加</button>
+                                    	</a>
+                           			 </p>
                             <p>
-                            <table class="table table-striped table-bordered table-hover dataTables-example">
+                             <table class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                     <tr>
-                                    	<th>名称</th>
-                                        <th>地址</th>
-                                        <th>联系人</th>
-                                        <td>联系电话</td>
-                                        <th>管理帐号</th>
+                                        <th>标签名称</th>
+                                        <th>创建老师</th>
+                                        <th>单位Id</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
-                               <c:forEach items="${pageList}" var="item" varStatus="status">
+                               <c:forEach items="${labelList}" var="item" varStatus="status">
                                     <tr class="gradeX">
-                                    	<td>${item.name}</td>
-                                        <td>${item.address}</td>
-                                        <td>${item.contacts}</td>
-                                        <td>${item.telPhone}</td>
-                                        <td>${item.name}</td>
+                                        <td>${item.labelName}</td>
+                                        <td>${item.userid}</td>
+                                         <td>${item.companyid }
+                                             
+                                    <!--      <form action="updateRolefind" method="post"> 权限菜单更新 
+                                         	<input name="id" type="hidden" value="${item.id}">
+                                         	<button type="submit"class="btn btn-primary btn-xs btn-success" >权限管理</button>
+                                         </form> -->
+                                
+                                         </td>
+                                       
                                         <td class="center">
-                                        	<a href="">
-                                         		<button type="button" class="btn btn-primary btn-xs btn-success" data-id="1">产品管理</button>
-                                         	</a>
-                                        	<a href="editor?id=${item.id}">
+                                         	<a href="editor?id=${item.id}">
                                          		<button type="button" class="btn btn-primary btn-xs edit-news" data-id="1">编辑</button>
                                          	</a>
                                             <button type="button" class="btn btn-danger btn-xs delete-news" data-id="1"
@@ -120,9 +113,13 @@
             </div>
         </div>
     </div>
-
-<!-- 删除 -->
+    
+ 
+ 
+ 
  <script type="text/javascript">
+ 	
+ 	
  	var deleteId;
  	//删除提示窗口
  	function deleteAlert(id) {
@@ -134,10 +131,8 @@
  	function deleteById() {
  		window.location.href = "delete?id="+deleteId;
  	}
- </script>
- 
- <!-- 动态数据表格，前台查询 -->
-<script>
+
+//表格查询
 $(document).ready(function () {
     $('.summernote').summernote({
         lang: 'zh-CN',
@@ -147,7 +142,9 @@ $(document).ready(function () {
     });
     $('.dataTables-example').dataTable();//表格
 
+
 });
+
 </script>
 
 </body>

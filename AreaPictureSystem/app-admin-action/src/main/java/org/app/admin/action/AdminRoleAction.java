@@ -65,6 +65,7 @@ public class AdminRoleAction extends GeneralAction<AdminRole> {
 	 */
 	@RequestMapping("/createOrUpdateToFind")
 	public ModelAndView list(HttpSession session, AdminRole adminRole) {
+		log.info("createOrUpdateToFind");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("redirect:/adminRole/list");
 		try {
