@@ -29,6 +29,35 @@
 <link
 	href="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet" media="screen">
+
+
+
+<script type="text/javascript">
+	function edit(o) {
+		var forderActivityName = "#"+o+"_forderActivityName";
+		var address = "#"+o+"_address";
+		var id ="#"+o+"_id";
+		var boundId = "#"+o+"_boundId";
+		var type = "#"+o+"_type";
+		var description = "#"+o+"_description";
+		var activityTime = "#"+o+"_activityTime";
+		$("#forderActivityName").val($(forderActivityName).val());
+		$("#address").val($(address).val());
+		$("#editid").val($(id).val());
+		$("#description").val($(description).val());
+		$("#activityTime").val($(activityTime).val());
+		$("#Enumtype").find("option[value="+$(type).val()+"]").prop("selected",true);
+		$("#boundId").find("option[value="+$(boundId).val()+"]").prop("selected",true);
+		
+		
+		$("#toModal-form").trigger("click");
+		
+	}
+</script>
+
+
+
+
 <body>
 	<div id="wrapper">
 		<!-- .aside left menu -->
@@ -55,70 +84,93 @@
 									class="fa fa-envelope-o"></i> Email</a></li>
 							<li><a href="" class="itemopt disabled"><i
 									class="fa fa-download"></i> 下载</a></li>
-							<li><a href="" class="itemopt disabled"><i
-									class="fa fa-pencil"></i> 编辑</a></li>
-							<li><a href="" class="itemopt disabled"><i
+						<!-- 	<li><a href="" class="itemopt disabled"><i
+									class="fa fa-pencil"></i> 编辑</a></li> -->
+							<li><a href="javascript:void(0);"
+								onclick="return deleteAlert();" class="itemopt disabled"><i
 									class="fa fa-trash-o"></i> 删除</a></li>
-									
-									
-									
-							<li class="filter-type">
-							
-							<a href="${pageContext.request.contextPath}/forderActivity/list">根目录</a>/
-							<c:if test="${not empty  parentForderActivity}">
-							<a href="${pageContext.request.contextPath}/forderActivity/list?id=${parentForderActivity.id}&parentId=${parentForderActivity.parentId}">${parentForderActivity.forderActivityName}</a>/
-							</c:if>
-							<c:if test="${not empty  forderActivity}">
-							<a href="#">${forderActivity.forderActivityName}</a>
-							<!-- Show: <a href="all.html"
+
+
+
+							<li class="filter-type"><a
+								href="${pageContext.request.contextPath}/forderActivity/list">根目录</a>/
+								<c:if test="${not empty  parentForderActivity}">
+									<a
+										href="${pageContext.request.contextPath}/forderActivity/list?id=${parentForderActivity.id}&parentId=${parentForderActivity.parentId}">${parentForderActivity.forderActivityName}</a>/
+							</c:if> <c:if test="${not empty  forderActivity}">
+									<a href="#">${forderActivity.forderActivityName}</a>
+									<!-- Show: <a href="all.html"
 								class="active">All</a> <a href="document.html">Documents</a> <a
 								href="audio.html">Audio</a> <a href="image.html">Images</a> <a
 								href="video.html">Videos</a> -->
-							</c:if>
-							</li>
+								</c:if></li>
 						</ul>
 
 
 						<div class="row">
 							<div class="col-sm-9">
 								<div class="row filemanager">
-							<c:forEach items="${listForderActivity}" var="items" varStatus="status">
-									<div class="col-xs-6 col-sm-4 col-md-2 document">
-										<div class="thmb">
-											<div class="ckbox ckbox-default">
-												<input type="checkbox" id="check2" value="1" /> <label
-													for="check2"></label>
+									<c:forEach items="${listForderActivity}" var="items"
+										varStatus="status">
+										<div class="col-xs-6 col-sm-4 col-md-2 document">
+											<div class="thmb">
+												<div class="ckbox ckbox-default">
+													<input type="checkbox" id="ids${items.id }" name="ids"
+														value="${items.id }" /> <label for="ids${items.id }"></label>
+												</div>
+												<div class="btn-group fm-group">
+													<button type="button"
+														class="btn btn-default dropdown-toggle fm-toggle"
+														data-toggle="dropdown">
+														<span class="caret"></span>
+													</button>
+													<ul class="dropdown-menu fm-menu" role="menu">
+														<li><a href="javascript:void(0);" onclick="return edit('${items.id}');"><i class="fa fa-pencil"></i>修改</a></li>
+														<li><a href="#"><i class="fa fa-download"></i>下载</a></li>
+														<li><a href="javascript:void(0);"
+															onclick="deleteAlert('${items.id}')"><i
+																class="fa fa-trash-o"></i>删除</a></li>
+													</ul>
+												</div>
+												<!-- btn-group -->
+												<div class="thmb-prev">
+													<a href="#"
+														ondblclick="window.open('${pageContext.request.contextPath}/forderActivity/list?id=${items.id }&parentId=${items.parentId}','_self')">
+														<img
+														src="${pageContext.request.contextPath}/assets/admin/FileSystem/Pictures_Folder.png"
+														class="img-responsive" alt="" />
+													</a>
+												</div>
+
+												<input type="hidden" value="${items.forderActivityName }"
+													id="${items.id }_forderActivityName"> <input
+													type="hidden" value="${items.address }"
+													id="${items.id }_address"> <input
+													type="hidden" value="${items.boundId }"
+													id="${items.id }_boundId"> <input
+													type="hidden" value="${items.type }"
+													id="${items.id }_type"> <input type="hidden"
+													value="${items.description }"
+													id="${items.id }_description"> <input
+													type="hidden" value="${items.activityTime }"
+													id="${items.id }_activityTime"><input
+													type="hidden" value="${items.id }"
+													id="${items.id }_id">
+
+
+
+
+
+
+												<h5 class="fm-title">
+													<a href="">${items.forderActivityName}</a>
+												</h5>
+												<small class="text-muted">${items.activityTime}</small>
 											</div>
-											<div class="btn-group fm-group">
-												<button type="button"
-													class="btn btn-default dropdown-toggle fm-toggle"
-													data-toggle="dropdown">
-													<span class="caret"></span>
-												</button>
-												<ul class="dropdown-menu fm-menu" role="menu">
-													<li><a href="#"><i class="fa fa-pencil"></i>修改</a></li>
-													<li><a href="#"><i class="fa fa-download"></i>下载</a></li>
-													<li><a href="#"><i class="fa fa-trash-o"></i>删除</a></li>
-												</ul>
-											</div>
-											<!-- btn-group -->
-											<div class="thmb-prev">
-												<a
-													href="#" onclick="window.open('${pageContext.request.contextPath}/forderActivity/list?id=${items.id }&parentId=${items.parentId }','_self')" "
-													data-rel="prettyPhoto"> <img
-													src="${pageContext.request.contextPath}/assets/admin/FileSystem/Pictures_Folder.png"
-													class="img-responsive" alt="" />
-												</a>
-											</div>
-											<h5 class="fm-title">
-												<a href="">${items.forderActivityName}</a>
-											</h5>
-											<small class="text-muted">${items.activityTime}</small>
+											<!-- thmb -->
 										</div>
-										<!-- thmb -->
-									</div>
-									<!-- col-xs-6 -->
-							</c:forEach>
+										<!-- col-xs-6 -->
+									</c:forEach>
 
 
 								</div>
@@ -132,14 +184,15 @@
 									<div class="mb30"></div>
 
 									<h5 class="subtitle">
-										所有文件夹 <a data-toggle="modal" href="#modal-form"
+										所有文件夹 <a id="toModal-form" data-toggle="modal" href="#modal-form"
 											class="pull-right">+ 创建活动文件夹</a>
 									</h5>
 									<ul class="folder-list">
-									<c:forEach items="${listForderActivity}" var="items" varStatus="status">
-										<li><a href=""><i class="fa fa-folder-o"></i>${items.forderActivityName}</a>
-									</c:forEach>
-										
+										<c:forEach items="${listForderActivity}" var="items"
+											varStatus="status">
+											<li><a href="#" onclick="window.open('${pageContext.request.contextPath}/forderActivity/list?id=${items.id }&parentId=${items.parentId}','_self')"><i class="fa fa-folder-o"></i>${items.forderActivityName}</a>
+										</c:forEach>
+
 									</ul>
 
 									<div class="mb30"></div>
@@ -181,65 +234,68 @@
 					<div class="row">
 						<div class="col-sm-12">
 
-						<form action="${pageContext.request.contextPath}/forderActivity/createForder" method="post">
-							<div class="form-group">
-								<label>文件夹/活动名称：</label> <input type="text"
-									placeholder="请输入文件夹/活动名称" name="forderActivityName"
-									id="forderActivityName" class="form-control">
-							</div>
-							
-							<div class="form-group">
-								<label>活动地址：</label> <input type="text"
-									placeholder="活动地址" name="address"
-									id="address" class="form-control">
-							</div>
-							
-							<div class="form-group">
-								<label>文件夹绑定：</label>
-								 <select class="form-control m-b" name="boundId" id="boundId">
-                                        <option value="0">个人</option>
-                                        <option value="1">单位</option>
-                                    </select>
-							</div>
-							
-							<div class="form-group">
-								<label>文件夹类别：</label>
-								 <select class="form-control m-b" name="Enumtype">
-                                        <option value="QUYU">区域</option>
-                                        <option value="ZHISHU">直属单位</option>
-                                        <option value="GEREN">个人</option>
-                                    </select>
-							</div>
-							
-							<div class="form-group">
-								<label>活动时间：</label> <input type="text"
-									placeholder="活动地址" name="activityTime"
-									id="activityTime" class="form-control datainput" data-date-format="yyyy-mm-dd">
-							</div>
-					
+							<form
+								action="${pageContext.request.contextPath}/forderActivity/createForder"
+								method="post">
+								<div class="form-group">
+									<label>文件夹/活动名称：</label> <input type="text"
+										placeholder="请输入文件夹/活动名称" name="forderActivityName"
+										id="forderActivityName" class="form-control">
+								</div>
 
+								<div class="form-group">
+									<label>活动地址：</label> <input type="text" placeholder="活动地址"
+										name="address" id="address" class="form-control">
+								</div>
 
-							<div class="form-group">
-								<label>描述：</label> <textarea rows="5" cols="7" style="resize:none;overflow:scroll;"
-									placeholder="描述" name="description"
-									id="description" class="form-control"></textarea>
-							</div>
-							
-						<input type="text" name="parentId" id="parentId" value="${parentId }">
+								<div class="form-group">
+									<label>文件夹绑定：</label> <select class="form-control m-b"
+										name="boundId" id="boundId">
+										<option value="0">个人</option>
+										<option value="1">单位</option>
+									</select>
+								</div>
+
+								<div class="form-group">
+									<label>文件夹类别：</label> <select class="form-control m-b"
+										name="Enumtype" id="Enumtype" >
+										<option value="QUYU">区域</option>
+										<option value="ZHISHU">直属单位</option>
+										<option value="GEREN">个人</option>
+									</select>
+								</div>
+
+								<div class="form-group">
+									<label>活动时间：</label> <input type="text" placeholder="活动地址"
+										name="activityTime" id="activityTime"
+										class="form-control datainput" data-date-format="yyyy-mm-dd">
+								</div>
 
 
 
+								<div class="form-group">
+									<label>描述：</label>
+									<textarea rows="5" cols="7"
+										style="resize: none; overflow: scroll;" placeholder="描述"
+										name="description" id="description" class="form-control"></textarea>
+								</div>
+
+								<input type="text" name="parentId" id="parentId" value="${id }">
+								<input type="text" name="editid" id="editid">
 
 
-							<div>
-								<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
-									type="submit">
-									<strong>添加</strong>
-								</button>
-							</div>
-							
+
+
+
+								<div>
+									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
+										type="submit">
+										<strong>添加</strong>
+									</button>
+								</div>
+
 							</form>
-							
+
 						</div>
 					</div>
 				</div>
@@ -265,7 +321,7 @@
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 					</button>
-					<span style="float: left; color: red; font-size: 18px;">删除提示</span>
+					<span style="float: left; color: red; font-size: 10px;">删除提示（删除的数据将无法还原）</span>
 				</div>
 				<div class="modal-body">
 					<h3>您确认是否要删除此记录吗?</h3>
@@ -307,40 +363,40 @@
 
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/fileSystem/custom.js"></script>
-		
-		
-		
-		<!-- datepicker  日期控件js-->
-<%-- <script src="${pageContext.request.contextPath}/assets/js/datepicker/bootstrap-datepicker.js"></script> --%>
 
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/bootstrap-datetimepicker.js"
-	charset="UTF-8"></script>
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/locales/bootstrap-datetimepicker.zh-CN.js"
-	charset="UTF-8"></script>
-<script type="text/javascript">
-	$('.datainput').datetimepicker({
-		weekStart : 1,
-		todayBtn : 1,
-		autoclose : 1,
-		todayHighlight : 1,
-		startView : 2,
-		minView : 2,
-		forceParse : 0
-	});
-</script>
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+
+
+	<!-- datepicker  日期控件js-->
+	<%-- <script src="${pageContext.request.contextPath}/assets/js/datepicker/bootstrap-datepicker.js"></script> --%>
+
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/bootstrap-datetimepicker.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/locales/bootstrap-datetimepicker.zh-CN.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript">
+		$('.datainput').datetimepicker({
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			minView : 2,
+			forceParse : 0
+		});
+	</script>
+
+
+
+
+
+
+
+
+
+
+
 	<script type="text/javascript">
 		jQuery(document).ready(function() {
 
@@ -423,12 +479,24 @@
 		//删除提示窗口
 		function deleteAlert(id) {
 			$('#deleteModal6').modal('show');
-			deleteId = id;
+
+			if (id == null)
+				var delids = $("input[name='ids']:checked");
+			//获取所有的id执行删除操作，使用ajax
+			var str = "";
+			$(delids).each(function() {
+				str += this.value + ",";
+			});
+			if (str != "") {
+				var ids = str.substring(0, str.length - 1);
+				deleteId = ids;
+			}
 
 		}
 		//删除记录
 		function deleteById() {
-			window.location.href = "delete?id=" + deleteId;
+			window.location.href = "delete?id=" + deleteId + "&parentId="
+					+ $("#parentId").val();
 		}
 
 		//表格查询

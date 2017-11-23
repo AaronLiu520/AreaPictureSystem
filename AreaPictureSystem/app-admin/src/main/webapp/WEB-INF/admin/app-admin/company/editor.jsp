@@ -81,7 +81,7 @@
 												<label class="col-sm-4 control-label">电话</label>
 												<div class="col-sm-8">
 													 <input value="${bean.telPhone}" id="telPhone" name="telPhone" type="text" 
-													 placeholder="请输入 电话" class="form-control" required>
+													 placeholder="请输入电话" class="form-control" required>
                                             		
 												</div>
 											</div>
@@ -97,54 +97,41 @@
 										<div class="row">
 											
 											<div class="form-group col-sm-6">
-											 <label class="col-sm-4 control-label">企业角色</label>
+											 <label class="col-sm-4 control-label">性质</label>
 
 	                                        <div class="col-sm-8">
-	                                            <select class="form-control" name="adminRoleId" id="adminRoleId">
-	                                            <c:forEach items="${role}" var="item" varStatus="status">
-	                                                <option id="${item.id}" value="${item.id}">${item.name}</option>
-	                                             </c:forEach>
+	                                            <select class="form-control" name="nature" id="nature">
+													<option id="0" value="">幼儿园</option>
+													<option id="1" value="">小学</option>
+													<option id="2" value="">中学</option>
 	                                            </select>
 												</div>
 											</div>
 											<div class="form-group col-sm-6">
-												<label class="col-sm-4 control-label">用户名</label>
+												<label class="col-sm-4 control-label">类型</label>
 												<div class="col-sm-8">
-													<input  value="${bean.userName}" type="text"  name="userName"
-													id="userName" placeholder="请输入用户名" class="form-control" required>
+													<select class="form-control" name="type" id="type">
+														<option id="12" value="">直属单位</option>
+														<option id="123" value="">基层单位</option>
+													</select>
 												</div>
 											</div>
 										</div>
 										<div class="hr-line-dashed"></div>
-										<div class="row">
-											
-											<div class="form-group col-sm-6">
-												<label class="col-sm-4 control-label">密码</label>
-												<div class="col-sm-8">
-													 <input value="${bean.password}" name="password" type="text" 
-													 placeholder="密码" class="form-control" required>
-												</div>
-											</div>
-											
-											<div class="form-group col-sm-6">
-												<label class="col-sm-4 control-label">重复密码</label>
-												<div class="col-sm-8">
-													 <input value="${bean.password}" id="pwd" type="text" 
-													 placeholder="密码" class="form-control" required>
-												</div>
-											</div>
-										</div>
+
 										
 									<!-- 隐常ID,更新时使用 -->
 									<c:if test="${not empty bean.id}">
 										<!-- 验证是修改、还是添加 -->
 										<input  name="id" type="hidden" value="${bean.id}">
-										<input  name="adminAreaId" type="hidden" value="${bean.id}">
 										<script type="text/javascript">
 										//禁用，用户名。
 										$("#userName").attr("readOnly",true);
 										//角色
-										 $("#adminRoleId").find("option[value='${bean.adminRole.id}']").attr("selected", "selected");
+                                        /**
+										 *  // $("#adminRoleId").find("option[value='${bean.id}']").attr("selected", "selected");
+                                         */
+
 										</script>
 									</c:if>
 									
@@ -235,16 +222,15 @@
 
             $("#form").validate({
                 rules: {
-                    password: {
+                    contacts: {
                         required: true,
-                        minlength: 6,
+                        minlength: 2,
                         maxlength: 15,
-                        equalTo:"#pwd"
                     },
-                    username: {
+                    telPhone: {
                         required: true,
-                        minlength: 6,
-                        maxlength: 15
+                        minlength: 11,
+                        maxlength: 11
                     },
                     contacts: {
                         required: true,

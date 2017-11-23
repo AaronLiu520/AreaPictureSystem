@@ -60,8 +60,7 @@
                                         <th>地址</th>
                                         <th>联系人</th>
                                         <td>联系电话</td>
-                                        <th>用户名</th>
-                                        <th>权限</th>
+                                        <th>管理帐号</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
@@ -70,13 +69,12 @@
                                <c:forEach items="${pageList}" var="item" varStatus="status">
                                     <tr class="gradeX">
                                     	<td>${item.name}</td>
-                                        <td>../${item.adminArea.namePingYing}/${item.namePingYing}</td>
+                                        <td>${item.address}</td>
                                         <td>${item.contacts}</td>
                                         <td>${item.telPhone}</td>
-                                        <td>${item.userName}</td>
-                                        <td>${item.adminRole.name}</td>
+                                        <td>${item.name}</td>
                                         <td class="center">
-                                        	<a href="productManage?id=${item.id}&areaId=${item.adminArea.id}">
+                                        	<a href="">
                                          		<button type="button" class="btn btn-primary btn-xs btn-success" data-id="1">产品管理</button>
                                          	</a>
                                         	<a href="editor?id=${item.id}">
