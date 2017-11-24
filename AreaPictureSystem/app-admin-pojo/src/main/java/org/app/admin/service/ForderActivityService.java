@@ -165,41 +165,19 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			 * if (Common.isEmpty(forderActivity.getParentId())) {
 			 * forderActivity.setParentId(null); }
 			 */
-			// 1.parentId=null Id=null 创建父文件夹
-			if (Common.isEmpty(forderActivity.getParentId()) && Common.isEmpty(editid)) {
-				forderActivity.setResource(new ArrayList<Resource>());
-				forderActivity.setCreatUser(newAdminUser);
+			// 1.parentId=null Id=null 创建父文件夹||3.parentId!=null Id=null 创建子文件夹
+			if ((Common.isEmpty(forderActivity.getParentId()) && Common.isEmpty(editid))||(Common.isNotEmpty(forderActivity.getParentId()) && Common.isEmpty(editid))) {
+				if(Common.isEmpty(forderActivity.getParentId())){
 				forderActivity.setParentId("0");
-				forderActivity.setFolderSize(0l);
-				// 新建文件夹
-				this.insert(forderActivity);
-
-				// 2.parentId=null Id!=null 修改父文件夹
-			} else if (Common.isEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid)) {
-				// 根据文件夹的ID进行查询
-				ForderActivity editForderActivity = this.findOneById(editid, ForderActivity.class);
-				if (editForderActivity == null)
-					editForderActivity = new ForderActivity();
-				editForderActivity.setActivityTime(forderActivity.getActivityTime());
-				editForderActivity.setAddress(forderActivity.getAddress());
-				editForderActivity.setBoundId(forderActivity.getBoundId());
-				editForderActivity.setDescription(forderActivity.getDescription());
-				editForderActivity.setForderActivityName(forderActivity.getForderActivityName());
-				editForderActivity.setType(forderActivity.getType());
-				this.save(editForderActivity);
-
-				// 3.parentId!=null Id=null 创建子文件夹
-			} else if (Common.isNotEmpty(forderActivity.getParentId()) && Common.isEmpty(editid)) {
-
+				}
 				forderActivity.setResource(new ArrayList<Resource>());
 				forderActivity.setCreatUser(newAdminUser);
 				forderActivity.setFolderSize(0l);
 				// 新建文件夹
 				this.insert(forderActivity);
 
-				// 4.parentId!=null Id!=null 修改子文件夹
-			} else if (Common.isNotEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid)) {
-
+				// 2.parentId=null Id!=null 修改父文件夹||4.parentId!=null Id!=null 修改子文件夹
+			} else if ((Common.isEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid))||(Common.isNotEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid))) {
 				// 根据文件夹的ID进行查询
 				ForderActivity editForderActivity = this.findOneById(editid, ForderActivity.class);
 				if (editForderActivity == null)
@@ -211,14 +189,22 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				editForderActivity.setForderActivityName(forderActivity.getForderActivityName());
 				editForderActivity.setType(forderActivity.getType());
 				this.save(editForderActivity);
-
-			}
-
+			} 
 		}
 
 		return null;
 	}
 
+	
+	/**
+	 * 
+	* @Title: delete 
+	* @Description: TODO(调用删除操作) 
+	* @param @param id
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
 	public String delete(String id) {
 
 		String[] strids = id.split(",");

@@ -8,8 +8,10 @@
 */
 package org.app.admin.action;
 
+import java.io.PrintWriter;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.app.admin.pojo.ForderActivity;
@@ -23,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -105,7 +108,6 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		return modelAndView;
 	}
 
-	// @RequestParam(value="Enumtype",defaultValue="")String Enumtype
 	/**
 	 * 
 	 * @Title: createForderActivity @Description: TODO(添加文件夹) @param @param
@@ -137,7 +139,17 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	
 	
 	
-	
+	/**
+	 * 
+	* @Title: delete 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param @param model
+	* @param @param id  删除的id包括集合
+	* @param @param parentId   删除后需要显示的文件夹
+	* @param @return    设定文件 
+	* @return ModelAndView    返回类型 
+	* @throws
+	 */
 	@RequestMapping("/delete")
 	public ModelAndView delete(RedirectAttributes model,
 			@RequestParam(value="id",defaultValue="")String id,
@@ -152,8 +164,6 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 			this.forderActivityService.delete(id);
 			
 		}
-
-	
 			if (Common.isNotEmpty(parentId)) {
 			
 			model.addFlashAttribute("parentId", parentId);
@@ -161,12 +171,37 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		
 		return modelAndView;
 		
-		
-		
 	}
 	
 	
-	
+
+	/**
+	 * 通过ajax获取相同目录下是否存在重复文件夹名称的信息
+	 * @param printWriter
+	 * @param session
+	 * @param response
+	 */
+	//TODO
+	@RequestMapping(value = "/ajaxgetRepletes", method = RequestMethod.POST) 
+    public void ajaxgetRepletes(@RequestParam(value = "roleName", defaultValue = "")String roleName,PrintWriter printWriter,HttpSession session,HttpServletResponse response) { 
+		//通过ajax获取
+		if(!roleName.equals("")){
+		/*	Role  role;
+			try {
+				role = this.roleService.findRoleByRoleName(roleName);
+				if(role!=null){
+					printWriter.write("true");
+				}else{
+					printWriter.write("false");
+				}
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  printWriter.flush(); 
+		        printWriter.close(); */
+		}
+    }
 	
 	
 	
