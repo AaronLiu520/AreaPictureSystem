@@ -52,8 +52,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	/**
 	 * 
 	 * @Title: list @Description: TODO(这里用一句话描述这个方法的作用) @param @param
-	 * session @param @param parentId 父文件夹id @param @param id
-	 * 当前文件夹id @param @return 设定文件 @return ModelAndView 返回类型 @throws
+	 *         session @param @param parentId 父文件夹id @param @param id
+	 *         当前文件夹id @param @return 设定文件 @return ModelAndView 返回类型 @throws
 	 */
 	@RequestMapping("/list")
 	public ModelAndView list(HttpSession session, @ModelAttribute("parentId") String parentId,
@@ -68,13 +68,13 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		List<ForderActivity> list = this.forderActivityService.listForderActivity(parentId, id);
 
 		modelAndView.addObject("listForderActivity", list);
-		if (list!=null) {
+		if (list != null) {
 			for (ForderActivity f : list) {
 				id = f.getParentId();
 			}
 		}
-		
-		if (Common.isNotEmpty(id)&&!("0").equals(id)) {
+
+		if (Common.isNotEmpty(id) && !("0").equals(id)) {
 			modelAndView.addObject("id", id);
 			// 当前目录
 			ForderActivity forderActivity = this.forderActivityService.findForderById(id);
@@ -87,18 +87,17 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 
 			// 上级目录
 
-				ForderActivity parentForderActivity = this.forderActivityService
-						.findForderById(forderActivity.getParentId());
+			ForderActivity parentForderActivity = this.forderActivityService
+					.findForderById(forderActivity.getParentId());
 
-				if (parentForderActivity != null) {
+			if (parentForderActivity != null) {
 
-					modelAndView.addObject("parentForderActivity", parentForderActivity);
+				modelAndView.addObject("parentForderActivity", parentForderActivity);
 
 			}
-		}else if(Common.isNotEmpty(parentId)&&Common.isEmpty(id)){
-			//直接获取上级目录
-			ForderActivity parentForderActivity = this.forderActivityService
-					.findForderById(parentId);
+		} else if (Common.isNotEmpty(parentId) && Common.isEmpty(id)) {
+			// 直接获取上级目录
+			ForderActivity parentForderActivity = this.forderActivityService.findForderById(parentId);
 
 			if (parentForderActivity != null) {
 
@@ -117,95 +116,68 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	@RequestMapping("/createForder")
 	public ModelAndView createForderActivity(HttpSession session,
 			@ModelAttribute("forderActivityName") ForderActivity forderActivity,
-			@RequestParam(value = "Enumtype", defaultValue = "") String Enumtype, 
-			@RequestParam(value = "editid", defaultValue = "") String editid,RedirectAttributes model) {
+			@RequestParam(value = "Enumtype", defaultValue = "") String Enumtype,
+			@RequestParam(value = "editid", defaultValue = "") String editid, RedirectAttributes model) {
 		log.info("进行编辑文件夹操作");
 		ModelAndView modelAndView = new ModelAndView();
 
 		modelAndView.setViewName("redirect:/forderActivity/list");
 
+		String message = this.forderActivityService.createForder(forderActivity, Enumtype, session, editid);
 
-		String message = this.forderActivityService.createForder(forderActivity, Enumtype, session,editid);
-		
 		if (Common.isNotEmpty(forderActivity.getParentId())) {
-			
+
 			model.addFlashAttribute("parentId", forderActivity.getParentId());
-			
+
 		}
 		log.info(message);
 
 		return modelAndView;
 	}
-	
-	
-	
+
 	/**
 	 * 
-	* @Title: delete 
-	* @Description: TODO(这里用一句话描述这个方法的作用) 
-	* @param @param model
-	* @param @param id  删除的id包括集合
-	* @param @param parentId   删除后需要显示的文件夹
-	* @param @return    设定文件 
-	* @return ModelAndView    返回类型 
-	* @throws
+	 * @Title: delete @Description: TODO(这里用一句话描述这个方法的作用) @param @param
+	 * model @param @param id 删除的id包括集合 @param @param parentId
+	 * 删除后需要显示的文件夹 @param @return 设定文件 @return ModelAndView 返回类型 @throws
 	 */
 	@RequestMapping("/delete")
-	public ModelAndView delete(RedirectAttributes model,
-			@RequestParam(value="id",defaultValue="")String id,
-			@RequestParam(value="parentId",defaultValue="")String parentId
-			){
+	public ModelAndView delete(RedirectAttributes model, @RequestParam(value = "id", defaultValue = "") String id,
+			@RequestParam(value = "parentId", defaultValue = "") String parentId) {
 		ModelAndView modelAndView = new ModelAndView();
-		
+
 		modelAndView.setViewName("redirect:/forderActivity/list");
-		
-		if(Common.isNotEmpty(id)){
-			
+
+		if (Common.isNotEmpty(id)) {
+
 			this.forderActivityService.delete(id);
-			
+
 		}
-			if (Common.isNotEmpty(parentId)) {
-			
+		if (Common.isNotEmpty(parentId)) {
+
 			model.addFlashAttribute("parentId", parentId);
 		}
-		
+
 		return modelAndView;
-		
+
 	}
-	
-	
 
 	/**
 	 * 通过ajax获取相同目录下是否存在重复文件夹名称的信息
+	 * 
 	 * @param printWriter
 	 * @param session
 	 * @param response
 	 */
-	//TODO
-	@RequestMapping(value = "/ajaxgetRepletes", method = RequestMethod.POST) 
-    public void ajaxgetRepletes(@RequestParam(value = "roleName", defaultValue = "")String roleName,PrintWriter printWriter,HttpSession session,HttpServletResponse response) { 
-		//通过ajax获取
-		if(!roleName.equals("")){
-		/*	Role  role;
-			try {
-				role = this.roleService.findRoleByRoleName(roleName);
-				if(role!=null){
-					printWriter.write("true");
-				}else{
-					printWriter.write("false");
-				}
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			  printWriter.flush(); 
-		        printWriter.close(); */
-		}
-    }
-	
-	
-	
-	
-	
+	// TODO
+	@RequestMapping(value = "/ajaxgetRepletes", method = RequestMethod.POST)
+	public void ajaxgetRepletes(@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
+			PrintWriter printWriter, HttpSession session, HttpServletResponse response) {
+
+		printWriter.write("false");
+		printWriter.flush();
+		printWriter.close();
+
+	}
 
 }

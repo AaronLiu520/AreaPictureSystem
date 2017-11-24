@@ -42,6 +42,7 @@
 		var description = "#"+o+"_description";
 		var activityTime = "#"+o+"_activityTime";
 		$("#forderActivityName").val($(forderActivityName).val());
+		$("#forderActivityNamehid").val($(forderActivityName).val());
 		$("#address").val($(address).val());
 		$("#editid").val($(id).val());
 		$("#description").val($(description).val());
@@ -238,10 +239,11 @@
 								action="${pageContext.request.contextPath}/forderActivity/createForder"
 								method="post">
 								<div class="form-group">
-									<label>文件夹/活动名称：</label> <input type="text"
-										placeholder="请输入文件夹/活动名称" name="forderActivityName"
+									<label>文件夹/活动名称：</label><label id="forforderActivityNamehid"></label> <input type="text"
+										placeholder="请输入文件夹/活动名称" name="forderActivityName" onchange="return getrepletes('forderActivityName');"
 										id="forderActivityName" class="form-control">
 								</div>
+								<input type="hidden" id="forderActivityNamehid" > 
 
 								<div class="form-group">
 									<label>活动地址：</label> <input type="text" placeholder="活动地址"
@@ -396,8 +398,7 @@ function getrepletes(o1) {
 	var r2 = $("#" + o1 + "hid").val();//该值的隐藏域值 判断如果是原始值则不变
 	if (r1 != '#') {
 		if (r1 != r2) {
-			$
-					.ajax({
+			$.ajax({
 						type : "POST",
 						url : "ajaxgetRepletes",
 						data : o1 + "=" + r1,
