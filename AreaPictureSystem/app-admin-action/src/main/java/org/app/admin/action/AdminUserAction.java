@@ -2,8 +2,10 @@ package org.app.admin.action;
 
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.AdminRoleService;
 import org.app.admin.service.AdminUserService;
 import org.app.framework.action.GeneralAction;
@@ -11,6 +13,7 @@ import org.app.framework.util.CommonEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,6 +33,8 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	private AdminUserService adminUserService;
 	@Autowired
 	private AdminRoleService adminRoleService;
+	@Autowired
+	private AdminCompanyService AdminCompanyService;
 	
 	
 	
@@ -42,9 +47,15 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public ModelAndView list(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/user/list");
+		Query query =new Query();
 		try {
-			
+			AdminUser adminUser=(AdminUser)session.getAttribute(CommonEnum.USERSESSION);
+			if(AdminUser.UserType.SCHOOLADMIN.equals(adminUser.getUserType())){
+				query.addCriteria(Criteria.where("adminCompany").is(adminUser.getAdminCompany()));
+			}
+			modelAndView.addObject("pageList", this.adminUserService.find(query, AdminUser.class));
 		} catch (Exception e) {
+			log.error("select 'AdminUser' table error ");
 		}
 		return modelAndView;// 返回
 	}
@@ -59,25 +70,52 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public ModelAndView editor(HttpSession session,String id) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/user/editor");
-
-
 		try {
 			if(id!=null && id!=""){
 				log.info("come!");
 				modelAndView.addObject("bean",this.adminUserService.findOneById(id, AdminUser.class));
 			}
-			//加载角色信息
-//			modelAndView.addObject("role",this.adminRoleService.find(new Query(), AdminRole.class));
+			//加载所有的角色信息
+			modelAndView.addObject("role",this.adminRoleService.find(new Query(), AdminRole.class));
+			//加载单位信息
+			modelAndView.addObject("company",this.AdminCompanyService.find(new Query(), AdminCompany.class));
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
 		return modelAndView;// 返回
 	}
-	
-	
-	
-	
-	
+
+
+
+
+	@RequestMapping("/createOrUpdateToFind")
+	public ModelAndView list(HttpSession session, AdminUser adminUser, String roleId,String companyId) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("redirect:/adminUser/list");
+		// git AdminRole and AdminCompany
+		if(roleId!=null)
+			adminUser.setAdminRole(this.adminRoleService.findOneById(roleId, AdminRole.class));
+		if(companyId!=null)
+			adminUser.setAdminCompany(this.AdminCompanyService.findOneById(companyId,AdminCompany.class));
+		try {
+			if (adminUser != null) {
+				if (adminUser.getId() == null) {//create or update
+					// check AdminUser.userName
+					if (this.adminUserService.findCountByQuery(
+							super.craeteQueryWhere("userName", adminUser.getUserName()), AdminUser.class) > 0) {
+							session.setAttribute("error", "添加失败，您添加的帐号信息已经存在。");
+					} else {
+						this.adminUserService.insert(adminUser);
+					}
+				} else
+					this.adminUserService.save(adminUser);
+			}
+			log.info(adminUser.toString());
+		} catch (Exception e) {
+			log.error(e.getMessage(), e);
+		}
+		return modelAndView;// 返回
+	}
 	
 
 	/**
@@ -101,30 +139,36 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@RequestMapping("/checkLogin")
 	public ModelAndView checkLogin(HttpSession session,String username,String password) {
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("admin/index");
+		modelAndView.setViewName("redirect:/adminUser/index");
+		//清除菜单
 		session.removeAttribute(CommonEnum.WEBMENUSESSION);
 		try {
 			//检查帐号登录
-			//AdminUser au=this.adminUserService.findOneByQuery(super.craeteQueryWhere("username",username,"password",password), AdminUser.class);
-			//if(au!=null){//不等于空,保存用户帐号信息
-				//session.setAttribute(CommonEnum.USERSESSION, au);
-				//加载  帐号登录角色（菜单）
-				//session.setAttribute("listMenu", au.getAdminRole().getListMenu());
+			AdminUser au=this.adminUserService.findOneByQuery(super.craeteQueryWhere
+					("userName",username,"password",password), AdminUser.class);
+			if(au!=null){//不等于空,保存用户帐号信息
 				//加载权限
-				AdminRole ar=this.adminRoleService.findOneById("595c93f777c8267be0b18969",AdminRole.class);
-				session.setAttribute("listMenu",ar.getListMenu());
-				modelAndView.addObject("listMenu",ar.getListMenu());
-				AdminUser au=new AdminUser();
-				au.setName("Aaron");
+				session.setAttribute("listMenu",au.getAdminRole().getListMenu());
 				session.setAttribute(CommonEnum.USERSESSION, au);
 
-			//}else{
+			}else{
 				//返回到登录。对应跟目录地址
-				//modelAndView.setViewName("redirect:/adminUser/login");
-			//}
+				modelAndView.setViewName("redirect:/adminUser/login");
+			}
 		}catch (Exception e) {
 			log.error("用户登录异常："+e.toString());
 		}
+		return modelAndView;// 返回
+	}
+
+	/**
+	 * 登录成功后，重定向
+	 * @return
+	 */
+	@RequestMapping("/index")
+	public ModelAndView index() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("admin/index");
 		return modelAndView;// 返回
 	}
 	

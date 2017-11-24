@@ -25,7 +25,7 @@
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
                             <span class="m-r-sm text-muted welcome-message">
-                            <a href="${pageContext.request.contextPath}/web/index" title="返回首页">
+                            <a href="${pageContext.request.contextPath}/adminUser/index" title="返回首页">
                             <i class="fa fa-home"></i></a>
                            </span>
                         </li>

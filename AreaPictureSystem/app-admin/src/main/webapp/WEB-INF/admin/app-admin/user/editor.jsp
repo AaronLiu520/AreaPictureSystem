@@ -60,7 +60,7 @@
 										<div class="col-sm-6">
 												<label class="col-sm-4 control-label">密 码</label>
 												<div class="col-sm-8">
-													<input type="text" id="password" value="${bean.password}"
+													<input type="password" id="password" value="${bean.password}"
 														name="password" class="form-control" placeholder=""
 														required>
 												</div>
@@ -68,7 +68,7 @@
 										<div class="col-sm-6">
 												<label class="col-sm-4 control-label">确认密码</label>
 												<div class="col-sm-8">
-													<input type="text" id="passwords" value="${bean.password}"
+													<input type="password" id="passwords" value="${bean.password}"
 														name="passwords" class="form-control" placeholder=""
 														required>
 											</div>
@@ -110,27 +110,72 @@
 											</div>
 										</div>
 									</div>
+
 									<div class="hr-line-dashed"></div>
 									<div class="row">
 										<div class="col-sm-6">
-												<label class="col-sm-4 control-label">角 色</label>
-												<div class="col-sm-8">
-													<input type="text" id="adminRoleId"
-														value="${bean.adminRoleId}" name="adminRoleId"
-														class="form-control" placeholder="" required>
+											<label class="col-sm-4 control-label">用户类型</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="userType" id="userType">
+													<option id="TEACHER" value="TEACHER">老师</option>
+													<option id="SCHOOLADMIN" value="SCHOOLADMIN">学校管理员</option>
+													<option id="ADMINISTRATORS" value="ADMINISTRATORS">超级管理员</option>
+												</select>
 											</div>
+
 										</div>
 
 										<div class="col-sm-6">
-												<label class="col-sm-4 control-label">头像图片</label>
-												<div class="col-sm-8">
-														<input id="headImage"
-														name="headImage" type="file" class="filestyle" placeholder="选择文件"
-														data-classButton="btn btn-default"
-														data-classInput="form-control inline v-middle input-s">
+											<label class="col-sm-4 control-label">邮箱</label>
+											<div class="col-sm-8">
+												<input type="email" id="email" value="${bean.email}"
+													   name="email" class="form-control" placeholder=""
+													   required>
 											</div>
 										</div>
 									</div>
+									<div class="hr-line-dashed"></div>
+									<div class="row">
+										<div class="col-sm-6">
+											<label class="col-sm-4 control-label">所属单位</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="companyId" id="companyId">
+													<c:forEach items="${company}" var="item" varStatus="status">
+														<option id="${item.id}" value="${item.id}">${item.name}</option>
+													</c:forEach>
+												</select>
+											</div>
+
+										</div>
+
+									</div>
+
+									<div class="hr-line-dashed"></div>
+									<div class="row">
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label">角 色</label>
+										<div class="col-sm-8">
+											<select class="form-control" name="roleId" id="roleId">
+												<c:forEach items="${role}" var="item" varStatus="status">
+													<option id="${item.id}" value="${item.id}">${item.name}</option>
+												</c:forEach>
+											</select>
+										</div>
+
+									</div>
+
+									<div class="col-sm-6">
+										<label class="col-sm-4 control-label">头像图片</label>
+										<div class="col-sm-8">
+											<input id="headImage"
+												   name="headImage" type="file" class="filestyle" placeholder="选择文件"
+												   data-classButton="btn btn-default"
+												   data-classInput="form-control inline v-middle input-s">
+										</div>
+									</div>
+								</div>
+
+
 									<div class="hr-line-dashed"></div>
 									<div class="row">
 										<div class="form-group">
@@ -145,7 +190,17 @@
 
 									<!-- 隐常ID,更新时使用 -->
 									<c:if test="${not empty bean.id}">
-										<input id="id" name="id" type="hidden" value="${bean.id }">
+										<input id="id" name="id" type="hidden" value="${bean.id}">
+										<script type="text/javascript">
+                                            //禁用，用户名。
+                                            $("#userName").attr("readOnly",true);
+                                            //权限
+                                            $("#roleId").find("option[value='${bean.adminRole.id}']").attr("selected", "selected");
+                                            //用户类型
+                                            $("#userType").find("option[value='${bean.userType}']").attr("selected", "selected");
+                                            //公司
+                                            $("#companyId").find("option[value='${bean.adminCompany.id}']").attr("selected", "selected");
+										</script>
 									</c:if>
 
 									<div class="modal-footer">
@@ -179,6 +234,23 @@
                         required: true,
                         minlength: 2,
                         maxlength: 15
+                    },
+                    passwords: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 15,
+                        equalTo:"#password"
+                    },
+                    username: {
+                        required: true,
+                        minlength: 6,
+                        maxlength: 15
+                    },
+                    tel: {
+                        required: true,
+                        minlength: 11,
+                        maxlength: 11,
+                        number: true
                     }
             
                 }
