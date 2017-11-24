@@ -96,6 +96,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 */
 	@RequestMapping("/editor")
 	public ModelAndView editor(HttpSession session, String id) {
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/company/editor");
 		try {
