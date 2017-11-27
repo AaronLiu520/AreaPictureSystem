@@ -60,7 +60,7 @@ public class AdminRoleAction extends GeneralAction<AdminRole> {
 	 * 添加 或 更新
 	 * 
 	 * @param session
-	 * @param adminMenu
+	 * @param adminRole
 	 * @return
 	 */
 	@RequestMapping("/createOrUpdateToFind")
@@ -72,8 +72,14 @@ public class AdminRoleAction extends GeneralAction<AdminRole> {
 			if (adminRole != null) {
 				if (adminRole.getId() == null)
 					this.adminRoleService.insert(adminRole);
-				else
-					this.adminRoleService.save(adminRole);
+				else{
+					AdminRole updateAR=this.adminRoleService.findOneById(adminRole.getId(),AdminRole.class);
+					updateAR.setName(adminRole.getName());
+					updateAR.setReamrk(adminRole.getReamrk());
+					this.adminRoleService.save(updateAR);
+
+				}
+
 			}
 			log.info(adminRole.toString());
 		} catch (Exception e) {

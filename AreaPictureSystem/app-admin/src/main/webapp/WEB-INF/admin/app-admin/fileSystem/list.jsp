@@ -289,7 +289,7 @@
 
 								<div>
 									<button class="btn btn-sm btn-primary pull-right m-t-n-xs"
-										type="submit">
+										type="submit" id="submit">
 										<strong>添加</strong>
 									</button>
 								</div>
@@ -388,7 +388,36 @@
 	</script>
 
 
+<script type="text/javascript">
 
+//ajax判断有没有重复
+function getrepletes(o1) {
+	var r1 = $("#" + o1).val();//获取需要判断是否重复的属性
+	var r2 = $("#" + o1 + "hid").val();//该值的隐藏域值 判断如果是原始值则不变
+	if (r1 != '#') {
+		if (r1 != r2) {
+			$
+					.ajax({
+						type : "POST",
+						url : "ajaxgetRepletes",
+						data : o1 + "=" + r1,
+						dataType : "text",
+						success : function(msg) {
+							if (msg == "true") {//
+								document.getElementById("for" + o1).innerHTML = "当前值已存在！！";
+								document.getElementById("for" + o1).style.cssText = "float: right; color: red;";
+								$("#submit").attr("disabled", true);
+							} else {
+								$("#submit").attr("disabled", false);
+								document.getElementById("for" + o1).innerHTML = " ";
+							}
+						}
+					});
+		}
+	}
+}
+
+</script>
 
 
 
