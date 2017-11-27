@@ -95,14 +95,14 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @return
 	 */
 	@RequestMapping("/editor")
-	public ModelAndView editor(HttpSession  session, String id) {
+	public ModelAndView editor(HttpSession session, String id) {
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/company/editor");
 		try {
 			if (id != null && id != "") {
 				modelAndView.addObject("bean", this.AdminCompanyService.findOneById(id, AdminCompany.class));
 				//TODO 查询企业性质、企业类型。
-
 			}
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);

@@ -74,9 +74,7 @@
                                         <td>${item.telPhone}</td>
                                         <td>${item.name}</td>
                                         <td class="center">
-                                        	<a href="">
-                                         		<button type="button" class="btn btn-primary btn-xs btn-success" data-id="1">产品管理</button>
-                                         	</a>
+
                                         	<a href="editor?id=${item.id}">
                                          		<button type="button" class="btn btn-primary btn-xs edit-news" data-id="1">编辑</button>
                                          	</a>

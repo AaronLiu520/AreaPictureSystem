@@ -68,8 +68,9 @@ li_style:hover {
 							href="index.html#"> <span class="clear"> <span
 								class="block m-t-xs"> <strong class="font-bold">
 										奉贤区图片库 </strong>
-							</span> <span class="text-muted text-xs block"> 欢迎您： 刘庆 <b
-									class="caret"></b></span>
+							</span> <span class="text-muted text-xs block">
+						欢迎：${sessionScope.userSession.name}
+						<b class="caret"></b></span>
 						</span>
 						</a>
 						<ul class="dropdown-menu animated fadeInRight m-t-xs">
