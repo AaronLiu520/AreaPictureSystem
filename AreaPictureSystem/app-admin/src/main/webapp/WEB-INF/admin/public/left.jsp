@@ -78,9 +78,66 @@ li_style:hover {
 							<li><a href="#">个人图片库</a></li>
 
 							<li><a href="#">修改头像</a></li>
+  <!-- Button trigger modal -->
+							<li><a data-toggle="modal" data-target="#myModal"
+								>个人资料</a></li>
 
-							<li><a
-								href="${pageContext.request.contextPath}/user/profile">个人资料</a></li>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <table class="table">
+         <caption>个人信息资料</caption>
+  <tbody>
+    <tr>
+      <td>姓名:</td>
+      <td>${sessionScope.userSession.name}</td>
+    </tr>
+    <tr>
+      <td>性别:</td>
+      <td>${sessionScope.userSession.sex}</td>
+    </tr>
+    <tr>
+      <td>地址:</td>
+      <td>${sessionScope.userSession.address}</td>
+    </tr>
+    <tr>
+      <td>所属单位:</td>
+      <td>${sessionScope.userSession.adminCompany.name}</td>
+    </tr>
+    <tr>
+      <td>电话:</td>
+      <td>${sessionScope.userSession.tel}</td>
+    </tr>
+     <tr>
+      <td>邮箱:</td>
+      <td>${sessionScope.userSession.email}</td>
+    </tr>
+    <tr>
+      <td>备注:</td>
+      <td>${sessionScope.userSession.reamrk}</td>
+    </tr>
+  </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <a href="${pageContext.request.contextPath}/user/editor?id=${sessionScope.userSession.id}"><button type="button" class="btn btn-primary">跳转</button></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 
 							<li class="divider"></li>
 							<li><a
