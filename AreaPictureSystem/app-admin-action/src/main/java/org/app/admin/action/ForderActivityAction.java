@@ -14,11 +14,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.Common;
+import org.app.framework.util.CommonEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,8 +140,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	/**
 	 * 
 	 * @Title: delete @Description: TODO(这里用一句话描述这个方法的作用) @param @param
-	 * model @param @param id 删除的id包括集合 @param @param parentId
-	 * 删除后需要显示的文件夹 @param @return 设定文件 @return ModelAndView 返回类型 @throws
+	 *         model @param @param id 删除的id包括集合 @param @param parentId
+	 *         删除后需要显示的文件夹 @param @return 设定文件 @return ModelAndView 返回类型 @throws
 	 */
 	@RequestMapping("/delete")
 	public ModelAndView delete(RedirectAttributes model, @RequestParam(value = "id", defaultValue = "") String id,
@@ -171,10 +173,21 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	 */
 	// TODO
 	@RequestMapping(value = "/ajaxgetRepletes", method = RequestMethod.POST)
-	public void ajaxgetRepletes(@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
-			PrintWriter printWriter, HttpSession session, HttpServletResponse response) {
+	public void ajaxgetRepletes(
+			@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
+			@RequestParam(value = "parentId", defaultValue = "0") String parentId, PrintWriter printWriter,
+			HttpSession session, HttpServletResponse response) {
 
-		printWriter.write("false");
+		AdminUser user = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+
+		Boolean b = this.forderActivityService.findForderActivityByName(forderActivityName, user.getId(), parentId);
+
+		if (b) {
+			printWriter.write("true");
+		} else {
+			printWriter.write("false");
+		}
+
 		printWriter.flush();
 		printWriter.close();
 

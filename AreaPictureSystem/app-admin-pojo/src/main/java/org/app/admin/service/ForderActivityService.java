@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
-import org.app.admin.pojo.Resource;
 import org.app.admin.pojo.ForderActivity.Type;
+import org.app.admin.pojo.Resource;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
@@ -242,10 +242,56 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			ForderActivity delforder = this.findForderById(id);
 			
 			this.remove(delforder);
-		
-		
-		
 
 	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: findForderActivityByName 
+	* @Description: TODO(这里用一句话描述这个方法的作用) 
+	* @param @param forderActivityName  活动名称
+	* @param @param userId				用户id
+	* @param @param boundId				绑定id
+	* @param @return    设定文件 
+	* @return boolean    返回类型 
+	* @throws
+	 */
+	public boolean findForderActivityByName(String forderActivityName,String userId,String parentId){
+		
+		Query query = new Query();
+		
+		if(Common.isNotEmpty(forderActivityName)){
+			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
+		}else if(Common.isNotEmpty(userId)){
+			query.addCriteria(Criteria.where("creatUser.id").is(userId));
+		}
+			query.addCriteria(Criteria.where("parentId").is(parentId));
+	
+		
+		List<ForderActivity> list = this.find(query, ForderActivity.class);
+		
+		if(list.size()>0)
+			return true;
+		else 
+			return false;
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

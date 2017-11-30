@@ -110,7 +110,7 @@
                                                 </div>
                                                 <div class="col-xs-8 text-right">
                                                     <span>想更精确的查找资料，点击我！</span>
-                                                    <h3 class="font-bold">查找区域图片资料</h3>
+                                                    <h3 class="font-bold">查找区域图片资料</h3> 
                                                 </div>
                                             </a>
                                         </div>
@@ -186,7 +186,7 @@
         });
     </script>
 
-
+   	
 
     <!-- 图表统计 -->
     <script src="${pageContext.request.contextPath}/assets/admin/js/plugins/flot/jquery.flot.js"></script>
@@ -225,16 +225,13 @@
                 tooltipOpts: {
                     content: "x: %x, y: %y"
                 }
-            };
+            };	
             var barData = {
                 label: "bar",
                 data: [
-                    [20, 34],
-                    [21, 25],
-                    [22, 19],
-                    [23, 34],
-                    [24, 32],
-                    [25, 44]
+                	<c:forEach items="${uploadList}" var="items" varStatus="status">
+               		 ${items },
+               	 </c:forEach>
                 ]
             };
             $.plot($("#flot-line-chart"), [barData], barOptions);
