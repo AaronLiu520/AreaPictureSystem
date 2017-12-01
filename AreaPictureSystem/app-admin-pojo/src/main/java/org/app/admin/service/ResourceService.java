@@ -85,11 +85,17 @@ public class ResourceService extends GeneralServiceImpl<Resource>{
 			
 			int month =now.get(Calendar.MONTH) + 1;
 			
-			int day = now.get(Calendar.DAY_OF_MONTH);
+			//int day = now.get(Calendar.DAY_OF_MONTH);
+			int day = getMaxDayByYearMonth(year,month);
 			
 			for(int i =1;i<=day;i++){
-				
-				int num = this.maxUploadThisMonthForDay(year+"-"+month+"-"+i, null);
+				String day_="";
+				if(i<10){
+					day_="0"+i;
+				}else{
+					day_=String.valueOf(i);
+				}
+				int num = this.maxUploadThisMonthForDay(year+"-"+month+"-"+day_, null);
 				
 				list.add("["+i+","+num+"]");
 				
@@ -103,7 +109,19 @@ public class ResourceService extends GeneralServiceImpl<Resource>{
 		
 		
 		
-		
+		/**
+		 * 获得某个月最大天数
+		 *
+		 * @param year 年份
+		 * @param month 月份 (1-12)
+		 * @return 某个月最大天数
+		 */
+		public int getMaxDayByYearMonth(int year, int month) {
+		  Calendar calendar = Calendar.getInstance();
+		  calendar.set(Calendar.YEAR, year - 1);
+		  calendar.set(Calendar.MONTH, month);
+		  return calendar.getActualMaximum(Calendar.DATE);
+		}
 		
 		
 	
