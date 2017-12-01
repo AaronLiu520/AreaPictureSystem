@@ -61,9 +61,21 @@ li_style:hover {
 				<li class="nav-header">
 
 					<div class="dropdown profile-element">
-						<span style="float: left; padding-right: 10px;"> <img
-							alt="image" class="img-circle"
-							src="${pageContext.request.contextPath}/assets/admin/img/profile_small.jpg" />
+						<span style="float: left; padding-right: 10px;"> 
+ <c:choose>
+        <c:when test="${sessionScope.userSession.headImage==''}">  
+           <img alt="image" class="img-circle" src= "${pageContext.request.contextPath}/assets/admin/img/profile_small.jpg"  />
+        </c:when>
+         <c:otherwise> 
+           <img alt="image" class="img-circle" src= "${pageContext.request.contextPath}/user/getImg" width="64" />
+         </c:otherwise>
+ </c:choose>
+						
+						
+						
+						
+						
+						
 						</span> <a data-toggle="dropdown" class="dropdown-toggle"
 							href="index.html#"> <span class="clear"> <span
 								class="block m-t-xs"> <strong class="font-bold">
@@ -77,7 +89,34 @@ li_style:hover {
 
 							<li><a href="#">个人图片库</a></li>
 
-							<li><a href="#">修改头像</a></li>
+  		                    <li><a data-toggle="modal" data-target="#myModal2">修改头像</a></li>
+							
+							<!-- Button trigger modal -->
+<!-- Modal -->
+             
+<div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+     <div class="form-group">
+     <form role="form" enctype="multipart/form-data" method="post" action="${pageContext.request.contextPath}/user/change">
+		<label for="inputfile">图片选择输入</label>
+		<input type="file" id="inputfile" name="file">
+	</div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+        <button type="submit" class="btn btn-primary" >修改上传</button>
+      </div>
+    </div>
+  </div>
+</div>
+</form>
+							
+							
   <!-- Button trigger modal -->
 							<li><a data-toggle="modal" data-target="#myModal"
 								>个人资料</a></li>

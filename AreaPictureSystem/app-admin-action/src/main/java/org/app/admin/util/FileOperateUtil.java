@@ -5,7 +5,6 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,26 +17,190 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.app.admin.action.AdminUserAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+@Repository
 public class FileOperateUtil {
-    private static final Logger log = LoggerFactory
-            .getLogger(FileOperateUtil.class);
-    private static final int BUFFER_SIZE = 16 * 1024;
+	private static final String FILENAME = "fileName";
+	private static final String CONTENTTYPE = "contentType";
+	private static final String HASSUFFIX = "hassuffix";
+	private static final String SAVEPATH = "savepath";
+	private static final String NOFILE = "nofile";
+	private static final String RENAME = "reName";
+	private static final String SERVLETPATH = "servletPath";
 
-    private static final String REALNAME = "realname";
-    private static final String PATH = "path";
-    private static final String SIZE = "size";
-    private static final String SUFFIX = "suffix";
-    private static final String CONTENTTYPE = "contentType";
-    private static final String CREATETIME = "createTime";
-    private static final String HASSUFFIX = "hassuffix";
+	private static final Logger log = LoggerFactory
+			.getLogger(FileOperateUtil.class);
+	
+	/***
+	 * 将上传的文件进行重命名
+	 * 
+	 * @param name
+	 * @return
+	 */
+	private static String rname(String name) {
+		Long now = Long.parseLong(new SimpleDateFormat("yyyyMMddHHmmss").format(new Date()));
+		Long random = (long) (Math.random() * now);
+		String fileName = now + "" + random;
 
-    /**
+		if (name.indexOf(".") != -1) {
+			fileName += name.substring(0, name.lastIndexOf(".")) + name.substring(name.lastIndexOf("."));
+		}
+		return fileName;
+
+	}
+
+	/**
+	 * 文件上传
+	 * 
+	 * @param request
+	 *            httpservletRequest
+	 * @param UPLOADDIR
+	 *            上传至
+	 * @param filetype
+	 *            上传文件类型
+	 * @return
+	 * @throws Exception
+	 */
+	public static List<Map<String, Object>> upload(HttpServletRequest request, String UPLOADDIR, String[] filetype)
+			throws Exception {
+
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
+
+		Map<String, MultipartFile> fileMap = mRequest.getFileMap();
+		// 文件重命名
+		String rname = "";
+
+		String path = "";
+
+		File destFile = null;
+		// 上传目录
+		String uploadDir = request.getSession().getServletContext().getRealPath("/WEB-INF/") + UPLOADDIR;
+		log.info("uploadDir:"+uploadDir);
+		// 判断文件目录是否存在，如果不存在则创建目录
+		File file = new File(uploadDir);
+		if (!file.exists()) {
+			file.mkdirs();
+			log.info("file"+file.getAbsolutePath());
+			
+		}
+		// 文件名称
+		String fileName = null;
+		// 文件是否符合要求格式
+		boolean has = false;
+
+		for (Iterator<Map.Entry<String, MultipartFile>> it = fileMap.entrySet().iterator(); it.hasNext();) {
+
+			Map.Entry<String, MultipartFile> entry = it.next();
+			MultipartFile mFile = entry.getValue();
+			// 获取上传文件的名称
+			fileName = mFile.getOriginalFilename();
+			if (fileName.equals("") || fileName.equals(null)) {
+				// 设置标识没有文件上传
+				map.put(FileOperateUtil.NOFILE, true);
+				result.add(map);
+				return result;
+			}
+			// 获取文件的后缀名
+			String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+			// 如果文件的后缀名为空
+			if (extension == "") {
+				map.put(FileOperateUtil.NOFILE, true);
+			} else {
+				for (int a = 0; a < filetype.length; a++) {
+					if (filetype[a].contains(extension)) {
+						has = true;
+					}
+				}
+				if (has == false) {
+					// 设置表示上传文件符合文件要求
+					map.put(FileOperateUtil.HASSUFFIX, has);
+					result.add(map);
+					return result;
+				}
+				// 对上传文件进行重命名
+				rname = rname(fileName);
+				map.put(FileOperateUtil.RENAME, rname);
+				path = file + "/" + rname;// 存放位置\
+				destFile = new File(path);
+			}
+
+			OutputStream outputStream = new FileOutputStream(destFile);
+			FileCopyUtils.copy(mFile.getInputStream(), outputStream);
+
+			map.put(FileOperateUtil.SAVEPATH, path);
+			map.put(FileOperateUtil.FILENAME, fileName);
+			map.put(FileOperateUtil.NOFILE, false);
+			map.put(FileOperateUtil.SERVLETPATH, request.getContextPath() + UPLOADDIR + rname);
+		}
+
+		// 固定参数值对
+		// .put(FileOperateUtil.STORENAME, zipName(storeName));
+		// map.put(FileOperateUtil.SIZE, new File(zipName).length());
+		// map.put(FileOperateUtil.SUFFIX, "zip");
+		map.put(FileOperateUtil.CONTENTTYPE, "application/octet-stream");
+		map.put(FileOperateUtil.HASSUFFIX, has);
+		result.add(map);
+		return result;
+	}
+
+	/***
+	 * 下载文件
+	 * 
+	 * @param request
+	 * @param response
+	 * @param storeName
+	 * @param contentType
+	 * @param realName
+	 * @throws Exception
+	 */
+	public static void download(HttpServletRequest request, HttpServletResponse response, String storeName,
+			String contentType, String UPLOADDIR) throws Exception {
+		response.setContentType("text/html;charset=UTF-8");
+		request.setCharacterEncoding("UTF-8");
+		BufferedInputStream bis = null;
+
+		BufferedOutputStream bos = null;
+
+		String ctxPath = request.getSession().getServletContext().getRealPath("/") + UPLOADDIR;
+
+		String downLoadPath = ctxPath + storeName;
+
+		long fileLength = new File(downLoadPath).length();
+
+		response.setContentType(contentType);
+
+		response.setHeader("Content-disposition",
+				"attachment; filename=" + new String(storeName.getBytes("utf-8"), "ISO8859-1"));
+
+		response.setHeader("Content-Length", String.valueOf(fileLength));
+
+		bis = new BufferedInputStream(new FileInputStream(downLoadPath));
+
+		bos = new BufferedOutputStream(response.getOutputStream());
+
+		byte[] buff = new byte[2048];
+
+		int bytesRead;
+
+		while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
+			bos.write(buff, 0, bytesRead);
+		}
+		bis.close();
+		bos.close();
+	}
+
+	
+	/**
      * 添加文件集合中的图片类型。
      *
      * @param filetype
@@ -52,6 +215,8 @@ public class FileOperateUtil {
     }
 
 
+
+
     /**
      * 获取文件的后缀名
      *
@@ -60,175 +225,8 @@ public class FileOperateUtil {
      */
     public static String getFilePrefix(String fileName) {
 
+
         return fileName.substring(fileName.lastIndexOf("."));
     }
-
-
-    /***
-     * 将上传的文件进行重命名
-     * @param name
-     * @return
-     */
-    private static String rname(String name) {
-        Long now = Long.parseLong(new SimpleDateFormat("yyyyMMddHHmmss")
-                .format(new Date()));
-        Long random = (long) (Math.random() * now);
-        String fileName = now + "" + random;
-
-        if (name.indexOf(".") != -1) {
-            fileName += name.substring(0, name.lastIndexOf(".")) + name.substring(name.lastIndexOf("."));
-        }
-        return fileName;
-
-    }
-
-
-    public static String uploadFile(File file, String fileName, String upLoadPath) {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        Date date = new Date();
-        File newFile = new File(upLoadPath + fileName);//新文件的目录
-        copy(file, newFile);
-
-        ImageTool imageTool = new ImageTool();
-//		imageTool.compressPic(SystemConfig.getProjectPath() + "\\"
-//				+ SystemConfig.getLinePath() + "\\", SystemConfig
-//				.getProjectPath()
-//				+ "\\" + SystemConfig.getLinePath() + "\\", fileName, "1_"
-//				+ fileName, 200, 200, true);
-        log.info("上传文件的路径：" + upLoadPath + fileName);
-
-        return upLoadPath + fileName;
-    }
-
-
-    private static void copy(File src, File dst) {
-        try {
-            InputStream in = null;
-            OutputStream out = null;
-            try {
-                in = new BufferedInputStream(new FileInputStream(src),
-                        BUFFER_SIZE);
-                // in = new BufferedInputStream( new FileInputStream(src),
-                // BUFFER_SIZE);
-                out = new BufferedOutputStream(new FileOutputStream(dst),
-                        BUFFER_SIZE);
-                // out = new BufferedOutputStream(new FileOutputStream(dst),
-                // BUFFER_SIZE);
-                byte[] buffer = new byte[BUFFER_SIZE];
-                while (in.read(buffer) > 0) {
-                    out.write(buffer);
-                }
-            } finally {
-                if (null != in) {
-                    in.close();
-                }
-                if (null != out) {
-                    out.close();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    /**
-     * 上传文件
-     *
-     * @param request
-     * @param params
-     * @param values
-     * @return
-     * @throws Exception
-     */
-    public static List<Map<String, Object>> upload(HttpServletRequest request,
-                                                   String[] params, Map<String, Object[]> values, String UPLOADDIR, String[] filetype) throws Exception {
-
-        List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = new HashMap<String, Object>();
-        MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
-        Map<String, MultipartFile> fileMap = mRequest.getFileMap();
-
-        String uploadDir = request.getSession().getServletContext().getRealPath("/") + UPLOADDIR;
-        File file = new File(uploadDir);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
-        String fileName = null;
-        boolean has = false;
-        int i = 0;
-        System.out.println("路径" + file.getPath());
-        for (Iterator<Map.Entry<String, MultipartFile>> it = fileMap.entrySet()
-                .iterator(); it.hasNext(); i++) {
-
-            Map.Entry<String, MultipartFile> entry = it.next();
-            MultipartFile mFile = entry.getValue();
-            fileName = mFile.getOriginalFilename();
-            String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-            for (int a = 0; a < filetype.length; a++) {
-                if (filetype[a].contains(extension)) {
-                    has = true;
-                }
-            }
-
-
-            if (has == false) {
-                map.put(FileOperateUtil.HASSUFFIX, has);
-                result.add(map);
-                return result;
-            }
-            String path = file + "/" + rname(fileName);// 存放位置
-            File destFile = new File(path);
-            OutputStream outputStream = new FileOutputStream(destFile);
-            FileCopyUtils.copy(mFile.getInputStream(), outputStream);
-
-            // 固定参数值对
-            map.put(FileOperateUtil.REALNAME, fileName);
-            map.put(FileOperateUtil.PATH, path);
-            //.put(FileOperateUtil.STORENAME, zipName(storeName));
-            // map.put(FileOperateUtil.SIZE, new File(zipName).length());
-            // map.put(FileOperateUtil.SUFFIX, "zip");
-            map.put(FileOperateUtil.CONTENTTYPE, "application/octet-stream");
-            map.put(FileOperateUtil.CREATETIME, new Date());
-            map.put(FileOperateUtil.HASSUFFIX, has);
-            result.add(map);
-        }
-        return result;
-    }
-
-    /***
-     * 下载文件
-     * @param request
-     * @param response
-     * @param storeName
-     * @param contentType
-     * @param realName
-     * @throws Exception
-     */
-    public static void download(HttpServletRequest request,
-                                HttpServletResponse response, String storeName, String contentType, String UPLOADDIR) throws Exception {
-        response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
-        BufferedInputStream bis = null;
-        BufferedOutputStream bos = null;
-        String ctxPath = request.getSession().getServletContext().getRealPath("/") + UPLOADDIR;
-        String downLoadPath = ctxPath + storeName;
-        long fileLength = new File(downLoadPath).length();
-        response.setContentType(contentType);
-        response.setHeader("Content-disposition", "attachment; filename=" + new String(storeName.getBytes("utf-8"), "ISO8859-1"));
-        response.setHeader("Content-Length", String.valueOf(fileLength));
-        bis = new BufferedInputStream(new FileInputStream(downLoadPath));
-        bos = new BufferedOutputStream(response.getOutputStream());
-        byte[] buff = new byte[2048];
-        int bytesRead;
-        while (-1 != (bytesRead = bis.read(buff, 0, buff.length))) {
-            bos.write(buff, 0, bytesRead);
-        }
-        bis.close();
-        bos.close();
-    }
-
-
+	
 }
