@@ -25,6 +25,9 @@
 
 <link rel="stylesheet"  href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css" media="all" />
 
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/Assets/tooltip/stylesheets/jquery.tooltip/jquery.tooltip.css" type="text/css" />
+
 <style type="text/css">
     * {
 
@@ -182,51 +185,89 @@
 
                             </div>
                         </div>
+
+
+
                         <div class="mail-box">
+
+
                             <div >
                                  <div class="col-lg-12 gallery" >
                                      <ul style="display: initial;">
                                     <c:forEach items="${listPhoto.datas}" var="item" varStatus="status">
-                                        <li><a target="_blank" href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=max">
+                                        <li><a target="_blank"
+                                               href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=">
                                             <div class="file-box" >
                                                 <div class="file">
                                                     <span class="corner"></span>
 
-                                                    <div class="image" style="height: 150px;text-align: center;">
+                                                    <div id="item_4"  class="item image" style="height: 150px;text-align: center;">
 
                                                         <img alt="image" class="img-responsive" style="margin: 0 auto;"
                                                              src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min">
+                                                        <div class="tooltip_description"
+                                                             style="display:none" title="Item 4 Description">
+                                                            <p>
+                                                                <span style="float:left;">高度: ${item.imgInfoBean.imgHeight}</span>
+                                                                <span style="float: right;">宽度: ${item.imgInfoBean.imgWidth}</span>
+                                                            </p>
+                                                            </br>
+                                                            <p>
+                                                                <span style="float:left;">相机: ${item.imgInfoBean.make} </span>
+                                                                <span style="float: right;">型号: ${item.imgInfoBean.model}</span>
+                                                            </p></br>
+                                                            <p>
+                                                                <span style="float:left;">闪光: ${item.imgInfoBean.flashMode}</span>
+                                                                <span style="float: right;">模式: ${item.imgInfoBean.easyShooting}</span>
+                                                            </p></br>
+                                                            <p>
+                                                                <span style="float:left;">纬度: ${item.imgInfoBean.latitude}</span>
+                                                                <span style="float: right;">经度: ${item.imgInfoBean.longitude}</span>
+                                                            </p></br>
 
+                                                            <p>
+                                                                <span style="float:left;">大小: ${item.imgInfoBean.imgSize} MB</span>
+                                                            </p></br>
+                                                            <p>
+                                                                <span style="float: left;">名称: ${item.imgInfoBean.imgName}</span>
+                                                            </p>
+                                                            </br>
+                                                            <p >
+                                                                <span style="float:left;">拍摄时间: ${item.imgInfoBean.dateTime}</span>
+                                                            </p>
+                                                        </div>
                                                     </div>
+
+
                                                     <div class="file-name" style="text-align: center;">
                                                         <!--如果修改后的资源名称不为空-->
 
                                                         <c:choose>
-                                                            <c:when test="${fn:length(item.resourceName)<10}">
-                                                                ${item.resourceName}
+                                                            <c:when test="${fn:length(item.originalName)<15}">
+                                                                ${item.originalName}
                                                             </c:when>
                                                             <c:otherwise>
-                                                                ${fn:substring(item.resourceName,0,10)}...
+                                                                ${fn:substring(item.originalName,0,15)}...
                                                             </c:otherwise>
                                                         </c:choose>
 
                                                         <br/>
                                                         <small>
-			                                                <span style="padding-right: 30px;">
-                                                                <a onclick="updateImg('${item.id}','${item.resourceName}','${item.person}',
-                                                                        '${item.photographer}','${item.resourceAddress}','${item.description}')"
+			                                                <span>
+                                                                <a onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
+                                                                        '${item.editorImgInfo.photographer}','${item.editorImgInfo.resourceAddress}',
+                                                                        '${item.editorImgInfo.description}')"
                                                                    data-toggle="modal" data-target="#File_Made">
                                                                     描述
                                                                 </a>
 			                                                </span>
-                                                            <span>
-                                                                <!--
-                                                                <a data-toggle="modal" data-target="#File_Delete"> -->
+                                                            <span style="padding-left: 10%;">
                                                                     <a onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">
                                                                     删除 </a>
 			                                                </span>
                                                         </small>
                                                     </div>
+
 
                                                 </div>
                                             </div>
@@ -267,7 +308,7 @@
                     </div>
                 </div>
             </div>
-            
+
              <%@include file="../../public/botton.jsp" %>
         </div>
     </div>
@@ -283,6 +324,17 @@
     <!-- DROPZONE -->
     <script src="${pageContext.request.contextPath}/assets/admin/js/plugins/dropzone/dropzone.js"></script>
     <script src="${pageContext.request.contextPath}/assets/admin/Assets/js/zoom.min.js"></script>
+
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/admin/Assets/tooltip/javascripts/jquery.tooltip.js"></script>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        $j(document).ready(function(){
+            $j("div.item").tooltip();
+        });
+    </script>
+
+
 
 </body>
 </html>

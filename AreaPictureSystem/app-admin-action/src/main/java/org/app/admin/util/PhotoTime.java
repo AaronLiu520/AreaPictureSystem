@@ -82,13 +82,17 @@ public class PhotoTime {
                 pt.getList().add(fa);
             }
             //检查是否需要选择中菜单
-            if(checkDate!=null){
+            if(checkDate!=null && pt.getTime()!=null){
                 if(pt.getTime().equals(checkDate)){
                     pt.setIstree(true);
                 }
             }
+            //检查pt.gettime
+            if(pt.getTime()!=null){
+                list.add(pt);
+            }
 
-            list.add(pt);
+
         }
         return list;
     }

@@ -60,7 +60,7 @@ public class FileOperateUtil {
      */
     public static String getFilePrefix(String fileName) {
 
-        return fileName.substring(fileName.lastIndexOf("."));
+        return fileName.substring(fileName.lastIndexOf(".")).toLowerCase().trim();
     }
 
 
