@@ -42,6 +42,7 @@
 		var description = "#"+o+"_description";
 		var activityTime = "#"+o+"_activityTime";
 		$("#forderActivityName").val($(forderActivityName).val());
+		$("#forderActivityNamehid").val($(forderActivityName).val());
 		$("#address").val($(address).val());
 		$("#editid").val($(id).val());
 		$("#description").val($(description).val());
@@ -238,10 +239,11 @@
 								action="${pageContext.request.contextPath}/forderActivity/createForder"
 								method="post">
 								<div class="form-group">
-									<label>文件夹/活动名称：</label> <input type="text"
-										placeholder="请输入文件夹/活动名称" name="forderActivityName"
+									<label>文件夹/活动名称：</label><label id="forforderActivityName"></label> <input type="text"
+										placeholder="请输入文件夹/活动名称" name="forderActivityName" onchange="return getrepletes('forderActivityName');" onkeyup="return getrepletes('forderActivityName');"
 										id="forderActivityName" class="form-control">
 								</div>
+								<input type="hidden" id="forderActivityNamehid" > 
 
 								<div class="form-group">
 									<label>活动地址：</label> <input type="text" placeholder="活动地址"
@@ -394,17 +396,16 @@
 function getrepletes(o1) {
 	var r1 = $("#" + o1).val();//获取需要判断是否重复的属性
 	var r2 = $("#" + o1 + "hid").val();//该值的隐藏域值 判断如果是原始值则不变
-	if (r1 != '#') {
+	var parentId=$("#parentId").val();
 		if (r1 != r2) {
-			$
-					.ajax({
+			$.ajax({
 						type : "POST",
 						url : "ajaxgetRepletes",
-						data : o1 + "=" + r1,
+						data : o1 + "=" + r1+"&parentId="+parentId,
 						dataType : "text",
 						success : function(msg) {
 							if (msg == "true") {//
-								document.getElementById("for" + o1).innerHTML = "当前值已存在！！";
+								document.getElementById("for" + o1).innerHTML = "请不要创建重复的活动！！";
 								document.getElementById("for" + o1).style.cssText = "float: right; color: red;";
 								$("#submit").attr("disabled", true);
 							} else {
@@ -413,8 +414,10 @@ function getrepletes(o1) {
 							}
 						}
 					});
+		}else{
+			$("#submit").attr("disabled", false);
+			document.getElementById("for" + o1).innerHTML = " ";
 		}
-	}
 }
 
 </script>
@@ -509,7 +512,7 @@ function getrepletes(o1) {
 		function deleteAlert(id) {
 			$('#deleteModal6').modal('show');
 
-			if (id == null)
+			if (id == null){
 				var delids = $("input[name='ids']:checked");
 			//获取所有的id执行删除操作，使用ajax
 			var str = "";
@@ -520,6 +523,9 @@ function getrepletes(o1) {
 				var ids = str.substring(0, str.length - 1);
 				deleteId = ids;
 			}
+		}else{
+			deleteId = id;
+		}
 
 		}
 		//删除记录

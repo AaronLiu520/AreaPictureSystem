@@ -110,7 +110,7 @@
                                                 </div>
                                                 <div class="col-xs-8 text-right">
                                                     <span>想更精确的查找资料，点击我！</span>
-                                                    <h3 class="font-bold">查找区域图片资料</h3>
+                                                    <h3 class="font-bold">查找区域图片资料</h3> 
                                                 </div>
                                             </a>
                                         </div>
@@ -186,7 +186,7 @@
         });
     </script>
 
-
+   	
 
     <!-- 图表统计 -->
     <script src="${pageContext.request.contextPath}/assets/admin/js/plugins/flot/jquery.flot.js"></script>
@@ -200,7 +200,7 @@
                         fill: true,
                         fillColor: {
                             colors: [{
-                                opacity: 0.0
+                                opacity: 1.0
                             }, {
                                 opacity: 0.0
                             }]
@@ -208,7 +208,13 @@
                     }
                 },
                 xaxis: {
-                    tickDecimals: 0
+                    ticks:20, 
+                    tickDecimals: 0,
+                },
+                yaxis:{
+                	ticks:10,   
+                	min: 0,   
+                	tickDecimals:0 ,   
                 },
                 colors: ["#1ab394"],
                 grid: {
@@ -225,20 +231,62 @@
                 tooltipOpts: {
                     content: "x: %x, y: %y"
                 }
-            };
+            };	
             var barData = {
                 label: "bar",
                 data: [
-                    [20, 34],
-                    [21, 25],
-                    [22, 19],
-                    [23, 34],
-                    [24, 32],
-                    [25, 44]
+                	<c:forEach items="${uploadList}" var="items" varStatus="status">
+               		 ${items },
+               	 </c:forEach>
                 ]
             };
             $.plot($("#flot-line-chart"), [barData], barOptions);
 
+            
+            
+            
+            // 节点提示  
+            function showTooltip(x, y, contents) {  
+                $('<div id="tooltip">' + contents + '</div>').css( {  
+                    position: 'absolute',  
+                    display: 'none',  
+                    top: y + 10,  
+                    left: x + 10,  
+                    border: '1px solid #fdd',  
+                    padding: '2px',  
+                    'background-color': '#dfeffc',  
+                    opacity: 0.80  
+                }).appendTo("body").fadeIn(200);  
+            }  
+      
+            var previousPoint = null;  
+            // 绑定提示事件  
+            $("#flot-line-chart").bind("plothover", function (event, pos, item) {  
+                if (item) {  
+                    if (previousPoint != item.dataIndex) {  
+                        previousPoint = item.dataIndex;  
+                        $("#tooltip").remove();  
+                        var y = item.datapoint[1].toFixed(0);  
+      
+                        var tip = "上传总数：";  
+                        showTooltip(item.pageX, item.pageY,tip+y);  
+                    }  
+                }  
+                else {  
+                    $("#tooltip").remove();  
+                    previousPoint = null;  
+                }  
+            
+            }); 
+            
+            
+            
+            
+            
+            
+            
+            
+            
         });
 
     </script>

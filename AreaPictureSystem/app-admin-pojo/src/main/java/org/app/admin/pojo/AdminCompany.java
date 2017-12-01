@@ -28,6 +28,7 @@ public class AdminCompany extends GeneralBean {
 	@DBRef
 	private AdminUser adminUser;// 权限
 
+	
 	public String getName() {
 		return name;
 	}
