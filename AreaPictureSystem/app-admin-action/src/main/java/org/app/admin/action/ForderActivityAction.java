@@ -117,7 +117,7 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	 */
 	@RequestMapping("/createForder")
 	public ModelAndView createForderActivity(HttpSession session,
-			@ModelAttribute("forderActivityName") ForderActivity forderActivity,
+			 ForderActivity forderActivity,
 			@RequestParam(value = "Enumtype", defaultValue = "") String Enumtype,
 			@RequestParam(value = "editid", defaultValue = "") String editid, RedirectAttributes model) {
 		log.info("进行编辑文件夹操作");

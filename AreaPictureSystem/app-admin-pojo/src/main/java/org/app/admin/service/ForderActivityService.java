@@ -276,22 +276,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			return true;
 		else 
 			return false;
-		
-		
+
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
