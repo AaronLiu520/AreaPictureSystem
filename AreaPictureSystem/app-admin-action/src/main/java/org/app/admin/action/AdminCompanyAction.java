@@ -26,6 +26,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -147,12 +148,6 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 
 	
 	
-	
-	
-	
-	
-	
-	
 	/***
 	 * 文件上传
 	 * @param request
@@ -162,7 +157,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	@SuppressWarnings({ "static-access", "unused" })
 	@RequestMapping(value = "upload")  
     public ModelAndView upload(AdminCompany adminCompany,HttpServletRequest request,HttpSession session,RedirectAttributes attr) {  
-		System.out.println("上传文件");
+		log.info("开始上传文件");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("redirect:/adminCompany/list");
 		String error="";
@@ -170,6 +165,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		Map<String, Object> map = new HashMap<String, Object>();  
         // 别名  
         String upname="WEB-INF"+File.separator+"FileUpload"+File.separator+"company";
+        
         //可以上传的文件格式
        log.info("准备上传企业单位数据");
         String filetype[]={"xls,xlsx"};
@@ -182,15 +178,15 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
             String path=(String) result.get(0).get("savepath");
             	File file=new File(path);
             	//知道导入返回导入结果
-            	 error =this.AdminCompanyService.BatchImport(file, 1);
+            	 error =this.AdminCompanyService.BatchImport(file, 1,session);
             	 
-     		       attr.addFlashAttribute("error",error);
+     		       attr.addFlashAttribute("errorImport",error);
           //  map.put("result", result);  
            return new ModelAndView("redirect:/adminCompany/list"); 
      		     //  return modelAndView;
         }
         }catch(Exception e){
-        	modelAndView.addObject("error", e);
+        	modelAndView.addObject("errorImport", e);
         	 return new ModelAndView("redirect:/adminCompany/list"); 
         	
         }
@@ -220,7 +216,23 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
     
 	
 	
-	
+    
+    /** 
+     * process 获取进度 
+     * @param request 
+     * @param response 
+     * @return 
+     * @throws Exception 
+     */  
+    @RequestMapping(value = "uploadprocess")  
+    @ResponseBody  
+    public Object process(HttpServletRequest request,  
+            HttpServletResponse response) throws Exception { 
+    	
+        return this.AdminCompanyService.findproInfo(request);  
+    }  
+      
+  
 	
 	
 	
