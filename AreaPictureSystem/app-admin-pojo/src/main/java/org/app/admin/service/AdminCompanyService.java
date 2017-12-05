@@ -20,6 +20,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
+import com.app.admin.annotation.SystemServiceLog;
+
 /**
  * 后台 企业单位管理
  * @author aaronlau
@@ -50,6 +52,7 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 	* @return String    返回类型 
 	* @throws
 	 */
+	@SystemServiceLog(description="企业信息批量导入")
 	public String BatchImport(File file,int row,HttpSession session) throws IOException{
 
 		

@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.app.admin.annotation.SystemControllerLog;
+
 /**
  * Company class
  * @author Lau Aaron
@@ -50,6 +52,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @return
 	 */
 	@RequestMapping("/list")
+	@SystemControllerLog(description="查询企业信息")
 	public ModelAndView list(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/company/list");
@@ -72,6 +75,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @return
 	 */
 	@RequestMapping("/createOrUpdateToFind")
+	@SystemControllerLog(description="添加企业信息")
 	public ModelAndView list(HttpSession session, AdminCompany adminCompany) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("redirect:/adminCompany/list");
@@ -129,6 +133,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@SystemControllerLog(description="删除企业信息")
 	public ModelAndView delete(HttpSession session, @RequestParam(value = "id", defaultValue = "0") String id,
 			@RequestParam(value = "ids", defaultValue = "0") String ids) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -156,6 +161,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 */
 	@SuppressWarnings({ "static-access", "unused" })
 	@RequestMapping(value = "upload")  
+	@SystemControllerLog(description="批量导入企业信息")
     public ModelAndView upload(AdminCompany adminCompany,HttpServletRequest request,HttpSession session,RedirectAttributes attr) {  
 		log.info("开始上传文件");
 		ModelAndView modelAndView = new ModelAndView();
