@@ -16,6 +16,7 @@ import org.app.framework.util.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
@@ -94,8 +95,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         //查询活动信息
         ForderActivity fa =this.forderActivityService.findOneById(checkId,ForderActivity.class);
 
-
-
         if(checkId!=null)
             session.setAttribute("checkActivityId",checkId);
 
@@ -112,6 +111,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             Pagination<Resource> pageList = new Pagination<Resource>();
             Query query = new Query();
             query.addCriteria(Criteria.where("forderActivityId").is(checkId));
+            query.with(new Sort(Sort.Direction.DESC, "createTime"));
             pageList=this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
             modelAndView.addObject("listPhoto",pageList);
         } catch (Exception e) {

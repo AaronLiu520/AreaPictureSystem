@@ -25,7 +25,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-@Repository
+
 public class FileOperateUtil {
 	private static final String FILENAME = "fileName";
 	private static final String CONTENTTYPE = "contentType";
