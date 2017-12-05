@@ -6,6 +6,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.annotation.SystemServiceLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
@@ -19,8 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-
-import com.app.admin.annotation.SystemServiceLog;
 
 /**
  * 后台 企业单位管理
@@ -204,11 +203,7 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 	
 	
 	
-	
-	
-	
-	
-	
+
 	
 	
 	
