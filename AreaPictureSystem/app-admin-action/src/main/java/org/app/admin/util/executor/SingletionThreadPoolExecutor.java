@@ -22,7 +22,7 @@ public class SingletionThreadPoolExecutor {
                 Integer.parseInt(ec.getConfig().getProperty("maximumPoolSize")) ,
                 Integer.parseInt(ec.getConfig().getProperty("keepAliveTime")),
                 TimeUnit.SECONDS,
-                new LinkedBlockingQueue<Runnable>(Integer.parseInt(ec.getConfig().getProperty("queue"))),
+                new LinkedBlockingQueue<Runnable>(),
                 new Rejected());
     }
 
@@ -38,5 +38,7 @@ public class SingletionThreadPoolExecutor {
     public ExecutorService getPool() {
         return pool;
     }
+
+
 
 }
