@@ -23,15 +23,10 @@ public class GeneralBean implements Serializable {
 
 	public GeneralBean() {
 
-		if(createTime==null){
-			this.createTime = new Date();// 创建时间
-		}
-
+		this.createTime = new Date();// 创建时间
 		this.isDelete = false; //
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		if(createDate!=null){
-			this.createDate = sdf.format(new Date());// 创建日期
-		}
+		this.createDate = sdf.format(new Date());// 创建日期
 
 	}
 	
