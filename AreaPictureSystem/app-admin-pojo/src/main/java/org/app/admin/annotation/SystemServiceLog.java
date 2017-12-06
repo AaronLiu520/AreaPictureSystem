@@ -21,10 +21,9 @@ import java.lang.annotation.Target;
 * @date 2017年12月4日 下午4:56:36 
 *  
 */
-
-@Target({ElementType.METHOD,ElementType.PARAMETER})
-@Retention(RetentionPolicy.RUNTIME)
-@Documented
+@Target({ ElementType.PARAMETER, ElementType.METHOD })  
+@Retention(RetentionPolicy.RUNTIME)  
+@Documented  
 public @interface SystemServiceLog {
 
 		String description() default "";
