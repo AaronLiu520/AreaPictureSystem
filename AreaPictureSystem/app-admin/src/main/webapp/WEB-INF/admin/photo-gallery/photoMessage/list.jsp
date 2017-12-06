@@ -53,50 +53,13 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-content mailbox-content">
                                 <div class="file-manager">
-                                    <a class="btn btn-block btn-primary compose-mail" href="">
+                                     <a class="btn btn-block btn-primary compose-mail"
+                                        data-toggle="modal" data-target="#CrateActivity">
                                         创建活动
                                     </a>
                                     <div class="space-25"></div>
                                     <h5>导航器</h5>
-                                    <div id="jstree1">
-                                        <!-- jstree-open 打开树形菜单 -->
-                                        <ul>
-                                            <li class="jstree-open" >时间轴
-                                                <ul>
-                                                    <c:forEach items="${photoTimeList}" var="item" varStatus="status">
-                                                        <!-- jstree-open 打开树形 时间轴 -->
-                                                        <c:choose>
-                                                            <c:when test="${item.istree}">
-                                                                <li class="jstree-open" >
-                                                            </c:when>
-                                                            <c:otherwise>
-                                                                <li>
-                                                            </c:otherwise>
-                                                        </c:choose>
-
-                                                             <i class="fa "></i>${item.time}</span>
-                                                            <!-- 活动名称 -->
-                                                            <c:if test="${not empty item.list}">
-                                                                <ul>
-                                                                    <c:forEach items="${item.list}" var="activity" varStatus="status">
-                                                                        <li  data-jstree='{"type":"css"}'>
-                                                                            <span onclick="checkActivity('${activity.id}');">
-                                                                                <i class="fa "></i>${activity.forderActivityName}
-                                                                            </span>
-
-                                                                        </li>
-
-                                                                    </c:forEach>
-                                                                </ul>
-                                                            </c:if>
-                                                        </li>
-                                                    </c:forEach>
-
-                                                </ul>
-                                            </li>
-                                        </ul>
-
-                                    </div>
+                                    <%@include file="treetime.jsp" %>
                                     <!-- 类型 -->
                                     <h5>类型</h5>
                                     <ul class="category-list" style="padding: 0">

@@ -16,15 +16,21 @@
     <div class="mail-box-header">
 
         <!-- 创建子文件夹 -->
-        <form method="get" action="index.html" class="pull-right mail-search">
+        <div class="pull-right mail-search">
             <div class="input-group">
                 <div class="input-group-btn" style="width: 0%">
+                    <!--
                     <button type="submit" class="btn btn-sm btn-primary">
                         创建子文件夹
+                    </button>-->
+
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        全选
                     </button>
+
                 </div>
             </div>
-        </form>
+        </div>
 
         <c:choose>
             <c:when test="${not empty fa}">
@@ -45,12 +51,12 @@
                     </i>&nbsp;&nbsp;<span class="bold">上传图片</span>
                     </button>
                 </a>
-
+                <!--
                 <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
-
+                -->
 
                 <button class="btn btn-danger " type="button"><i class="fa fa-warning">
-                </i><span class="bold">删除</span>
+                </i><span class="bold">批量删除</span>
                 </button>
 
                 <button class="btn btn-primary " type="button"><i class="fa fa-check"></i>&nbsp;下载</button>
@@ -65,6 +71,10 @@
     </div>
 
 
+
+
+
+
     <!-- 资源内容展示 -->
     <div class="mail-box">
         <div>
@@ -77,7 +87,7 @@
                                 <div class="file">
                                     <span class="corner"></span>
 
-                                    <div id="item_4"  class="item image" style="height: 150px;text-align: center;">
+                                    <div id="item_4"  class="item image" style="height: 130px;text-align: center;">
                                         <img alt="image" class="img-responsive" style="margin: 0 auto;"
                                              src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min">
                                         <div class="tooltip_description" style="display:none" title="相机、图片信息">
@@ -167,11 +177,14 @@
                                                         <span style="float:left;">高度: ${item.imgInfoBean.imgHeight}</span>
                                                         <span style="float: right;padding-right: 10px;">宽度: ${item.imgInfoBean.imgWidth}</span>
                                                     </p>
-
-                                                    <p>
-                                                        <span style="float:left;">相机: ${item.imgInfoBean.make} </span>
-                                                        <span style="float: right;padding-right: 10px;">型号: ${item.imgInfoBean.model}</span>
-                                                    </p>
+                                                    <!-- 相机、型号-->
+                                                    <c:if test="${not empty item.imgInfoBean.make &&
+                                                          not empty item.imgInfoBean.model}">
+                                                        <p>
+                                                            <span style="float:left;">相机: ${item.imgInfoBean.make} </span>
+                                                            <span style="float: right;padding-right: 10px;">型号: ${item.imgInfoBean.model}</span>
+                                                        </p>
+                                                    </c:if>
                                                     <!-- 检查闪光，模式 -->
                                                     <c:if test="${not empty item.imgInfoBean.flashMode &&
                                                           not empty item.imgInfoBean.easyShooting}">
