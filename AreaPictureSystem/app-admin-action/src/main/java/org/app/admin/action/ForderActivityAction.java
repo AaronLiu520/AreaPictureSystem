@@ -14,6 +14,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.service.ForderActivityService;
@@ -58,6 +60,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	 *         当前文件夹id @param @return 设定文件 @return ModelAndView 返回类型 @throws
 	 */
 	@RequestMapping("/list")
+	@SystemErrorLog(description="查询活动出错")
+	@SystemControllerLog(description = "查询活动信息")
 	public ModelAndView list(HttpSession session, @ModelAttribute("parentId") String parentId,
 			@RequestParam(value = "id", defaultValue = "") String id) {
 		log.info("查询所有的文件夹");
@@ -116,6 +120,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	 *         接受界面的枚举枚举值 @param @return 设定文件 @return ModelAndView 返回类型 @throws
 	 */
 	@RequestMapping("/createForder")
+	@SystemErrorLog(description="创建活动出错")
+	@SystemControllerLog(description = "创建活动信息")
 	public ModelAndView createForderActivity(HttpSession session,
 			 ForderActivity forderActivity,
 			@RequestParam(value = "Enumtype", defaultValue = "") String Enumtype,
@@ -144,6 +150,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	 *         删除后需要显示的文件夹 @param @return 设定文件 @return ModelAndView 返回类型 @throws
 	 */
 	@RequestMapping("/delete")
+	@SystemErrorLog(description="删除活动出错")
+	@SystemControllerLog(description = "删除活动信息")
 	public ModelAndView delete(RedirectAttributes model, @RequestParam(value = "id", defaultValue = "") String id,
 			@RequestParam(value = "parentId", defaultValue = "") String parentId) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -173,6 +181,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	 */
 	// TODO
 	@RequestMapping(value = "/ajaxgetRepletes", method = RequestMethod.POST)
+	@SystemErrorLog(description="查询重复活动出错")
+	@SystemControllerLog(description = "查询重复活动信息")
 	public void ajaxgetRepletes(
 			@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
 			@RequestParam(value = "parentId", defaultValue = "0") String parentId, PrintWriter printWriter,
