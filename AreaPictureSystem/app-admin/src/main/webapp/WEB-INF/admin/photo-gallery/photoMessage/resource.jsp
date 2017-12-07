@@ -34,7 +34,12 @@
 
         <c:choose>
             <c:when test="${not empty fa}">
-                <h2>${fa.forderActivityName}</h2>
+                <h2>
+                    <c:if test="${webType=='AREA'}"> 区域 </c:if>
+                    <c:if test="${webType=='BASEUTIS'}"> 基层单位 </c:if>
+                    <c:if test="${webType=='DIRECTLYUTIS'}"> 直属单位 </c:if>
+                       《 ${fa.forderActivityName} 》
+                </h2>
             </c:when>
             <c:otherwise>
                 <h3>

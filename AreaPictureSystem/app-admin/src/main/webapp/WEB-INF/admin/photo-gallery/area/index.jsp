@@ -56,19 +56,21 @@
                                 <div class="ibox-content">
                                     <div class="widget style1 navy-bg">
                                         <div class="row">
-                                            <div class="col-xs-4">
-                                                <i class="fa fa-anchor fa-5x"></i>
-                                            </div>
-                                            <div class="col-xs-8 text-right">
-                                                <span style="font-size: 10px;"> 如果您找不到需要的活动主题，请点击我！ </span>
-                                                <h3 class="font-bold">我要《创建主题》活动</h3>
-                                            </div>
+                                            <a href="${pageContext.request.contextPath}/photoMessageAction/index/AREA">
+                                                <div class="col-xs-4">
+                                                    <i class="fa fa-anchor fa-5x"></i>
+                                                </div>
+                                                <div class="col-xs-8 text-right">
+                                                    <span style="font-size: 10px;"> 如果您找不到需要的活动主题，请点击我！ </span>
+                                                    <h3 class="font-bold">我要《创建主题》活动</h3>
+                                                </div>
+                                            </a>
                                         </div>
                                     </div>
 
                                     <div class="widget style1 lazur-bg">
                                         <div class="row">
-                                            <a href="${pageContext.request.contextPath}/photoMessageAction/index">
+
                                                 <div class="col-xs-4">
                                                     <i class="fa fa-eye fa-5x"></i>
                                                 </div>
@@ -76,7 +78,7 @@
                                                     <span>想更精确的查找资料，点击我！</span>
                                                     <h3 class="font-bold">查找区域图片资料</h3> 
                                                 </div>
-                                            </a>
+
                                         </div>
                                     </div>
 
@@ -155,106 +157,11 @@
     <!-- 图表统计 -->
     <script src="${pageContext.request.contextPath}/assets/admin/js/plugins/flot/jquery.flot.js"></script>
     <script>
-        $(function() {
-            var barOptions = {
-                series: {
-                    lines: {
-                        show: true,
-                        lineWidth: 2,
-                        fill: true,
-                        fillColor: {
-                            colors: [{
-                                opacity: 1.0
-                            }, {
-                                opacity: 0.0
-                            }]
-                        }
-                    }
-                },
-                xaxis: {
-                    ticks:20, 
-                    tickDecimals: 0,
-                },
-                yaxis:{
-                	ticks:10,   
-                	min: 0,   
-                	tickDecimals:0 ,   
-                },
-                colors: ["#1ab394"],
-                grid: {
-                    color: "#999999",
-                    hoverable: true,
-                    clickable: true,
-                    tickColor: "#D4D4D4",
-                    borderWidth:0
-                },
-                legend: {
-                    show: false
-                },
-                tooltip: true,
-                tooltipOpts: {
-                    content: "x: %x, y: %y"
-                }
-            };	
-            var barData = {
-                label: "bar",
-                data: [
-                	<c:forEach items="${uploadList}" var="items" varStatus="status">
-               		 ${items },
-               	 </c:forEach>
-                ]
-            };
-            $.plot($("#flot-line-chart"), [barData], barOptions);
-
-            
-            
-            
-            // 节点提示  
-            function showTooltip(x, y, contents) {  
-                $('<div id="tooltip">' + contents + '</div>').css( {  
-                    position: 'absolute',  
-                    display: 'none',  
-                    top: y + 10,  
-                    left: x + 10,  
-                    border: '1px solid #fdd',  
-                    padding: '2px',  
-                    'background-color': '#dfeffc',  
-                    opacity: 0.80  
-                }).appendTo("body").fadeIn(200);  
-            }  
-      
-            var previousPoint = null;  
-            // 绑定提示事件  
-            $("#flot-line-chart").bind("plothover", function (event, pos, item) {  
-                if (item) {  
-                    if (previousPoint != item.dataIndex) {  
-                        previousPoint = item.dataIndex;  
-                        $("#tooltip").remove();  
-                        var y = item.datapoint[1].toFixed(0);  
-      
-                        var tip = "上传总数：";  
-                        showTooltip(item.pageX, item.pageY,tip+y);  
-                    }  
-                }  
-                else {  
-                    $("#tooltip").remove();  
-                    previousPoint = null;  
-                }  
-            
-            }); 
-            
-            
-            
-            
-            
-            
-            
-            
-            
-        });
+                // 时间轴（活动的单事件）
+        function checkActivity(id){
+            window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/AREA?checkId="+id
+        }
 
     </script>
-
-
 </body>
 </html>

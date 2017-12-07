@@ -113,8 +113,8 @@
 												<label class="col-sm-4 control-label">类型</label>
 												<div class="col-sm-8">
 													<select class="form-control" name="type" id="type">
-														<option id="12" value="">直属单位</option>
-														<option id="123" value="">基层单位</option>
+														<option id="DIRECTLYUTIS" value="DIRECTLYUTIS">直属单位</option>
+														<option id="BASEUTIS" value="BASEUTIS">基层单位</option>
 													</select>
 												</div>
 											</div>

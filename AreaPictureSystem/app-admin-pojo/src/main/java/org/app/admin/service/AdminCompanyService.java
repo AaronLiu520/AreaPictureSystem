@@ -79,7 +79,8 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 		    		   importAdminCompany.setTelPhone(resultexcel[i][j+4]);
 		    		   importAdminCompany.setEmail(resultexcel[i][j+5]);
 		    		   importAdminCompany.setNature(resultexcel[i][j+6]);
-		    		   importAdminCompany.setType(resultexcel[i][j+7]);
+					   //TODO
+		    		   //importAdminCompany.setType(resultexcel[i][j+7]);
 		    		   importAdminCompany.setRemark(resultexcel[i][j+8]);
 
 		    		   String telPhone = importAdminCompany.getTelPhone();
@@ -107,7 +108,8 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 		            		 adminCompany.setRemark(importAdminCompany.getRemark());
 		            		 adminCompany.setShorts(importAdminCompany.getShorts());
 		            		 adminCompany.setTelPhone(importAdminCompany.getTelPhone());
-		            		 adminCompany.setType(importAdminCompany.getType());
+		            		 //TODO
+		            		// adminCompany.setType(importAdminCompany.getType());
 		       
 		            		 //执行更新操作。
 		            		 this.save(adminCompany);

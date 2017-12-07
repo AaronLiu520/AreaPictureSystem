@@ -49,6 +49,7 @@
 
             <div class="wrapper wrapper-content">
                 <div class="row">
+                    <!--left -->
                     <div class="col-lg-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-content mailbox-content">
@@ -59,62 +60,54 @@
                                     </a>
                                     <div class="space-25"></div>
                                     <h5>导航器</h5>
-                                    <%@include file="treetime.jsp" %>
-                                    <!-- 类型 -->
-                                    <h5>类型</h5>
-                                    <ul class="category-list" style="padding: 0">
-                                        <li>
-                                            <a href="mail_compose.html#"> <i class="fa fa-circle text-navy"></i>幼儿园</a>
-                                        </li>
-                                        <li>
-                                            <a href="mail_compose.html#"> <i class="fa fa-circle text-danger"></i>小学</a>
-                                        </li>
-                                        <li>
-                                            <a href="mail_compose.html#"> <i class="fa fa-circle text-primary"></i>中学</a>
-                                        </li>
-                                        <li>
-                                            <a href="mail_compose.html#"> <i class="fa fa-circle text-info"></i>高中</a>
-                                        </li>
-                                        <li>
-                                            <a href="mail_compose.html#"> <i class="fa fa-circle text-warning"></i>九年制</a>
-                                        </li>
-                                    </ul>
 
+                                    <!-- 树形菜单类型-->
+                                    <c:choose>
+                                        <c:when test="${webType=='BASEUTIS'}">
+                                            <%@include file="basetreetime.jsp" %>
+                                        </c:when>
+                                        <c:otherwise>
+                                             <%@include file="treetime.jsp" %>
+                                        </c:otherwise>
+                                    </c:choose>
+
+
+
+                                    <!-- 如果是基层单位 显示（类型） -->
+                                    <c:if test="${webType=='BASEUTIS'}">
+                                        <%@include file="baseuitls.jsp" %>
+                                    </c:if>
+                                    <!-- 标签内容 -->
                                     <c:if test="${not empty lableList}">
                                         <h5 class="tag-title">标签</h5>
-
                                         <ul class="tag-list" style="padding: 0">
                                             <c:forEach items="${lableList}" var="item" varStatus="status">
                                                 <li><a href=""><i class="fa fa-tag"></i> ${item.labelName}</a>
                                                 </li>
                                             </c:forEach>
                                         </ul>
-
                                     </c:if>
-
                                     <div class="clearfix"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <!-- 资源管理 -->
                     <%@include file="resource.jsp" %>
 
                 </div>
             </div>
-
-             <%@include file="../../public/botton.jsp" %>
+                <!-- 底部 -->
+                <%@include file="../../public/botton.jsp" %>
         </div>
     </div>
 
 
 
-    <!--javaScript event-->
+    <!--javaScript event and JS-->
     <%@include file="operate.jsp" %>
     <!-- import popups -->
     <%@include file="popups.jsp" %>
-
 
     <!-- DROPZONE -->
     <script src="${pageContext.request.contextPath}/assets/admin/js/plugins/dropzone/dropzone.js"></script>

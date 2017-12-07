@@ -57,7 +57,7 @@ public class Task implements Runnable {
 
 
     /**
-     * 加载资源
+     * Load Resource
      *
      * @param task
      * @return

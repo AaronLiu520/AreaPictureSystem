@@ -19,7 +19,7 @@
                 <h4 class="modal-title">创建活动／文件夹</h4>
             </div>
 
-            <form method="post" action="createActivity">
+            <form method="post" action="../createActivity/${webType}">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>名称</label>
@@ -40,7 +40,7 @@
                                id="address">
 
                         <!-- 活动主题类型 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人 -->
-                        <input type="hidden" id="type" name="type" value="QUYU">
+                        <input type="hidden" id="type" name="type" value="${webType}">
                         <!-- 公司ID ，个人ID-->
                         <input  type="hidden" name="boundId" value="${sessionScope.userSession.adminCompany.id}">
 
@@ -74,7 +74,7 @@
                 <h4 class="modal-title" id="galleryNameId">编 缉</h4>
             </div>
 
-            <form method="post" action="update">
+            <form method="post" action="${pageContext.request.contextPath}/photoMessageAction/update/${webType}">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>名称</label>
@@ -115,7 +115,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="ibox-content">
-                        <form  id="my-awesome-dropzone" class="dropzone" action="uploadFile">
+                        <form  id="my-awesome-dropzone" class="dropzone"
+                               action="${pageContext.request.contextPath}/photoMessageAction/uploadFile">
                             <div class="dropzone-previews"></div>
                             <input type="hidden" value="${sessionScope.checkActivityId}" name="forderActivityId">
                             <button onclick="uploadFile()"  type="submit" class="btn btn-primary pull-right">上传文件</button>

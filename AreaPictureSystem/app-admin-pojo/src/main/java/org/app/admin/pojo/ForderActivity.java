@@ -2,6 +2,7 @@ package org.app.admin.pojo;
 
 import java.util.List;
 
+import org.app.admin.util.BaseType;
 import org.app.framework.pojo.GeneralBean;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -64,12 +65,16 @@ public class ForderActivity extends GeneralBean {
 	public void setBoundId(String boundId) {
 		this.boundId = boundId;
 	}
-	public Type getType() {
+
+
+	public BaseType.Type getType() {
 		return type;
 	}
-	public void setType(Type type) {
+
+	public void setType(BaseType.Type type) {
 		this.type = type;
 	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -112,7 +117,7 @@ public class ForderActivity extends GeneralBean {
 	private String address;// 活动地址
 	private String sumPotoCount;// 图片数量
 	private String boundId;// 绑定对象Id(公司、个人)
-	private Type type; // 区域，直属单位，个人（用于统计）
+	private BaseType.Type type; // 区域，直属单位，个人（用于统计）
 	private String description; // 描述
 	private String activityTime; // 活动时间
 /*	private Date createTime; // 创建时间
@@ -123,16 +128,6 @@ public class ForderActivity extends GeneralBean {
 	private String parentId;// 付文件夹Id
 
 
-	/**
-	 * 
-	 * @ClassName: Type
-	 * @Description: TODO( 创建枚举类 QUYU表示区域级 ZHISHU 直属 BASE 基层 GEREN 个人 )
-	 * @author fliay
-	 * @date 2017年11月20日 下午2:26:46
-	 *
-	 */
-	public static enum Type {
-		QUYU, ZHISHU, GEREN,BASE
-	}
+
 
 }
