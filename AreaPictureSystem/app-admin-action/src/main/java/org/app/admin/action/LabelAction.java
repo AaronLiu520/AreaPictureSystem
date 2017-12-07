@@ -3,9 +3,6 @@ package org.app.admin.action;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
-
-import org.app.admin.pojo.AdminRole;
-import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.Label;
 import org.app.admin.service.LabelService;
 import org.app.framework.action.GeneralAction;
