@@ -39,43 +39,7 @@
                         </div>
                         <div class="ibox-content">
 
-                            <div id="jstree1">
-                                <ul>
-                                    <li class="jstree-open">时间轴
-                                        <ul>
-                                            <li>2017-10-19
-                                                <ul>
-                                                    <li data-jstree='{"type":"img"}'>国庆节活动</li>
-                                                    <li data-jstree='{"type":"img"}'>欢度中秋节</li>
-                                                </ul>
-                                            </li>
-                                            <li>2017-09-11
-                                                <ul>
-                                                    <li data-jstree='{"type":"img"}'>教师节活动</li>
-                                                </ul>
-                                            </li>
-                                            <li>2017-09-01
-                                                <ul>
-                                                    <li data-jstree='{"type":"img"}'>学生运动会</li>
-                                                    <li data-jstree='{"type":"img"}'>教学节活动</li>
-                                                </ul>
-                                            </li>
-                                            <li>2017-05-03
-                                                <ul>
-                                                    <li data-jstree='{"type":"img"}'>学生节活动</li>
-                                                    <li data-jstree='{"type":"img"}'>校园植树节</li>
-                                                </ul>
-                                            </li>
-                                            <!--  class="jstree-open" -->
-                                            <li>2017-04-13
-                                                <ul>
-                                                    <li data-jstree='{"type":"img"}'>喜庆端午节</li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div>
+                            <%@include file="../photoMessage/treetime.jsp" %>
 
                         </div>
                     </div>

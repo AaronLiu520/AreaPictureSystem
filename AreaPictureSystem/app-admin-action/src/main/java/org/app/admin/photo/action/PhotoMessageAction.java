@@ -42,6 +42,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
     private static final Logger log = LoggerFactory
             .getLogger(PhotoMessageAction.class);
+
     @Autowired
     private ForderActivityService forderActivityService;
     @Autowired
@@ -50,7 +51,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     private ResourceService resourceService;//资源（图片）
 
     /**
-     *
+     *  查找图片页面
      * @param session
      * @param type
      * @param activityIndexId
@@ -61,7 +62,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
-
         List<ForderActivity> listFA = this.forderActivityService.find(
                 super.craeteQueryWhere("parentId", "0"), ForderActivity.class);
         // 按日期进行分类
@@ -69,11 +69,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         //TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
         //标签
         modelAndView.addObject("lableList", labelService.find(new Query(), Label.class));
-
         //删除当前活动session
         session.removeAttribute("checkActivityId");
-
-
         return modelAndView;// 返回
     }
 
@@ -225,7 +222,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 
     /**
-     *  更新
+     *  更新  资源描述
      * @param activityId
      * @param id
      * @param resourceName
@@ -279,7 +276,27 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         return modelAndView;
     }
 
+    /**
+     * 创建活动
+     * @param session
+     * @param fa
+     * @return
+     */
+    @RequestMapping("/createActivity")
+    public ModelAndView createActivity(HttpSession session,ForderActivity fa){
+        ModelAndView modelAndView = new ModelAndView();
+
+        AdminUser au=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+        if(au==null)return null;else fa.setCreatUser(au);
+        this.forderActivityService.insert(fa);
+
+        Query query=super.craeteQueryWhere("forderActivityName",fa.getForderActivityName());
+        ForderActivity forderActivity=this.forderActivityService.findOneByQuery(query,ForderActivity.class);
 
 
+        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity?checkId="+forderActivity.getId());
+
+        return modelAndView;
+    }
 
 }

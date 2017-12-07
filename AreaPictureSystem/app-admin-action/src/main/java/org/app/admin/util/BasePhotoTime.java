@@ -5,9 +5,7 @@ import org.app.admin.pojo.ForderActivity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PhotoTime {
-
-    private String id;//文件夹活动，哪于哪个公司，
+public class BasePhotoTime {
 
     private String time;
 
@@ -16,15 +14,7 @@ public class PhotoTime {
     private boolean istree;
 
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public PhotoTime() {
+    public BasePhotoTime() {
         this.istree = false;
     }
 
@@ -68,14 +58,14 @@ public class PhotoTime {
      * @return 前台展示队列
      * @return
      */
-    public static  List<PhotoTime> getPhotoTime(List<ForderActivity> listFA,String checkDate){
-        List<PhotoTime> list=new ArrayList<PhotoTime>();
+    public static  List<BasePhotoTime> getPhotoTime(List<ForderActivity> listFA, String checkDate){
+        List<BasePhotoTime> list=new ArrayList<BasePhotoTime>();
 
         for (ForderActivity fa:listFA) {
-            PhotoTime pt=new PhotoTime();
+            BasePhotoTime pt=new BasePhotoTime();
             boolean check=false;
 
-            for (PhotoTime pts:list) {
+            for (BasePhotoTime pts:list) {
                 if(fa.getActivityTime().equals(pts.getTime())){
                     check=true;
                     pts.getList().add(fa);
@@ -86,7 +76,6 @@ public class PhotoTime {
             //添加时间
             if(check==false){
                 pt.setTime(fa.getActivityTime());
-                pt.setId(fa.getBoundId());
                 if(pt.getList()==null){
                     pt.setList(new ArrayList<ForderActivity>());
                 }
@@ -107,7 +96,6 @@ public class PhotoTime {
         }
         return list;
     }
-
 
 
 

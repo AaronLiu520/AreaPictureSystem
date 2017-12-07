@@ -126,13 +126,13 @@ public class ForderActivity extends GeneralBean {
 	/**
 	 * 
 	 * @ClassName: Type
-	 * @Description: TODO( 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人 )
+	 * @Description: TODO( 创建枚举类 QUYU表示区域级 ZHISHU 直属 BASE 基层 GEREN 个人 )
 	 * @author fliay
 	 * @date 2017年11月20日 下午2:26:46
 	 *
 	 */
 	public static enum Type {
-		QUYU, ZHISHU, GEREN
+		QUYU, ZHISHU, GEREN,BASE
 	}
 
 }
