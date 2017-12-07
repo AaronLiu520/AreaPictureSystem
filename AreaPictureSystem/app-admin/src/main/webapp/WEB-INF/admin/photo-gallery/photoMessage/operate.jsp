@@ -51,6 +51,7 @@
         });
         <!--显示与隐常左边的菜单-->
         $('#show-and-hidden-left').trigger("click");
+
     });
 
     // tree 时间轴

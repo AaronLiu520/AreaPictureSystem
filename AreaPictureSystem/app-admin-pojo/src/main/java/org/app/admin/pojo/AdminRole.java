@@ -2,6 +2,7 @@ package org.app.admin.pojo;
 
 import java.util.List;
 
+import org.app.admin.pojo.AdminUser.UserType;
 import org.app.framework.pojo.GeneralBean;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -18,7 +19,16 @@ public class AdminRole extends GeneralBean {
 	private String reamrk;//备注
 	@DBRef
 	private List<AdminMenu> listMenu;//角色的菜单；
+	
+	private UserType userType;
+	
 		
+	public UserType getUserType() {
+		return userType;
+	}
+	public void setUserType(UserType userType) {
+		this.userType = userType;
+	}
 	public String getName() {
 		return name;
 	}

@@ -25,7 +25,8 @@
 		<context:exclude-filter type="annotation"
 			expression="org.springframework.stereotype.Service" />
 	</context:component-scan>
-
+	<!-- 添加aop -->
+	<aop:aspectj-autoproxy />
 
 	<!-- 启动springMVC的注解功能，他会自动注册HandlerMapping,HandlerAdapter,ExceptionResolver的相关实例 -->
 	<mvc:annotation-driven>
@@ -68,7 +69,7 @@
 				访问登录页面 -->
 			<mvc:exclude-mapping path="/adminUser/checkLogin" /><!-- 
 				登录 -->
-            <mvc:exclude-mapping path="/label/**"/>
+			<mvc:exclude-mapping path="/label/**" />
 			<mvc:exclude-mapping path="/public/top.jsp" />
 			<mvc:exclude-mapping path="/public/left.jsp" />
 			<bean class="org.app.admin.interceptor.LoginInterceptor"></bean>

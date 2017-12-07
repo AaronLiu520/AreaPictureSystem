@@ -7,12 +7,22 @@ import java.util.List;
 
 public class PhotoTime {
 
+    private String id;//文件夹活动，哪于哪个公司，
+
     private String time;
 
     private List<ForderActivity> list;
 
     private boolean istree;
 
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public PhotoTime() {
         this.istree = false;
@@ -76,22 +86,28 @@ public class PhotoTime {
             //添加时间
             if(check==false){
                 pt.setTime(fa.getActivityTime());
+                pt.setId(fa.getBoundId());
                 if(pt.getList()==null){
                     pt.setList(new ArrayList<ForderActivity>());
                 }
                 pt.getList().add(fa);
             }
             //检查是否需要选择中菜单
-            if(checkDate!=null){
+            if(checkDate!=null && pt.getTime()!=null){
                 if(pt.getTime().equals(checkDate)){
                     pt.setIstree(true);
                 }
             }
+            //检查pt.gettime
+            if(pt.getTime()!=null){
+                list.add(pt);
+            }
 
-            list.add(pt);
+
         }
         return list;
     }
+
 
 
 

@@ -59,13 +59,26 @@
 				                            </div>
 				                        </div>
 				                      </div>
+				                      <div class="row">
+				                      			<div class="col-sm-6">
+											<label class="col-sm-4 control-label">用户类型</label>
+											<div class="col-sm-8">
+												<select class="form-control" name="userType" id="userType">
+													<option id="TEACHER" <c:if test="${bean.userType eq  'TEACHER'}">selected</c:if> value="TEACHER">老师</option>
+													<option id="SCHOOLADMIN" <c:if test="${bean.userType eq  'SCHOOLADMIN'}">selected</c:if> value="SCHOOLADMIN">学校管理员</option>
+													<option id="ADMINISTRATORS" <c:if test="${bean.userType eq  'ADMINISTRATORS'}">selected</c:if> value="ADMINISTRATORS">超级管理员</option>
+												</select>
+											</div>
+
+										</div>
+				                      </div>
 				                      
 									<!-- 隐常ID,更新时使用 -->
 									<c:if test="${not empty bean.id}">
 									<input id="id" name="id" type="hidden" value="${bean.id }">
 									</c:if>
 									
-									<div class="modal-footer">
+									<div class="modal-footer" style="margin-top: 20px;">
 										<button type="submit" id="save-btn-news"
 											class="btn btn-primary">保存</button>
 									</div>

@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.annotation.SystemServiceLog;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.ForderActivity.Type;
@@ -44,9 +45,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 *         TODO(根据parentId查询所有文件夹) @param @param parentId @param @return
 	 *         设定文件 @return List<ForderActivity> 返回类型 @throws
 	 */
+	@SystemServiceLog(description = "查询活动")
 	public List<ForderActivity> listForderActivity(String parentId, String id) {
 		Query query = new Query();
-
 		// 如果parentId 为 0 id不为空
 		if (parentId.equals("0") && Common.isNotEmpty(id)) {
 			query.addCriteria(Criteria.where("parentId").is(id));
@@ -74,7 +75,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: findForderById @Description: TODO(根据Id查询文件夹信息) @param @param
-	 * id @param @return 设定文件 @return ForderActivity 返回类型 @throws
+	 *         id @param @return 设定文件 @return ForderActivity 返回类型 @throws
 	 */
 	public ForderActivity findForderById(String id) {
 
@@ -94,12 +95,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 	/**
 	 * 
-	* @Title: findForderByParentId 
-	* @Description: TODO(根据parentId查询) 
-	* @param @param parentId
-	* @param @return    设定文件 
-	* @return List<ForderActivity>    返回类型 
-	* @throws
+	 * @Title: findForderByParentId @Description:
+	 * TODO(根据parentId查询) @param @param parentId @param @return 设定文件 @return
+	 * List<ForderActivity> 返回类型 @throws
 	 */
 	public List<ForderActivity> findForderListByParentId(String parentId) {
 
@@ -120,14 +118,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 		return null;
 
-		
 	}
-	
-	
-	
-	
-	
-	
 
 	/**
 	 * 
@@ -136,7 +127,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 *         session @param @return 设定文件 @return String 返回类型 @throws
 	 */
 	// TODO
-	public String createForder(ForderActivity forderActivity, String enumtype, HttpSession session,String editid) {
+	public String createForder(ForderActivity forderActivity, String enumtype, HttpSession session, String editid) {
 
 		if (Common.isEmpty(forderActivity.getForderActivityName())) {
 
@@ -166,9 +157,10 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			 * forderActivity.setParentId(null); }
 			 */
 			// 1.parentId=null Id=null 创建父文件夹||3.parentId!=null Id=null 创建子文件夹
-			if ((Common.isEmpty(forderActivity.getParentId()) && Common.isEmpty(editid))||(Common.isNotEmpty(forderActivity.getParentId()) && Common.isEmpty(editid))) {
-				if(Common.isEmpty(forderActivity.getParentId())){
-				forderActivity.setParentId("0");
+			if ((Common.isEmpty(forderActivity.getParentId()) && Common.isEmpty(editid))
+					|| (Common.isNotEmpty(forderActivity.getParentId()) && Common.isEmpty(editid))) {
+				if (Common.isEmpty(forderActivity.getParentId())) {
+					forderActivity.setParentId("0");
 				}
 				forderActivity.setResource(new ArrayList<Resource>());
 				forderActivity.setCreatUser(newAdminUser);
@@ -176,8 +168,10 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				// 新建文件夹
 				this.insert(forderActivity);
 
-				// 2.parentId=null Id!=null 修改父文件夹||4.parentId!=null Id!=null 修改子文件夹
-			} else if ((Common.isEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid))||(Common.isNotEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid))) {
+				// 2.parentId=null Id!=null 修改父文件夹||4.parentId!=null Id!=null
+				// 修改子文件夹
+			} else if ((Common.isEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid))
+					|| (Common.isNotEmpty(forderActivity.getParentId()) && Common.isNotEmpty(editid))) {
 				// 根据文件夹的ID进行查询
 				ForderActivity editForderActivity = this.findOneById(editid, ForderActivity.class);
 				if (editForderActivity == null)
@@ -189,21 +183,16 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				editForderActivity.setForderActivityName(forderActivity.getForderActivityName());
 				editForderActivity.setType(forderActivity.getType());
 				this.save(editForderActivity);
-			} 
+			}
 		}
 
 		return null;
 	}
 
-	
 	/**
 	 * 
-	* @Title: delete 
-	* @Description: TODO(调用删除操作) 
-	* @param @param id
-	* @param @return    设定文件 
-	* @return String    返回类型 
-	* @throws
+	 * @Title: delete @Description: TODO(调用删除操作) @param @param id @param @return
+	 * 设定文件 @return String 返回类型 @throws
 	 */
 	public String delete(String id) {
 
@@ -218,65 +207,56 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 	/**
 	 * 
-	* @Title: recursion 
-	* @Description: TODO(递归删除) 
-	* @param @param id    设定文件 
-	* @return void    返回类型 
-	* @throws
+	 * @Title: recursion @Description: TODO(递归删除) @param @param id 设定文件 @return
+	 * void 返回类型 @throws
 	 */
 	public void recursion(String id) {
-		
-		//根据ID查询parentId，如果存在则在查出该parentId的id进行递归查询
-		
+
+		// 根据ID查询parentId，如果存在则在查出该parentId的id进行递归查询
+
 		List<ForderActivity> listForderActivity = this.findForderListByParentId(id);
-		
-			for(ForderActivity forderActivity:listForderActivity){
-				
-				ForderActivity forder = this.findForderById(forderActivity.getId());
-				
-				if(Common.isNotEmpty(forder.getId())){
-					recursion(forder.getId());
-				}
-			
+
+		for (ForderActivity forderActivity : listForderActivity) {
+
+			ForderActivity forder = this.findForderById(forderActivity.getId());
+
+			if (Common.isNotEmpty(forder.getId())) {
+				recursion(forder.getId());
 			}
-			ForderActivity delforder = this.findForderById(id);
-			
-			this.remove(delforder);
+
+		}
+		ForderActivity delforder = this.findForderById(id);
+
+		this.remove(delforder);
 
 	}
-	
-	
-	
+
 	/**
 	 * 
-	* @Title: findForderActivityByName 
-	* @Description: TODO(这里用一句话描述这个方法的作用) 
-	* @param @param forderActivityName  活动名称
-	* @param @param userId				用户id
-	* @param @param boundId				绑定id
-	* @param @return    设定文件 
-	* @return boolean    返回类型 
-	* @throws
+	 * @Title: findForderActivityByName @Description:
+	 * TODO(这里用一句话描述这个方法的作用) @param @param forderActivityName 活动名称 @param @param
+	 * userId 用户id @param @param boundId 绑定id @param @return 设定文件 @return
+	 * boolean 返回类型 @throws
 	 */
-	public boolean findForderActivityByName(String forderActivityName,String userId,String parentId){
-		
+	public boolean findForderActivityByName(String forderActivityName, String userId, String parentId) {
+
 		Query query = new Query();
-		
-		if(Common.isNotEmpty(forderActivityName)){
+
+		if (Common.isNotEmpty(forderActivityName)) {
 			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
-		}else if(Common.isNotEmpty(userId)){
+		} else if (Common.isNotEmpty(userId)) {
 			query.addCriteria(Criteria.where("creatUser.id").is(userId));
 		}
-			query.addCriteria(Criteria.where("parentId").is(parentId));
-	
-		
+		query.addCriteria(Criteria.where("parentId").is(parentId));
+
 		List<ForderActivity> list = this.find(query, ForderActivity.class);
-		
-		if(list.size()>0)
+
+		if (list.size() > 0)
 			return true;
-		else 
+		else
 			return false;
 
 	}
-	
+
+
 }

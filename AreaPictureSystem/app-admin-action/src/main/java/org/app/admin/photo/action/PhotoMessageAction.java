@@ -7,16 +7,16 @@ import org.app.admin.pojo.*;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.LabelService;
 import org.app.admin.service.ResourceService;
-import org.app.admin.util.FileOperateUtil;
-import org.app.admin.util.FileType;
-import org.app.admin.util.ImageTool;
-import org.app.admin.util.PhotoTime;
+import org.app.admin.util.*;
+import org.app.admin.util.executor.SingletionThreadPoolExecutor;
+import org.app.admin.util.executor.Task;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.CommonEnum;
 import org.app.framework.util.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
@@ -42,6 +42,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
     private static final Logger log = LoggerFactory
             .getLogger(PhotoMessageAction.class);
+
     @Autowired
     private ForderActivityService forderActivityService;
     @Autowired
@@ -50,7 +51,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     private ResourceService resourceService;//资源（图片）
 
     /**
-     *
+     *  查找图片页面
      * @param session
      * @param type
      * @param activityIndexId
@@ -61,7 +62,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
-
         List<ForderActivity> listFA = this.forderActivityService.find(
                 super.craeteQueryWhere("parentId", "0"), ForderActivity.class);
         // 按日期进行分类
@@ -69,11 +69,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         //TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
         //标签
         modelAndView.addObject("lableList", labelService.find(new Query(), Label.class));
-
         //删除当前活动session
         session.removeAttribute("checkActivityId");
-
-
         return modelAndView;// 返回
     }
 
@@ -95,8 +92,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         //查询活动信息
         ForderActivity fa =this.forderActivityService.findOneById(checkId,ForderActivity.class);
 
-
-
         if(checkId!=null)
             session.setAttribute("checkActivityId",checkId);
 
@@ -109,12 +104,11 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         modelAndView.addObject("lableList", labelService.find(new Query(), Label.class));
 
 
-
-
         try {
             Pagination<Resource> pageList = new Pagination<Resource>();
             Query query = new Query();
             query.addCriteria(Criteria.where("forderActivityId").is(checkId));
+            query.with(new Sort(Sort.Direction.DESC, "createTime"));
             pageList=this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
             modelAndView.addObject("listPhoto",pageList);
         } catch (Exception e) {
@@ -144,7 +138,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             throws IOException {
         //session
         AdminUser au=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-
+        SingletionThreadPoolExecutor pool= SingletionThreadPoolExecutor.getInstance();
         log.info("活动ID ："+forderActivityId);
 
         List<Resource> myfilesList;
@@ -174,57 +168,32 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             String originalFileName = mpfile.getOriginalFilename();
             // 创建文件的新名字(当前的时间＋后缀)
             String newFileName = new Date().getTime() + prefix;
-            // 保存文件的新地址
+            // TODO 保存文件的新地址
             StringBuffer path = new StringBuffer(request.getSession()
                     .getServletContext().getRealPath(File.separator))
                     .append("WEB-INF")
                     .append(File.separator)
                     .append("uploadmr").append(File.separator);
 
-            String NewFilepath = path + newFileName;
 
             // 保存上传的文件到新地址
             FileOutputStream fos = FileUtils.openOutputStream(new File(
-                    NewFilepath));
+                    path + newFileName));
             IOUtils.copy(mpfile.getInputStream(), fos);
 
-            rf.setId(String.valueOf(new Date().getTime()));//ID
+
             rf.setUploadPerson(au.getName());   // 1 上传者
-            rf.setBoundId(au.getId());  // 1 绑定公司或个人Id
-            rf.setForderActivityId(forderActivityId);   // 1 文件夹Id或活动Id
+            rf.setBoundId(au.getId());  // 2 绑定公司或个人Id
+            rf.setForderActivityId(forderActivityId);   // 3 文件夹Id或活动Id
+            rf.setOriginalName(mpfile.getOriginalFilename());// 4 原名
+            rf.setOriginalPath(path.toString());// 5 路径
 
-            rf.setOriginalName(mpfile.getOriginalFilename());// 1 资源原名
-            rf.setGenerateName(newFileName);// 1  生成的文件名
-            rf.setOriginalPath(NewFilepath);// 1 资源路径
-            rf.setExtensionName(prefix);// 文件扩展名
+            rf.setExtensionName(prefix);// 7 扩展名
+            rf.setGenerateName(newFileName);// 8  生成的文件名
 
-            rf.setResourceName(mpfile.getOriginalFilename());//同步一下：3 资源名称
-
-            // 如果是图片，压缩它
             log.info("后缀名:"+prefix);
             if (FileType.picture.toLowerCase().indexOf(prefix.toLowerCase()) !=-1) {
-                log.info("图片压缩");
-                ImageTool tool = new ImageTool();
-                log.info("图片原地址："+path.toString());
-                rf.setFileType(FileType.picture);
-
-                // 创建缩略图片
-                // compressPic(大图片路径,生成小图片路径,大图片文件名,生成小图片文名,生成小图片宽度,
-                // 生成小图片高度,是否等比缩放(默认为true))
-                boolean min_imgupdate=tool.compressPic(path.toString(), path.toString(), newFileName,
-                        "min_" + newFileName, 200, 200, true);
-                boolean middle_imgupdate=tool.compressPic(path.toString(), path.toString(), newFileName,
-                        "middle_" + newFileName, 500, 300, true);
-
-                if(min_imgupdate){
-                    rf.setMin_generateName(path + "min_"+ newFileName);// 小图
-                }else if(middle_imgupdate){
-                    rf.setMin_generateName(path + "min_"+ newFileName);// 中图
-                }
-                rf.setMax_generateName(path + newFileName);// 原图
-                rf.setFileType("picture");// 文件夹，图片，文档等
-                fileContainsType=FileOperateUtil.fileTypeScreening(fileContainsType,"picture");//父类的图片类型集合
-
+                rf.setFileType(FileType.picture);// 7 文件类型
             }else if(FileType.video.toLowerCase().toLowerCase().indexOf(prefix.toLowerCase()) !=-1) {
                 //TODO video
             }else if(FileType.music.toLowerCase().indexOf(prefix.toLowerCase()) !=-1) {
@@ -240,6 +209,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             log.info("文件信息:" + rf.toString());
             // 更新到数据库
             this.resourceService.insert(rf);
+            pool.getPool().execute(new Task(rf.getGenerateName(),this.resourceService));
+
         }
 
         //返回当前活动的ID
@@ -251,7 +222,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 
     /**
-     *  更新
+     *  更新  资源描述
      * @param activityId
      * @param id
      * @param resourceName
@@ -268,11 +239,12 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
         if(id!=null){
             Resource r=this.resourceService.findOneById(id,Resource.class);
-            r.setResourceName(resourceName);
-            r.setPerson(person);
-            r.setPhotographer(photographer);
-            r.setResourceAddress(resourceAddress);
-            r.setDescription(description);
+            if(r.getEditorImgInfo()==null) r.setEditorImgInfo(new EditorImgBean());
+                r.getEditorImgInfo().setResourceName(resourceName);
+                r.getEditorImgInfo().setPerson(person);
+                r.getEditorImgInfo().setPhotographer(photographer);
+                r.getEditorImgInfo().setResourceAddress(resourceAddress);
+                r.getEditorImgInfo().setDescription(description);
             this.resourceService.save(r);
         }
         modelAndView.setViewName("redirect:/photoMessageAction/checkActivity?checkId="+activityId);
@@ -283,7 +255,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
     /**
      * 删除资源
-     * @param session
      * @param activityId
      * @param id
      * @param ids
@@ -305,7 +276,27 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         return modelAndView;
     }
 
+    /**
+     * 创建活动
+     * @param session
+     * @param fa
+     * @return
+     */
+    @RequestMapping("/createActivity")
+    public ModelAndView createActivity(HttpSession session,ForderActivity fa){
+        ModelAndView modelAndView = new ModelAndView();
+
+        AdminUser au=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+        if(au==null)return null;else fa.setCreatUser(au);
+        this.forderActivityService.insert(fa);
+
+        Query query=super.craeteQueryWhere("forderActivityName",fa.getForderActivityName());
+        ForderActivity forderActivity=this.forderActivityService.findOneByQuery(query,ForderActivity.class);
 
 
+        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity?checkId="+forderActivity.getId());
+
+        return modelAndView;
+    }
 
 }

@@ -76,6 +76,7 @@ public class AdminRoleAction extends GeneralAction<AdminRole> {
 					AdminRole updateAR=this.adminRoleService.findOneById(adminRole.getId(),AdminRole.class);
 					updateAR.setName(adminRole.getName());
 					updateAR.setReamrk(adminRole.getReamrk());
+					updateAR.setUserType(adminRole.getUserType());
 					this.adminRoleService.save(updateAR);
 
 				}

@@ -17,7 +17,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.app.admin.action.AdminUserAction;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -25,7 +25,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-@Repository
+
 public class FileOperateUtil {
 	private static final String FILENAME = "fileName";
 	private static final String CONTENTTYPE = "contentType";
@@ -160,7 +160,6 @@ public class FileOperateUtil {
 	 * @param response
 	 * @param storeName
 	 * @param contentType
-	 * @param realName
 	 * @throws Exception
 	 */
 	public static void download(HttpServletRequest request, HttpServletResponse response, String storeName,
@@ -225,8 +224,11 @@ public class FileOperateUtil {
      */
     public static String getFilePrefix(String fileName) {
 
-
-        return fileName.substring(fileName.lastIndexOf("."));
+        return fileName.substring(fileName.lastIndexOf(".")).toLowerCase().trim();
     }
+
+
+
+
 	
 }

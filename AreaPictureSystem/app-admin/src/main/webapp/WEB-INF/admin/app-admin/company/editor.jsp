@@ -101,9 +101,11 @@
 
 	                                        <div class="col-sm-8">
 	                                            <select class="form-control" name="nature" id="nature">
-													<option id="0" value="">幼儿园</option>
-													<option id="1" value="">小学</option>
-													<option id="2" value="">中学</option>
+													<option id="幼儿园" value="幼儿园">幼儿园</option>
+													<option id="小学" value="小学">小学</option>
+													<option id="中学" value="中学">中学</option>
+													<option id="高中" value="高中">高中</option>
+													<option id="九年制" value="九年制">九年制</option>
 	                                            </select>
 												</div>
 											</div>

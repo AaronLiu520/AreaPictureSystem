@@ -14,7 +14,11 @@ import java.util.List;
  */
 @Document(collection = "AdminUser")
 public class AdminUser extends GeneralBean {
-    private String name;
+    /** 
+	* @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
+	*/ 
+	private static final long serialVersionUID = 3564343269323650694L;
+	private String name;
     @Indexed
     private String userName;
     @Indexed

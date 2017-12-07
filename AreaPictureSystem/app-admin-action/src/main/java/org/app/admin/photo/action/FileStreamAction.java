@@ -30,6 +30,7 @@ public class FileStreamAction {
     @Autowired
     private ResourceService resourceService;//资源（图片）
 
+
     /**
      * 取當前的缩略图片
      *
@@ -37,34 +38,51 @@ public class FileStreamAction {
      * @param response
      */
     @RequestMapping("/getImg/{id}")
-    public void getThumbnailsImage(@PathVariable(value = "id") String id,String type,
+    public void getThumbnailsImage(@PathVariable(value = "id")  String id , String type,
                                    HttpServletResponse response, HttpServletRequest request) {
-        try {
-            Resource r = resourceService.findOneById(id, Resource.class);
-            if (r == null) {
-                //throw new ProValiException("error", "数据错误");
-            }
-            if (FileType.picture.toLowerCase().indexOf(r.getExtensionName()) !=-1) {
-                StringBuffer buffer;
-                //获取不同图片的大小
-                if (type.equals("min")) {
-                    buffer = new StringBuffer(r.getMin_generateName());
-                } else if (type.equals("middle")) {
-                    buffer = new StringBuffer(r.getMiddle_generateName());
-                } else if (type.equals("max")) {
-                    buffer = new StringBuffer(r.getMax_generateName());
-                } else {
-                    buffer = new StringBuffer(r.getMin_generateName());
-                }
 
-                log.info("访问缩略图片的路径：{}", buffer.toString());
-                File file = new File(buffer.toString());
-                FileInputStream is = new FileInputStream(file);
-                ResponseTools.responsePicture(response, is);
+
+            Resource r = resourceService.findOneById(id, Resource.class);
+
+            if (r == null )  return;
+
+                if (FileType.picture.toLowerCase().indexOf(r.getExtensionName()) != -1) {
+
+                    StringBuffer buffer;
+
+                    try {
+                        if (r.getImgCompressionBean() != null && r.getImgCompressionBean().getMin_generateName()!="") {
+                            //获取不同图片的大小
+                            if (type.equals("min")) {
+                                buffer = new StringBuffer(r.getOriginalPath() + r.getImgCompressionBean().getMin_generateName());
+                            } else if (type.equals("middle")) {
+                                buffer = new StringBuffer(r.getOriginalPath() + r.getImgCompressionBean().getMiddle_generateName());
+                            } else if (type.equals("max")) {
+                                buffer = new StringBuffer(r.getOriginalPath() + r.getImgCompressionBean().getMax_generateName());
+                            } else {
+                                buffer = new StringBuffer(r.getOriginalPath() + r.getGenerateName());
+                            }
+                        }else {
+                            //原图
+                            buffer = new StringBuffer(r.getOriginalPath() + r.getGenerateName());
+                        }
+                    }catch (Exception e){
+                            buffer = new StringBuffer(r.getOriginalPath() + r.getGenerateName());
+                    }
+
+                    try {
+                        log.info("访问缩略图片的路径：{}", buffer.toString());
+                        File file = new File(buffer.toString());
+                        FileInputStream is = new FileInputStream(file);
+                        ResponseTools.responsePicture(response, is);
+                    } catch (Exception e) {
+                        log.error(e.toString());
+                    }
+
+
             }
-        } catch (Exception e) {
-            log.error(e.toString());
-        }
+
+
 
     }
 }
