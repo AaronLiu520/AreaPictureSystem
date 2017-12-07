@@ -13,7 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.app.admin.annotation.SystemServiceLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.ForderActivity.Type;
@@ -45,7 +45,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 *         TODO(根据parentId查询所有文件夹) @param @param parentId @param @return
 	 *         设定文件 @return List<ForderActivity> 返回类型 @throws
 	 */
-	@SystemServiceLog(description = "查询活动")
+	@SystemErrorLog(description = "查询活动")
 	public List<ForderActivity> listForderActivity(String parentId, String id) {
 		Query query = new Query();
 		// 如果parentId 为 0 id不为空

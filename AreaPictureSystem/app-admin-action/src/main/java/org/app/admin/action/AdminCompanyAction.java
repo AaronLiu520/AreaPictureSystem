@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
@@ -52,8 +53,13 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @return
 	 */
 	@RequestMapping("/list")
+	@SystemErrorLog(description="查询企业信息出错")
 	@SystemControllerLog(description = "查询企业信息")
 	public ModelAndView list(HttpSession session) {
+		
+		this.AdminCompanyService.aaa();
+		
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/company/list");
 		session.removeAttribute("error");
@@ -76,6 +82,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @return
 	 */
 	@RequestMapping("/createOrUpdateToFind")
+	@SystemErrorLog(description="添加企业信息出错")
 	@SystemControllerLog(description = "添加企业信息")
 	public ModelAndView list(HttpSession session, AdminCompany adminCompany) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -134,6 +141,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @return
 	 */
 	@RequestMapping("/delete")
+	@SystemErrorLog(description="删除企业信息出错")
 	@SystemControllerLog(description = "删除企业信息")
 	public ModelAndView delete(HttpSession session, @RequestParam(value = "id", defaultValue = "0") String id,
 			@RequestParam(value = "ids", defaultValue = "0") String ids) {
@@ -160,6 +168,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 */
 	@SuppressWarnings({ "static-access", "unused" })
 	@RequestMapping(value = "upload")
+	@SystemErrorLog(description="批量导入企业信息出错")
 	@SystemControllerLog(description = "批量导入企业信息")
 	public ModelAndView upload(AdminCompany adminCompany, HttpServletRequest request, HttpSession session,
 			RedirectAttributes attr) {
@@ -210,6 +219,8 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	 * @throws Exception
 	 */
 	@RequestMapping(value = "download")
+	@SystemErrorLog(description="下载导企业信息导入模版出错")
+	@SystemControllerLog(description = "下载企业信息导入模版")
 	public ModelAndView download(HttpServletRequest request, HttpServletResponse response) throws Exception {
 		String storeName = "企业信息导入模版.xlsx";
 		String contentType = "application/octet-stream";

@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemControllerLog;
-import org.app.admin.annotation.SystemServiceLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.Log;
 import org.app.admin.service.LogService;
@@ -49,8 +49,8 @@ public class SystemLogAspect {
 	private LogService logService;
 
 	// service层切点
-	@Pointcut("@annotation(org.app.admin.annotation.SystemServiceLog)")
-	public void ServiceAspect() {
+	@Pointcut("@annotation(org.app.admin.annotation.SystemErrorLog)")
+	public void ErrorAspect() {
 
 	}
 
@@ -107,7 +107,7 @@ public class SystemLogAspect {
 	 * @param joinPoint
 	 * @param e
 	 */
-	@AfterThrowing(pointcut = "ServiceAspect()", throwing = "e")
+	@AfterThrowing(pointcut = "ErrorAspect()", throwing = "e")
 	public void doAfterThrowing(JoinPoint joinPoint, Throwable e) {
 		Gson gson = new Gson();
 		// 获取但当前request请求
@@ -190,7 +190,7 @@ public class SystemLogAspect {
 
 				if (clazzs.length == args.length) {
 
-					description = method.getAnnotation(SystemServiceLog.class).description();
+					description = method.getAnnotation(SystemErrorLog.class).description();
 					break;
 				}
 			}

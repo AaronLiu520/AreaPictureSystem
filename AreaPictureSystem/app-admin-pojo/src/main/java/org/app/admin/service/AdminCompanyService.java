@@ -6,7 +6,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.app.admin.annotation.SystemServiceLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
@@ -51,7 +51,7 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 	* @return String    返回类型 
 	* @throws
 	 */
-	@SystemServiceLog(description="企业信息批量导入")
+	@SystemErrorLog(description="企业信息批量导入")
 	public String BatchImport(File file,int row,HttpSession session) throws IOException{
 
 		
@@ -201,8 +201,11 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 	    }  
 	     
 	
-	
-	
+	@SystemErrorLog(description="aaaaa")
+	  public void aaa(){
+			System.out.println(1/0);
+		}
+		
 
 	
 	

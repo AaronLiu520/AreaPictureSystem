@@ -27,6 +27,10 @@
 	</context:component-scan>
 	<!-- 添加aop -->
 	<aop:aspectj-autoproxy />
+	
+	
+	
+	
 
 	<!-- 启动springMVC的注解功能，他会自动注册HandlerMapping,HandlerAdapter,ExceptionResolver的相关实例 -->
 	<mvc:annotation-driven>
