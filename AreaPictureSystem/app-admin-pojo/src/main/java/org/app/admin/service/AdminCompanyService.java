@@ -201,15 +201,6 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 	    }  
 	     
 	
-	@SystemErrorLog(description="aaaaa")
-	  public void aaa(){
-			System.out.println(1/0);
-		}
-		
-
-	
-	
-	
 	
 	
 	

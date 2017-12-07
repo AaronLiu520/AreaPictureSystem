@@ -57,9 +57,6 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	@SystemControllerLog(description = "查询企业信息")
 	public ModelAndView list(HttpSession session) {
 		
-		this.AdminCompanyService.aaa();
-		
-		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/company/list");
 		session.removeAttribute("error");
