@@ -7,8 +7,96 @@
     p{
         height: 15px;
     }
-
+<!--添加checkboxbox样式-->
 </style>
+    <link href="${pageContext.request.contextPath}/assets/admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css" rel="stylesheet">
+
+<script type="text/javascript">
+
+$(function(){
+
+	$("#checkall").click(function() {
+		var flag = $("[name=checkall]:checkbox").is(':checked');
+		$("[name=ids]:checkbox").each(function() {
+			$(this).prop("checked", flag);
+		})
+	})
+	
+})
+</script>
+
+
+
+<script type="text/javascript">
+
+
+var i=0;
+function choose(){
+	if(i==0){
+		$(".checkbox").show();
+		$("#deletes").show();
+		$("#downloads").show();
+		$("#favorites").show();
+		$("#choose").html("<i class='fa fa-square-o'>&nbsp;取消选择</i>");
+		i=1;
+		
+	}else if(i==1){
+		$(".checkbox").hide();
+		$("#deletes").hide();
+		$("#downloads").hide();
+		$("#favorites").hide();
+		$("#choose").html("<i class='fa fa-check-square-o'>&nbsp;选择</i>");
+		i=0;
+		
+	}
+}
+
+</script>
+
+
+<script type="text/javascript">
+function tobatchDelete(){
+	var a = $("input[name='ids']:checked").length;
+	
+	if(a==0){
+		$("#delete").hide();
+		
+		$("#modalMessage").text("请先选中需要删除的图片！");
+		
+	}else{
+		$("#delete").show();
+		
+		$("#modalMessage").text("确定要删除所有选中的图片吗？");
+	}
+	
+	$('#deleteModal').modal('show');
+	
+}
+
+
+function todelete(o){
+	
+	var delids = $("input[name='ids']:checked");
+	
+	//获取所有的id执行删除操作，使用ajax
+	var str = "";
+	$(delids).each(function() {
+		str += this.value + ",";
+	});
+	
+	if (str != "") {
+		var id = str.substring(0, str.length - 1);
+		window.location.href = "delete?id=" + id+"&activityId="+o;
+	} else {
+		window.location.href = document.URL;
+	}
+	
+}
+
+
+
+</script>
+
 
 <body>
 <!-- 资源管理模块 -->
@@ -24,9 +112,7 @@
                         创建子文件夹
                     </button>-->
 
-                    <button type="submit" class="btn btn-sm btn-primary">
-                        全选
-                    </button>
+                    
 
                 </div>
             </div>
@@ -45,6 +131,15 @@
         <!-- 管理 菜单 按扭  -->
         <div class="mail-tools tooltip-demo m-t-md">
             <!--当用户选择活动后，显示操作按扭-->
+            
+            <div class="checkbox"   style="float: left;display: none;" >
+                                        <input  id="checkall"  type="checkbox"   name="checkall">
+                                        <label for="checkall" >
+                                        </label> 
+                          </div>
+            
+            
+            
             <c:if test="${not empty sessionScope.checkActivityId}">
                 <a data-toggle="modal"  href="form_basic.html#modal-form">
                     <button  class="btn btn-success " type="button"><i class="fa fa-upload">
@@ -55,22 +150,27 @@
                 <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
                 -->
 
-                <button class="btn btn-danger " type="button"><i class="fa fa-warning">
+                <button onclick="return tobatchDelete()" class="btn btn-danger " style="display: none;"  id="deletes" type="button"><i class="fa fa-warning">
                 </i><span class="bold">批量删除</span>
                 </button>
 
-                <button class="btn btn-primary " type="button"><i class="fa fa-check"></i>&nbsp;下载</button>
+                <button class="btn btn-primary " style="display: none;" id="downloads" type="button"><i class="fa fa-check"></i>&nbsp;下载</button>
 
 
-                <button class="btn btn-warning " type="button"><i class="fa fa-heart">
+                <button class="btn btn-warning " style="display: none;" id="favorites"  type="button"><i class="fa fa-heart">
                 </i> 收藏
                 </button>
+                
+                <button class="btn btn-default "  id="choose" type="button" onclick="return choose();"><i class="fa fa-check-square-o">
+                </i> 选择
+                </button>
+                  
+                
+                
             </c:if>
 
         </div>
     </div>
-
-
 
 
 
@@ -82,14 +182,31 @@
             <div class="col-lg-12 gallery" >
                 <ul style="display: initial;">
                     <c:forEach items="${listPhoto.datas}" var="item" varStatus="status">
-                        <li><a target="_blank" href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=">
-                            <div class="file-box" >
+                    
+                        <li >
+                        <!-- 已经将点击预览移植到图片层中 -->
+             		 <div class="file-box">
+                      	<div class="checkbox"    name="checkboxs" style="z-index:999;position: absolute; margin-top:3px; margin-left: 3px;  display: none"  >
+                                        <input id="ids${item.id}" value="${item.id }"  type="checkbox" name="ids" >
+                                        <label for="ids${item.id}">
+                                        </label> 
+                          </div>
+                 </div>
+                                    
+                       <a target="_blank" href="${pageContext.request.contextPath}/file/getImg/${item.id }?type="> 
+                       
+                            <div class="file-box">
+                            
                                 <div class="file">
                                     <span class="corner"></span>
-
+           <!--如果修改后的资源名称不为空-->
+           
+								
                                     <div id="item_4"  class="item image" style="height: 130px;text-align: center;">
-                                        <img alt="image" class="img-responsive" style="margin: 0 auto;"
+                                <%--    <a target="_blank" href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=">  --%>
+                                        <img alt="image" class="img-responsive" style="margin: 0 auto;" onclick="return findImg('${item.id}')"
                                              src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min">
+                                    <!--  </a>  -->
                                         <div class="tooltip_description" style="display:none" title="相机、图片信息">
                                             <!-- 图片信息-->
                                               <c:choose>
@@ -224,8 +341,7 @@
 
 
                                     <div class="file-name" style="text-align: center;">
-                                        <!--如果修改后的资源名称不为空-->
-
+                             
                                         <c:choose>
                                             <c:when test="${fn:length(item.originalName)<15}">
                                                 ${item.originalName}
@@ -236,6 +352,9 @@
                                         </c:choose>
 
                                         <br/>
+                                        
+                                        
+                                        	
                                         <small>
 			                                                <span>
                                                                 <a onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
@@ -243,7 +362,7 @@
                                                                         '${item.editorImgInfo.description}')"
                                                                    data-toggle="modal" data-target="#File_Made">
                                                                     描述
-                                                                </a>
+                                                                </a> 
 			                                                </span>
                                             <span style="padding-left: 10%;">
                                                                     <a onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">
@@ -255,7 +374,9 @@
 
                                 </div>
                             </div>
-                        </a></li>
+                   </a> 
+                   
+                   </li>
                     </c:forEach>
                 </ul>
             </div>
@@ -290,6 +411,34 @@
 
     </div>
 </div>
+
+
+	<!-- 删除弹出层提示 -->
+	<div class="modal inmodal fade" id="deleteModal" tabindex="-1"
+		role="dialog" aria-hidden="true" style="padding: 15%">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<span style="float: left; color: red; font-size: 18px;">批量删除提示</span>
+				</div>
+				<div class="modal-body">
+					<h3 id="modalMessage"></h3>
+				</div>
+				<input type="hidden" id="delete-id">
+				<div class="modal-footer">
+					<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+					<button type="button" onclick="return todelete('${sessionScope.checkActivityId}');" id="delete"
+						class="btn btn-primary delete-confirm-btn">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
 
 </body>
 </html>

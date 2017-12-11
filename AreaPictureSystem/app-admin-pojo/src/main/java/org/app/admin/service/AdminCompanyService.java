@@ -141,6 +141,7 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 			            		 adminUser.setName(importAdminCompany.getContacts());
 			            		 adminUser.setTel(importAdminCompany.getTelPhone());
 			            		 adminUser.setUserType(UserType.SCHOOLADMIN);
+			            		 adminUser.setSpaceSize("30");//设置默认控件大小
 			            		 //创建adminRole的引用
 			            		 adminUser.setAdminRole(adminRole);
 			            		 this.adminUserService.insert(adminUser);

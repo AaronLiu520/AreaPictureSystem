@@ -267,9 +267,13 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("redirect:/photoMessageAction/checkActivity?checkId="+activityId);
         try {
-            if (!id.isEmpty() && !id.equals("0")) {// 删除
-                    resourceService.remove(resourceService.findOneById(id,Resource.class));
-            }
+        	String deleteId[] = id.split(",");
+        	for(int i =0;i<deleteId.length;i++){
+        		  if (!deleteId[i].isEmpty() && !deleteId[i].equals("0")) {// 删除
+                      resourceService.remove(resourceService.findOneById(deleteId[i],Resource.class));
+              }
+        	}
+          
         } catch (Exception e) {
             log.error(e.getMessage(), e);
         }

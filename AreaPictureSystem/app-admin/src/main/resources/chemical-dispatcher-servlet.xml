@@ -17,7 +17,7 @@
 		 http://www.springframework.org/schema/task    
     	http://www.springframework.org/schema/task/spring-task-4.1.xsd ">
 
-
+ 
 	<!-- 注解探测器（组件扫描）@Controller -->
 	<context:component-scan base-package="org.app">
 		<context:exclude-filter type="annotation"
