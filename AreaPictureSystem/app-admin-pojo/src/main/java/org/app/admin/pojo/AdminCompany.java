@@ -1,127 +1,127 @@
 package org.app.admin.pojo;
 
+import org.app.admin.util.BaseType;
 import org.app.framework.pojo.GeneralBean;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 /**
  * 公司单位（ 企业单位、学校 ）
- * 
- * @author Lau Aaron
  *
+ * @author Lau Aaron
  */
 @Document(collection = "AdminCompany")
 public class AdminCompany extends GeneralBean {
 
-	private String name;
-	// 企业名称
-	private String shorts;// 简称
-	private String address;// 地址
-	private String contacts;// 联系人
-	private String telPhone;// 电话
-	private String email;// 邮箱
-	private String remark;// 备注
-	//TODO 修改基本类
-	private String nature;//性质（中学、小学、幼儿园、中小学、高中、九年制）
-	//TODO 修改基本类
-	private String type;//类型（基层单位、直属单位）
-	@DBRef
-	private AdminUser adminUser;// 权限
+    private String name;
+    // 企业名称
+    private String shorts;// 简称
+    private String address;// 地址
+    private String contacts;// 联系人
+    private String telPhone;// 电话
+    private String email;// 邮箱
+    private String remark;// 备注
+    //TODO 修改基本类
+    private String nature;//性质（中学、小学、幼儿园、中小学、高中、九年制）
+    //TODO 修改基本类
+    private BaseType.Type type;//类型（基层单位、直属单位）
+    @DBRef
+    private AdminUser adminUser;// 权限
 
-	
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getShorts() {
-		return shorts;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	public void setShorts(String shorts) {
-		this.shorts = shorts;
-	}
+    public String getShorts() {
+        return shorts;
+    }
 
-	public String getAddress() {
-		return address;
-	}
+    public void setShorts(String shorts) {
+        this.shorts = shorts;
+    }
 
-	public void setAddress(String address) {
-		this.address = address;
-	}
+    public String getAddress() {
+        return address;
+    }
 
-	public String getContacts() {
-		return contacts;
-	}
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
-	public void setContacts(String contacts) {
-		this.contacts = contacts;
-	}
+    public String getContacts() {
+        return contacts;
+    }
 
-	public String getTelPhone() {
-		return telPhone;
-	}
+    public void setContacts(String contacts) {
+        this.contacts = contacts;
+    }
 
-	public void setTelPhone(String telPhone) {
-		this.telPhone = telPhone;
-	}
+    public String getTelPhone() {
+        return telPhone;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setTelPhone(String telPhone) {
+        this.telPhone = telPhone;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getEmail() {
+        return email;
+    }
 
-	public String getRemark() {
-		return remark;
-	}
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-	public void setRemark(String remark) {
-		this.remark = remark;
-	}
+    public String getRemark() {
+        return remark;
+    }
 
-	public String getNature() {
-		return nature;
-	}
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
 
-	public void setNature(String nature) {
-		this.nature = nature;
-	}
+    public String getNature() {
+        return nature;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setNature(String nature) {
+        this.nature = nature;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    @Override
+    public String toString() {
+        return "AdminCompany{" +
+                "name='" + name + '\'' +
+                ", shorts='" + shorts + '\'' +
+                ", address='" + address + '\'' +
+                ", contacts='" + contacts + '\'' +
+                ", telPhone='" + telPhone + '\'' +
+                ", email='" + email + '\'' +
+                ", remark='" + remark + '\'' +
+                ", nature='" + nature + '\'' +
+                ", type=" + type +
+                ", adminUser=" + adminUser +
+                '}';
+    }
 
-	public AdminUser getAdminUser() {
-		return adminUser;
-	}
+    public AdminUser getAdminUser() {
+        return adminUser;
+    }
 
-	public void setAdminUser(AdminUser adminUser) {
-		this.adminUser = adminUser;
-	}
+    public void setAdminUser(AdminUser adminUser) {
+        this.adminUser = adminUser;
+    }
 
-	@Override
-	public String toString() {
-		return "AdminCompany{" +
-				"name='" + name + '\'' +
-				", shorts='" + shorts + '\'' +
-				", address='" + address + '\'' +
-				", contacts='" + contacts + '\'' +
-				", telPhone='" + telPhone + '\'' +
-				", email='" + email + '\'' +
-				", remark='" + remark + '\'' +
-				", nature='" + nature + '\'' +
-				", type='" + type + '\'' +
-				", adminUser=" + adminUser +
-				'}';
-	}
+    public BaseType.Type getType() {
+        return type;
+    }
+
+    public void setType(BaseType.Type type) {
+        this.type = type;
+    }
 }

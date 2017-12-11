@@ -2,6 +2,7 @@ package org.app.admin.photo.action;
 
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.util.BaseType;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
@@ -46,7 +47,7 @@ public class photoAction extends GeneralAction<AdminUser> {
 
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
         modelAndView.addObject("photoTimeList",
-                getPhotoTimeList(String.valueOf(ForderActivity.Type.QUYU),null));
+                getPhotoTimeList(BaseType.Type.AREA.toString(),null));
         return modelAndView;// 返回
     }
 
@@ -60,7 +61,7 @@ public class photoAction extends GeneralAction<AdminUser> {
 
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属  GEREN 个人
         modelAndView.addObject("photoTimeList",
-                getPhotoTimeList(String.valueOf(ForderActivity.Type.ZHISHU),null));
+                getPhotoTimeList(BaseType.Type.DIRECTLYUTIS.toString(),null));
 
 
 
@@ -74,7 +75,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         modelAndView.setViewName("admin/photo-gallery/basicLevel/index");//登录页面
 
 
-        List<PhotoTime> lpt= getPhotoTimeList(String.valueOf(ForderActivity.Type.BASE),null);
+        List<PhotoTime> lpt= getPhotoTimeList(String.valueOf(BaseType.Type.BASEUTIS.toString()),null);
 
         //加载所有的企业
         List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);

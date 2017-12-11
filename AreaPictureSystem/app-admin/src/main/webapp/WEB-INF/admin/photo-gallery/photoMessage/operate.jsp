@@ -25,7 +25,7 @@
                 this.on("sendingmultiple", function () {
                 });
                 this.on("successmultiple", function (files, response) {
-                    window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity?checkId="+response
+                    window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId="+response
                 });
                 this.on("errormultiple", function (files, response) {
 
@@ -90,7 +90,7 @@
     // 时间轴（活动的单事件）
 
     function checkActivity(id){
-        window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity?checkId="+id
+        window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId="+id
     }
 
 </script>
@@ -122,7 +122,7 @@
     //删除记录
     function deleteById() {
         if(deleteId!=null && activityId!=null){
-            window.location.href = "${pageContext.request.contextPath}/photoMessageAction/delete?id="+deleteId
+            window.location.href = "${pageContext.request.contextPath}/photoMessageAction/delete/${webType}?id="+deleteId
                 +"&activityId="+activityId;
         }
 

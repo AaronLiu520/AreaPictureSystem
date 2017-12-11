@@ -15,8 +15,8 @@ import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.util.BaseType;
 import org.app.admin.pojo.ForderActivity;
-import org.app.admin.pojo.ForderActivity.Type;
 import org.app.admin.pojo.Resource;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
@@ -142,14 +142,14 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			}
 
 			// 获取前台传递给后台的值，并且通过枚举类型赋值
-			if (enumtype.equals("QUYU")) {
-				forderActivity.setType(Type.QUYU);
-			} else if (enumtype.equals("ZHISHU")) {
-				forderActivity.setType(Type.ZHISHU);
-			} else if (enumtype.equals("GEREN")) {
-				forderActivity.setType(Type.GEREN);
+			if (enumtype.equals(BaseType.Type.AREA)) {
+				forderActivity.setType(BaseType.Type.AREA);
+			} else if (enumtype.equals(BaseType.Type.DIRECTLYUTIS)) {
+				forderActivity.setType(BaseType.Type.DIRECTLYUTIS);
+			} else if (enumtype.equals(BaseType.Type.PERSION)) {
+				forderActivity.setType(BaseType.Type.PERSION);
 			} else {
-				forderActivity.setType(Type.GEREN);
+				forderActivity.setType(BaseType.Type.DIRECTLYUTIS);
 			}
 
 			/*

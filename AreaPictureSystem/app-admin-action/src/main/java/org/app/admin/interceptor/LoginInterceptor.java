@@ -76,8 +76,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		}
 		
 		//当session过期时，获取用户问的地址信息。
-		session.setAttribute(CommonEnum.USERSESSION, "登录过期请重新登录" );
-		response.sendRedirect("adminUser/login");
+		LOG.info("session 过期");
+		response.sendRedirect(request.getContextPath()+"/adminUser/login");
 		
 		
 		

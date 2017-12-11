@@ -8,6 +8,8 @@ import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.LabelService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.util.*;
+import org.app.admin.util.basetreetime.BaseTreeTime;
+import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.admin.util.executor.SingletionThreadPoolExecutor;
 import org.app.admin.util.executor.Task;
 import org.app.framework.action.GeneralAction;
@@ -20,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -49,6 +52,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     private LabelService labelService;//标签
     @Autowired
     private ResourceService resourceService;//资源（图片）
+    @Autowired
+    private org.app.admin.service.AdminCompanyService AdminCompanyService;
 
     /**
      *  查找图片页面
@@ -57,20 +62,46 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param activityIndexId
      * @return
      */
-    @RequestMapping("/index")
-    public ModelAndView index(HttpSession session, String type,String activityIndexId) {
+    @RequestMapping("/index/{type}")
+    public ModelAndView index(HttpSession session,
+                              @PathVariable("type")String type,
+                              String activityIndexId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
+        //检查类型
+        if(!BaseType.checkType(type))return null;
+        modelAndView.addObject("webType",type);
+
+
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
-        List<ForderActivity> listFA = this.forderActivityService.find(
-                super.craeteQueryWhere("parentId", "0"), ForderActivity.class);
-        // 按日期进行分类
-        modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA,null));
+
+        Query querylistFA=super.craeteQueryWhere("parentId","0","type",type);
+
+        List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
+        //如果用户是 BASEUTIS
+
+        if(type.equals(BaseType.Type.BASEUTIS.toString())){
+
+            List<PhotoTime> lpt=PhotoTime.getPhotoTime(listFA,null);
+            //加载所有的企业
+            List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);
+            List<LayerAdmonCompany> llac= LayerAdmonCompany.LayerAdmonCompany(lac,lpt);
+            List<BaseTreeTime> lbpt= BaseTreeTime.getBaseTreeTime(llac);
+            log.info(lbpt.toString());
+            modelAndView.addObject("basePhotoTimeList", lbpt);
+
+        }else{
+            // 按日期进行分类,并且中当前菜单
+            modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA,null));
+        }
         //TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
         //标签
         modelAndView.addObject("lableList", labelService.find(new Query(), Label.class));
         //删除当前活动session
         session.removeAttribute("checkActivityId");
+
+        session.setAttribute("",type);
+
         return modelAndView;// 返回
     }
 
@@ -83,22 +114,49 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param checkId
      * @return
      */
-    @RequestMapping("/checkActivity")
-    public ModelAndView checkActivity(@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-                                       @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
-                                       HttpSession session,String checkId) {
+    @RequestMapping("/checkActivity/{type}")
+    public ModelAndView checkActivity(
+            @PathVariable("type")String type,
+            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
+            HttpSession session,String checkId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
+        //检查类型
+        if(!BaseType.checkType(type))return null;
+        modelAndView.addObject("webType",type);
+
         //查询活动信息
         ForderActivity fa =this.forderActivityService.findOneById(checkId,ForderActivity.class);
 
-        if(checkId!=null)
-            session.setAttribute("checkActivityId",checkId);
+        if(checkId!=null) session.setAttribute("checkActivityId",checkId);
 
-        List<ForderActivity> listFA = this.forderActivityService.find(
-                super.craeteQueryWhere("parentId", "0"), ForderActivity.class);
-        // 按日期进行分类,并且中当前菜单
-        modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA,fa.getActivityTime()));
+
+        Query querylistFA=super.craeteQueryWhere("parentId","0","type",type);
+        List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
+
+
+        //如果用户是 BASEUTIS
+
+        if(type.equals(BaseType.Type.BASEUTIS.toString())){
+
+            List<PhotoTime> lpt=PhotoTime.getPhotoTime(listFA,fa.getActivityTime());
+            //加载所有的企业
+            List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);
+            List<LayerAdmonCompany> llac= LayerAdmonCompany.LayerAdmonCompany(lac,lpt);
+            List<BaseTreeTime> lbpt= BaseTreeTime.getBaseTreeTime(llac);
+            log.info(lbpt.toString());
+            modelAndView.addObject("basePhotoTimeList", lbpt);
+
+        }else{
+            // 按日期进行分类,并且中当前菜单
+            modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA,fa.getActivityTime()));
+        }
+
+
+
+
+
         //TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
         //标签
         modelAndView.addObject("lableList", labelService.find(new Query(), Label.class));
@@ -232,8 +290,10 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param description
      * @return
      */
-    @RequestMapping("/update")
-    public ModelAndView update(String activityId, String id,String resourceName,String person,String photographer
+    @RequestMapping("/update/{type}")
+    public ModelAndView update(
+            @PathVariable("type")String type,
+            String activityId, String id,String resourceName,String person,String photographer
     ,String resourceAddress,String description) {
         ModelAndView modelAndView = new ModelAndView();
 
@@ -247,7 +307,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
                 r.getEditorImgInfo().setDescription(description);
             this.resourceService.save(r);
         }
-        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity?checkId="+activityId);
+        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/"+type+"?checkId="+activityId);
 
         return modelAndView;
     }
@@ -260,12 +320,12 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param ids
      * @return
      */
-    @RequestMapping("/delete")
-    public ModelAndView delete(String activityId,
+    @RequestMapping("/delete/{type}")
+    public ModelAndView delete(String activityId,@PathVariable("type")String type,
                                @RequestParam(value = "id", defaultValue = "0") String id,
                                @RequestParam(value = "ids", defaultValue = "0") String ids) {
         ModelAndView modelAndView = new ModelAndView();
-        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity?checkId="+activityId);
+        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/"+type+"?checkId="+activityId);
         try {
         	String deleteId[] = id.split(",");
         	for(int i =0;i<deleteId.length;i++){
@@ -286,8 +346,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param fa
      * @return
      */
-    @RequestMapping("/createActivity")
-    public ModelAndView createActivity(HttpSession session,ForderActivity fa){
+    @RequestMapping("/createActivity/{type}")
+    public ModelAndView createActivity( @PathVariable("type")String type,
+                                        HttpSession session,ForderActivity fa){
         ModelAndView modelAndView = new ModelAndView();
 
         AdminUser au=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
@@ -298,7 +359,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         ForderActivity forderActivity=this.forderActivityService.findOneByQuery(query,ForderActivity.class);
 
 
-        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity?checkId="+forderActivity.getId());
+        modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/"+type+"?checkId="+forderActivity.getId());
 
         return modelAndView;
     }

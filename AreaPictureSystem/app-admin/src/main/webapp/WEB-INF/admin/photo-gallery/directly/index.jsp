@@ -56,13 +56,15 @@
                             <div class="ibox-content">
                                 <div class="widget style1 navy-bg">
                                     <div class="row">
-                                        <div class="col-xs-4">
-                                            <i class="fa fa-anchor fa-5x"></i>
-                                        </div>
-                                        <div class="col-xs-8 text-right">
-                                            <span style="font-size: 10px;"> 如果您找不到需要的活动主题，请点击我！ </span>
-                                            <h3 class="font-bold">我要《创建主题》活动</h3>
-                                        </div>
+                                        <a href="${pageContext.request.contextPath}/photoMessageAction/index/DIRECTLYUTIS">
+                                            <div class="col-xs-4">
+                                                <i class="fa fa-anchor fa-5x"></i>
+                                            </div>
+                                            <div class="col-xs-8 text-right">
+                                                <span style="font-size: 10px;"> 如果您找不到需要的活动主题，请点击我！ </span>
+                                                <h3 class="font-bold">我要《创建主题》活动</h3>
+                                            </div>
+                                        </a>
                                     </div>
                                 </div>
 
@@ -205,6 +207,12 @@
 
 </script>
 
+<script>
+    // 时间轴（活动的单事件）
+    function checkActivity(id){
+        window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/DIRECTLYUTIS?checkId="+id
+    }
 
+</script>
 </body>
 </html>

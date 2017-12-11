@@ -19,14 +19,14 @@
             <ul>
                 <c:forEach items="${basePhotoTimeList}" var="item" varStatus="status">
                     <!-- jstree-open 打开树形 时间轴 -->
-                    <li class="jstree-open" >
+                    <li>
                     <i class="fa "></i>${item.name}</span>
                     <!-- 活动名称 -->
                     <c:if test="${not empty item.layerAdmonCompanyList}">
                         <ul>
                             <c:forEach items="${item.layerAdmonCompanyList}" var="activity" varStatus="status">
-                                <li >
-                                    <span ">
+                                <li>
+                                    <span>
                                         <i class="fa "></i>${activity.name}
                                     </span>
                                     <c:if test="${not empty activity.timeList}">
@@ -34,7 +34,7 @@
                                             <c:forEach items="${activity.timeList}" var="subitem"
                                                        varStatus="status">
                                                 <li >
-                                                    <span onclick="checkActivity('${subitem.id}');">
+                                                    <span >
                                                         <i class="fa "></i>${subitem.time}
                                                     </span>
 
@@ -42,8 +42,8 @@
                                                     <c:if test="${not empty subitem.list}">
                                                         <ul>
                                                             <c:forEach items="${subitem.list}" var="ss" varStatus="status">
-                                                                <li  data-jstree='{"type":"css"}'>
-                                                                    <span >
+                                                                <li data-jstree='{"type":"css"}'>
+                                                                    <span  onclick="checkActivity('${ss.id}');">
                                                                         <i class="fa "></i>${ss.forderActivityName}
                                                                     </span>
 
