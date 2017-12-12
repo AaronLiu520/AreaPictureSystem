@@ -86,7 +86,8 @@ function todelete(o){
 	
 	if (str != "") {
 		var id = str.substring(0, str.length - 1);
-		window.location.href = "delete?id=" + id+"&activityId="+o;
+		  window.location.href = "${pageContext.request.contextPath}/photoMessageAction/delete/${webType}?id="+id
+          +"&activityId="+o;
 	} else {
 		window.location.href = document.URL;
 	}
@@ -162,7 +163,7 @@ function todelete(o){
                 <button class="btn btn-primary " style="display: none;" id="downloads" type="button"><i class="fa fa-check"></i>&nbsp;下载</button>
 
 
-                <button class="btn btn-warning " style="display: none;" id="favorites"  type="button"><i class="fa fa-heart">
+                <button class="btn btn-warning " onclick="return tofavorites();" style="display: none;" id="favorites"  type="button"><i class="fa fa-heart">
                 </i> 收藏
                 </button>
                 
@@ -196,21 +197,35 @@ function todelete(o){
                                         <label for="ids${item.id}">
                                         </label> 
                           </div>
-                 </div>
+               		     
+               		  </div>
+                             
                                     
                        <a target="_blank" href="${pageContext.request.contextPath}/file/getImg/${item.id }?type="> 
                        
                             <div class="file-box">
                             
                                 <div class="file">
+                                //TODO
+                                <div style="z-index:999;position: absolute; margin-top:3px; right:0px;">
+                                
+ 									<img alt="image" style="width: 25px;height:25px;" class="img-responsive"  src="${pageContext.request.contextPath}/assets/admin/img/star.ico">
+
+								</div>
+                                
+                                
                                     <span class="corner"></span>
            <!--如果修改后的资源名称不为空-->
            
 								
                                     <div id="item_4"  class="item image" style="height: 130px;text-align: center;">
+                                             
                                 <%--    <a target="_blank" href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=">  --%>
                                         <img alt="image" class="img-responsive" style="margin: 0 auto;" onclick="return findImg('${item.id}')"
                                              src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min">
+                                        
+                                             
+                                             
                                     <!--  </a>  -->
                                         <div class="tooltip_description" style="display:none" title="相机、图片信息">
                                             <!-- 图片信息-->
@@ -441,6 +456,49 @@ function todelete(o){
 			</div>
 		</div>
 	</div>
+
+
+
+
+
+<script type="text/javascript">
+
+//ajax收藏图片资源
+function tofavorites() {
+			
+			//获取所有选中状态下的收藏图片的id      
+			var favorites = $("input[name='ids']:checked");
+			
+			
+			var favoritesIds = "";
+			$(favorites).each(function() {
+				favoritesIds += this.value + ",";
+			});
+			
+			
+		alert(favoritesIds)		
+	
+			$.ajax({
+						type : "POST",
+						url : "${pageContext.request.contextPath}/photoMessageAction/toMyFavorties",
+						data : "resourceId="+favoritesIds,
+						dataType : "text",
+						success : function(msg) {
+								alert(msg)
+						}
+					});
+}
+
+</script>
+
+
+
+
+
+
+
+
+
 
 
 

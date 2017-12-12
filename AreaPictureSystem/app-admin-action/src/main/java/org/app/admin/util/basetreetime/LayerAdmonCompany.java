@@ -54,7 +54,7 @@ public class LayerAdmonCompany {
         for(AdminCompany ac:lac){
             LayerAdmonCompany layerAdmonCompany=new LayerAdmonCompany();
 
-            layerAdmonCompany.setId(ac.getNature());//性质
+            layerAdmonCompany.setId(ac.getNature().toString());//性质  //2017年12月12日 14:36:40 添加了.toString
             layerAdmonCompany.setName(ac.getName());//名称
 
             for(PhotoTime pt:lpt){

@@ -1,13 +1,33 @@
 package org.app.admin.photo.action;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.app.admin.pojo.*;
+import org.app.admin.pojo.AdminCompany;
+import org.app.admin.pojo.AdminUser;
+import org.app.admin.pojo.ForderActivity;
+import org.app.admin.pojo.Label;
+import org.app.admin.pojo.Resource;
+import org.app.admin.service.FavoritesService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.LabelService;
 import org.app.admin.service.ResourceService;
-import org.app.admin.util.*;
+import org.app.admin.util.BaseType;
+import org.app.admin.util.EditorImgBean;
+import org.app.admin.util.FileOperateUtil;
+import org.app.admin.util.FileType;
+import org.app.admin.util.PhotoTime;
 import org.app.admin.util.basetreetime.BaseTreeTime;
 import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.admin.util.executor.SingletionThreadPoolExecutor;
@@ -29,16 +49,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 @Controller
 @RequestMapping("/photoMessageAction")
 public class PhotoMessageAction extends GeneralAction<ForderActivity> {
@@ -54,6 +64,10 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     private ResourceService resourceService;//资源（图片）
     @Autowired
     private org.app.admin.service.AdminCompanyService AdminCompanyService;
+    @Autowired
+    private FavoritesService favoritesService;
+    
+    
 
     /**
      *  查找图片页面
@@ -364,4 +378,32 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         return modelAndView;
     }
 
+    
+    
+    
+    @RequestMapping("/toMyFavorties")
+    public void toMyFavorties(@RequestParam(defaultValue="",value="resourceId")String resourceId,HttpSession session,PrintWriter printWriter){
+    	
+    	AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+    	
+    	List<Resource> listResource = this.favoritesService.getResource(resourceId);
+    	
+    	boolean flag = this.favoritesService.toSaveFavorites(adminUser, listResource);
+    	
+    	printWriter.print(flag);
+    	printWriter.flush();
+    	printWriter.close();
+    	
+    	
+    	
+    	
+    	
+    	
+    }
+    
+    
+    
+    
+    
+    
 }

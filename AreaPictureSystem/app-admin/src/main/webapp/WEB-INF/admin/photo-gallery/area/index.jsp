@@ -163,5 +163,109 @@
         }
 
     </script>
+    
+     <script>
+        $(function() {
+            var barOptions = {
+                series: {
+                    lines: {
+                        show: true,
+                        lineWidth: 2,
+                        fill: true,
+                        fillColor: {
+                            colors: [{
+                                opacity: 1.0
+                            }, {
+                                opacity: 0.0
+                            }]
+                        }
+                    }
+                },
+                xaxis: {
+                    ticks:20, 
+                    tickDecimals: 0,
+                },
+                yaxis:{
+                	ticks:10,   
+                	min: 0,   
+                	tickDecimals:0 ,   
+                },
+                colors: ["#1ab394"],
+                grid: {
+                    color: "#999999",
+                    hoverable: true,
+                    clickable: true,
+                    tickColor: "#D4D4D4",
+                    borderWidth:0
+                },
+                legend: {
+                    show: false
+                },
+                tooltip: true,
+                tooltipOpts: {
+                    content: "x: %x, y: %y"
+                }
+            };	
+            var barData = {
+                label: "bar",
+                data: [
+                	<c:forEach items="${uploadList}" var="items" varStatus="status">
+               		 ${items },
+               	 </c:forEach>
+                ]
+            };
+            $.plot($("#flot-line-chart"), [barData], barOptions);
+
+            
+            
+            
+            // 节点提示  
+            function showTooltip(x, y, contents) {  
+                $('<div id="tooltip">' + contents + '</div>').css( {  
+                    position: 'absolute',  
+                    display: 'none',  
+                    top: y + 10,  
+                    left: x + 10,  
+                    border: '1px solid #fdd',  
+                    padding: '2px',  
+                    'background-color': '#dfeffc',  
+                    opacity: 0.80  
+                }).appendTo("body").fadeIn(200);  
+            }  
+      
+            var previousPoint = null;  
+            // 绑定提示事件  
+            $("#flot-line-chart").bind("plothover", function (event, pos, item) {  
+                if (item) {  
+                    if (previousPoint != item.dataIndex) {  
+                        previousPoint = item.dataIndex;  
+                        $("#tooltip").remove();  
+                        var y = item.datapoint[1].toFixed(0);  
+      
+                        var tip = "展现量：";  
+                        showTooltip(item.pageX, item.pageY,tip+y);  
+                    }  
+                }  
+                else {  
+                    $("#tooltip").remove();  
+                    previousPoint = null;  
+                }  
+            
+            }); 
+            
+            
+            
+            
+            
+            
+            
+            
+            
+        });
+
+    </script>
+    
+    
+    
 </body>
 </html>

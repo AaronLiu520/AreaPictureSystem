@@ -10,7 +10,9 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
-import org.app.admin.pojo.AdminUser.UserType;
+import org.app.admin.pojo.CompanyType;
+import org.app.admin.util.BaseType;
+import org.app.admin.util.BaseType.UserType;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
 import org.app.framework.util.ExcelReadUtil;
@@ -78,9 +80,16 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 		    		   importAdminCompany.setContacts(resultexcel[i][j+3]);
 		    		   importAdminCompany.setTelPhone(resultexcel[i][j+4]);
 		    		   importAdminCompany.setEmail(resultexcel[i][j+5]);
-		    		   importAdminCompany.setNature(resultexcel[i][j+6]);
-					   //TODO
-		    		   //importAdminCompany.setType(resultexcel[i][j+7]);
+		    		   String nature = resultexcel[i][j+6];
+		    		   if(nature.equals("直属单位 ")){
+		    			   importAdminCompany.setNature(BaseType.CompanyNature.ZHISHU);
+		    		   }/*else if(type.equals("基层单位")){
+		    			   importAdminCompany.setType(BaseType.CompanyType.JICHENG);
+		    		   }*/else{
+		    			   importAdminCompany.setNature(BaseType.CompanyNature.JICHENG);
+		    		   }
+		    		 
+		    		   importAdminCompany.setType(resultexcel[i][j+7]);
 		    		   importAdminCompany.setRemark(resultexcel[i][j+8]);
 
 		    		   String telPhone = importAdminCompany.getTelPhone();
@@ -108,8 +117,7 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 		            		 adminCompany.setRemark(importAdminCompany.getRemark());
 		            		 adminCompany.setShorts(importAdminCompany.getShorts());
 		            		 adminCompany.setTelPhone(importAdminCompany.getTelPhone());
-		            		 //TODO
-		            		// adminCompany.setType(importAdminCompany.getType());
+		            		 adminCompany.setType(importAdminCompany.getType());
 		       
 		            		 //执行更新操作。
 		            		 this.save(adminCompany);
