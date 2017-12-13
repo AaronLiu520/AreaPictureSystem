@@ -47,5 +47,10 @@ public class Favorites extends GeneralBean {
 		this.userId = userId;
 	}
 
+	@Override
+	public String toString() {
+		return "Favorites [userId=" + userId + ", adminUser=" + adminUser + ", resource=" + resource + "]";
+	}
+
 	
 }

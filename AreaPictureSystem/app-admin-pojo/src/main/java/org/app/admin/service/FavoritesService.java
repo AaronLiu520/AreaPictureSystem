@@ -55,11 +55,11 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 	 *         TODO(通过用户的id查询收藏夹) @param @param id @param @return 设定文件 @return
 	 *         Favorites 返回类型 @throws
 	 */
-	public Favorites findFavoritesById(String id) {
+	public Favorites findFavoritesById(String userId) {
 
 		Query query = new Query();
 
-		query.addCriteria(Criteria.where("userId").is(id));
+		query.addCriteria(Criteria.where("userId").is(userId));
 
 		Favorites favorites = this.findOneByQuery(query, Favorites.class);
 
@@ -78,25 +78,26 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 	 */
 	public boolean toSaveFavorites(AdminUser adminUser, List<Resource> listResource) {
 
-		boolean flag = true; // 标记是否存在该收藏资源
+		
 		try {
 			// 通过用户的id来进行查询该用户的收藏夹
 			String userId = adminUser.getId();
 
 			Favorites fa = this.findFavoritesById(userId);
 
-			if (fa != null) {
+			if (fa != null&&fa.getResource().size()>0) {
 				// 对当前收藏夹进行修改
 				List<Resource> list = fa.getResource(); // 获取当前用户已经收藏的资源
+				List<Resource> newlist = new ArrayList();
 
 				// 遍历每个需要新收藏的资源除去重复收藏
 
 				for (Resource newRes : listResource) {
-
+					boolean flag = true; // 标记是否存在该收藏资源
 					for (Resource hisRes : list) {
-
 						if (newRes.getId().equals(hisRes.getId())) {
 							flag = true;
+							break;
 						} else {
 							flag = false;
 						}
@@ -104,12 +105,12 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 					}
 					// 如果不存在该资源则添加
 					if (!flag) {
-						list.add(newRes);
+						newlist.add(newRes);
 					}
 				}
 				fa.setUserId(userId);
 				fa.setAdminUser(adminUser);
-				fa.setResource(list);
+				fa.getResource().addAll(newlist);
 				this.save(fa);
 			} else {
 				// 创建收藏夹
@@ -130,9 +131,7 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 				this.insert(favorites);
 			}
 
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 
 			e.printStackTrace();
 
@@ -141,5 +140,64 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 
 		return true;
 	}
+	
+	
+	/**
+	 * 
+	* @Title: cancelFavorites 
+	* @Description: TODO(取消收藏，支持批量取消) 
+	* @param @param adminUser
+	* @param @param listResource  //需要从收藏夹删除的资源集合
+	* @param @return    设定文件 
+	* @return boolean    返回类型 
+	* @throws
+	 */
+	public boolean cancelFavorites(AdminUser adminUser, List<Resource> listResource){
+		
+		try{
+			
+			// 通过用户的id来进行查询该用户的收藏夹
+			String userId = adminUser.getId();
+			
+			Favorites fa = this.findFavoritesById(userId);
+			
+			//定义一个新的List集合
+			List<Resource>  newlist = new ArrayList();
+			
+			if(fa!=null&&fa.getResource().size()>0){
+				
+				for(Resource r1:fa.getResource()){
+					
+					for(Resource r2:listResource){
+						
+						if(!r2.getId().equals(r1.getId())){
+							newlist.add(r1);
+						}
+					}
+					
+				}
+				fa.setUserId(userId);
+				fa.setAdminUser(adminUser);
+				fa.setResource(newlist);
+				
+				this.save(fa);
+				
+			}else{
+				return false;
+			}
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return true;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

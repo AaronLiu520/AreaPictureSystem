@@ -242,7 +242,7 @@
                         $("#tooltip").remove();  
                         var y = item.datapoint[1].toFixed(0);  
       
-                        var tip = "展现量：";  
+                        var tip = "上传数：";  
                         showTooltip(item.pageX, item.pageY,tip+y);  
                     }  
                 }  

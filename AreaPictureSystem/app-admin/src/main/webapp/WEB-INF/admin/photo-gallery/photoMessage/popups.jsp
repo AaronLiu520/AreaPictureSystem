@@ -3,7 +3,9 @@
 <%@page isELIgnored="false" %>
 <!doctype html>
 <html lang="en" class="app">
-
+<link
+	href="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/css/bootstrap-datetimepicker.min.css"
+	rel="stylesheet" media="screen">
 <body>
 
 
@@ -27,8 +29,8 @@
                                 id="forderActivityName">
 
                         <label>时间</label>
-                        <input  placeholder="活动时间" class="form-control" name="activityTime"
-                                id="activityTime">
+                        <input  placeholder="活动时间" class="form-control datainput" name="activityTime"
+                                id="activityTime"  data-date-format="yyyy-mm-dd">
 
                         <label>数量</label>
                         <input  placeholder="图片上传最大数量" class="form-control" name="sumPotoCount"
@@ -151,6 +153,43 @@
         </div>
     </div>
 </div>
+
+
+
+
+
+
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/bootstrap-datetimepicker.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/locales/bootstrap-datetimepicker.zh-CN.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript">
+		$('.datainput').datetimepicker({
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			minView : 2,
+			forceParse : 0
+		});
+	</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </body>
 </html>
