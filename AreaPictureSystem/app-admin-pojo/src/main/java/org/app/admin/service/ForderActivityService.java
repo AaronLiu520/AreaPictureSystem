@@ -15,9 +15,11 @@ import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
-import org.app.admin.util.BaseType;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
+import org.app.admin.util.BaseType;
+import org.app.admin.util.BaseType.CompanyNature;
+import org.app.admin.util.BaseType.UserType;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
@@ -45,7 +47,6 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 *         TODO(根据parentId查询所有文件夹) @param @param parentId @param @return
 	 *         设定文件 @return List<ForderActivity> 返回类型 @throws
 	 */
-	@SystemErrorLog(description = "查询活动")
 	public List<ForderActivity> listForderActivity(String parentId, String id) {
 		Query query = new Query();
 		// 如果parentId 为 0 id不为空
@@ -96,8 +97,8 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: findForderByParentId @Description:
-	 * TODO(根据parentId查询) @param @param parentId @param @return 设定文件 @return
-	 * List<ForderActivity> 返回类型 @throws
+	 *         TODO(根据parentId查询) @param @param parentId @param @return
+	 *         设定文件 @return List<ForderActivity> 返回类型 @throws
 	 */
 	public List<ForderActivity> findForderListByParentId(String parentId) {
 
@@ -192,7 +193,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: delete @Description: TODO(调用删除操作) @param @param id @param @return
-	 * 设定文件 @return String 返回类型 @throws
+	 *         设定文件 @return String 返回类型 @throws
 	 */
 	public String delete(String id) {
 
@@ -208,7 +209,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: recursion @Description: TODO(递归删除) @param @param id 设定文件 @return
-	 * void 返回类型 @throws
+	 *         void 返回类型 @throws
 	 */
 	public void recursion(String id) {
 
@@ -234,9 +235,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: findForderActivityByName @Description:
-	 * TODO(这里用一句话描述这个方法的作用) @param @param forderActivityName 活动名称 @param @param
-	 * userId 用户id @param @param boundId 绑定id @param @return 设定文件 @return
-	 * boolean 返回类型 @throws
+	 *         TODO(这里用一句话描述这个方法的作用) @param @param forderActivityName
+	 *         活动名称 @param @param userId 用户id @param @param boundId
+	 *         绑定id @param @return 设定文件 @return boolean 返回类型 @throws
 	 */
 	public boolean findForderActivityByName(String forderActivityName, String userId, String parentId) {
 
@@ -257,6 +258,189 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			return false;
 
 	}
+	
 
+	/**
+	 * 
+	 * @Title: findForderActivityByUserType @Description:
+	 * TODO(通过用户帐号的类别来判断) @param @param adminUser @param @return 设定文件 @return
+	 * List<ForderActivity> 返回类型 @throws
+	 * 
+	 */
+	public List<ForderActivity> findForderActivityByUserType(String forderActivityName,AdminUser adminUser) {
 
+		if (adminUser.getAdminCompany() != null) {
+			UserType getuserType = adminUser.getUserType();
+			// 企业ID
+			String companyId = adminUser.getAdminCompany().getId();
+			// 用户ID
+			String userId = adminUser.getId();
+			List<ForderActivity> listForderActivity = new ArrayList();
+
+			Query query = new Query();
+			/**
+			 * 获取活动 1.超级管理员登录 可查询所有的活动
+			 *  2.学校管理员登录 可查询学校的活动 
+			 *  3.老师帐号登录 可查询个人的活动
+			 */
+				query.addCriteria(Criteria.where("parentId").is("0"));//获取所有父活动
+				//如果forderActivityName不为空查询该信息
+			if(Common.isNotEmpty(forderActivityName)){
+				query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
+				
+			} else if (getuserType.equals(UserType.SCHOOLADMIN)) {
+			
+				// 获取绑定区域的所有活动
+				query.addCriteria(Criteria.where("boundId").is(companyId));
+
+			} else if (getuserType.equals(UserType.TEACHER)) {
+				
+
+				query.addCriteria(Criteria.where("boundId").is(userId));
+			}
+
+			listForderActivity = this.find(query, ForderActivity.class);
+
+			if (listForderActivity.size() > 0)
+				return listForderActivity;
+			else
+				return null;
+		} else {
+			return null;
+		}
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * 
+	* @Title: createActivity 
+	* @Description: TODO(创建活动) 
+	* @param @param forderActivity
+	* @param @param adminUser    设定文件 
+	* @return void    返回类型 
+	* @throws
+	 */
+	public void creatOrEditActivity(ForderActivity forderActivity,AdminUser adminUser,String id){
+		
+		//超级管理员创建区域级别的图片库
+		
+		//直属单位的创建直属单位的图片库
+		
+		//基层单位的创建基层单位的图片库
+		
+		//判断用户的session是否存在
+		if(adminUser!=null){
+			
+			UserType usertype = adminUser.getUserType();
+			
+			//获取当前用户的企业性质
+			CompanyNature nature = adminUser.getAdminCompany().getNature();
+			
+			
+			
+			if(Common.isNotEmpty(id)){
+				//执行修改
+				ForderActivity editActivity = this.findForderById(id);
+				
+				if(editActivity!=null){
+					editActivity.setActivityTime(forderActivity.getActivityTime());
+					editActivity.setAddress(forderActivity.getAddress());
+					editActivity.setBoundId(editActivity.getBoundId());
+					editActivity.setDescription(forderActivity.getDescription());
+					editActivity.setFolderSize(forderActivity.getFolderSize());
+					editActivity.setForderActivityName(forderActivity.getForderActivityName());
+					editActivity.setResource(editActivity.getResource());
+					editActivity.setSumPotoCount(forderActivity.getSumPotoCount());
+					
+					if(usertype.equals(UserType.ADMINISTRATORS)){
+						
+							editActivity.setType(BaseType.Type.AREA);
+						
+					}else if(usertype.equals(UserType.SCHOOLADMIN)){
+						
+						if(nature.equals(CompanyNature.JICHENG)){
+							
+							editActivity.setType(BaseType.Type.BASEUTIS);
+							
+						}else if(nature.equals(CompanyNature.ZHISHU)){
+							
+							editActivity.setType(BaseType.Type.DIRECTLYUTIS);
+						}
+						
+					}else if(usertype.equals(UserType.TEACHER)){
+						
+						editActivity.setType(BaseType.Type.PERSION);
+						
+					}
+					
+					editActivity.setCreatUser(editActivity.getCreatUser());
+
+					this.save(editActivity);
+				}
+				
+				
+			}else{
+				//执行添加
+				if(usertype.equals(UserType.ADMINISTRATORS)){
+					
+					forderActivity.setType(BaseType.Type.AREA);
+				
+			}else if(usertype.equals(UserType.SCHOOLADMIN)){
+				
+				if(nature.equals(CompanyNature.JICHENG)){
+					
+					forderActivity.setType(BaseType.Type.BASEUTIS);
+					
+				}else if(nature.equals(CompanyNature.ZHISHU)){
+					
+					forderActivity.setType(BaseType.Type.DIRECTLYUTIS);
+				}
+				//绑定id
+				forderActivity.setBoundId(adminUser.getAdminCompany().getId());
+				
+			}else if(usertype.equals(UserType.TEACHER)){
+				//绑定id
+				forderActivity.setBoundId(adminUser.getId());
+				forderActivity.setType(BaseType.Type.PERSION);
+				
+			}
+				
+				forderActivity.setCreatUser(adminUser);
+				forderActivity.setParentId("0");
+				this.insert(forderActivity);
+				
+			}
+			
+		}
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
 }

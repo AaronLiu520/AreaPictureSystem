@@ -45,7 +45,7 @@ public class BaseType {
     
     
     public enum CompanyNature{
-    	ZHISHU,JICHENG
+    	ZHISHU,JICHENG,MANAGER
     	
     }
     
