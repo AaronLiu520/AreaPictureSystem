@@ -27,4 +27,28 @@ public class BaseType {
         }
         return false;
     }
+    
+    
+    
+    
+    /**
+     * 
+    * @ClassName: UserType 
+    * @Description: TODO（用户类型枚举） 
+    * @author fliay
+    * @date 2017年12月12日 下午1:44:28 
+    *
+     */
+    public enum UserType {
+        ADMINISTRATORS, SCHOOLADMIN, TEACHER
+    }
+    
+    
+    public enum CompanyNature{
+    	ZHISHU,JICHENG
+    	
+    }
+    
+    
+    
 }

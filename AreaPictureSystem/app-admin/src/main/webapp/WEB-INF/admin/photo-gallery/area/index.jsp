@@ -209,7 +209,9 @@
                 ]
             };
             $.plot($("#flot-line-chart"), [barData], barOptions);
-            
+
+
+
             
             
             // 节点提示  
@@ -255,6 +257,10 @@
             
             
         });
+
+
+
+
     </script>
     
     

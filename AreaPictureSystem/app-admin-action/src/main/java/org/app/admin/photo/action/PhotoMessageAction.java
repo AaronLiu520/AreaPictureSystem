@@ -1,13 +1,34 @@
 package org.app.admin.photo.action;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.app.admin.pojo.*;
+import org.app.admin.pojo.AdminCompany;
+import org.app.admin.pojo.AdminUser;
+import org.app.admin.pojo.Favorites;
+import org.app.admin.pojo.ForderActivity;
+import org.app.admin.pojo.Label;
+import org.app.admin.pojo.Resource;
+import org.app.admin.service.FavoritesService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.LabelService;
 import org.app.admin.service.ResourceService;
-import org.app.admin.util.*;
+import org.app.admin.util.BaseType;
+import org.app.admin.util.EditorImgBean;
+import org.app.admin.util.FileOperateUtil;
+import org.app.admin.util.FileType;
+import org.app.admin.util.PhotoTime;
 import org.app.admin.util.basetreetime.BaseTreeTime;
 import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.admin.util.executor.SingletionThreadPoolExecutor;
@@ -25,19 +46,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/photoMessageAction")
@@ -54,6 +66,10 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     private ResourceService resourceService;//资源（图片）
     @Autowired
     private org.app.admin.service.AdminCompanyService AdminCompanyService;
+    @Autowired
+    private FavoritesService favoritesService;
+    
+    
 
     /**
      *  查找图片页面
@@ -169,6 +185,30 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             query.with(new Sort(Sort.Direction.DESC, "createTime"));
             pageList=this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
             modelAndView.addObject("listPhoto",pageList);
+            
+            //获取当前用户收藏的图片
+            //start
+            AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+            
+            if(adminUser != null){
+            	
+            	Favorites favorites = this.favoritesService.findFavoritesById(adminUser.getId());
+            	
+            	if(favorites != null && favorites.getResource() != null){
+            		
+            		 modelAndView.addObject("listFavorites",favorites.getResource());
+            	}
+            	
+            	
+            }
+            
+            //end 
+            
+            
+            
+            
+            
+            
         } catch (Exception e) {
             log.info(e.toString());
         }
@@ -364,4 +404,71 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         return modelAndView;
     }
 
+    
+    /**
+     * 
+    * @Title: toMyFavorties 
+    * @Description: TODO(将资源放入收藏夹) 
+    * @param @param resourceId
+    * @param @param session
+    * @param @return    设定文件 
+    * @return List<Resource>    返回类型 
+    * @throws
+     */
+    
+    @RequestMapping("/toMyFavorties")
+    @ResponseBody
+    public List<Resource> toMyFavorties(@RequestParam(defaultValue="",value="resourceId")String resourceId,HttpSession session){
+    	
+    	AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+    	
+    	List<Resource> listResource = this.favoritesService.getResource(resourceId);
+    	
+    	boolean flag = this.favoritesService.toSaveFavorites(adminUser, listResource);
+    	
+    	if(flag){
+
+        	return listResource;
+    	}
+    	return null;
+    	
+    	
+    }
+    
+    /**
+     * 
+    * @Title: cancelMyFavorties 
+    * @Description: TODO(将资源从收藏夹删除) 
+    * @param @param resourceId
+    * @param @param session
+    * @param @return    设定文件 
+    * @return List<Resource>    返回类型 
+    * @throws
+     */
+    @RequestMapping("/cancelMyFavorties")
+    @ResponseBody
+    public List<Resource>  cancelMyFavorties(@RequestParam(defaultValue="",value="resourceId")String resourceId,HttpSession session){
+    	
+    	AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+    	
+    	List<Resource> listResource = this.favoritesService.getResource(resourceId);
+    	
+    
+    	boolean flag = this.favoritesService.cancelFavorites(adminUser, listResource);
+    	
+    	if(flag){
+
+        	return listResource;
+    	}
+    	return null;
+    	
+    	
+    	
+    }
+    
+    
+    
+    
+    
+    
 }

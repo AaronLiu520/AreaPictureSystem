@@ -2,7 +2,7 @@ package org.app.admin.pojo;
 
 import java.util.List;
 
-import org.app.admin.pojo.AdminUser.UserType;
+import org.app.admin.util.BaseType.UserType;
 import org.app.framework.pojo.GeneralBean;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;

@@ -1,5 +1,6 @@
 package org.app.admin.pojo;
 
+import org.app.admin.util.BaseType.UserType;
 import org.app.framework.pojo.GeneralBean;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -175,8 +176,6 @@ public class AdminUser extends GeneralBean {
                 '}';
     }
 
-    public enum UserType {
-        ADMINISTRATORS, SCHOOLADMIN, TEACHER
-    }
+
 
 }
