@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -14,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.Favorites;
@@ -135,13 +138,22 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             @PathVariable("type")String type,
             @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
             @RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
-            HttpSession session,String checkId) {
+            @RequestParam(value = "sort", defaultValue = "DESC") String sort,
+            @RequestParam(value = "mfregex", defaultValue = "") String mfregex
+            ,HttpSession session,String checkId) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
         //检查类型
         if(!BaseType.checkType(type))return null;
         modelAndView.addObject("webType",type);
-
+        //模糊匹配
+         try {
+			mfregex=new String(mfregex.getBytes("iso-8859-1"),"utf8");
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
+		}
+        log.info("mfregex:"+mfregex);
+        Pattern pattern = Pattern.compile(".*?" + mfregex + ".*", Pattern.CASE_INSENSITIVE);
         //查询活动信息
         ForderActivity fa =this.forderActivityService.findOneById(checkId,ForderActivity.class);
 
@@ -168,8 +180,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA,fa.getActivityTime()));
         }
-
-
+        
+        
 
 
 
@@ -179,12 +191,21 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 
         try {
-            Pagination<Resource> pageList = new Pagination<Resource>();
-            Query query = new Query();
-            query.addCriteria(Criteria.where("forderActivityId").is(checkId));
-            query.with(new Sort(Sort.Direction.DESC, "createTime"));
+           
+        	Pagination<Resource> pageList = new Pagination<Resource>();
+           
+        	Query query = new Query();
+           
+        	if(StringUtils.isNotEmpty(mfregex)){
+              query = Query.query(Criteria.where("originalName").regex(pattern));
+        	}
+        	query.addCriteria(Criteria.where("forderActivityId").is(checkId));
+            query.with(new Sort((sort.equals(String.valueOf("DESC")))?Sort.Direction.DESC:Sort.Direction.ASC, "createTime"));
             pageList=this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
             modelAndView.addObject("listPhoto",pageList);
+            
+             
+            
             
             //获取当前用户收藏的图片
             //start
@@ -217,6 +238,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         return modelAndView;
     }
 
+  
+    
 
     /**
      *资料上传
