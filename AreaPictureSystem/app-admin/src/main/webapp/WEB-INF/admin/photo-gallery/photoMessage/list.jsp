@@ -64,9 +64,11 @@
                                     <!-- 树形菜单类型-->
                                     <c:choose>
                                         <c:when test="${webType=='BASEUTIS'}">
+                                          <%System.out.println("进入treetime.jsp"); %>
                                             <%@include file="basetreetime.jsp" %>
                                         </c:when>
                                         <c:otherwise>
+                                             <%System.out.println("进入treetime.jsp"); %>
                                              <%@include file="treetime.jsp" %>
                                         </c:otherwise>
                                     </c:choose>
