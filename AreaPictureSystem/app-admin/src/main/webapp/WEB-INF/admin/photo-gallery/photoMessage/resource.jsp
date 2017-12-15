@@ -416,13 +416,11 @@ p {
 																	class="fa fa-heart"></i>已收藏</a>
 															</span>
 														</c:when>
-												<%-- 		<c:otherwise>
+												 		<c:otherwise>
 															<span style="padding-left: 10%; display: none;"
-																class="collection" id="collection_${item.id }"
-																onclick="return tofavorites('${item.id}')"> <a><i
-																	class="fa fa-heart"></i>收藏</a>
+																class="collection" id="collection_${item.id }">
 															</span>
-														</c:otherwise> --%>
+														</c:otherwise> 
 													</c:choose>
 
 												</small>
@@ -539,7 +537,7 @@ p {
 
 
 
-<!-- 
+
 
 	<script type="text/javascript">
 		//ajax收藏图片资源
@@ -563,15 +561,14 @@ p {
 						success : function(data) {
 							for (var i = 0; i < data.length; i++) {
 								var a = "collection_" + data[i].id;
-								$("#"+a).attr("onclick","return cancelfavorites('"+data[i].id+"')")
-								$("#" + a) .html("<a><i class='fa fa-heart'></i>取消收藏</a>");
+								$("#" + a).html("<a><i class='fa fa-heart'></i>已收藏</a>");
 							}
 							/* 收藏成功提示 $('#successFavorites').modal('show'); */
 						}
 					});
 		}
 		
-		
+		<!-- 	
 		//取消收藏
 		function cancelfavorites(o){
 			
@@ -601,11 +598,11 @@ p {
 						}
 					});
 		}
-		
+		 -->
 	</script>
 
 
- -->
+
 
 
 
