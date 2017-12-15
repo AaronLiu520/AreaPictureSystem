@@ -116,7 +116,8 @@ p {
 					</div>
 				</div>
 			</div>
-
+<input id="mfregex" class="col-md-offset-8" placeholder="请输入要查找的图片···"/>
+					  <button class=" " type="button" id="botton1" onclick="checkout();">查找</button>
 			<c:choose>
 				<c:when test="${not empty fa}">
 					<h2>
@@ -125,6 +126,8 @@ p {
 						<c:if test="${webType=='DIRECTLYUTIS'}"> 直属单位 </c:if>
 						《 ${fa.forderActivityName} 》
 					</h2>
+					
+				
 				</c:when>
 				<c:otherwise>
 					<h3>请先： 选择活动 或 创建活动</h3>
@@ -145,8 +148,27 @@ p {
 					<a data-toggle="modal" href="form_basic.html#modal-form">
 						<button class="btn btn-success " type="button">
 							<i class="fa fa-upload"> </i>&nbsp;&nbsp;<span class="bold">上传图片</span>
+							
 						</button>
 					</a>
+				
+				
+<div class="btn-group">
+	<button type="button" class="btn btn-primary dropdown-toggle"
+			data-toggle="dropdown">按时间排列 
+		<span class="caret"></span>
+	</button>
+	
+	
+	
+	<ul class="dropdown-menu" role="menu">
+		<li><a href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=ASC">升序</a></li>
+		<li><a href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=DESC">降序</a></li>
+	</ul>
+</div>
+				
+				
+				
 					<!--
                 <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
                 -->
@@ -171,11 +193,8 @@ p {
 						onclick="return choose();">
 						<i class="fa fa-check-square-o"> </i> 选择
 					</button>
-
-
-
+         
 				</c:if>
-
 			</div>
 		</div>
 
@@ -507,7 +526,13 @@ p {
 
 
 
+<script type="text/javascript">
+   function checkout(){
+	  var mfregex=$("#mfregex").val();
+	  window.location.href ="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&mfregex="+mfregex;
+   }
 
+</script>
 
 
 
