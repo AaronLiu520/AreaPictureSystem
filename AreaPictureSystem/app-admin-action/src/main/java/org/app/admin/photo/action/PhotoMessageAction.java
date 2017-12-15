@@ -11,12 +11,15 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.disk.DiskFileItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.Favorites;
@@ -39,9 +42,11 @@ import org.app.admin.util.executor.Task;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.CommonEnum;
 import org.app.framework.util.Pagination;
+import org.app.framework.util.ZipCompress;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -488,6 +493,69 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     	
     	
     }
+    
+    
+    
+    
+    /**
+	 * 文件打包下载
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws Exception
+	 */
+	@RequestMapping(value = "download")
+	@SystemErrorLog(description="图片打包下载出错")
+	@SystemControllerLog(description = "图片打包下载")
+	@Scope("singleto")
+	public  ModelAndView download(HttpServletRequest request, HttpServletResponse response,String id) throws Exception {
+		
+			//1.获取所有需要下载的图片id
+			//2.将所有下载图片的路径转换成List<File>
+			List<File> listFile = this.resourceService.getImageFile(id);
+			
+			String temporary = "WEB-INF"+File.separator+"Template"+File.separator+"Temporary"+File.separator;
+			
+			//3.创建服务器临时文件目录
+			String UPLOAD = request.getSession().getServletContext().getRealPath("/");
+
+			log.info("临时压缩包目录："+UPLOAD+temporary);
+			//获取临时压缩文件
+			String storeName = ZipCompress.getZipFilename();
+			log.info("压缩文件："+storeName);
+			
+			File zipfile = new File(UPLOAD+temporary+storeName);
+			
+			ZipCompress.zipFile(listFile, zipfile);
+			
+			//4.执行打包操作并且下载
+			String contentType = "application/octet-stream";
+			
+			try{
+				FileOperateUtil.download(request, response, storeName, contentType, temporary);
+				
+			}catch(Exception e){
+				e.printStackTrace();
+			}finally{
+				
+				ZipCompress.deleteFile(zipfile);
+			}
+		return null;
+	}
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     
     

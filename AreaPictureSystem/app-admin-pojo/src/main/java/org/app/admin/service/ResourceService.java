@@ -8,6 +8,7 @@
 */
 package org.app.admin.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.LinkedList;
@@ -137,5 +138,65 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		System.out.println(list);
 
 	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: getImageFile 
+	* @Description: TODO(获取图片的路径并且转换成File) 
+	* @param @param id
+	* @param @return    设定文件 
+	* @return List<File>    返回类型 
+	* @throws
+	 */
+	public List<File> getImageFile(String id){
+		List<File> listFile = new ArrayList();
+		
+		if(Common.isNotEmpty(id)){
+			
+			String[] ids = id.split(",");
+		
+			for(int i = 0 ; i<ids.length;i++){
+			
+				Resource rs = this.findResourceByResourceId(ids[i]);
+				
+				if(rs!=null){
+					
+					String imgPath = rs.getOriginalPath()+rs.getImgCompressionBean().getMax_generateName();
+					
+					File file = new File(imgPath);
+					
+					listFile.add(file);
+					
+				}
+			
+			}
+		}
+		
+		return listFile;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

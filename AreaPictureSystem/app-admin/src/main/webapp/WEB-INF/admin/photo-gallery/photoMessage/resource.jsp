@@ -94,6 +94,64 @@ p {
 		}
 
 	}
+	
+	
+	
+	
+	function todownload() {
+		var a = $("input[name='ids']:checked").length;
+
+		if (a == 0) {
+			$("#delete").hide();
+
+			$("#modalMessage").text("请先选中需要下载的图片！");
+			
+			$('#deleteModal').modal('show');
+
+		}else{
+			
+			var downloadIds = $("input[name='ids']:checked");
+
+			//获取所有的id执行删除操作，使用ajax
+			var str = "";
+			$(downloadIds).each(function() {
+				str += this.value + ",";
+			});
+
+			if (str != "") {
+				var id = str.substring(0, str.length - 1);
+				 window.location.href = "${pageContext.request.contextPath}/photoMessageAction/download?id="
+						+ id ; 
+				  $("#downloads").attr("disabled","disabled");
+					 setTimeout(function(){
+			            $("#downloads").removeAttr("disabled");
+			        },5000)
+				 
+				 
+				 
+			} else {
+				window.location.href = document.URL;
+			}
+			
+		} 
+
+		
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </script>
 
 
@@ -179,7 +237,7 @@ p {
 					</button>
 
 					<button class="btn btn-primary " style="display: none;"
-						id="downloads" type="button">
+						id="downloads" type="button" onclick="return todownload();">
 						<i class="fa fa-check"></i>&nbsp;下载
 					</button>
 
@@ -482,7 +540,7 @@ p {
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 					</button>
-					<span style="float: left; color: red; font-size: 18px;">批量删除提示</span>
+					<span style="float: left; color: red; font-size: 18px;">信息提示</span>
 				</div>
 				<div class="modal-body">
 					<h3 id="modalMessage"></h3>
