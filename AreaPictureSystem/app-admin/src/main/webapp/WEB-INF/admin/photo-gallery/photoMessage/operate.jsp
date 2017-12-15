@@ -92,6 +92,9 @@
     function checkActivity(id){
         window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId="+id
     }
+    function checkActivityAndSort(id,Sortname){
+        window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId="+id+"&Sort="+Sortname
+    }
 
 </script>
 
