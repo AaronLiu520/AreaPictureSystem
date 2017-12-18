@@ -169,7 +169,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
 
 
-        if(type.equals(BaseType.Type.BASEUTIS.toString())){
+
 
         //如果用户是 BASEUTIS
 
@@ -235,7 +235,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             log.info(e.toString());
         }
         modelAndView.addObject("fa", fa);
-    }
+
         return modelAndView;
     }
     /**
