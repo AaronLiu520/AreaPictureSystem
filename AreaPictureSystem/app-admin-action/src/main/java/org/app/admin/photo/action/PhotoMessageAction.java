@@ -186,7 +186,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 
         } else {
-
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, fa.getActivityTime()));
         }
