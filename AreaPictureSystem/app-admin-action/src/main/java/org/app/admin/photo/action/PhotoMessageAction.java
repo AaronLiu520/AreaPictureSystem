@@ -114,6 +114,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, null));
         }
+         
+        
+        
         //TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
         //标签
         modelAndView.addObject("lableList", labelService.find(new Query(), Label.class));
@@ -166,9 +169,12 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
 
 
+        if(type.equals(BaseType.Type.BASEUTIS.toString())){
+
         //如果用户是 BASEUTIS
 
         if (type.equals(BaseType.Type.BASEUTIS.toString())) {
+
 
             List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, fa.getActivityTime());
             //加载所有的企业
@@ -178,7 +184,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             log.info(lbpt.toString());
             modelAndView.addObject("basePhotoTimeList", lbpt);
 
+
         } else {
+
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, fa.getActivityTime()));
         }
@@ -227,11 +235,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             log.info(e.toString());
         }
         modelAndView.addObject("fa", fa);
-
+    }
         return modelAndView;
     }
-
-
     /**
      * 资料上传
      *
@@ -372,22 +378,22 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
     @RequestMapping("/toMyFavorties")
     @ResponseBody
-    public List<Resource> toMyFavorties(@RequestParam(defaultValue = "", value = "resourceId") String resourceId, HttpSession session) {
+    public List<Resource> toMyFavorties(@RequestParam(defaultValue="",value="resourceId")String resourceId,HttpSession session){
+    	
+    	AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+    	
+    	List<Resource> listResource = this.favoritesService.getResource(resourceId);
+    	
+    	boolean flag = this.favoritesService.toSaveFavorites(adminUser, listResource);
+    	
+    	if(flag){
 
-        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-
-        List<Resource> listResource = this.favoritesService.getResource(resourceId);
-
-        boolean flag = this.favoritesService.toSaveFavorites(adminUser, listResource);
-
-        if (flag) {
-
-            return listResource;
-        }
-        return null;
-
-
+        	return listResource;
+    	}
+    	return null;
     }
+    
+ 
 
     /**
      * @param @param  resourceId
