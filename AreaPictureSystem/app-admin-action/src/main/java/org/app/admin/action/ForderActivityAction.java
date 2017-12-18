@@ -209,7 +209,7 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	@SystemErrorLog(description="查询所有活动出错")
 	@RequestMapping("/list")
 	public ModelAndView list(HttpSession session){
-		
+		log.info("forder list");
 		ModelAndView modelAndView =new ModelAndView();
 		
 		modelAndView.setViewName("admin/app-admin/fileSystem/list");
@@ -233,7 +233,7 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	@RequestMapping("/creatOrEditActivity")
 	public ModelAndView creatOrEditActivity(HttpSession session,ForderActivity forderActivity
 			,@RequestParam(value="edit",defaultValue="")String edit){
-		
+		log.info("进去create!");
 		ModelAndView modelAndView = new ModelAndView();
 		
 		modelAndView.setViewName("redirect:/forderActivity/list");

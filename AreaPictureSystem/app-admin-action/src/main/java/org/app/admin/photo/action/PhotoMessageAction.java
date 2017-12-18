@@ -113,6 +113,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA,null));
         }
+         
+        
+        
         //TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
         //标签
         modelAndView.addObject("lableList", labelService.find(new Query(), Label.class));
@@ -164,8 +167,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
 
 
-        //如果用户是 BASEUTIS
-
         if(type.equals(BaseType.Type.BASEUTIS.toString())){
 
             List<PhotoTime> lpt=PhotoTime.getPhotoTime(listFA,fa.getActivityTime());
@@ -176,7 +177,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             log.info(lbpt.toString());
             modelAndView.addObject("basePhotoTimeList", lbpt);
 
-        }else{
+        }else
+        {
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA,fa.getActivityTime()));
         }
@@ -454,7 +456,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         	return listResource;
     	}
     	return null;
-    	
     	
     }
     
