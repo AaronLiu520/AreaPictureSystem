@@ -33,9 +33,17 @@
                     <c:if test="${not empty item.list}">
                         <ul>
                             <c:forEach items="${item.list}" var="activity" varStatus="status">
-                                <li  data-jstree='{"type":"css"}'>
+                                <li  data-jstree='{"type":"css"}' title="${activity.forderActivityName}">
                                     <span onclick="checkActivity('${activity.id}');">
-                                        <i class="fa "></i>${activity.forderActivityName}
+                                        <i class="fa"></i>
+                                        <c:choose>
+                                        	<c:when test="${fn:length(activity.forderActivityName)<12}">
+                                                ${activity.forderActivityName}
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${fn:substring(activity.forderActivityName,0,12)}..
+                                            </c:otherwise>
+                                        </c:choose>
                                     </span>
 
                                 </li>
