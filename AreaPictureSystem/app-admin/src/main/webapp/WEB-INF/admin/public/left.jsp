@@ -165,7 +165,7 @@ li_style:hover {
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <a href="${pageContext.request.contextPath}/user/editor?id=${sessionScope.userSession.id}"><button type="button" class="btn btn-primary">跳转</button></a>
+        <a href="${pageContext.request.contextPath}/user/editor?id=${sessionScope.userSession.id}"><button type="button" class="btn btn-primary">修改</button></a>
       </div>
     </div>
   </div>

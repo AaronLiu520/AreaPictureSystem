@@ -44,8 +44,17 @@
                         <!-- 活动主题类型 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人 -->
                         <input type="hidden" id="type" name="type" value="${webType}">
                         <!-- 公司ID ，个人ID-->
-                        <input  type="hidden" name="boundId" value="${sessionScope.userSession.adminCompany.id}">
-
+                         <c:choose>
+                          <c:when test="${webType =='PERSION'}">
+                         <input  type="hidden" name="boundId" value="${sessionScope.userSession.id}">  
+                          </c:when>
+                          <c:otherwise>
+                         
+                          <input  type="hidden" name="boundId" value="${sessionScope.userSession.adminCompany.id}">
+                          </c:otherwise>
+                         </c:choose>
+                        
+                         
                         <input  type="hidden" name="parentId" value="0">
 
                         <label>描述</label>

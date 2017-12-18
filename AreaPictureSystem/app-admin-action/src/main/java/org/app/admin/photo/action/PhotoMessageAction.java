@@ -91,7 +91,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         //检查类型
         if (!BaseType.checkType(type)) return null;
         modelAndView.addObject("webType", type);
-
+        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
 
@@ -110,7 +110,13 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             log.info(lbpt.toString());
             modelAndView.addObject("basePhotoTimeList", lbpt);
 
-        } else {
+        }else if(type.equals(BaseType.Type.PERSION.toString())){
+        	  modelAndView.addObject("photoTimeList",
+                      getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
+        }
+        
+        
+        else {
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, null));
         }
@@ -128,6 +134,16 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         return modelAndView;// 返回
     }
 
+    
+    
+    public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
+        
+        Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
+        List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
+         System.out.println(listFA.size());
+        return PhotoTime.getPhotoTime(listFA,check);
+    }
+    
 
     /**
      * 选择中对应的主题活动
@@ -151,6 +167,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         //检查类型
         if (!BaseType.checkType(type)) return null;
         modelAndView.addObject("webType", type);
+        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         //模糊匹配
         try {
             mfregex = new String(mfregex.getBytes("iso-8859-1"), "utf8");
@@ -163,9 +180,14 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         ForderActivity fa = this.forderActivityService.findOneById(checkId, ForderActivity.class);
 
         if (checkId != null) session.setAttribute("checkActivityId", checkId);
+        Query querylistFA=new Query();
+        //如果用户是个人
+        if (type.equals(BaseType.Type.PERSION.toString())) {
+        	querylistFA= super.craeteQueryWhere("parentId", "0", "type", type,"boundId",adminUser.getId());
 
-
-        Query querylistFA = super.craeteQueryWhere("parentId", "0", "type", type);
+        }else{
+         querylistFA = super.craeteQueryWhere("parentId", "0", "type", type);
+        }
         List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
 
 
@@ -183,14 +205,12 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
             log.info(lbpt.toString());
             modelAndView.addObject("basePhotoTimeList", lbpt);
-
-
-        } else {
+        } 
+        else{
 
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, fa.getActivityTime()));
         }
-
 
         //TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
         //标签
@@ -214,7 +234,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
             //获取当前用户收藏的图片
             //start
-            AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 
             if (adminUser != null) {
 
@@ -354,6 +373,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         if (au == null) return null;
         else fa.setCreatUser(au);
+        log.info(fa.getBoundId());
         this.forderActivityService.insert(fa);
 
         Query query = super.craeteQueryWhere("forderActivityName", fa.getForderActivityName());

@@ -75,7 +75,7 @@ public class photoAction extends GeneralAction<AdminUser> {
 
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
         modelAndView.addObject("photoTimeList1",
-                getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(),null,adminUser.getId()));
+                getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
         return modelAndView;// 返回
     }
     
