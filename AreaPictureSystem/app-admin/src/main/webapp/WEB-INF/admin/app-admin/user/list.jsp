@@ -129,7 +129,7 @@
  	}
  	//删除记录
  	function deleteById() {
- 		window.location.href = "delete?id="+o;
+ 		window.location.href = "delete?id="+deleteId;
  	}
  	
  	
