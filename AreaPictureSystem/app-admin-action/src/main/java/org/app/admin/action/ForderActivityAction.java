@@ -16,8 +16,10 @@ import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemControllerLog;
 import org.app.admin.annotation.SystemErrorLog;
+import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
+import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
 import org.app.framework.action.GeneralAction;
@@ -27,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -52,6 +53,9 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 
 	@Autowired
 	private ResourceService resourceService;
+	
+	@Autowired
+	private AdminCompanyService adminCompanyService;
 
 	/**
 	 * 
@@ -184,14 +188,17 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	@SystemErrorLog(description="查询重复活动出错")
 	@SystemControllerLog(description = "查询重复活动信息")
 	public void ajaxgetRepletes(
-			@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName, PrintWriter printWriter,
+			@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
+			@RequestParam(value = "companyId", defaultValue = "") String companyId,
+			@RequestParam(value = "type", defaultValue = "") String type,
+			PrintWriter printWriter,
 			HttpSession session, HttpServletResponse response) {
 
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 
-		List<ForderActivity> list = this.forderActivityService.findForderActivityByUserType(forderActivityName, adminUser);
+		List<ForderActivity> list = this.forderActivityService.findForderActivityByforderActivityName(forderActivityName, adminUser,companyId,type);
 
-		if (list !=null) {
+		if (list.size()>0) {
 			printWriter.write("true");
 		} else {
 			printWriter.write("false");
@@ -219,7 +226,11 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	
 		List<ForderActivity> listForderActivity = this.forderActivityService.findForderActivityByUserType(null,adminUser);
 		
+		List<AdminCompany> listAdminCompany = this.adminCompanyService.listCompay();//获取所有的企业信息
+		
 		modelAndView.addObject("pageList",listForderActivity);
+		
+		modelAndView.addObject("company", listAdminCompany);
 		
 		
 		return modelAndView;
@@ -228,8 +239,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	
 	
 	
-	@SystemControllerLog(description="查询所有活动")
-	@SystemErrorLog(description="查询所有活动出错")
+	@SystemControllerLog(description="创建活动")
+	@SystemErrorLog(description="创建活动出错")
 	@RequestMapping("/creatOrEditActivity")
 	public ModelAndView creatOrEditActivity(HttpSession session,ForderActivity forderActivity
 			,@RequestParam(value="edit",defaultValue="")String edit){
