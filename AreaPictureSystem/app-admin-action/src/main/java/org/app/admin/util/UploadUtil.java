@@ -40,9 +40,17 @@ public class UploadUtil {
         // 保存文件的新地址
         StringBuffer path = new StringBuffer(ec.getValueString("resourcesPath"));
 
+        File file= new File(path + newFileName);
+
+
+        File fileParent = file.getParentFile();
+        if(!fileParent.exists()){
+            fileParent.mkdirs();
+        }
+
         // 保存上传的文件到新地址
         try {
-            FileOutputStream fos = FileUtils.openOutputStream(new File(path + newFileName));
+            FileOutputStream fos = FileUtils.openOutputStream(file);
             IOUtils.copy(mpfile.getInputStream(), fos);
         } catch (IOException e) {
             log.error("上传文件失败,检查文件目录是否存在:"+e.toString());
