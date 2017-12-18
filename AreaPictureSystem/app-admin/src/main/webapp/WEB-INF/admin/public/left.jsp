@@ -302,10 +302,6 @@ li_style:hover {
 
 					</c:if>
 				</c:forEach>
-				<li><a
-					href="${pageContext.request.contextPath}/forderActivity/list">
-						<i class="fa ${item.icon}"></i>活动管理
-				</a></li>
 
 
 
