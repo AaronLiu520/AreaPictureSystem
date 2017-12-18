@@ -63,12 +63,4 @@ public class Configure {
     }
 
 
-
-    public static void main(String[] args) {
-        Configure configure= Configure.getInstance();
-        System.out.println(configure.getValueInt("corePoolSize"));
-        System.out.println(Integer.parseInt(configure.getConfig().getProperty("corePoolSize")));
-
-    }
-
 }

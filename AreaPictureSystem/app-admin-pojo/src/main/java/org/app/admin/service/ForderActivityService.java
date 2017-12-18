@@ -13,12 +13,11 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
-import org.app.admin.annotation.SystemErrorLog;
+import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
 import org.app.admin.util.BaseType;
-import org.app.admin.util.BaseType.CompanyNature;
 import org.app.admin.util.BaseType.UserType;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
@@ -40,6 +39,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 	@Autowired
 	private AdminUserService adminUserService;
+	
+	@Autowired
+	private AdminCompanyService adminCompanyService;
 
 	/**
 	 * 
@@ -268,43 +270,80 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 * 
 	 */
 	public List<ForderActivity> findForderActivityByUserType(String forderActivityName,AdminUser adminUser) {
+		
 
-		if (adminUser.getAdminCompany() != null) {
+		if (adminUser != null) {
+			
+			Query query = new Query();
+			
 			UserType getuserType = adminUser.getUserType();
 			// 企业ID
-			String companyId = adminUser.getAdminCompany().getId();
+			String companyId = "";
+			if(adminUser.getAdminCompany()!=null){
+				companyId = adminUser.getAdminCompany().getId();
+			}
 			// 用户ID
 			String userId = adminUser.getId();
-			List<ForderActivity> listForderActivity = new ArrayList();
-
-			Query query = new Query();
-			/**
-			 * 获取活动 1.超级管理员登录 可查询所有的活动
-			 *  2.学校管理员登录 可查询学校的活动 
-			 *  3.老师帐号登录 可查询个人的活动
-			 */
-				query.addCriteria(Criteria.where("parentId").is("0"));//获取所有父活动
-				//如果forderActivityName不为空查询该信息
-			if(Common.isNotEmpty(forderActivityName)){
-				query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
-				
-			} else if (getuserType.equals(UserType.SCHOOLADMIN)) {
 			
-				// 获取绑定区域的所有活动
-				query.addCriteria(Criteria.where("boundId").is(companyId));
-
-			} else if (getuserType.equals(UserType.TEACHER)) {
+			List<ForderActivity> listForderActivity = new ArrayList();
+			//超级管理员
+			if(getuserType.equals(UserType.ADMINISTRATORS)){
+				
+				query.addCriteria(Criteria.where("type").in(BaseType.Type.AREA,BaseType.Type.BASEUTIS,BaseType.Type.DIRECTLYUTIS));
+				
+				List<ForderActivity> list = this.find(query, ForderActivity.class);
+				
+				query=new Query();
+				query.addCriteria(Criteria.where("boundId").is(userId)).addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
+				
+				listForderActivity = this.find(query, ForderActivity.class);
+				
+				listForderActivity.addAll(list);
+				
+				
+			}else if(getuserType.equals(UserType.SCHOOLADMIN)){
+				
+				
+				
+				
+				query.addCriteria(Criteria.where("type").in(BaseType.Type.BASEUTIS,BaseType.Type.DIRECTLYUTIS,BaseType.Type.AREA)).
+				addCriteria(Criteria.where("boundCompany").is(companyId));
 				
 
-				query.addCriteria(Criteria.where("boundId").is(userId));
+				List<ForderActivity> list = this.find(query, ForderActivity.class);
+				
+				query=new Query();
+				query.addCriteria(Criteria.where("boundId").is(userId)).addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
+				
+				listForderActivity = this.find(query, ForderActivity.class);
+				
+				listForderActivity.addAll(list);
+				
+			
+			
+			
+			}else if(getuserType.equals(UserType.TEACHER)){
+				
+				
+				query.addCriteria(Criteria.where("boundCompany").is(companyId))
+				
+				.addCriteria(Criteria.where("type").in(BaseType.Type.BASEUTIS,BaseType.Type.DIRECTLYUTIS,BaseType.Type.AREA));
+				
+				List<ForderActivity> list = this.find(query, ForderActivity.class);
+				
+				query=new Query();
+				query.addCriteria(Criteria.where("boundId").is(userId)).addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
+				
+				listForderActivity = this.find(query, ForderActivity.class);
+				
+				listForderActivity.addAll(list);
+				
 			}
-
-			listForderActivity = this.find(query, ForderActivity.class);
-
-			if (listForderActivity.size() > 0)
-				return listForderActivity;
-			else
-				return null;
+			
+		
+			
+			return listForderActivity;
+			
 		} else {
 			return null;
 		}
@@ -331,106 +370,126 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 */
 	public void creatOrEditActivity(ForderActivity forderActivity,AdminUser adminUser,String id){
 		
-		//超级管理员创建区域级别的图片库
 		
-		//直属单位的创建直属单位的图片库
-		
-		//基层单位的创建基层单位的图片库
-		
-		//判断用户的session是否存在
-		if(adminUser!=null){
+		if(adminUser != null && forderActivity!=null){									//判断adminUser,forderActiviy 是否为空
 			
-			UserType usertype = adminUser.getUserType();
-			
-			//获取当前用户的企业性质
-			CompanyNature nature = adminUser.getAdminCompany().getNature();
-			
-			
-			
-			if(Common.isNotEmpty(id)){
-				//执行修改
-				ForderActivity editActivity = this.findForderById(id);
+			if(Common.isNotEmpty(id)){													//如果id不为空执行休息
 				
-				if(editActivity!=null){
-					editActivity.setActivityTime(forderActivity.getActivityTime());
-					editActivity.setAddress(forderActivity.getAddress());
-					editActivity.setBoundId(editActivity.getBoundId());
-					editActivity.setDescription(forderActivity.getDescription());
-					editActivity.setFolderSize(forderActivity.getFolderSize());
-					editActivity.setForderActivityName(forderActivity.getForderActivityName());
-					editActivity.setResource(editActivity.getResource());
-					editActivity.setSumPotoCount(forderActivity.getSumPotoCount());
-					
-					if(usertype.equals(UserType.ADMINISTRATORS)){
-						
-							editActivity.setType(BaseType.Type.AREA);
-						
-					}else if(usertype.equals(UserType.SCHOOLADMIN)){
-						
-						if(nature.equals(CompanyNature.JICHENG)){
-							
-							editActivity.setType(BaseType.Type.BASEUTIS);
-							
-						}else if(nature.equals(CompanyNature.ZHISHU)){
-							
-							editActivity.setType(BaseType.Type.DIRECTLYUTIS);
-						}
-						
-					}else if(usertype.equals(UserType.TEACHER)){
-						
-						editActivity.setType(BaseType.Type.PERSION);
-						
+				ForderActivity editforderActivity = this.findForderById(id);
+				
+				if(editforderActivity!=null){
+					editforderActivity.setAddress(forderActivity.getAddress());
+					editforderActivity.setActivityTime(forderActivity.getActivityTime());
+					editforderActivity.setCreatUser(adminUser);
+					editforderActivity.setDescription(forderActivity.getDescription());
+					editforderActivity.setFolderSize(forderActivity.getFolderSize());
+					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
+					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
+					if(Common.isNotEmpty(forderActivity.getBoundCompany())){
+						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
+						//根据boundCompany获取企业信息
+						AdminCompany adminCompany = this.adminCompanyService.findAdminCompanyById(forderActivity.getBoundCompany());
+						editforderActivity.setAdminCompany(adminCompany);
 					}
 					
-					editActivity.setCreatUser(editActivity.getCreatUser());
-
-					this.save(editActivity);
+					this.save(editforderActivity);
 				}
 				
+			}else{																		//执行添加活动
 				
-			}else{
-				//执行添加
-				if(usertype.equals(UserType.ADMINISTRATORS)){
-					
-					forderActivity.setType(BaseType.Type.AREA);
-				
-			}else if(usertype.equals(UserType.SCHOOLADMIN)){
-				
-				if(nature.equals(CompanyNature.JICHENG)){
-					
-					forderActivity.setType(BaseType.Type.BASEUTIS);
-					
-				}else if(nature.equals(CompanyNature.ZHISHU)){
-					
-					forderActivity.setType(BaseType.Type.DIRECTLYUTIS);
+				if(Common.isEmpty(forderActivity.getBoundCompany())){					//如果BoundCompany 为空则添加默认自己单位
+					if(adminUser.getAdminCompany()==null){
+						forderActivity.setBoundCompany("");
+					}else{
+						forderActivity.setBoundCompany(adminUser.getAdminCompany().getId());
+					}
 				}
-				//绑定id
-				forderActivity.setBoundId(adminUser.getAdminCompany().getId());
 				
-			}else if(usertype.equals(UserType.TEACHER)){
-				//绑定id
-				forderActivity.setBoundId(adminUser.getId());
-				forderActivity.setType(BaseType.Type.PERSION);
+				if(Common.isEmpty(forderActivity.getBoundId())){
+					forderActivity.setBoundId(adminUser.getId());
+				}
 				
-			}
+				//根据boundCompany获取企业信息
+				AdminCompany adminCompany = this.adminCompanyService.findAdminCompanyById(forderActivity.getBoundCompany());
 				
-				forderActivity.setCreatUser(adminUser);
+				forderActivity.setAdminCompany(adminCompany);
 				forderActivity.setParentId("0");
+				forderActivity.setCreatUser(adminUser);
 				this.insert(forderActivity);
+				
+				
 				
 			}
 			
+			
 		}
-		
-		
 		
 		
 	}
 	
 	
 	
+	/**
+	 * 
+	* @Title: findForderActivityByforderActivityName 
+	* @Description: TODO(查询是否存在重复值) 
+	* @param @param forderActivityName
+	* @param @param adminUser
+	* @param @param companyId
+	* @param @return    设定文件 
+	* @return List<ForderActivity>    返回类型 
+	* @throws
+	 */
+	public List<ForderActivity> findForderActivityByforderActivityName(String forderActivityName,AdminUser adminUser,String companyId,String type){
+		
+		if(adminUser!=null&&Common.isNotEmpty(forderActivityName)){
+			
+			Query query = new Query();
+			
+			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
+			
+			UserType getuserType = adminUser.getUserType();
 	
-	
+			// 用户ID
+			String userId = adminUser.getId();
+			//超级管理员
+			if(getuserType.equals(UserType.ADMINISTRATORS)){
+		
+				if(Common.isNotEmpty(companyId)){
+					query.addCriteria(Criteria.where("boundCompany").is(companyId));
+					if(Common.isNotEmpty(type)){
+						
+						query.addCriteria(Criteria.where("type").is(type));
+						
+					}
+				}
+				
+			}else if(getuserType.equals(UserType.SCHOOLADMIN)){
+				// 企业ID
+				 companyId = "";
+				if(adminUser.getAdminCompany()!=null){
+					companyId = adminUser.getAdminCompany().getId();
+				}
+				query.addCriteria(Criteria.where("boundCompany").is(companyId));
+					if(Common.isNotEmpty(type)){
+					
+					query.addCriteria(Criteria.where("type").is(type));
+					
+				}
+			}else if(getuserType.equals(UserType.TEACHER)){
+				
+				query.addCriteria(Criteria.where("boundId").is(userId));
+				
+			}
+			
+			List<ForderActivity> list = this.find(query, ForderActivity.class);
+			
+			return list;
+		}
+		
+		return null;
+		
+	}
 	
 	
 	

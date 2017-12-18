@@ -20,9 +20,9 @@ public class Task implements Runnable {
 
     private String generateName;
 
-    public Task(String generateName,ResourceService resourceService){
-        this.generateName=generateName;
-        this.resourceService=resourceService;
+    public Task(String generateName, ResourceService resourceService) {
+        this.generateName = generateName;
+        this.resourceService = resourceService;
     }
 
 
@@ -41,7 +41,6 @@ public class Task implements Runnable {
     public void setResourceService(ResourceService resourceService) {
         this.resourceService = resourceService;
     }
-
 
 
     @Override
@@ -69,32 +68,32 @@ public class Task implements Runnable {
     }
 
     /**
-     *  Resource Compression ( min_ , middle_ , max_ )
+     * Resource Compression ( min_ , middle_ , max_ )
+     *
      * @param r
      * @return
      */
     public ImgCompressionBean imgCompressionProcess(Resource r) {
         log.info("imgCompression_address：" + r.getOriginalPath());
         ImgCompressionBean icb = new ImgCompressionBean();
-        icb.setMin_generateName(compressPicProcess(r,300,200,"min_",false));
-        icb.setMiddle_generateName(compressPicProcess(r,800,600,"middle_",true));
-        icb.setMax_generateName(compressPicProcess(r,1500,1200,"max_",true));
+        icb.setMin_generateName(compressPicProcess(r, 300, 200, "min_", false));
+        icb.setMiddle_generateName(compressPicProcess(r, 800, 600, "middle_", true));
+        icb.setMax_generateName(compressPicProcess(r, 1500, 1200, "max_", true));
         return icb;
     }
 
-    public String compressPicProcess(Resource r,int width,int heigth,String name,boolean is){
+    public String compressPicProcess(Resource r, int width, int heigth, String name, boolean is) {
         ImageTool tool = new ImageTool();
-        String newfileName=name + r.getGenerateName();
+        String newfileName = name + r.getGenerateName();
         tool.compressPic(r.getOriginalPath(), r.getOriginalPath(), r.getGenerateName(),
                 newfileName, width, heigth, is);
         return newfileName;
     }
 
     public ImgInfoBean imgInfoProcess(Resource r) {
-        log.info("imgInfoProcess"+r.getOriginalPath()+r.getGenerateName());
-        return new SampleUsage().parseImgInfo(r.getOriginalPath()+r.getGenerateName());
+        log.info("imgInfoProcess" + r.getOriginalPath() + r.getGenerateName());
+        return new SampleUsage().parseImgInfo(r.getOriginalPath() + r.getGenerateName());
     }
-
 
 
 }

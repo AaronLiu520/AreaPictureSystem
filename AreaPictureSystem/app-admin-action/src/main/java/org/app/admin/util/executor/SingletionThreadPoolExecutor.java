@@ -1,10 +1,12 @@
 package org.app.admin.util.executor;
 
 
-
 import org.app.admin.util.Configure;
 
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Resource Process;
@@ -17,10 +19,8 @@ public class SingletionThreadPoolExecutor {
 
     private SingletionThreadPoolExecutor() {
         Configure ec= Configure.getInstance();
-        pool=new ThreadPoolExecutor(
-                Integer.parseInt(ec.getConfig().getProperty("corePoolSize")),
-                Integer.parseInt(ec.getConfig().getProperty("maximumPoolSize")) ,
-                Integer.parseInt(ec.getConfig().getProperty("keepAliveTime")),
+        pool=new ThreadPoolExecutor(ec.getValueInt("corePoolSize"),ec.getValueInt("maximumPoolSize"),
+                ec.getValueInt("keepAliveTime"),
                 TimeUnit.SECONDS,
                 new LinkedBlockingQueue<Runnable>(),
                 new Rejected());

@@ -38,9 +38,38 @@ public class ForderActivity extends GeneralBean {
 	文件夹大小		folderSize		String				
 	资源集合		List<Resource>		String				
 	创建者		creatUser		String		创建者Id		*/
+	private String forderActivityName;// 文件夹名称、活动名称
+	private String address;// 活动地址
+	private String sumPotoCount;// 图片数量
+	private String boundId;// 绑定对象Id(个人)
+	private String boundCompany;// 绑定对象Id(公司)
+	private BaseType.Type type; // 区域，直属单位，个人（用于统计）
+	private String description; // 描述
+	private String activityTime; // 活动时间
+/*	private Date createTime; // 创建时间
+*/	private Long folderSize; // 文件夹大小
+	private List<Resource> resource;// 资源集合
+	@DBRef
+	private AdminUser creatUser;//创建者
+	@DBRef
+	private AdminCompany adminCompany;//企业信息
+	private String parentId;// 付文件夹Id
+
 
 
 	
+	public AdminCompany getAdminCompany() {
+		return adminCompany;
+	}
+	public void setAdminCompany(AdminCompany adminCompany) {
+		this.adminCompany = adminCompany;
+	}
+	public String getBoundCompany() {
+		return boundCompany;
+	}
+	public void setBoundCompany(String boundCompany) {
+		this.boundCompany = boundCompany;
+	}
 	public String getForderActivityName() {
 		return forderActivityName;
 	}
@@ -112,20 +141,6 @@ public class ForderActivity extends GeneralBean {
 		this.parentId = parentId;
 	}
 	
-
-	private String forderActivityName;// 文件夹名称、活动名称
-	private String address;// 活动地址
-	private String sumPotoCount;// 图片数量
-	private String boundId;// 绑定对象Id(公司、个人)
-	private BaseType.Type type; // 区域，直属单位，个人（用于统计）
-	private String description; // 描述
-	private String activityTime; // 活动时间
-/*	private Date createTime; // 创建时间
-*/	private Long folderSize; // 文件夹大小
-	private List<Resource> resource;// 资源集合
-	@DBRef
-	private AdminUser creatUser;//创建者
-	private String parentId;// 付文件夹Id
 
 
 
