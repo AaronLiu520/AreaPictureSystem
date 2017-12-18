@@ -78,7 +78,7 @@
                                             <button type="button" class="btn btn-primary btn-xs edit-news" data-id="1">编辑</button>
                                             </a>
                                             <button type="button" class="btn  btn-warning btn-xs delete-news" data-id="1"
-                                             onclick="deleteById('${item.id}')">删除</button>
+                                             onclick="deleteAlert('${item.id}')">删除</button>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -128,7 +128,7 @@
  		
  	}
  	//删除记录
- 	function deleteById(o) {
+ 	function deleteById() {
  		window.location.href = "delete?id="+o;
  	}
  	
