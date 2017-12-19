@@ -63,6 +63,7 @@ public class UploadUtil {
         rf.setOriginalPath(path.toString());// 5 路径
         rf.setExtensionName(prefix);// 7 扩展名
         rf.setGenerateName(newFileName);// 8  生成的文件名
+        rf.setAdminCompanyId(au.getAdminCompany().getId());
 
         log.info("后缀名:"+prefix);
         if (FileType.picture.toLowerCase().indexOf(prefix.toLowerCase()) !=-1) {
