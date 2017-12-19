@@ -229,13 +229,34 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 	}
 	
 	
+		
 	
 	
 	
 	
-	
-	
-	
+	/**
+	 * 
+	* @Title: findListResourceByCompanyId 
+	* @Description: TODO(通过adminCompanyId来查询数据) 
+	* @param @param adminComanyId
+	* @param @return    设定文件 
+	* @return List<Resource>    返回类型 
+	* @throws
+	 */
+	public List<Resource> findListResourceByCompanyId(String adminComanyId){
+		
+		Query query = new Query();
+		
+		query.addCriteria(Criteria.where("adminCompanyId").is(adminComanyId));
+		
+		List<Resource> list = this.find(query, Resource.class);
+		
+		if(list.size()>0)
+			return list;
+		else
+			return null;
+		
+	}
 	
 	
 	

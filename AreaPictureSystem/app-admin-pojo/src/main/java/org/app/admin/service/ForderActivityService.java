@@ -385,6 +385,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					editforderActivity.setFolderSize(forderActivity.getFolderSize());
 					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
 					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
+					editforderActivity.setType(forderActivity.getType());
 					if(Common.isNotEmpty(forderActivity.getBoundCompany())){
 						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
 						//根据boundCompany获取企业信息
