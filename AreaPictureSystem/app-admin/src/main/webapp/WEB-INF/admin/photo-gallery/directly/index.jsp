@@ -34,7 +34,7 @@
                 <div class="col-lg-6">
                     <div class="ibox float-e-margins">
                         <div class="ibox-title">
-                            <h5>区域图片库 <small>按时间找主题</small></h5>
+                            <h5>直属图片库 <small>按时间找主题</small></h5>
 
                         </div>
                         <div class="ibox-content">
@@ -193,13 +193,10 @@
         var barData = {
             label: "bar",
             data: [
-                [20, 34],
-                [21, 25],
-                [22, 19],
-                [23, 34],
-                [24, 32],
-                [25, 44]
-            ]
+               	<c:forEach items="${uploadList1}" var="items" varStatus="status">
+          		 ${items },
+          	 </c:forEach>
+           ]
         };
         $.plot($("#flot-line-chart"), [barData], barOptions);
 
