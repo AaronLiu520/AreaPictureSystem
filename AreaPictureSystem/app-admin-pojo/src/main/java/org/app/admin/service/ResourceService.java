@@ -15,9 +15,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.app.admin.pojo.Resource;
+import org.app.admin.pojo.UploadFileLog;
 import org.app.admin.util.BaseType;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -31,7 +33,10 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class ResourceService extends GeneralServiceImpl<Resource> {
-
+    
+	@Autowired
+	private ForderActivityService forderActivityService;
+	
 	public Resource findResourceByResourceId(String resourceId) {
 
 		Resource resource = this.findOneById(resourceId, Resource.class);
@@ -41,7 +46,53 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 			return null;
 
 	}
-
+    /**
+     * 获取上传记录
+     * @param boundId
+     * @return
+     */
+	public List<UploadFileLog> findUploadFileLogByBoundId(String boundId){
+         Query query=Query.query(Criteria.where("boundId").is(boundId));
+    	 List<Resource> lrs=this.find(query, Resource.class);
+         List<UploadFileLog> lufl=new LinkedList<>();
+    	 for (Resource resource : lrs) {
+		  UploadFileLog ufl=new UploadFileLog();
+		  ufl.setDate(resource.getCreateDate());
+		  ufl.setImgSize(resource.getImgInfoBean().getImgSize());
+		  ufl.setName(resource.getOriginalName());
+	      ufl.setPlace(returnUploadType(forderActivityService.findForderById(resource.getForderActivityId()).getType().toString()));
+    	  lufl.add(ufl);
+    	 }
+         return lufl;
+     }
+     /**
+      * 返回上传位置
+      * @param type
+      * @return
+      */
+     public String returnUploadType(String type){
+    	 String result=null; 
+    	switch (type) {
+		case "AREA":
+			result="区域上传";
+			break;
+        case "PERSION":
+        	result="个人上传";
+        	break;
+        case "BASEUTIS":
+        	result="基层上传";
+        	break;
+        case "DIRECTLYUTIS":
+        	result="直属上传";
+        	break;
+		default:
+			result="have no idea!";
+			break;
+		}
+    	 return result;
+      }
+     
+     
 	/**
 	 * 
 	 * @Title: maxUploadThisMonth @Description: TODO(获取本月上传文件最大的) @param @return
@@ -70,6 +121,18 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		else
 			return 0;
 	}
+	
+	
+	     public  int isBelong(String boundId){
+	    	 
+	    	  
+	    	 return 0;
+	     }
+	
+	
+	
+	
+	
 	/**
 	 * @Title: maxUploadThisMonth @Description: TODO(获取本月上传文件最大的) @param @return
 	 * 设定文件 @return int 返回类型 @throws
@@ -227,26 +290,6 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		return listFile;
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 
 }
