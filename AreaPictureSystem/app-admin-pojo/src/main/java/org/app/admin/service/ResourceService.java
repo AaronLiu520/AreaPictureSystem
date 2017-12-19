@@ -290,14 +290,7 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		return listFile;
 		
 	}
-	
-<<<<<<< HEAD
-	
 		
-	
-	
-	
-	
 	/**
 	 * 
 	* @Title: findListResourceByCompanyId 
@@ -323,17 +316,5 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 	}
 	
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-=======
->>>>>>> 27741cbea9af458989e3878a05089c5976820f09
 
 }
