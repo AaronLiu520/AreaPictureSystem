@@ -26,7 +26,7 @@ public class Resource extends GeneralBean {
 
 
     private String uploadPerson;        // 1 上传者
-    private String boundId;             // 1 绑定公司或个人Id
+    private String boundId;             // 1 个人Id
     private String forderActivityId;    // 1 文件夹Id或活动Id
     private String originalName;        // 1 原名
     private String originalPath;        // 1 路径
@@ -44,6 +44,10 @@ public class Resource extends GeneralBean {
     private EditorImgBean editorImgInfo;//用户修改信息
 
     private ImgCompressionBean imgCompressionBean;//加工图片
+
+
+    private String adminCompanyId;//企业ID
+
 
 
     public static long getSerialVersionUID() {
@@ -152,6 +156,14 @@ public class Resource extends GeneralBean {
 
     public void setImgCompressionBean(ImgCompressionBean imgCompressionBean) {
         this.imgCompressionBean = imgCompressionBean;
+    }
+
+    public String getAdminCompanyId() {
+        return adminCompanyId;
+    }
+
+    public void setAdminCompanyId(String adminCompanyId) {
+        this.adminCompanyId = adminCompanyId;
     }
 
     @Override
