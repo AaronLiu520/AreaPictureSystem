@@ -44,7 +44,7 @@ public class SortBean implements Comparable<SortBean> {
     
 	@Override
 	public int compareTo(SortBean o) {
-		return this.uploadnum-o.uploadnum;
+		return o.uploadnum-this.uploadnum;
 	}
 
 }
