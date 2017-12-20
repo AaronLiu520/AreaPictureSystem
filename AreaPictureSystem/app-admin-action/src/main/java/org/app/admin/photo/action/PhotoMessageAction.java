@@ -373,7 +373,12 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
         AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         if (au == null) return null;
-        else fa.setCreatUser(au);
+        else
+        	fa.setCreatUser(au);
+        if(au.getAdminCompany()!=null){
+        	fa.setAdminCompany(au.getAdminCompany());
+        }
+        
         log.info(fa.getBoundId());
         this.forderActivityService.insert(fa);
 
@@ -384,6 +389,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + forderActivity.getId());
 
         return modelAndView;
+
     }
 
 

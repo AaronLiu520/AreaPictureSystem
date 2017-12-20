@@ -20,6 +20,7 @@ public class AdminMenu extends GeneralBean {
 	private String url;// 访问的地址
 	private float orderby;// 排序
 	private String remark;// 备注
+	private String key; //权限key
 	
 	
 
@@ -79,15 +80,29 @@ public class AdminMenu extends GeneralBean {
 		this.remark = remark;
 	}
 
+	
+	
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
+
+
+
 	enum MenuType {
 		HaveMenu, NoMenu
 	}
 
+
+
 	@Override
 	public String toString() {
-		return "AdminMenu [pid=" + pid + ", name=" + name + ", type=" + type
-				+ ", icon=" + icon + ", url=" + url + ", orderby=" + orderby
-				+ ", remark=" + remark + "]";
+		return "AdminMenu [pid=" + pid + ", name=" + name + ", type=" + type + ", icon=" + icon + ", url=" + url
+				+ ", orderby=" + orderby + ", remark=" + remark + ", key=" + key + "]";
 	}
+
 
 }

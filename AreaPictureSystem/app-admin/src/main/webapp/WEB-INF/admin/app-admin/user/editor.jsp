@@ -36,7 +36,7 @@
 								<h5>用户管理</h5>
 							</div>
 							<div class="ibox-content">
-								<form role="form" id="signupForm" action="createOrUpdateToFind" method="post" class="form-horizontal m-t">
+								<form role="form" id="signupForm"  action="createOrUpdateToFind" method="post" class="form-horizontal m-t" enctype="multipart/form-data">
 									<div class="row">
 										<div class="col-sm-5">
 											<label class="col-sm-4 control-label">姓 名</label>

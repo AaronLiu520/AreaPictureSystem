@@ -158,6 +158,13 @@
 												</div>
 											</div>
 											<div class="form-group col-sm-12">
+												<label class="col-sm-4 control-label">KEY</label>
+												<div class="col-sm-8">
+													<input type="text" id="key" name="key" value="${bean.key}"
+														class="form-control" placeholder="权限key">
+												</div>
+											</div>
+											<div class="form-group col-sm-12">
 												<label class="col-sm-4 control-label">图标</label>
 												<div class="col-sm-8">
 													<input type="text" id="icon" name="icon" value="${bean.icon}"
