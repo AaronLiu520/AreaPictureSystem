@@ -40,48 +40,65 @@
 								<h5>角色管理</h5>
 							</div>
 							<div class="ibox-content">
-								<form role="form" id="form" action="createOrUpdateToFind" method="post" class="form-horizontal">
-										 <div class="row">
-				                        	<div class="form-group">
-					                            <label class="col-sm-2 control-label">角色名称</label>
-					                            <div class="col-sm-10">
-					                                <input type="text" id="name"  value="${bean.name}" 
-					                                name="name" class="form-control" placeholder="角色名称" required >
-					                            </div>
-				                      	</div>
-				                      </div>
-				                      <div class="row">
-				                      		 <div class="form-group">
-				                            <label class="col-sm-2 control-label">角色备注</label>
-				                            <div class="col-sm-10">
-				                            	<textarea id="reamrk" name="reamrk" data-rangelength="[2,100]" 
-				                            	placeholder="备注" class="form-control parsley-validated" rows="6">${bean.reamrk}</textarea>
-				                            </div>
-				                        </div>
-				                      </div>
-				                      <div class="row">
-				                      			<div class="col-sm-6">
-											<label class="col-sm-4 control-label">用户类型</label>
-											<div class="col-sm-8">
-												<select class="form-control" name="userType" id="userType">
-													<option id="TEACHER" <c:if test="${bean.userType eq  'TEACHER'}">selected</c:if> value="TEACHER">老师</option>
-													<option id="SCHOOLADMIN" <c:if test="${bean.userType eq  'SCHOOLADMIN'}">selected</c:if> value="SCHOOLADMIN">学校管理员</option>
-													<option id="ADMINISTRATORS" <c:if test="${bean.userType eq  'ADMINISTRATORS'}">selected</c:if> value="ADMINISTRATORS">超级管理员</option>
+								<form role="form" id="signupForm" action="createOrUpdateToFind"
+									method="post" class="form-horizontal">
+									<div class="row">
+										<div class="col-sm-8">
+											<label class="col-sm-3 control-label">角色名称</label>
+											<div class="col-sm-7 form-group">
+												<input type="text" id="name" value="${bean.name}"
+													name="name" class="form-control" placeholder="角色名称"
+													required>
+											</div>
+										</div>
+									</div>
+									<div class="row">
+										<div class="col-sm-8">
+												<label class="col-sm-3 control-label">用户类型</label>
+											<div class="col-sm-7 form-group">
+												<select class="form-control" name="userType" id="userType"
+													required>
+													<option id="" value="">请选择用户类型</option>
+													<option id="TEACHER"
+														<c:if test="${bean.userType eq  'TEACHER'}">selected</c:if>
+														value="TEACHER">老师</option>
+													<option id="SCHOOLADMIN"
+														<c:if test="${bean.userType eq  'SCHOOLADMIN'}">selected</c:if>
+														value="SCHOOLADMIN">学校管理员</option>
+													<option id="ADMINISTRATORS"
+														<c:if test="${bean.userType eq  'ADMINISTRATORS'}">selected</c:if>
+														value="ADMINISTRATORS">超级管理员</option>
 												</select>
 											</div>
-
 										</div>
-				                      </div>
-				                      
+									</div>
+									
+									<div class="row">
+										<div class="col-sm-8">
+										<label class="col-sm-3 control-label">角色备注</label>
+											<div class="col-sm-7 form-group">
+										<textarea id="reamrk" name="reamrk"
+													data-rangelength="[2,100]" placeholder="备注"
+													class="form-control parsley-validated" rows="6">${bean.reamrk}</textarea>
+											</div>
+										</div>
+									</div>
+
+
 									<!-- 隐常ID,更新时使用 -->
 									<c:if test="${not empty bean.id}">
-									<input id="id" name="id" type="hidden" value="${bean.id }">
+										<input id="id" name="id" type="hidden" value="${bean.id }">
 									</c:if>
-									
-									<div class="modal-footer" style="margin-top: 20px;">
-										<button type="submit" id="save-btn-news"
+								<div class="row">
+								<div class="col-sm-8">
+									<label class="col-sm-3 control-label"></label>
+										<div class="col-sm-8" style="margin-top: 20px;">
+										<button type="submit" id="save-btn-news" style="float:right;"
 											class="btn btn-primary">保存</button>
-									</div>
+											</div>
+										</div>
+								</div>
+									
 								</form>
 							</div>
 						</div>
@@ -90,7 +107,7 @@
 
 				</div>
 			</div>
-			<%@include file="../../public/botton.jsp" %>
+			<%@include file="../../public/botton.jsp"%>
 		</div>
 	</div>
 
@@ -117,24 +134,52 @@
 			</div>
 		</div>
 	</div>
- <!-- Jquery Validate -->
-  	<script src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
-   	<script src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
+	<!-- Jquery Validate -->
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-
-            $("#form").validate({
-                rules: {
-                    name: {
-                        required: true,
-                        minlength: 2,
-                        maxlength: 15
-                    }
-            
-                }
-            });
-        });
-    </script>
+	<script type="text/javascript">
+		$.validator.setDefaults({
+			highlight : function(a) {
+				$(a).closest(".form-group").removeClass("has-success")
+						.addClass("has-error")
+			},
+			success : function(a) {
+				a.closest(".form-group").removeClass("has-error").addClass(
+						"has-success")
+			},
+			errorElement : "span",
+			errorPlacement : function(a, b) {
+				if (b.is(":radio") || b.is(":checkbox")) {
+					a.appendTo(b.parent().parent().parent())
+				} else {
+					a.appendTo(b.parent())
+				}
+			},
+			errorClass : "help-block m-b-none",
+			validClass : "help-block m-b-none"
+		});
+		$().ready(function() {
+			$("#commentForm").validate();
+			var a = "<i class='fa fa-times-circle'></i> ";
+			$("#signupForm").validate({
+				rules : {
+					name : "required",
+					userType : {
+						required : true,
+					}
+				},
+				messages : {
+					name : a + "请输入角色名称",
+					userType : {
+						required : a + "请选择用户类型"
+					}
+				}
+			});
+		});
+	</script>
+	
 </body>
 </html>

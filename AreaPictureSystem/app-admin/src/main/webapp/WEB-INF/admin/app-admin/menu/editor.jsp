@@ -44,9 +44,9 @@
 										<div class="row">
 											
 											<div class="form-group col-sm-6">
-												<label class="col-sm-4 control-label">名称</label>
+												<label class="col-sm-4 ">名称</label>
 												<div class="col-sm-8">
-                                            		<input id="name" name="name" type="text" class="form-control" required="" 
+                                            		<input id="name" name="name" type="text" class="form-control" required
                                             		value="${bean.name}" aria-required="true" aria-invalid="true" aria-describedby="cname-error">
                                        			 </div>
 											</div>
@@ -79,6 +79,8 @@
 												</div>
 											</div>
 										</div>
+										
+										
 										
 										<div class="row">
 											

@@ -221,7 +221,7 @@
 					<div class="row">
 						<div class="col-sm-12">
 
-							<form id="activity"
+							<form id="signupForm"
 								action="${pageContext.request.contextPath}/forderActivity/creatOrEditActivity"
 								method="post">
 								<div class="form-group">
@@ -243,7 +243,7 @@
 								<div class="form-group">
 									<label>图片上传最大数量：</label> <input type="text"
 										placeholder="图片上传最大数量" name="sumPotoCount" id="sumPotoCount"
-										class="form-control">
+										class="form-control" required>
 								</div>
 
 
@@ -292,7 +292,7 @@
 
 								<div class="form-group">
 									<label>活动所属：</label> <select class="form-control m-b"
-										name="type" id="type" onchange="return getrepletes('forderActivityName');">
+										name="type" id="type" onchange="return getrepletes('forderActivityName');" required="required">
 										<option value=""></option>
 										<option value="AREA">区域</option>
 										<option value="DIRECTLYUTIS">直属单位</option>
@@ -317,8 +317,8 @@
 
 								<div class="form-group">
 									<label>活动时间：</label> <input type="text" placeholder="活动地址"
-										name="activityTime" id="activityTime"
-										class="form-control datainput" data-date-format="yyyy-mm-dd">
+										name="activityTime" id="activityTime" readonly="readonly"
+										class="form-control datainput" data-date-format="yyyy-mm-dd" required>
 								</div>
 
 
@@ -447,36 +447,59 @@
 	</script>
 
 	<script type="text/javascript">
-		$().ready(
-				function() {
-					// 提交时验证表单
-					var a = "<i class='fa fa-times-circle'></i> ";
-					var validator = $("#activity").validate(
-							{
-								errorPlacement : function(error, element) {
-									// Append error within linked label
-									$(element).closest("form").find(
-											"label[for='" + element.attr("id")
-													+ "']").append(error);
-								},
-								errorElement : "span",
-
-								messages : {
-									"forderActivityName" : {
-										required : a + "请输入活动的名称",
-										minlength : a + " (不能少于 3 个字母)"
-									},
-
-								}
-							});
-
-					$(".cancel").click(function() {
-						validator.resetForm();
-					});
-				});
+		$.validator.setDefaults({
+			highlight : function(a) {
+				$(a).closest(".form-group").removeClass("has-success")
+						.addClass("has-error")
+			},
+			success : function(a) {
+				a.closest(".form-group").removeClass("has-error").addClass(
+						"has-success")
+			},
+			errorElement : "span",
+			errorPlacement : function(a, b) {
+				if (b.is(":radio") || b.is(":checkbox")) {
+					a.appendTo(b.parent().parent().parent())
+				} else {
+					a.appendTo(b.parent())
+				}
+			},
+			errorClass : "help-block m-b-none",
+			validClass : "help-block m-b-none"
+		});
+		$().ready(function() {
+			$("#commentForm").validate();
+			var a = "<i class='fa fa-times-circle'></i> ";
+			$("#signupForm").validate({
+				rules : {
+					forderActivityName : "required",
+					activityTime : {
+						required : true,
+					},
+					sumPotoCount : {
+						required : true,
+						digits:true
+					},
+					type :{
+						required:true,
+					}
+				},
+				messages : {
+					forderActivityName : a + "请输入活动名称",
+					activityTime : {
+						required : a + "请选择活动时间"
+					},
+					sumPotoCount : {
+						required : a + "请输入上传图片最大数量",
+						digits: a+"请输入正确的数字"
+					},
+					type : {
+						required : a+"请选择活动所属"
+					}
+				}
+			});
+		});
 	</script>
-
-
 
 
 
