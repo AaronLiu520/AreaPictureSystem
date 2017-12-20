@@ -4,11 +4,14 @@ import org.apache.commons.lang.StringUtils;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.util.BaseType;
+import org.app.admin.util.BasesultBean;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.UploadFileLog;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
+import org.app.admin.service.StatisticsService;
 import org.app.admin.util.PhotoTime;
+import org.app.admin.util.uploadStatistics;
 import org.app.admin.util.basetreetime.BaseTreeTime;
 import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.framework.action.GeneralAction;
@@ -24,6 +27,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.servlet.http.HttpSession;
 
@@ -33,6 +37,9 @@ public class photoAction extends GeneralAction<AdminUser> {
     private static final Logger log = LoggerFactory
             .getLogger(photoAction.class);
     
+    
+	@Autowired
+	private StatisticsService statisticsService;
     @Autowired
     private ResourceService resourceService;//资源（图片）
     @Autowired
@@ -137,16 +144,28 @@ public class photoAction extends GeneralAction<AdminUser> {
     public ModelAndView basicLevelIndex(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/basicLevel/index");//登录页面
+//        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         List<PhotoTime> lpt= getPhotoTimeList(String.valueOf(BaseType.Type.BASEUTIS.toString()),null);
         //加载所有的企业
         List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);
         List<LayerAdmonCompany> llac= LayerAdmonCompany.LayerAdmonCompany(lac,lpt);
         List<BaseTreeTime> lbpt= BaseTreeTime.getBaseTreeTime(llac);
+        List<BasesultBean> list = this.statisticsService.sortupload(null,BaseType.Type.BASEUTIS.toString());
+        Random random=new Random();
+        for (BasesultBean basesultBean : list) {
+        	basesultBean.setStr(random.nextInt(10)+","+random.nextInt(10)+","
+        			+random.nextInt(10)+","+random.nextInt(10)+","+random.nextInt(10)+","+random.nextInt(10)
+        			);
+		}
         modelAndView.addObject("basePhotoTimeList", lbpt);
+        modelAndView.addObject("list", list);
         return modelAndView;// 返回
     }
 
 
+  
+    
+    
     @RequestMapping("/persionIndex")
     public ModelAndView persionIndex(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();

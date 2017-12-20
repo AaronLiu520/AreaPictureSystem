@@ -17,6 +17,8 @@ import java.util.Map;
 
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.Resource;
+import org.app.admin.util.BaseType;
+import org.app.admin.util.BasesultBean;
 import org.app.admin.util.SortBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -44,6 +46,9 @@ public class StatisticsService {
 	
 	@Autowired
 	private AdminUserService adminUserService;
+	
+	@Autowired
+	private ForderActivityService forderActivityService;
 	//listCompay  获取所有的企业
 	/**
 	 * 
@@ -74,15 +79,16 @@ public class StatisticsService {
 	* @return List<uploadStatistics>    返回类型 
 	* @throws
 	 */
-	public <T extends  SortBean > List<T> sortupload(String acompanyId,String bs){
+	public <T extends  SortBean > List<T> sortupload(String id,String bs){
 		List<T> lus=new ArrayList<>();
 		Query query=new Query();
 		//区域
+		Map<String, Integer> map=new HashMap<String, Integer>();
 		if(bs.equals("area")){
-		    query.addCriteria(Criteria.where("adminCompanyId").is(acompanyId)); 
+		    query.addCriteria(Criteria.where("adminCompanyId").is(id)); 
 		    List<Resource> lrs=resourceService.find(query, Resource.class);
 		    List<String> boundIdList=this.IdList(lrs,"boundid");
-		 Map<String, Integer> map=new HashMap<String, Integer>();
+		 
 		 for (String string : boundIdList) {
 			  map.put(string, numByBoundIdnum(boundIdList, string));
 		    }
@@ -94,10 +100,9 @@ public class StatisticsService {
 			}  
 		}
 		//Company排行
-		else{
+		else if(bs.equals("company")){
 			 List<Resource> lrs=resourceService.find(query, Resource.class);
-			List<String> companyIdList=this.IdList(lrs,"companyid");
-			 Map<String, Integer> map=new HashMap<String, Integer>();
+			 List<String> companyIdList=this.IdList(lrs,"companyid");
 			 for (String string :companyIdList) {
 				  map.put(string, numByBoundIdnum(companyIdList, string));
 			    }
@@ -110,13 +115,33 @@ public class StatisticsService {
 				    }
 				    }  
 			} 
+		else if(bs.equals(BaseType.Type.BASEUTIS.toString())){
+		  //获取活动Type为BASEUTIS的idlist
+			List<String> lfa=forderActivityService.findAllForderActivityIdByType((BaseType.Type.BASEUTIS.toString()));	
+		  //获取Resource中forderactivityid在idlist中有的lr 
+		    List<Resource> lr=this.getByForderActivityId(lfa);	
+			List<String> lbd=this.IdList(lr, "boundid");
+			 for (String string : lbd) {
+				  map.put(string, numByBoundIdnum(lbd, string));
+			    }
+			 for (String key : map.keySet()) {
+				    BasesultBean bb=new BasesultBean();
+				    bb.setName(adminUserService.findAdminUserById(key).getName());
+				    bb.setUploadnum(map.get(key));
+				    lus.add((T) bb);
+				}  
+		}
+		
 		return sort(lus);
 	}
 	
 	
+	
+	
+	
      /***
       * 前十排行
-     * @param <T>
+      * @param <T>
       * @param lup
       * @return
       */
@@ -146,11 +171,17 @@ public class StatisticsService {
 			for (Resource r : lrs) {
 				lbd.add(r.getBoundId());
 			}
-		} else {
+		} else if (bs.equals("companyid")) {
 			for (Resource r : lrs) {
 				lbd.add(r.getAdminCompanyId());
 			}
+
 		}
+//			else if(bs.equals(BaseType.Type.BASEUTIS)){
+//			for (Resource r : lrs) {
+//				lbd.add(r.getAdminCompanyId());
+//			}
+//		}
 		return lbd;
 	}
 	/**
@@ -168,6 +199,16 @@ public class StatisticsService {
 		}
 		 return num;
 	}
+	/**
+	 * 通过forderId集合查找Resource 
+	 * @param lfa
+	 * @return
+	 */
+	public List<Resource> getByForderActivityId(List<String> lfa){
+		Query query=Query.query(Criteria.where("forderActivityId").in(lfa));
+		return resourceService.find(query, Resource.class);
+	}
+	
 	
 	
 }
