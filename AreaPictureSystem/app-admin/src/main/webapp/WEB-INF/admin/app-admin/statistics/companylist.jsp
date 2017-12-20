@@ -5,7 +5,7 @@
 <html lang="en" class="app">
 <head>
 <meta charset="utf-8" />
-<title>教职工上传排行</title>
+<title>学校上传排行</title>
 
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,7 +37,7 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>教职工上传排行</h5>
+								<h5>学校上传排行</h5>
 								<div class="ibox-tools">
 									<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
 									</a>
@@ -62,7 +62,7 @@
 									<!-- 添加区域帐号 onclick="addFormValue();"-->
 									<a href="#modal-form" id="toModal-form" data-toggle="modal">
 									</a>
-								<!-- <button class="btn btn-primary " onclick="return save();"
+									<!-- <button class="btn btn-primary " onclick="return save();"
 										type="button">
 										<i class="fa fa-plus"></i>&nbsp;添加
 									</button> -->
