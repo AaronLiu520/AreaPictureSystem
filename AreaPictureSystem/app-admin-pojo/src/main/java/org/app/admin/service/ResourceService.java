@@ -46,25 +46,28 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 			return null;
 
 	}
-    /**
-     * 获取上传记录
-     * @param boundId
-     * @return
-     */
-	public List<UploadFileLog> findUploadFileLogByBoundId(String boundId){
-         Query query=Query.query(Criteria.where("boundId").is(boundId));
-    	 List<Resource> lrs=this.find(query, Resource.class);
-         List<UploadFileLog> lufl=new LinkedList<>();
-    	 for (Resource resource : lrs) {
-		  UploadFileLog ufl=new UploadFileLog();
-		  ufl.setDate(resource.getCreateDate());
-		  ufl.setImgSize(resource.getImgInfoBean().getImgSize());
-		  ufl.setName(resource.getOriginalName());
-	      ufl.setPlace(returnUploadType(forderActivityService.findForderById(resource.getForderActivityId()).getType().toString()));
-    	  lufl.add(ufl);
-    	 }
-         return lufl;
-     }
+    
+	/**
+	 * 获取上传记录
+	 * 
+	 * @param boundId
+	 * @return
+	 */
+	public List<UploadFileLog> findUploadFileLogByBoundId(String boundId) {
+		Query query = Query.query(Criteria.where("boundId").is(boundId));
+		List<Resource> lrs = this.find(query, Resource.class);
+		List<UploadFileLog> lufl = new LinkedList<>();
+		for (Resource resource : lrs) {
+			UploadFileLog ufl = new UploadFileLog();
+			ufl.setDate(resource.getCreateDate());
+			ufl.setImgSize(resource.getImgInfoBean().getImgSize());
+			ufl.setName(resource.getOriginalName());
+			ufl.setPlace(returnUploadType(
+					forderActivityService.findForderById(resource.getForderActivityId()).getType().toString()));
+			lufl.add(ufl);
+		}
+		return lufl;
+	}
      /**
       * 返回上传位置
       * @param type
@@ -121,14 +124,6 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		else
 			return 0;
 	}
-	
-	
-	     public  int isBelong(String boundId){
-	    	 
-	    	  
-	    	 return 0;
-	     }
-	
 	
 	
 	
@@ -290,17 +285,7 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		return listFile;
 		
 	}
-		
-	/**
-	 * 
-	* @Title: findListResourceByCompanyId 
-	* @Description: TODO(通过adminCompanyId来查询数据) 
-	* @param @param adminComanyId
-	* @param @return    设定文件 
-	* @return List<Resource>    返回类型 
-	* @throws
-	 */
-	public List<Resource> findListResourceByCompanyId(String adminComanyId){
+       public List<Resource> findListResourceByCompanyId(String adminComanyId){
 		
 		Query query = new Query();
 		
@@ -314,7 +299,5 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 			return null;
 		
 	}
-	
-	
 
 }

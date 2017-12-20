@@ -71,19 +71,19 @@
 									class="table table-striped table-bordered table-hover dataTables-example">
 									<thead>
 										<tr>
-											<th>上传时间</th>
-											<th>活动范围</th>
-											<th>学校</th>
-											<th>地址</th>
-											<th>最大图片数</th>
-											<td>活动时间</td>
-											<td>创建者</td>
-											<th>操作</th>
+											<th>上传排行榜</th>
+											<th>上传者</th>
+											<th>上传数量</th>
 										</tr>
 									</thead>
 									<tbody>
-
-									
+									        <c:forEach items="${list }" var="item" varStatus="status">
+									        <tr>
+									        <th>${item.sortnum }</th>
+									        <th>${item.name }</th>
+									        <th>${item.uploadnum }</th>
+									        </tr>
+									        </c:forEach>
 									</tbody>
 
 								</table>

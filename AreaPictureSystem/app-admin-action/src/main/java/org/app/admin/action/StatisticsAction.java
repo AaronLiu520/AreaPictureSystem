@@ -10,8 +10,12 @@ package org.app.admin.action;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
+import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.uploadStatistics;
 import org.app.admin.service.StatisticsService;
+import org.app.framework.util.CommonEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,19 +56,18 @@ public class StatisticsAction {
 
 	 */
 	@RequestMapping("/arealist")
-	public ModelAndView  arealist(){
-		
+	public ModelAndView  arealist(HttpSession session){
 		ModelAndView modelAndView  = new ModelAndView();
-		
 		modelAndView.setViewName("admin/app-admin/statistics/arealist");
-		
-		//
-		 List<uploadStatistics> list = this.statisticsService.companyUpload();
-		
+		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		List<uploadStatistics> list = this.statisticsService.sortupload(adminUser.getAdminCompany().getId());
+		System.out.println(list.size());
+
 		modelAndView.addObject("list", list);
-		 
 		return modelAndView;
 	}
+	
+	
 	
 	@RequestMapping("/companylist")
 	public ModelAndView  companylist(){

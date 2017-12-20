@@ -1,40 +1,48 @@
 package org.app.admin.pojo;
 
+import org.app.admin.util.SortBean;
 
-public  class  uploadStatistics implements Comparable<uploadStatistics>{
+public  class  uploadStatistics extends SortBean{
 	
-	private String companyName;//单位名称
-	private int no;	//上传排行
-	private int num;//上传图片的数量
-	public String getCompanyName() {
-		return companyName;
-	}
-	public void setCompanyName(String companyName) {
-		this.companyName = companyName;
-	}
-	public int getNo() {
-		return no;
-	}
-	public void setNo(int no) {
-		this.no = no;
-	}
-	public int getNum() {
-		return num;
-	}
-	public void setNum(int num) {
-		this.num = num;
-	}
-	/* (非 Javadoc) 
-	* <p>Title: compareTo</p> 
-	* <p>Description: </p> 
-	* @param o
-	* @return 
-	* @see java.lang.Comparable#compareTo(java.lang.Object) 
-	*/
-	public int compareTo(uploadStatistics o) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+//    private String teachername;
+//    private int uploadfilenum;
+//    private int phnum;
+//
+//
+//	public int getPhnum() {
+//		return phnum;
+//	}
+//
+//	public void setPhnum(int phnum) {
+//		this.phnum = phnum;
+//	}
+//
+//	public String getTeachername() {
+//		return teachername;
+//	}
+//
+//	public void setTeachername(String teachername) {
+//		this.teachername = teachername;
+//	}
+//
+//	public int getUploadfilenum() {
+//		return uploadfilenum;
+//	}
+//
+//	public void setUploadfilenum(int uploadfilenum) {
+//		this.uploadfilenum = uploadfilenum;
+//	}
+//
+//	@Override
+//	public String toString() {
+//		return "uploadStatistics [teachername=" + teachername + ", uploadfilenum=" + uploadfilenum + "]";
+//	}
+//
+//	@Override
+//	public int compareTo(uploadStatistics o) {
+//		return this.uploadfilenum-o.uploadfilenum;
+//	}
+
 	
 	
 }
