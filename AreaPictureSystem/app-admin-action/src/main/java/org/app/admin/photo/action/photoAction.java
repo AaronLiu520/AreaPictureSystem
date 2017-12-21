@@ -145,7 +145,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/basicLevel/index");//登录页面
 //        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-        List<PhotoTime> lpt= getPhotoTimeList(String.valueOf(BaseType.Type.BASEUTIS.toString()),null);
+        List<PhotoTime> lpt= getPhotoTimeList1(String.valueOf(BaseType.Type.BASEUTIS.toString()),null);
         //加载所有的企业
         List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);
         List<LayerAdmonCompany> llac= LayerAdmonCompany.LayerAdmonCompany(lac,lpt);
@@ -182,6 +182,13 @@ public class photoAction extends GeneralAction<AdminUser> {
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
          System.out.println(listFA.size());
         return PhotoTime.getPhotoTime(listFA,check);
+    }
+    
+    public List<PhotoTime> getPhotoTimeList1(String type,String check){
+        Query query=super.craeteQueryWhere("type",type,"parentId", "0");
+        List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
+         System.out.println(listFA.size());
+        return PhotoTime.getPhotoTime1(listFA,check);
     }
     
   /**

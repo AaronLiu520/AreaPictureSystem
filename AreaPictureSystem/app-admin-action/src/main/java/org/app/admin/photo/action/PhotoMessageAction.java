@@ -102,7 +102,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
         if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
-            List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, null);
+            List<PhotoTime> lpt = PhotoTime.getPhotoTime1(listFA, null);
             //加载所有的企业
             List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
             List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
@@ -198,7 +198,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
 
-            List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, fa.getActivityTime());
+            List<PhotoTime> lpt = PhotoTime.getPhotoTime1(listFA, fa.getActivityTime());
             //加载所有的企业
             List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
             List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
