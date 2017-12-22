@@ -234,6 +234,25 @@ li_style:hover {
 								<a href="#"> <i class="fa ${item.icon}"></i> <span
 									class="nav-label">${item.name}</span> <span class="fa arrow"></span></a>
 								<!-- 二级菜单，根目录 -->
+								<ul class="nav nav-second-level">
+									<c:forEach items="${listMenu}" var="subitem" varStatus="status">
+											<c:if test="${subitem.pid == item.id}">
+												<c:choose>
+													<c:when test="${subitem.type == 'HaveMenu'}">
+														<!-- 有只子菜单 -->
+													<c:choose>
+														<c:when
+															test="${fn:contains(sessionScope.webMenuSession,subitem.id)}">
+															<li class="active">
+														</c:when>
+														<c:otherwise>
+															<li>
+														</c:otherwise>
+													</c:choose>
+
+													<a href="#"> <i class="fa ${item.icon}"></i>${subitem.name}
+														<span class="nav-label"> <!-- 这里空，为三级菜单 --></span><span
+														class="fa arrow"></span></a>
 													<ul class="nav nav-second-level">
 														<c:forEach items="${listMenu}" var="menu"
 															varStatus="status">
@@ -295,7 +314,7 @@ li_style:hover {
 									</c:otherwise>
 								</c:choose>
 								<!-- 没有子菜单 -->
-								<a target="mainFrame"
+								<a
 									href="${pageContext.request.contextPath}/${item.url}?activeMenu=${item.id}">
 									<i class="fa ${item.icon}"></i> <span class="nav-label">
 										${item.name}</span>
