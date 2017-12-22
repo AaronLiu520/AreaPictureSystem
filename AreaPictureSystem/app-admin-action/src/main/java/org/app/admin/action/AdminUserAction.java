@@ -204,6 +204,8 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 			//个人 PERSION
 			modelAndView.addObject("photoTimeList",
 					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
+		//获取所有的图片信息	
+			
 
 		return modelAndView;// 返回
 	}
