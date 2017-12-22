@@ -1,11 +1,13 @@
 package org.app.admin.action;
 
+import javax.annotation.Resources;
 import javax.servlet.http.HttpSession;
 
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
+import org.app.admin.pojo.Resource;
 import org.app.admin.service.*;
 import org.app.admin.util.BaseType;
 import org.app.admin.util.BaseType.UserType;
@@ -206,8 +208,16 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
 		//获取所有的图片信息	
 			
-
-		return modelAndView;// 返回
+			  Query query = new Query();
+	    	   
+	    	   query.addCriteria(Criteria.where("adminCompanyId").ne(null));
+			
+			Pagination<Resource> pagination = this.resourceService.findPaginationByQuery(query,1,12,Resource.class);
+	
+			session.setAttribute("resourcelist", pagination);
+			
+			
+			return modelAndView;// 返回
 	}
 
 	/**
