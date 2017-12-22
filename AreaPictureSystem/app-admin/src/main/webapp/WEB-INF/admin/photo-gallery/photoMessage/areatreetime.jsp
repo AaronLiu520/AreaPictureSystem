@@ -12,7 +12,7 @@
 
 <body>
 
-<div id="jstree1">
+<div id="jstree_area">
     <!-- jstree-open 打开树形菜单 -->
     <ul style="-webkit-padding-start: 10px;color: #ffffff;">
         <!--

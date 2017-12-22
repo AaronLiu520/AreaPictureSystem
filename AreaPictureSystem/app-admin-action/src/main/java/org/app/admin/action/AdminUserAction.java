@@ -5,16 +5,21 @@ import javax.servlet.http.HttpSession;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
-import org.app.admin.service.AdminCompanyService;
-import org.app.admin.service.AdminRoleService;
-import org.app.admin.service.AdminUserService;
+import org.app.admin.pojo.ForderActivity;
+import org.app.admin.service.*;
+import org.app.admin.util.BaseType;
 import org.app.admin.util.BaseType.UserType;
+import org.app.admin.util.PhotoTime;
+import org.app.admin.util.basetreetime.BaseTreeTime;
+import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
+import org.app.framework.util.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
@@ -22,6 +27,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.List;
 
 /**
  * 用户管理
@@ -37,6 +44,11 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	private AdminRoleService adminRoleService;
 	@Autowired
 	private AdminCompanyService AdminCompanyService;
+
+	@Autowired
+	private ResourceService resourceService;//资源（图片）
+	@Autowired
+	private ForderActivityService forderActivityService;
 
 	/**
 	 * 用户查询
@@ -137,6 +149,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@RequestMapping("/checkLogin")
 	public ModelAndView checkLogin(HttpSession session, String username, String password) {
 		ModelAndView modelAndView = new ModelAndView();
+		//modelAndView.setViewName("redirect:/adminUser/index");
 		modelAndView.setViewName("redirect:/adminUser/index");
 		// 清除菜单
 		session.removeAttribute(CommonEnum.WEBMENUSESSION);
@@ -165,10 +178,65 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * @return
 	 */
 	@RequestMapping("/index")
-	public ModelAndView index() {
+	public ModelAndView index(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
+		//modelAndView.setViewName("admin/index");
 		modelAndView.setViewName("admin/index");
+		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		// 区域   AREA
+		session.setAttribute("areaphotoTimeList", PhotoTime.getPhotoTime(
+					loadForderActivityType(BaseType.Type.AREA.toString(),15), null));
+
+		// 直属 DIRECTLYUTIS
+			session.setAttribute("directlyphotoTimeList", PhotoTime.getPhotoTime(
+					loadForderActivityType(BaseType.Type.DIRECTLYUTIS.toString(),15), null));
+
+		//基层单位 BASEUTIS,,
+			List<PhotoTime> lpt = PhotoTime.getPhotoTime(
+					loadForderActivityType(BaseType.Type.BASEUTIS.toString(),100), null);
+		//加载所有的企业
+			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
+			List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
+			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
+			log.info(lbpt.toString());
+			session.setAttribute("basePhotoTimeList", lbpt);
+
+			//个人 PERSION
+			modelAndView.addObject("photoTimeList",
+					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
+
 		return modelAndView;// 返回
+	}
+
+	/**
+	 * 按类型，
+	 * @param type
+	 * @param number
+	 * @return
+	 */
+	public List<ForderActivity> loadForderActivityType(String type,int number){
+		Query query=new Query();
+		query.addCriteria(Criteria.where("parentId").is("0"));
+		query.addCriteria(Criteria.where("type").is(type));
+		query.with(new Sort(Sort.Direction.DESC, "createTime"));
+		Pagination<ForderActivity> p=this.forderActivityService.findPaginationByQuery(query,0,number,ForderActivity.class);
+		if(p==null) return null;
+
+		return p.getDatas();
+
+	}
+
+
+
+
+
+
+	public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
+
+		Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
+		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
+		System.out.println(listFA.size());
+		return PhotoTime.getPhotoTime(listFA,check);
 	}
 
 	/**

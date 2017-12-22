@@ -42,17 +42,19 @@
 <script>
 
     //上下文
-    $(document).ready(function () {
-        $('.summernote').summernote({
-            lang: 'zh-CN',
-            onImageUpload: function(files, editor, $editable) {
-                sendFile(files[0], editor, $editable);
-            }
-        });
-        <!--显示与隐常左边的菜单-->
-        $('#show-and-hidden-left').trigger("click");
+    <!--显示与隐常左边的菜单-->
+    //$(document).ready(function () {
+    //    $('.summernote').summernote({
+    //        lang: 'zh-CN',
+    //        onImageUpload: function(files, editor, $editable) {
+    //            sendFile(files[0], editor, $editable);
+   //         }
+    //    });
+//
+     //   $('#show-and-hidden-left').trigger("click");
+//
+   // });
 
-    });
 
     // tree 时间轴
     $(document).ready(function () {

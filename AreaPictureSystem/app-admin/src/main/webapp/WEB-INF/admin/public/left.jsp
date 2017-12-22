@@ -173,13 +173,7 @@ li_style:hover {
 </div>
 
 
-
-
-
-
-
-
-							<li class="divider"></li>
+				<li class="divider"></li>
 							<li><a
 								href="${pageContext.request.contextPath}/adminUser/loginOut">安全退出</a>
 							</li>
@@ -190,6 +184,34 @@ li_style:hover {
 				</li>
 
 
+				<!-- 区域图片库-->
+				<li class="active">
+					<a><i class="fa fa-th-large" style="margin-left: -10px;"></i>
+						<span class="nav-label">区域图片库</span> <span class="fa arrow"></span>
+					</a>
+					<ul style="color: #c7c7c7;margin-left: -20px;">
+						<%@include file="areatreetime.jsp" %>
+					</ul>
+				</li>
+				<!--直属单位-->
+				<li class="active">
+					<a><i class="fa fa-columns" style="margin-left: -10px;"></i>
+						<span class="nav-label">直属单位</span> <span class="fa arrow"></span> </a>
+					<ul style="color: #c7c7c7;margin-left: -20px;">
+						<%@include file="directlytreetime.jsp" %>
+					</ul>
+				</li>
+				<!--基层单位-->
+				<li class="active">
+					<a><i class="fa fa-sitemap" style="margin-left: -10px;"></i>
+						<span class="nav-label">基层单位</span><span class="fa arrow"></span>
+					</a>
+					<ul style="color: #c7c7c7;margin-left: -30px;">
+						<%@include file="basetreetime.jsp" %>
+					</ul>
+				</li>
+
+		<!-- 以上菜单为固定菜单，以下菜单为动态数据库权限菜单-->
 				<c:forEach items="${listMenu}" var="item" varStatus="status">
 
 					<!-- 一级菜单，根目录   updateFormValue(id,name,type,icon,url,orderby,remark,pid)-->
@@ -246,7 +268,7 @@ li_style:hover {
 																	</c:otherwise>
 																</c:choose>
 
-																<a
+																<a target="mainFrame"
 																	href="${pageContext.request.contextPath}/${menu.url}?activeMenu=${menu.id}_${item.id}_${subitem.id}">${menu.name}</a>
 																</li>
 
@@ -266,7 +288,7 @@ li_style:hover {
 															<li>
 														</c:otherwise>
 													</c:choose>
-													<a
+													<a target="mainFrame"
 														href="${pageContext.request.contextPath}/${subitem.url}?activeMenu=${subitem.id}_${item.id}">
 														<i class="fa ${subitem.icon}"></i> ${subitem.name}
 													</a>
@@ -292,7 +314,7 @@ li_style:hover {
 									</c:otherwise>
 								</c:choose>
 								<!-- 没有子菜单 -->
-								<a
+								<a target="mainFrame"
 									href="${pageContext.request.contextPath}/${item.url}?activeMenu=${item.id}">
 									<i class="fa ${item.icon}"></i> <span class="nav-label">
 										${item.name}</span>
@@ -346,7 +368,7 @@ li_style:hover {
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/toastr/toastr.min.js"></script>
 
-
+	<link rel="stylesheet"  href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css" media="all" />
 
 	<c:if test="${not empty success}">
 		<script type="text/javascript">
@@ -359,7 +381,98 @@ li_style:hover {
 			toastr.error('${error}', '操作失败');
 		</script>
 	</c:if>
-	
+	<!-- tree 树形 -->
+	<script>
+
+        // tree 时间轴
+        $(document).ready(function () {
+			<!--区域时间轴-->
+            $('#areatreetime').jstree({
+                'core': { 'check_callback': true  },
+                'plugins': ['types', 'dnd'],
+                'types': {
+                    'default': {
+                        'icon': 'fa fa-folder'
+                    },
+                    'html': {
+                        'icon': 'fa fa-file-code-o'
+                    },
+                    'svg': {
+                        'icon': 'fa fa-file-picture-o'
+                    },
+                    'css': {
+                        'icon': 'fa fa-file-code-o'
+                    },
+                    'img': {
+                        'icon': 'fa fa-file-image-o'
+                    },
+                    'js': {
+                        'icon': 'fa fa-file-text-o'
+                    }
+
+                }
+            });
+            <!--直属时间轴-->
+            $('#directlytreetime').jstree({
+                'core': { 'check_callback': true  },
+                'plugins': ['types', 'dnd'],
+                'types': {
+                    'default': {
+                        'icon': 'fa fa-folder'
+                    },
+                    'html': {
+                        'icon': 'fa fa-file-code-o'
+                    },
+                    'svg': {
+                        'icon': 'fa fa-file-picture-o'
+                    },
+                    'css': {
+                        'icon': 'fa fa-file-code-o'
+                    },
+                    'img': {
+                        'icon': 'fa fa-file-image-o'
+                    },
+                    'js': {
+                        'icon': 'fa fa-file-text-o'
+                    }
+
+                }
+            });
+            <!--个人时间轴-->
+            $('#basetreetime').jstree({
+                'core': { 'check_callback': true  },
+                'plugins': ['types', 'dnd'],
+                'types': {
+                    'default': {
+                        'icon': 'fa fa-folder'
+                    },
+                    'html': {
+                        'icon': 'fa fa-file-code-o'
+                    },
+                    'svg': {
+                        'icon': 'fa fa-file-picture-o'
+                    },
+                    'css': {
+                        'icon': 'fa fa-file-code-o'
+                    },
+                    'img': {
+                        'icon': 'fa fa-file-image-o'
+                    },
+                    'js': {
+                        'icon': 'fa fa-file-text-o'
+                    }
+
+                }
+            });
+        });
+
+        // 时间轴（活动的单事件）
+
+        function checkActivityType(id,webType){
+            window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/"+webType+"?checkId="+id
+        }
+
+	</script>
 
 </body>
 </html>

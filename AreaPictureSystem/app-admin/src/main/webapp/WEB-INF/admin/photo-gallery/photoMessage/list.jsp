@@ -66,7 +66,7 @@
                                         <c:when test="${webType=='BASEUTIS'}">
                                             <%@include file="basetreetime.jsp" %>
                                         </c:when>
-                                     
+
                                         <c:otherwise>
                                              <%@include file="treetime.jsp" %>
                                         </c:otherwise>
