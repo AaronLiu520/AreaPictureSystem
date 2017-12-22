@@ -9,6 +9,7 @@ import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.LabelService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.util.*;
+import org.app.admin.util.BaseType.Type;
 import org.app.admin.util.basetreetime.BaseTreeTime;
 import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.admin.util.executor.SingletionThreadPoolExecutor;
@@ -261,10 +262,16 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             throws IOException {
         //获取 用户 session
         AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-
+        ForderActivity f=forderActivityService.findForderById(forderActivityId);
+        String pd=null;
+        if(f.getType()==BaseType.Type.PERSION) {
+        	pd="PERSION";
+        }
         log.info("上传图片+活动ID"+ forderActivityId);
+        
         for (MultipartFile mpfile : multipartFiles) {
-            Resource rf = UploadUtil.processResource(mpfile, au, forderActivityId);
+        	
+            Resource rf = UploadUtil.processResource(mpfile, au, forderActivityId,pd);
             log.info("文件信息:" + rf.toString());
             // 更新到数据库
             this.resourceService.insert(rf);

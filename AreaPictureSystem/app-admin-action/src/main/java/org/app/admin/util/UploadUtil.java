@@ -15,7 +15,9 @@ import java.io.IOException;
 import java.util.Date;
 
 public class UploadUtil {
+     
 
+	
     private static final Logger log = LoggerFactory
             .getLogger(UploadUtil.class);
     static Configure ec= Configure.getInstance();
@@ -28,9 +30,10 @@ public class UploadUtil {
      * @param forderActivityId
      * @return
      */
-    public static Resource processResource(MultipartFile mpfile,AdminUser au,String forderActivityId){
-        Resource rf = new Resource();//  资源
-
+    public static Resource processResource(MultipartFile mpfile,AdminUser au,String forderActivityId,String pd){
+       
+    	Resource rf = new Resource();//  资源
+        
         CommonsMultipartFile cf = (CommonsMultipartFile) mpfile;
        // DiskFileItem fi = (DiskFileItem) cf.getFileItem();
         // 获取文件（真实）后缀名
@@ -63,8 +66,9 @@ public class UploadUtil {
         rf.setOriginalPath(path.toString());// 5 路径
         rf.setExtensionName(prefix);// 7 扩展名
         rf.setGenerateName(newFileName);// 8  生成的文件名
+        if(pd==null) {
         rf.setAdminCompanyId(au.getAdminCompany().getId());
-      
+        }
         log.info("后缀名:"+prefix);
         if (FileType.picture.toLowerCase().indexOf(prefix.toLowerCase()) !=-1) {
             rf.setFileType(FileType.picture);// 7 文件类型

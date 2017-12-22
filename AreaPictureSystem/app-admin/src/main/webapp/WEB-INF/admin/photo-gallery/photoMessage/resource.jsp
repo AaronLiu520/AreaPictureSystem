@@ -584,10 +584,19 @@ p {
 
 <script type="text/javascript">
    function checkout(){
+	  var h=$("h2").text();
+	  if(h==""){
+		  alert("空页面无法查询！");
+	      return 
+	  }
 	  var mfregex=$("#mfregex").val();
+	  if(mfregex==""){
+		  alert("查询条件不能为空！");
+	  }
+	  else{
 	  window.location.href ="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&mfregex="+mfregex;
-   }
-
+	  }
+	  }
 </script>
 
 
