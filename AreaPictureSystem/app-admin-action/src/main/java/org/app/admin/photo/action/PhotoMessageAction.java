@@ -1,31 +1,9 @@
 package org.app.admin.photo.action;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.commons.fileupload.disk.DiskFileItem;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
 import org.app.admin.annotation.SystemControllerLog;
 import org.app.admin.annotation.SystemErrorLog;
-import org.app.admin.pojo.AdminCompany;
-import org.app.admin.pojo.AdminUser;
-import org.app.admin.pojo.Favorites;
-import org.app.admin.pojo.ForderActivity;
-import org.app.admin.pojo.Label;
-import org.app.admin.pojo.Resource;
+import org.app.admin.pojo.*;
 import org.app.admin.service.FavoritesService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.LabelService;
@@ -52,8 +30,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/photoMessageAction")
@@ -113,10 +100,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         }else if(type.equals(BaseType.Type.PERSION.toString())){
         	  modelAndView.addObject("photoTimeList",
                       getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
-        }
-        
-        
-        else {
+        }else {
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, null));
         }
@@ -135,9 +119,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     }
 
     
-    
+
     public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
-        
+
         Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
          System.out.println(listFA.size());

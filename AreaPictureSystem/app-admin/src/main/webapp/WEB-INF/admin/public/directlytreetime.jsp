@@ -12,13 +12,13 @@
 
 <body>
 
-<div id="jstree1">
+<div id="directlytreetime">
     <!-- jstree-open 打开树形菜单 -->
     <ul style="-webkit-padding-start: 10px;color: #ffffff;">
         <!--
         <li class="jstree-open" >时间轴
             <ul>-->
-                <c:forEach items="${photoTimeList}" var="item" varStatus="status">
+                <c:forEach items="${directlyphotoTimeList}" var="item" varStatus="status">
                     <!-- jstree-open 打开树形 时间轴 -->
                     <c:choose>
                         <c:when test="${item.istree}">
@@ -34,15 +34,15 @@
                     <c:if test="${not empty item.list}">
                         <ul>
                             <c:forEach items="${item.list}" var="activity" varStatus="status">
-                                <li  data-jstree='{"type":"css"}' title="${activity.forderActivityName}">
-                                    <span onclick="checkActivity('${activity.id}');">
+                                <li  data-jstree='{"type":"img"}' title="${activity.forderActivityName}">
+                                    <span onclick="checkActivityType('${activity.id}','DIRECTLYUTIS');">
                                         <i class="fa"></i>
                                         <c:choose>
-                                        	<c:when test="${fn:length(activity.forderActivityName)<12}">
+                                        	<c:when test="${fn:length(activity.forderActivityName)<7}">
                                                 ${activity.forderActivityName}
                                             </c:when>
                                             <c:otherwise>
-                                                ${fn:substring(activity.forderActivityName,0,12)}..
+                                                ${fn:substring(activity.forderActivityName,0,7)}..
                                             </c:otherwise>
                                         </c:choose>
                                     </span>

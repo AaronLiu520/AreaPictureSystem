@@ -4,10 +4,7 @@ public class BaseType {
 
     /**
      *
-     * @ClassName: Type
-     * @Description: TODO( 创建枚举类 AREA 表示区域级 DIRECTLYUTIS 直属 BASEUTIS 基层 PERSION 个人 )
-     * @author fliay
-     * @date 2017年11月20日 下午2:26:46
+     *文件，活动在用。
      *
      */
     public enum  Type{

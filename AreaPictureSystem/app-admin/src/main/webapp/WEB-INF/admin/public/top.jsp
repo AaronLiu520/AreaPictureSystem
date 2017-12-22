@@ -31,7 +31,7 @@
                         </li>
 
                         <li>
-                            <a href="${pageContext.request.contextPath}/adminUser/loginOut">
+                            <a href="${pageContext.request.contextPath}/adminUser/loginOut" target="mainframer">
                                 <i class="fa fa-sign-out"></i> 退出
                             </a>
                         </li>

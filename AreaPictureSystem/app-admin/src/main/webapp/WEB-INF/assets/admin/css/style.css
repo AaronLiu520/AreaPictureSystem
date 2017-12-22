@@ -80,7 +80,7 @@ h5 {
 }
 
 body.body-small .navbar-top-links li:last-child {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 .navbar-top-links li a {
   padding: 20px 10px;
@@ -2873,6 +2873,7 @@ body {
   background-color: #2f4050;
   font-size: 13px;
   color: #676a6c;
+
   overflow-x: hidden;
 }
 html,
@@ -6403,5 +6404,5 @@ body.skin-3 {
 
 /* ECHARTS  */
 .echarts {
-    height: 240px;
+  height: 240px;
 }
