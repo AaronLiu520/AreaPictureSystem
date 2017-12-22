@@ -385,6 +385,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					editforderActivity.setFolderSize(forderActivity.getFolderSize());
 					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
 					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
+					editforderActivity.setType(forderActivity.getType());
 					if(Common.isNotEmpty(forderActivity.getBoundCompany())){
 						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
 						//根据boundCompany获取企业信息
@@ -492,7 +493,22 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	}
 	
 	
-	
+	/**
+	 * 根据活动Type查询相关Type的所有forderactivityid
+	 * @param type
+	 * @return
+	 */
+	public List<String> findAllForderActivityIdByType(String type){
+		List<String> ls=new ArrayList<>();
+		Query query=Query.query(Criteria.where("type").is(type));
+		List<ForderActivity> lfa=this.find(query, ForderActivity.class);
+	    for (int i = 0; i < lfa.size(); i++) {
+		     if(!ls.contains(lfa.get(i).getId())){
+		    	 ls.add(lfa.get(i).getId());
+		     }
+		}
+		return  ls;
+	}
 	
 	
 	

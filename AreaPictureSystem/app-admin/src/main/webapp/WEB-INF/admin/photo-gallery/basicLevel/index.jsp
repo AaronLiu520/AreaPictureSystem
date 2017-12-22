@@ -87,41 +87,15 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>
-                                            <td>1</td>
-                                            <td><span class="line">5,3,2,-1,-3,-2,2,3,5,2</span>
+                                       <c:forEach items="${list }" var="item" varStatus="status">
+									        <tr>
+									        <td>${item.sortnum }</td>
+									        <td><span class="line">${item.str}</span>
                                             </td>
-                                            <td>张三</td>
-                                            <td> 400</td>
-                                        </tr>
-                                        <tr>
-                                            <td>2</td>
-                                            <td><span class="line">5,3,9,6,5,9,7,3,5,2</span>
-                                            </td>
-                                            <td>李四</td>
-                                            <td> 300</td>
-                                        </tr>
-                                        <tr>
-                                            <td>3</td>
-                                            <td><span class="line">1,6,3,9,5,9,5,3,9,6,4</span>
-                                            </td>
-                                            <td>王麻子</td>
-                                            <td> 300</td>
-                                        </tr>
-                                        <tr>
-                                            <td>4</td>
-                                            <td><span class="line">6,2,3,9,5,8,5,3,3,9,4</span>
-                                            </td>
-                                            <td>李进</td>
-                                            <td> 200</td>
-                                        </tr>
-                                        <tr>
-                                            <td>5</td>
-                                            <td><span class="line">5,6,3,7,5,3,5,6,2,6,4</span>
-                                            </td>
-                                            <td>华人</td>
-                                            <td> 100</td>
-                                        </tr>
+									        <td>${item.name }</td>
+									        <td>${item.uploadnum }</td>
+									        </tr>
+									        </c:forEach>
                                         </tbody>
                                     </table>
                                 </div>

@@ -88,9 +88,9 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 			if (adminCompany != null) {
 				if (adminCompany.getId() == null) {
 					// 添加用户时，检用户帐号是否已经存在
-					int checkEmail = this.AdminCompanyService.findCountByQuery(
-							super.craeteQueryWhere("email", adminCompany.getEmail()), AdminCompany.class);
-					if (checkEmail > 0)
+					int checkphone = this.AdminCompanyService.findCountByQuery(
+							super.craeteQueryWhere("telPhone", adminCompany.getTelPhone()), AdminCompany.class);
+					if (checkphone > 0)
 						session.setAttribute("error", "添加失败，您添加的帐号信息已经存在。");
 					else {
 						// 添加用户信息

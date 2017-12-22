@@ -120,6 +120,7 @@ li_style:hover {
   <!-- Button trigger modal -->
 							<li><a data-toggle="modal" data-target="#myModal"
 								>个人资料</a></li>
+							<li><a data-toggle="model" href="${pageContext.request.contextPath}/picture/uploadfilelog">上传记录</a>
 
 <!-- Modal -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">

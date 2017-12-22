@@ -89,7 +89,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
         if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
-            List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, null);
+            List<PhotoTime> lpt = PhotoTime.getPhotoTime1(listFA, null);
             //加载所有的企业
             List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
             List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
@@ -182,7 +182,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
 
-            List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, fa.getActivityTime());
+            List<PhotoTime> lpt = PhotoTime.getPhotoTime1(listFA, fa.getActivityTime());
             //加载所有的企业
             List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
             List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
@@ -357,7 +357,12 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
         AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         if (au == null) return null;
-        else fa.setCreatUser(au);
+        else
+        	fa.setCreatUser(au);
+        if(au.getAdminCompany()!=null){
+        	fa.setAdminCompany(au.getAdminCompany());
+        }
+        
         log.info(fa.getBoundId());
         this.forderActivityService.insert(fa);
 
@@ -368,6 +373,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + forderActivity.getId());
 
         return modelAndView;
+
     }
 
 

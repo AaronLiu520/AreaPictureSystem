@@ -21,50 +21,67 @@
                 <h4 class="modal-title">创建活动／文件夹</h4>
             </div>
 
-            <form method="post" action="../createActivity/${webType}">
+            <form method="post" id="signupForm" action="../createActivity/${webType}">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label>名称</label>
-                        <input   class="form-control" name="forderActivityName"
-                                id="forderActivityName">
+									<label>活动名称：</label><label for="forderActivityName"
+										id="forforderActivityName" class="control-label"
+										style="color: red; float: right;"></label> <input type="text"
+										placeholder="请输入活动名称" name="forderActivityName"
+										onchange="return getrepletes('forderActivityName');" 
+										onkeyup="return getrepletes('forderActivityName');"
+										id="forderActivityName" class="form-control" required>
+								</div>
+								<input type="hidden" id="forderActivityNamehid">
 
-                        <label>时间</label>
-                        <input  placeholder="活动时间" class="form-control datainput" name="activityTime"
-                                id="activityTime"  data-date-format="yyyy-mm-dd">
-
-                        <label>数量</label>
-                        <input  placeholder="图片上传最大数量" class="form-control" name="sumPotoCount"
-                                id="sumPotoCount">
+								<div class="form-group">
+									<label>活动地址：</label> <input type="text" placeholder="活动地址"
+										name="address" id="address" class="form-control">
+								</div>
 
 
-                        <label>地址</label>
-                        <input placeholder="活动地址" class="form-control" name="address"
-                               id="address">
+								<div class="form-group">
+									<label>图片上传最大数量：</label> <input type="text"
+										placeholder="图片上传最大数量" name="sumPotoCount" id="sumPotoCount"
+										class="form-control" required>
+								</div>
+								
+								<c:if
+									test="${sessionScope.userSession.userType eq 'ADMINISTRATORS' }">
+									<div class="form-group" onchange="return getrepletes('forderActivityName');">
+										<label>活动所属学校：</label> <select class="form-control m-b"
+											name="boundCompany" id="boundCompany">
+											<c:forEach items="${company}" var="item" varStatus="status">
+												<option id="${item.id}" value="${item.id}">${item.name}</option>
+											</c:forEach>
+										</select>
+									</div>
+								</c:if>
 
-                        <!-- 活动主题类型 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人 -->
-                        <input type="hidden" id="type" name="type" value="${webType}">
-                        <!-- 公司ID ，个人ID-->
-                         <c:choose>
-                          <c:when test="${webType =='PERSION'}">
-                         <input  type="hidden" name="boundId" value="${sessionScope.userSession.id}">  
-                          </c:when>
-                          <c:otherwise>
-                         
-                          <input  type="hidden" name="boundId" value="${sessionScope.userSession.adminCompany.id}">
-                          </c:otherwise>
-                         </c:choose>
-                        
-                         
-                        <input  type="hidden" name="parentId" value="0">
 
-                        <label>描述</label>
-                        <textarea style="height: 100px;"  placeholder="文件夹描述"
-                                  class="form-control" name="description" id="description"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">保存</button>
-                </div>
+
+								<div class="form-group">
+									<label>活动时间：</label> <input type="text" placeholder="活动地址"
+										name="activityTime" id="activityTime" readonly="readonly"
+										class="form-control datainput" data-date-format="yyyy-mm-dd" required>
+								</div>
+
+
+
+								<div class="form-group">
+									<label>描述：</label>
+									<textarea rows="5" cols="7"
+										style="resize: none; overflow: scroll;" placeholder="描述"
+										name="description" id="description" class="form-control"></textarea>
+								</div>
+								   <input  type="hidden" name="boundId" id="boundId" value="${sessionScope.userSession.id}">  
+                       			   <input  type="hidden" name="boundCompany" id="boundCompany" value="${sessionScope.userSession.adminCompany.id}">
+                       			   <input  type="hidden" name="parentId" id="parentId" value="0">
+                       			   <input  type="hidden" name="type"  id="type" value="${webType}">
+            		    </div>
+           		     <div class="modal-footer">
+               		     <button type="submit" class="btn btn-primary">保存</button>
+              		  </div>
             </form>
         </div>
     </div>
@@ -85,7 +102,7 @@
                 <h4 class="modal-title" id="galleryNameId">编 缉</h4>
             </div>
 
-            <form method="post" action="${pageContext.request.contextPath}/photoMessageAction/update/${webType}">
+            <form method="post"  action="${pageContext.request.contextPath}/photoMessageAction/update/${webType}">
                 <div class="modal-body">
                     <div class="form-group">
                         <label>名称</label>
@@ -191,10 +208,100 @@
 
 
 
+<script type="text/javascript">
+		//ajax判断有没有重复
+		function getrepletes(o1) {
+			var r1 = $("#" + o1).val();//获取需要判断是否重复的属性
+			var r2 = $("#" + o1 + "hid").val();//该值的隐藏域值 判断如果是原始值则不变
+			
+			var boundCompany = $("#boundCompany").val();
+			if(boundCompany == null){
+				boundCompany="";
+			}
+			var type = $("#type").val();
+			if(type == null){
+				type="";
+			}
+			
+			
+			if (r1 != r2) {
+				$.ajax({
+							type : "POST",
+							url : "${pageContext.request.contextPath}/forderActivity/ajaxgetRepletes",
+							data : o1 + "=" + r1+"&companyId="+boundCompany+"&type="+type,
+							dataType : "text",
+							success : function(msg) {
+								if (msg == "true") {
+									document.getElementById("for" + o1).innerHTML = "您当前已经创建过这个活动了！！";
+									document.getElementById("for" + o1).style.cssText = "float: right; color: red;";
+									$("#submit").attr("disabled", true);
+								} else {
+									$("#submit").attr("disabled", false);
+									document.getElementById("for" + o1).innerHTML = " ";
+								}
+							}
+						});
+			} else {
+				$("#submit").attr("disabled", false);
+				document.getElementById("for" + o1).innerHTML = " ";
+			}
+		}
+	</script>
 
+<!-- Jquery Validate -->
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
 
-
-
+	<script type="text/javascript">
+		$.validator.setDefaults({
+			highlight : function(a) {
+				$(a).closest(".form-group").removeClass("has-success")
+						.addClass("has-error")
+			},
+			success : function(a) {
+				a.closest(".form-group").removeClass("has-error").addClass(
+						"has-success")
+			},
+			errorElement : "span",
+			errorPlacement : function(a, b) {
+				if (b.is(":radio") || b.is(":checkbox")) {
+					a.appendTo(b.parent().parent().parent())
+				} else {
+					a.appendTo(b.parent())
+				}
+			},
+			errorClass : "help-block m-b-none",
+			validClass : "help-block m-b-none"
+		});
+		$().ready(function() {
+			$("#commentForm").validate();
+			var a = "<i class='fa fa-times-circle'></i> ";
+			$("#signupForm").validate({
+				rules : {
+					forderActivityName : "required",
+					activityTime : {
+						required : true,
+					},
+					sumPotoCount : {
+						required : true,
+						digits:true
+					}
+				},
+				messages : {
+					forderActivityName : a + "请输入活动名称",
+					activityTime : {
+						required : a + "请选择活动时间"
+					},
+					sumPotoCount : {
+						required : a + "请输入上传图片最大数量",
+						digits: a+"请输入正确的数字"
+					}
+				}
+			});
+		});
+	</script>
 
 
 
