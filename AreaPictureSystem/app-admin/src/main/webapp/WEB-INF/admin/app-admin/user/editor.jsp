@@ -194,6 +194,7 @@
 
 									</div>
 
+									<!--
 									<div class="hr-line-dashed"></div>
 									<div class="row">
 									
@@ -207,7 +208,7 @@
 													data-classInput="form-control inline v-middle input-s">
 											</div>
 										</div>
-									</div>
+									</div>-->
 									
 									
 										<div class="hr-line-dashed"></div>

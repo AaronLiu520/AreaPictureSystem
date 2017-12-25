@@ -64,10 +64,13 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 		String url = request.getRequestURL().toString();
 		LOG.info("app-admin 请求:" + url);
+
+
 		/**
 		LOG.info("访问者IPss：" + request.getRemoteAddr());
 		LOG.info("访问者IP：" + request.getRemoteAddr());**/
 		HttpSession session = request.getSession();
+		loadTreeMenu(session);//验证菜单
 		//Menu Check，Cookie
 		if(request.getParameter("activeMenu")!=null && !request.getParameter("activeMenu").equals("")){
 			LOG.info("菜单ID ："+request.getParameter("activeMenu"));
@@ -77,7 +80,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		}
 		//检查用户是否登录过.
 		if (session.getAttribute(CommonEnum.USERSESSION) != null) {
-			loadTreeMenu(session);//验证菜单
 			return true;
 		}
 		//开放资源信息.
