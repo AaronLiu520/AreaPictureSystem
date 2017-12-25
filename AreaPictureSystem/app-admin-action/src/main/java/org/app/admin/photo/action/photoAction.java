@@ -53,7 +53,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         modelAndView.setViewName("admin/photo-gallery/area/index");//登录页面
         //每日上传统计
         List<String> forderActivityList=this.getforderActivityList(BaseType.Type.AREA.toString(),null);
-        List list = this.resourceService.getMonthUploadNum(forderActivityList);
+        List list = this.resourceService.getMonthUploadNum(forderActivityList,null);
         modelAndView.addObject("uploadList", list);
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
@@ -74,7 +74,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         //每日上传统计
         AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         List<String> forderActivityList=this.getforderActivityList(BaseType.Type.PERSION.toString(),adminUser.getId());
-        List list = this.resourceService.getMonthUploadNum(forderActivityList);
+        List list = this.resourceService.getMonthUploadNum(forderActivityList,null);
         modelAndView.addObject("uploadList1", list);
         for (Object object : list) {
 			System.out.println(object);
@@ -94,9 +94,19 @@ public class photoAction extends GeneralAction<AdminUser> {
    
     public List<String>  getforderActivityList(String type,String boundId){
     	 Query query=new Query();
+    	 //判断是个人则查询条件为boundId
+    	 if(StringUtils.isNotEmpty(type)&&type==BaseType.Type.PERSION.toString()) {
     	 if(StringUtils.isNotEmpty(boundId)){
     		 query.addCriteria(Criteria.where("boundId").is(boundId));
+    	  }
     	 }
+    	//判断是直属则查询条件为boundId
+    	 if(StringUtils.isNotEmpty(type)&&type==BaseType.Type.DIRECTLYUTIS.toString()) {
+    	 if(StringUtils.isNotEmpty(boundId)){
+    		 query.addCriteria(Criteria.where("boundCompany").is(boundId));
+    	  }
+    	 }
+    	
          query.addCriteria(Criteria.where("type").is(type));
          List<ForderActivity> lf=forderActivityService.find(query, ForderActivity.class);
          List<String> forderActivityList=new ArrayList<String>();
@@ -132,7 +142,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         //直属按照活动文件夹的DIRECTLYUTIS的Type和所属adminCompany的id进行判断.
         List<String> forderActivityList=this.getforderActivityList(BaseType.Type.DIRECTLYUTIS.toString(),adminUser.getAdminCompany().getId());
-        List list = this.resourceService.getMonthUploadNum(forderActivityList);
+        List list = this.resourceService.getMonthUploadNum(forderActivityList,null);
         modelAndView.addObject("uploadList1", list);
         modelAndView.addObject("photoTimeList",
                 getPhotoTimeList(BaseType.Type.DIRECTLYUTIS.toString(),null));
@@ -162,7 +172,32 @@ public class photoAction extends GeneralAction<AdminUser> {
         return modelAndView;// 返回
     }
 
-
+    @RequestMapping("/tubiao")
+    public ModelAndView tubiao(HttpSession session) {
+    	ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("admin/photo-gallery/tubiao/index");
+        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+        //区域
+        List<String> forderActivityListarea=this.getforderActivityList(BaseType.Type.AREA.toString(),null);
+        List listarea = this.resourceService.getMonthUploadNum(forderActivityListarea,null);
+        //个人
+        List<String> forderActivityListgeren=this.getforderActivityList(BaseType.Type.PERSION.toString(),adminUser.getId());
+        List listgeren = this.resourceService.getMonthUploadNum(forderActivityListgeren,null);
+        //直属
+        List<String> forderActivityListdirect=this.getforderActivityList(BaseType.Type.DIRECTLYUTIS.toString(),adminUser.getAdminCompany().getId());
+        List listdirect = this.resourceService.getMonthUploadNum(forderActivityListdirect,null);
+        //基层
+        List<String> forderActivityListbase=this.getforderActivityList(BaseType.Type.BASEUTIS.toString(),null);
+        List listbase = this.resourceService.getMonthUploadNum(forderActivityListbase,adminUser.getId());
+        
+        modelAndView.addObject("uploadListbase", listbase);
+        modelAndView.addObject("uploadListdirect", listdirect);
+        modelAndView.addObject("uploadListarea", listarea);
+        modelAndView.addObject("uploadListgeren", listgeren);
+        return modelAndView;
+    }
+    
+    
   
     
     

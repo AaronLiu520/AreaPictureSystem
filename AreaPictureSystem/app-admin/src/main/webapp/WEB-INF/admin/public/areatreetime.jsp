@@ -53,7 +53,7 @@
 
                         </ul>
                     </c:if>
-                    </li>
+                <!--     </li> -->
                 </c:forEach>
         <!--
                 <li  data-jstree='{"type":"css"}'>
