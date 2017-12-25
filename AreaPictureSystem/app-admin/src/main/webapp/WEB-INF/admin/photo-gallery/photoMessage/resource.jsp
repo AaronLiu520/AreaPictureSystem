@@ -454,15 +454,31 @@ p {
                                             </c:otherwise>
 												</c:choose>
 
-												<br /> <small> <span> <a
-														onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
-                                                                        '${item.editorImgInfo.photographer}','${item.editorImgInfo.resourceAddress}',
-                                                                        '${item.editorImgInfo.description}')"
-														data-toggle="modal" data-target="#File_Made"> 描述 </a>
-												</span> <span style="padding-left: 10%;"> <a
-														onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">删除
+												<br /> <small>
+												<!-- 只有：管理员 与 自己上传的图片才修改、删除-->
+												<c:choose>
+													<c:when test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'  || sessionScope.userSession.id == item.boundId }">
+														<span>
+													<a
+															onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
+																	'${item.editorImgInfo.photographer}','${item.editorImgInfo.resourceAddress}',
+																	'${item.editorImgInfo.description}')"
+															data-toggle="modal" data-target="#File_Made"> 描述
 													</a>
-												</span> <c:set var="contains" value="no" /> <c:forEach var="list"
+												</span>
+												<span style="padding-left: 10%;">
+													<a onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">删除 </a>
+												</span>
+													</c:when>
+													<c:otherwise>
+														<span style="padding-left: 10%;">
+
+												</span>
+
+													</c:otherwise>
+												</c:choose>
+
+												<c:set var="contains" value="no" /> <c:forEach var="list"
 														items="${listFavorites }" varStatus="status">
 														<c:if test="${list.id eq item.id}">
 															<c:set var="contains" value="yes" />
@@ -635,37 +651,35 @@ p {
 					});
 		}
 		
-		<!-- 	
-		//取消收藏
-		function cancelfavorites(o){
-			
-			var favoritesIds = "";
-			if (o == null) {
-				//获取所有选中状态下的收藏图片的id      
-				var favorites = $("input[name='ids']:checked");
-				$(favorites).each(function() {
-					favoritesIds += this.value + ",";
-				});
-			}else if(o != null){
-				favoritesIds=o;
-			}
-			
-			$.ajax({
-						type : "POST",
-						url : "${pageContext.request.contextPath}/photoMessageAction/cancelMyFavorties",
-						data : "resourceId=" + favoritesIds,
-						dataType : "json",
-						success : function(data) {
-							for (var i = 0; i < data.length; i++) {
-								var a = "collection_" + data[i].id;
-								$("#"+a).attr("onclick","return tofavorites('"+data[i].id+"')")
-								$("#" + a) .html("<a><i class='fa fa-heart'></i>收藏</a>");
-							}
-							/* 收藏成功提示 $('#successFavorites').modal('show'); */
-						}
-					});
-		}
-		 -->
+		<!--  取消收藏-->
+		<%--function cancelfavorites(o){--%>
+			<%--var favoritesIds = "";--%>
+			<%--if (o == null) {--%>
+				<%--//获取所有选中状态下的收藏图片的id      --%>
+				<%--var favorites = $("input[name='ids']:checked");--%>
+				<%--$(favorites).each(function() {--%>
+					<%--favoritesIds += this.value + ",";--%>
+				<%--});--%>
+			<%--}else if(o != null){--%>
+				<%--favoritesIds=o;--%>
+			<%--}--%>
+			<%----%>
+			<%--$.ajax({--%>
+						<%--type : "POST",--%>
+						<%--url : "${pageContext.request.contextPath}/photoMessageAction/cancelMyFavorties",--%>
+						<%--data : "resourceId=" + favoritesIds,--%>
+						<%--dataType : "json",--%>
+						<%--success : function(data) {--%>
+							<%--for (var i = 0; i < data.length; i++) {--%>
+								<%--var a = "collection_" + data[i].id;--%>
+								<%--$("#"+a).attr("onclick","return tofavorites('"+data[i].id+"')")--%>
+								<%--$("#" + a) .html("<a><i class='fa fa-heart'></i>收藏</a>");--%>
+							<%--}--%>
+							<%--/* 收藏成功提示 $('#successFavorites').modal('show'); */--%>
+						<%--}--%>
+					<%--});--%>
+		<%--}--%>
+
 	</script>
 
 

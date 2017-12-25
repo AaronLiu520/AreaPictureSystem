@@ -90,9 +90,12 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
         if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
-            List<PhotoTime> lpt = PhotoTime.getPhotoTime1(listFA, null);
+            List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, null);
             //加载所有的企业
             List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
+
+            modelAndView.addObject("listAdminCompany",lac);
+
             List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
             List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
             log.info(lbpt.toString());
@@ -183,16 +186,16 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
 
-            List<PhotoTime> lpt = PhotoTime.getPhotoTime1(listFA, fa.getActivityTime());
+            List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, fa.getActivityTime());
             //加载所有的企业
             List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
+            modelAndView.addObject("listAdminCompany",lac);
             List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
             List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
             log.info(lbpt.toString());
             modelAndView.addObject("basePhotoTimeList", lbpt);
 
-        } 
- else {
+        } else {
 
             // 按日期进行分类,并且中当前菜单
             modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, fa.getActivityTime()));
@@ -259,7 +262,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
             PrintWriter printWriter,
             HttpSession session, String forderActivityId,
             @RequestParam(value = "file[]", required = false) MultipartFile[] multipartFiles)
-            throws IOException {
+           {
         //获取 用户 session
         AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
         ForderActivity f=forderActivityService.findForderById(forderActivityId);
@@ -267,6 +270,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         if(f.getType()==BaseType.Type.PERSION) {
         	pd="PERSION";
         }
+
         log.info("上传图片+活动ID"+ forderActivityId);
         
         for (MultipartFile mpfile : multipartFiles) {

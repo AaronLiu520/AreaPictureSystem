@@ -31,6 +31,7 @@ public class AdminCompany extends GeneralBean {
 	private String type;// 性质（中学、小学、幼儿园、中小学、高中、九年制）
 	@DBRef
 	private AdminUser adminUser;// 权限
+
 	public String getName() {
 		return name;
 	}

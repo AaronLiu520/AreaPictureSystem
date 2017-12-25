@@ -134,7 +134,6 @@
 													<option  value="小学">小学</option>
 													<option  value="中学">中学</option>
 													<option  value="高中">高中</option>
-													<option  value="中小学">中小学</option>
 													<option  value="九年制">九年制</option>
 													<option  value="直属单位">直属单位</option>
 												</select>

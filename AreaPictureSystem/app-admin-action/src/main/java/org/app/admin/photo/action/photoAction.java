@@ -188,7 +188,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         Query query=super.craeteQueryWhere("type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
          System.out.println(listFA.size());
-        return PhotoTime.getPhotoTime1(listFA,check);
+        return PhotoTime.getPhotoTime(listFA,check);
     }
     
   /**

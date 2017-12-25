@@ -45,13 +45,13 @@
 										placeholder="图片上传最大数量" name="sumPotoCount" id="sumPotoCount"
 										class="form-control" required>
 								</div>
-								
+
 								<c:if
-									test="${sessionScope.userSession.userType eq 'ADMINISTRATORS' }">
+									test="${sessionScope.userSession.userType eq 'ADMINISTRATORS' && webType eq 'BASEUTIS'}">
 									<div class="form-group" onchange="return getrepletes('forderActivityName');">
-										<label>活动所属学校：</label> <select class="form-control m-b"
-											name="boundCompany" id="boundCompany">
-											<c:forEach items="${company}" var="item" varStatus="status">
+										<label>活动所属学校：</label> <select id="boundCompany" class="form-control m-b"
+											name="boundCompany" >
+											<c:forEach items="${listAdminCompany}" var="item" varStatus="status">
 												<option id="${item.id}" value="${item.id}">${item.name}</option>
 											</c:forEach>
 										</select>
@@ -74,8 +74,11 @@
 										style="resize: none; overflow: scroll;" placeholder="描述"
 										name="description" id="description" class="form-control"></textarea>
 								</div>
-								   <input  type="hidden" name="boundId" id="boundId" value="${sessionScope.userSession.id}">  
-                       			   <input  type="hidden" name="boundCompany" id="boundCompany" value="${sessionScope.userSession.adminCompany.id}">
+								   <input  type="hidden" name="boundId" id="boundId" value="${sessionScope.userSession.id}">
+                                    <c:if test="${sessionScope.userSession.userType != 'ADMINISTRATORS' }">
+                                        <input  type="hidden" name="boundCompany" id="boundCompany" value="${sessionScope.userSession.adminCompany.id}">
+
+                                    </c:if>
                        			   <input  type="hidden" name="parentId" id="parentId" value="0">
                        			   <input  type="hidden" name="type"  id="type" value="${webType}">
             		    </div>

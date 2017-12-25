@@ -184,72 +184,13 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		ModelAndView modelAndView = new ModelAndView();
 		//modelAndView.setViewName("admin/index");
 		modelAndView.setViewName("admin/index");
-		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-		// 区域   AREA
-		session.setAttribute("areaphotoTimeList", PhotoTime.getPhotoTime(
-					loadForderActivityType(BaseType.Type.AREA.toString(),15), null));
 
-		// 直属 DIRECTLYUTIS
-			session.setAttribute("directlyphotoTimeList", PhotoTime.getPhotoTime(
-					loadForderActivityType(BaseType.Type.DIRECTLYUTIS.toString(),15), null));
-
-		//基层单位 BASEUTIS,,
-			List<PhotoTime> lpt = PhotoTime.getPhotoTime(
-					loadForderActivityType(BaseType.Type.BASEUTIS.toString(),100), null);
-		//加载所有的企业
-			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
-			List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
-			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
-			log.info(lbpt.toString());
-			session.setAttribute("basePhotoTimeList", lbpt);
-
-			//个人 PERSION
-			modelAndView.addObject("photoTimeList",
-					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
-		//获取所有的图片信息	
-			
-			  Query query = new Query();
-	    	   
-	    	   query.addCriteria(Criteria.where("adminCompanyId").ne(null));
-			
-			Pagination<Resource> pagination = this.resourceService.findPaginationByQuery(query,1,12,Resource.class);
-	
-			session.setAttribute("resourcelist", pagination);
 			
 			
 			return modelAndView;// 返回
 	}
 
-	/**
-	 * 按类型，
-	 * @param type
-	 * @param number
-	 * @return
-	 */
-	public List<ForderActivity> loadForderActivityType(String type,int number){
-		Query query=new Query();
-		query.addCriteria(Criteria.where("parentId").is("0"));
-		query.addCriteria(Criteria.where("type").is(type));
-		query.with(new Sort(Sort.Direction.DESC, "createTime"));
-		Pagination<ForderActivity> p=this.forderActivityService.findPaginationByQuery(query,0,number,ForderActivity.class);
-		if(p==null) return null;
 
-		return p.getDatas();
-
-	}
-
-
-
-
-
-
-	public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
-
-		Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
-		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-		System.out.println(listFA.size());
-		return PhotoTime.getPhotoTime(listFA,check);
-	}
 
 	/**
 	 * 注销

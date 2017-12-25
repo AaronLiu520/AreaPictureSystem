@@ -55,15 +55,19 @@
                     </c:if>
                     </li>
                 </c:forEach>
-        <!--
-                <li  data-jstree='{"type":"css"}'>
-                    <span onclick=""> <i class="fa"></i>更多></span>
-                </li>-->
+        <!-- 创建活动 -->
+                <li  data-jstree='{"type":"html"}'>
+                    <span onclick="ActivityIndex('AREA');">
+                        <i class="fa"></i>创建活动
+                    </span>
+                </li>
             </ul>
        <!-- </li>
     </ul>-->
 
 </div>
+<script>
 
+</script>
 </body>
 </html>
