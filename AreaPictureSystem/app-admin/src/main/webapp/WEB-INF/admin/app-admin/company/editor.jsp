@@ -99,8 +99,11 @@
 											<label class="col-sm-4 control-label">电话</label>
 											<div class="col-sm-8 form-group">
 												<input type="text" id="telPhone" value="${bean.telPhone}"
-													name="telPhone" class="form-control" placeholder="请输入电话" required>
+													name="telPhone" class="form-control" placeholder="请输入电话" required 
+													onchange="return getrepletes('telPhone');" onkeyup="return getrepletes('telPhone');"
+													><label for="telPhone" id="fortelPhone" class="control-label" style="color: red; float: right;"></label>
 											</div>
+											<input type="hidden" id="telPhonehid" name="telPhonehid" value="${bean.telPhone}">
 										</div>
 										<div class="col-sm-5">
 											<label class="col-sm-4 control-label">email</label>
@@ -370,6 +373,35 @@
 
 
 
+<script type="text/javascript">
+		//ajax判断有没有重复
+		function getrepletes(o1) {
+			var r1 = $("#" + o1).val();//获取需要判断是否重复的属性
+			var r2 = $("#" + o1 + "hid").val();//该值的隐藏域值 判断如果是原始值则不变
+
+			if (r1 != r2) {
+				$.ajax({
+							type : "POST",
+							url : "${pageContext.request.contextPath}/adminCompany/ajaxgetRepletes",
+							data : o1 + "=" + r1,
+							dataType : "text",
+							success : function(msg) {
+								if (msg == "true") {
+									document.getElementById("for" + o1).innerHTML = "当前手机号已经创建过企业了！！";
+									document.getElementById("for" + o1).style.cssText = "float: right; color: red;";
+									$("#save-btn-news").attr("disabled", true);
+								} else {
+									$("#save-btn-news").attr("disabled", false);
+									document.getElementById("for" + o1).innerHTML = " ";
+								}
+							}
+						});
+			} else {
+				$("#save-btn-news").attr("disabled", false);
+				document.getElementById("for" + o1).innerHTML = " ";
+			}
+		}
+	</script>
 
 </body>
 </html>

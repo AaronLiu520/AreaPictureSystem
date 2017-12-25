@@ -83,7 +83,7 @@
                        			   <input  type="hidden" name="type"  id="type" value="${webType}">
             		    </div>
            		     <div class="modal-footer">
-               		     <button type="submit" class="btn btn-primary">保存</button>
+               		     <button type="submit" id="submit" class="btn btn-primary">保存</button>
               		  </div>
             </form>
         </div>
@@ -132,7 +132,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">保存</button>
+                    <button type="submit" id="submit" class="btn btn-primary">保存</button>
                 </div>
             </form>
         </div>

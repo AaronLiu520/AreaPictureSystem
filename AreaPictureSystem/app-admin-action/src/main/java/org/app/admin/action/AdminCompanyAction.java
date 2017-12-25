@@ -1,6 +1,7 @@
 package org.app.admin.action;
 
 import java.io.File;
+import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,12 +15,14 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.pojo.ForderActivity;
 import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.AdminRoleService;
 
 import org.app.admin.service.AdminUserService;
 import org.app.admin.util.BaseType;
 import org.app.framework.action.GeneralAction;
+import org.app.framework.util.CommonEnum;
 import org.app.framework.util.FileOperateUtil;
 import org.app.framework.util.PinyinTool;
 import org.slf4j.Logger;
@@ -29,6 +32,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -274,4 +278,38 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		return this.adminCompanyService.findproInfo(request);
 	}
 
+	
+	
+	
+	
+	/**
+	 * 通过ajax获取相同目录下是否存在重复文件夹名称的信息
+	 * 
+	 * @param printWriter
+	 * @param session
+	 * @param response
+	 */
+	// TODO
+	@RequestMapping(value = "/ajaxgetRepletes", method = RequestMethod.POST)
+	@SystemErrorLog(description="查询重复手机号")
+	@SystemControllerLog(description = "查询重复手机号")
+	public void ajaxgetRepletes(
+			@RequestParam(value = "telPhone", defaultValue = "") String telPhone,
+			PrintWriter printWriter,
+			HttpSession session, HttpServletResponse response) {
+		
+		boolean b =this.adminCompanyService.findtelPhone(telPhone);
+		if(b){
+			printWriter.write("true");
+		}else{
+			printWriter.write("false");
+		}
+
+		printWriter.flush();
+		printWriter.close();
+
+	}
+	
+	
+	
 }
