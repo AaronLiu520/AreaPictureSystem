@@ -76,18 +76,17 @@ public class PhotoTime {
             boolean check=false;
 
             for (PhotoTime pts:list) {
-                if(fa.getId().equals(pts.getTime())){
+                if(fa.getCreateDate().equals(pts.getTime()) && fa.getBoundCompany().equals(pts.getId())){
                     check=true;
                     pts.getList().add(fa);
                     break;
                 }
 
             }
-            pt.setTime(fa.getActivityTime());
-            pt.setId(fa.getBoundCompany());//企业ID
             //添加时间
             if(check==false){
-
+                pt.setTime(fa.getActivityTime());
+                pt.setId(fa.getBoundCompany());//企业ID
                 if(pt.getList()==null){
                     pt.setList(new ArrayList<ForderActivity>());
                 }
