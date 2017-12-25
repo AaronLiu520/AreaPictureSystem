@@ -95,8 +95,11 @@
                     </li>
                 </c:forEach>
 
-          <!--  </ul>
-        </li>-->
+        <li  data-jstree='{"type":"html"}'>
+                    <span onclick="ActivityIndex('BASEUTIS');">
+                        <i class="fa"></i>创建活动
+                    </span>
+        </li>
     </ul>
 
 </div>

@@ -231,7 +231,7 @@ li_style:hover {
 								</c:choose>
 
 
-								<a href="#"> <i class="fa ${item.icon}"></i> <span
+								<a href="#"> <i class="fa ${item.icon}" style="margin-left: -10px;"></i> <span
 									class="nav-label">${item.name}</span> <span class="fa arrow"></span></a>
 								<!-- 二级菜单，根目录 -->
 								<ul class="nav nav-second-level">
@@ -467,9 +467,13 @@ li_style:hover {
         });
 
         // 时间轴（活动的单事件）
-
         function checkActivityType(id,webType){
             window.location.href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/"+webType+"?checkId="+id
+        }
+
+        // 时间轴（首页）
+        function ActivityIndex(webType){
+            window.location.href="${pageContext.request.contextPath}/photoMessageAction/index/"+webType
         }
 
 	</script>

@@ -190,6 +190,8 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 						// 创建adminRole的引用
 						adminUser.setAdminRole(adminRole);
 						this.adminUserService.insert(adminUser);
+
+
 						importAdminCompany.setAdminUser(adminUser);
 						// 创建企业信息
 						this.insert(importAdminCompany);

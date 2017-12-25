@@ -17,6 +17,8 @@ import org.app.admin.pojo.AdminUser;
 import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.AdminRoleService;
 
+import org.app.admin.service.AdminUserService;
+import org.app.admin.util.BaseType;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.FileOperateUtil;
 import org.app.framework.util.PinyinTool;
@@ -44,7 +46,14 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	private static final Logger log = LoggerFactory.getLogger(AdminCompanyAction.class);
 
 	@Autowired
-	private AdminCompanyService AdminCompanyService;
+	private AdminCompanyService adminCompanyService;
+
+	@Autowired
+	private AdminUserService adminUserService;
+
+	@Autowired
+	private AdminRoleService adminRoleService;
+
 
 	/**
 	 * 查询数据
@@ -62,7 +71,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		session.removeAttribute("error");
 		try {
 			Query query = new Query();
-			modelAndView.addObject("pageList", this.AdminCompanyService.find(query, AdminCompany.class));
+			modelAndView.addObject("pageList", this.adminCompanyService.find(query, AdminCompany.class));
 		} catch (Exception e) {
 			log.error(e.getMessage(), e);
 		}
@@ -88,17 +97,19 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 			if (adminCompany != null) {
 				if (adminCompany.getId() == null) {
 					// 添加用户时，检用户帐号是否已经存在
-					int checkphone = this.AdminCompanyService.findCountByQuery(
+					int checkphone = this.adminCompanyService.findCountByQuery(
 							super.craeteQueryWhere("telPhone", adminCompany.getTelPhone()), AdminCompany.class);
-					if (checkphone > 0)
+					if (checkphone > 0) {
 						session.setAttribute("error", "添加失败，您添加的帐号信息已经存在。");
-					else {
-						// 添加用户信息
-						// TODO
-						this.AdminCompanyService.insert(adminCompany);
+					}else {
+						//添加企业信息成功后，创建一个企业管理员帐号。
+						this.adminCompanyService.insert(adminCompany);
+						AdminUser au=createSuperAdminUser(adminCompany);
+						adminCompany.setAdminUser(au);
+						this.adminCompanyService.save(adminCompany);//重新更新。
 					}
 				} else
-					this.AdminCompanyService.save(adminCompany);
+					this.adminCompanyService.save(adminCompany);
 			}
 			log.info(adminCompany.toString());
 		} catch (Exception e) {
@@ -106,6 +117,27 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		}
 		return modelAndView;// 返回
 	}
+
+
+
+	public AdminUser createSuperAdminUser(AdminCompany adminCompany){
+		// 添加用户信息
+		AdminUser superAdminUser=new AdminUser();
+		superAdminUser.setName(adminCompany.getName()+"管理员");
+		superAdminUser.setUserName(adminCompany.getTelPhone());
+		superAdminUser.setPassword(adminCompany.getTelPhone());
+		superAdminUser.setUserType(BaseType.UserType.SCHOOLADMIN);//学校管理员
+		// 获取管理员ROLE
+		AdminRole ac=this.adminRoleService.findOneByQuery(
+				super.craeteQueryWhere("userType", BaseType.UserType.SCHOOLADMIN.toString()), AdminRole.class);
+		superAdminUser.setAdminRole(ac);
+		superAdminUser.setAdminCompany(adminCompany);//企业信息
+		this.adminUserService.save(superAdminUser);
+
+		return superAdminUser;
+	}
+
+
 
 	/**
 	 * 编缉 或 添加
@@ -121,7 +153,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		modelAndView.setViewName("admin/app-admin/company/editor");
 		try {
 			if (id != null && id != "") {
-				modelAndView.addObject("bean", this.AdminCompanyService.findOneById(id, AdminCompany.class));
+				modelAndView.addObject("bean", this.adminCompanyService.findOneById(id, AdminCompany.class));
 				// TODO 查询企业性质、企业类型。
 			}
 		} catch (Exception e) {
@@ -146,8 +178,8 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		modelAndView.setViewName("redirect:/adminCompany/list");
 		try {
 			if (!id.isEmpty() && !id.equals("0")) {// 删除
-				AdminCompany am = this.AdminCompanyService.findOneById(id, AdminCompany.class);
-				AdminCompanyService.remove(am);
+				AdminCompany am = this.adminCompanyService.findOneById(id, AdminCompany.class);
+				adminCompanyService.remove(am);
 
 			}
 		} catch (Exception e) {
@@ -190,7 +222,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 				String path = (String) result.get(0).get("savepath");
 				File file = new File(path);
 				// 知道导入返回导入结果
-				error = this.AdminCompanyService.BatchImport(file, 1, session);
+				error = this.adminCompanyService.BatchImport(file, 1, session);
 
 				attr.addFlashAttribute("errorImport", error);
 				// map.put("result", result);
@@ -239,7 +271,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	@ResponseBody
 	public Object process(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
-		return this.AdminCompanyService.findproInfo(request);
+		return this.adminCompanyService.findproInfo(request);
 	}
 
 }

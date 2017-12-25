@@ -78,7 +78,7 @@
 									<thead>
 										<tr>
 											<th>名称</th>
-											<th>地址</th>
+											<th>性质</th>
 											<th>联系人</th>
 											<td>联系电话</td>
 											<th>管理帐号</th>
@@ -90,7 +90,7 @@
 										<c:forEach items="${pageList}" var="item" varStatus="status">
 											<tr class="gradeX">
 												<td>${item.name}</td>
-												<td>${item.address}</td>
+												<td>${item.type}</td>
 												<td>${item.contacts}</td>
 												<td>${item.telPhone}</td>
 												<td>${item.name}</td>
