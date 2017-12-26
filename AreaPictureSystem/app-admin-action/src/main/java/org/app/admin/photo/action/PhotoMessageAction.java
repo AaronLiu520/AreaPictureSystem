@@ -521,14 +521,20 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			
     	 
     	 if(adminUser!=null){
+    		 
+    		 
     		 //查询所有我收藏的资源
     		 favorites =this.favoritesService.findFavoritesById(adminUser.getId());
     		 
-    		 if(favorites.getResource().size()>0){
-    			 
-    			 listfavorites = favorites.getResource();
-    		 
+    		 if(favorites!=null){
+    			 if(favorites.getResource().size()>0){
+        			 
+        			 listfavorites = favorites.getResource();
+        		 
+        		 }
     		 }
+    		 
+    		
     		
     	 }
     	 if(pagination==null)
