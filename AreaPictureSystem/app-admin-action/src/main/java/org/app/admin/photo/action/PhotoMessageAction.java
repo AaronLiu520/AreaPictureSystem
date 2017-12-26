@@ -71,6 +71,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param activityIndexId
      * @return
      */
+	@SystemErrorLog(description="查询图片出错")
     @RequestMapping("/index/{type}")
     public ModelAndView index(HttpSession session,
                               @PathVariable("type") String type,
@@ -142,6 +143,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param checkId
      * @return
      */
+	@SystemErrorLog(description="选择中对应的主题活动")
     @RequestMapping("/checkActivity/{type}")
     public ModelAndView checkActivity(
             @PathVariable("type") String type,
@@ -257,6 +259,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param multipartFiles
      * @throws IOException
      */
+	@SystemErrorLog(description="文件上传出错")
     @RequestMapping("/uploadFile")
     public void uploadFile(
             HttpServletRequest request,
@@ -304,6 +307,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param description
      * @return
      */
+	@SystemErrorLog(description="资源更新出错")
     @RequestMapping("/update/{type}")
     public ModelAndView update(
             @PathVariable("type") String type,
@@ -362,6 +366,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @param fa
      * @return
      */
+    @SystemErrorLog(description="创建活动出错")
     @RequestMapping("/createActivity/{type}")
     public ModelAndView createActivity(@PathVariable("type") String type,
                                        HttpSession session, ForderActivity fa) {
@@ -398,7 +403,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @Title: toMyFavorties
      * @Description: TODO(将资源放入收藏夹)
      */
-
+    @SystemErrorLog(description="收藏图片出错")
     @RequestMapping("/toMyFavorties")
     @ResponseBody
     public List<Resource> toMyFavorties(@RequestParam(defaultValue="",value="resourceId")String resourceId,HttpSession session){
@@ -427,6 +432,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
      * @Title: cancelMyFavorties
      * @Description: TODO(将资源从收藏夹删除)
      */
+    @SystemErrorLog(description="取消收藏图片出错")
     @RequestMapping("/cancelMyFavorties")
     @ResponseBody
     public List<Resource> cancelMyFavorties(@RequestParam(defaultValue = "", value = "resourceId") String resourceId, HttpSession session) {
@@ -498,7 +504,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
     
     
     
-    
+    @SystemErrorLog(description="查询所有收藏出错")
     @RequestMapping("/findMyFavorites")
     public ModelAndView findMyFavorites(HttpSession session,
             @RequestParam(value = "sort", defaultValue = "DESC") String sort,
