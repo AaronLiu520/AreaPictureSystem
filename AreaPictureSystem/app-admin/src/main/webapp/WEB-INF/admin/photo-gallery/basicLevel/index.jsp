@@ -58,7 +58,7 @@
                                         <div class="col-xs-4">
                                             <i class="fa fa-eye fa-5x"></i>
                                         </div>
-                                        <div class="col-xs-8 text-right">
+                                        <div class="col-xs-8 text-right" >
                                             <span>想更精确的查找资料，点击我！</span>
                                             <h3 class="font-bold">查找区域图片资料</h3>
                                         </div>

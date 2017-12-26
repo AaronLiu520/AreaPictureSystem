@@ -442,7 +442,6 @@ public class StringUtil {
 				sb.append(strArray[i] + " ");
 			}
 		}
-		System.out.println(mLinkedSet);
 		return sb.toString();
 	}
 

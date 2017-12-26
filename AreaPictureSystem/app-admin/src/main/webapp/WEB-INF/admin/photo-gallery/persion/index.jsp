@@ -52,25 +52,20 @@
 
                     <div class="col-lg-12">
                         <div class="ibox float-e-margins">
-                            <div class="ibox-title">
-                                <h5>操作 <small>添加与查找</small></h5>
-                            </div>
                             <div class="ibox-content">
-                                <div class="widget style1 navy-bg">
                                     <div class="row">
                                         <a href="${pageContext.request.contextPath}/photoMessageAction/index/PERSION">
                                             <div class="col-xs-4">
                                                 <i class="fa fa-anchor fa-5x"></i>
                                             </div>
-                                            <div class="col-xs-8 text-right">
+                                            <div class="col-xs-8 text-right" >
                                                 <span style="font-size: 10px;"> 如果您找不到需要的活动主题，请点击我！ </span>
                                                 <h3 class="font-bold">我要《创建主题》活动</h3>
                                             </div>
                                         </a>
-                                    </div>
                                 </div>
 
-                                <div class="widget style1 lazur-bg">
+                                <div class="widget style1 lazur-bg" style="display: none;">
                                     <div class="row">
                                         <div class="col-xs-4">
                                             <i class="fa fa-eye fa-5x"></i>

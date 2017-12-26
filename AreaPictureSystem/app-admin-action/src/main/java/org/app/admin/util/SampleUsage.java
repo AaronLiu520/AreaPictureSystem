@@ -47,7 +47,6 @@ public class SampleUsage {
 	private ImgInfoBean printImageTags(File sourceFile, Metadata metadata) throws IOException {
 		ImgInfoBean imgInfoBean = new ImgInfoBean();
 		FileInputStream fis = new FileInputStream(sourceFile) ; 
-		//System.out.println(fis.available()/1000);
 		BigDecimal b1 = new BigDecimal(fis.available()/1000);  
 		   BigDecimal b2 = new BigDecimal("1000");  
 		   final int DEF_DIV_SCALE = 10;
@@ -60,7 +59,6 @@ public class SampleUsage {
 				String tagName = tag.getTagName();
 				String desc = tag.getDescription();
 
-				//System.out.println(tagName + ":" + desc);
 				if (tagName.equals("Image Height")) {
 					// 图片高度
 					imgInfoBean.setImgHeight(desc);
@@ -127,6 +125,5 @@ public class SampleUsage {
 	public static void main(String[] args) {
 		ImgInfoBean imgInfoBean = new SampleUsage()
 				.parseImgInfo("/Life/1.jpg");
-		System.out.println(imgInfoBean.toString());
 	}
 }

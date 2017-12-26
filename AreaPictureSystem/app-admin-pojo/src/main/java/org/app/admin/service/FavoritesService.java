@@ -69,6 +69,11 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 			return null;
 
 	}
+	
+	
+	
+	
+	
 
 	/**
 	 * 
@@ -85,29 +90,36 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 
 			Favorites fa = this.findFavoritesById(userId);
 
-			if (fa != null&&fa.getResource().size()>0) {
+			if (fa != null) {
 				// 对当前收藏夹进行修改
 				List<Resource> list = fa.getResource(); // 获取当前用户已经收藏的资源
 				List<Resource> newlist = new ArrayList();
 
-				// 遍历每个需要新收藏的资源除去重复收藏
+				if(list.size()>0){
+					// 遍历每个需要新收藏的资源除去重复收藏
 
-				for (Resource newRes : listResource) {
-					boolean flag = true; // 标记是否存在该收藏资源
-					for (Resource hisRes : list) {
-						if (newRes.getId().equals(hisRes.getId())) {
-							flag = true;
-							break;
-						} else {
-							flag = false;
+					for (Resource newRes : listResource) {
+						boolean flag = true; // 标记是否存在该收藏资源
+						for (Resource hisRes : list) {
+							if (newRes.getId().equals(hisRes.getId())) {
+								flag = true;
+								break;
+							} else {
+								flag = false;
+							}
+
 						}
-
+						// 如果不存在该资源则添加
+						if (!flag) {
+							newlist.add(newRes);
+						}
 					}
-					// 如果不存在该资源则添加
-					if (!flag) {
-						newlist.add(newRes);
-					}
+				}else{
+					newlist = listResource;
 				}
+				
+				
+			
 				fa.setUserId(userId);
 				fa.setAdminUser(adminUser);
 				fa.getResource().addAll(newlist);
@@ -161,24 +173,30 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 			
 			Favorites fa = this.findFavoritesById(userId);
 			
-			//定义一个新的List集合
-			List<Resource>  newlist = new ArrayList();
 			
+			
+			//定义一个新的List集合
+			List<Resource> oldlist = new ArrayList();
 			if(fa!=null&&fa.getResource().size()>0){
 				
-				for(Resource r1:fa.getResource()){
-					
-					for(Resource r2:listResource){
-						
-						if(!r2.getId().equals(r1.getId())){
-							newlist.add(r1);
+				//获取收藏夹中的所有资源
+				for(Resource oldRes:fa.getResource()){
+					boolean flag =false;
+					//需要取消收藏的资源
+					for(Resource delRes:listResource){
+						//如果资源不存在则说明不是需要取消收藏的资源
+						if(oldRes.getId().equals(delRes.getId())){
+							flag = true;
+							continue;
 						}
 					}
-					
+					if(!flag){
+					oldlist.add(oldRes);
+					}
 				}
 				fa.setUserId(userId);
 				fa.setAdminUser(adminUser);
-				fa.setResource(newlist);
+				fa.setResource(oldlist);
 				
 				this.save(fa);
 				

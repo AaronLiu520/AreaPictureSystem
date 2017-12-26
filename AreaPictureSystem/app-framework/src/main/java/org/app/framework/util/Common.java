@@ -636,24 +636,4 @@ public class Common {
 	
 	
 	
-	
-	public static void main(String[] args) {
-		Date d = Common.fromStringToDate("Sat Jan 04 00:00:00 CST 2014");
-		System.out.println(d);
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

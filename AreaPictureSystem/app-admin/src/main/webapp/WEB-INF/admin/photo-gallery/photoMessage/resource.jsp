@@ -7,9 +7,7 @@
 p {
 	height: 15px;
 }
-<!--
-添加checkboxbox样式--
->
+
 </style>
 <link
 	href="${pageContext.request.contextPath}/assets/admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
@@ -174,23 +172,44 @@ p {
 					</div>
 				</div>
 			</div>
-<input id="mfregex" class="col-md-offset-8" placeholder="请输入要查找的图片···"/>
-					  <button class=" " type="button" id="botton1" onclick="checkout();">查找</button>
-			<c:choose>
-				<c:when test="${not empty fa}">
-					<h2>
-						<c:if test="${webType=='AREA'}"> 区域 </c:if>
-						<c:if test="${webType=='BASEUTIS'}"> 基层单位 </c:if>
-						<c:if test="${webType=='DIRECTLYUTIS'}"> 直属单位 </c:if>
-						《 ${fa.forderActivityName} 》
-					</h2>
-					
-				
-				</c:when>
-				<c:otherwise>
-					<h3>请先： 选择活动 或 创建活动</h3>
-				</c:otherwise>
-			</c:choose>
+
+
+
+			<div class="row">
+				<div class="col-sm-8">
+					<c:choose>
+						<c:when test="${not empty fa}">
+							<h2>
+								<c:if test="${webType=='AREA'}"> 区域 </c:if>
+								<c:if test="${webType=='BASEUTIS'}"> 基层单位 </c:if>
+								<c:if test="${webType=='DIRECTLYUTIS'}"> 直属单位 </c:if>
+								《 ${fa.forderActivityName} 》
+							</h2>
+
+
+						</c:when>
+						<c:otherwise>
+							<h3>请先： 选择活动 或 创建活动</h3>
+						</c:otherwise>
+					</c:choose>
+
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group">
+						<input type="text" placeholder="图片快速搜索" class="input form-control" value="${mfregex }"
+							id="mfregex"> <span class="input-group-btn">
+							<button type="button" class="btn btn btn-primary"
+								onclick="checkout();">
+								<i class="fa fa-search"></i> 搜索
+							</button>
+						</span>
+					</div>
+				</div>
+			</div>
+
+
+
+
 			<!-- 管理 菜单 按扭  -->
 			<div class="mail-tools tooltip-demo m-t-md">
 				<!--当用户选择活动后，显示操作按扭-->
@@ -206,27 +225,29 @@ p {
 					<a data-toggle="modal" href="form_basic.html#modal-form">
 						<button class="btn btn-success " type="button">
 							<i class="fa fa-upload"> </i>&nbsp;&nbsp;<span class="bold">上传图片</span>
-							
+
 						</button>
 					</a>
-				
-				
-<div class="btn-group">
-	<button type="button" class="btn btn-primary dropdown-toggle"
-			data-toggle="dropdown">按时间排列 
-		<span class="caret"></span>
-	</button>
-	
-	
-	
-	<ul class="dropdown-menu" role="menu">
-		<li><a href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=ASC">升序</a></li>
-		<li><a href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=DESC">降序</a></li>
-	</ul>
-</div>
-				
-				
-				
+
+
+					<div class="btn-group">
+						<button type="button" class="btn btn-primary dropdown-toggle"
+							data-toggle="dropdown">
+							按时间排列 <span class="caret"></span>
+						</button>
+
+
+
+						<ul class="dropdown-menu" role="menu">
+							<li><a
+								href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=ASC">升序</a></li>
+							<li><a
+								href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=DESC">降序</a></li>
+						</ul>
+					</div>
+
+
+
 					<!--
                 <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
                 -->
@@ -251,7 +272,7 @@ p {
 						onclick="return choose();">
 						<i class="fa fa-check-square-o"> </i> 选择
 					</button>
-         
+
 				</c:if>
 			</div>
 		</div>
@@ -454,31 +475,25 @@ p {
                                             </c:otherwise>
 												</c:choose>
 
-												<br /> <small>
-												<!-- 只有：管理员 与 自己上传的图片才修改、删除-->
-												<c:choose>
-													<c:when test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'  || sessionScope.userSession.id == item.boundId }">
-														<span>
-													<a
-															onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
+												<br /> <small> <!-- 只有：管理员 与 自己上传的图片才修改、删除--> <c:choose>
+														<c:when
+															test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'  || sessionScope.userSession.id == item.boundId }">
+															<span> <a
+																onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
 																	'${item.editorImgInfo.photographer}','${item.editorImgInfo.resourceAddress}',
 																	'${item.editorImgInfo.description}')"
-															data-toggle="modal" data-target="#File_Made"> 描述
-													</a>
-												</span>
-												<span style="padding-left: 10%;">
-													<a onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">删除 </a>
-												</span>
-													</c:when>
-													<c:otherwise>
-														<span style="padding-left: 10%;">
+																data-toggle="modal" data-target="#File_Made"> 描述 </a>
+															</span>
+															<span style="padding-left: 10%;"> <a
+																onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">删除
+															</a>
+															</span>
+														</c:when>
+														<c:otherwise>
+															<span style="padding-left: 10%;"> </span>
 
-												</span>
-
-													</c:otherwise>
-												</c:choose>
-
-												<c:set var="contains" value="no" /> <c:forEach var="list"
+														</c:otherwise>
+													</c:choose> <c:set var="contains" value="no" /> <c:forEach var="list"
 														items="${listFavorites }" varStatus="status">
 														<c:if test="${list.id eq item.id}">
 															<c:set var="contains" value="yes" />
@@ -486,15 +501,14 @@ p {
 													</c:forEach> <c:choose>
 														<c:when test="${contains=='yes' }">
 															<span style="padding-left: 10%; display: none;"
-																class="collection" id="collection_${item.id }" <%-- onclick="return cancelfavorites('${item.id}')" --%>> <a><i
-																	class="fa fa-heart"></i>已收藏</a>
+																class="collection" id="collection_${item.id }"<%-- onclick="return cancelfavorites('${item.id}')" --%>>
+																<a><i class="fa fa-heart"></i>已收藏</a>
 															</span>
 														</c:when>
-												 		<c:otherwise>
+														<c:otherwise>
 															<span style="padding-left: 10%; display: none;"
-																class="collection" id="collection_${item.id }">
-															</span>
-														</c:otherwise> 
+																class="collection" id="collection_${item.id }"> </span>
+														</c:otherwise>
 													</c:choose>
 
 												</small>
@@ -556,7 +570,7 @@ p {
 					<button type="button" class="close" data-dismiss="modal">
 						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
 					</button>
-					<span style="float: left; color: red; font-size: 18px;">信息提示</span>
+					<span style="float: left; color: red; font-size: 18px;" id="title">信息提示</span>
 				</div>
 				<div class="modal-body">
 					<h3 id="modalMessage"></h3>
@@ -584,8 +598,8 @@ p {
 					</button>
 					<span style="float: left; color: red; font-size: 18px;">图片收藏提示</span>
 				</div>
-				<div class="modal-body">
-					<h3 id="modalMessage">您喜欢的图片都已经收藏啦！</h3>
+				<div class="modal-body" >
+					<h3 id="">您喜欢的图片都已经收藏啦！</h3>
 				</div>
 				<input type="hidden" id="delete-id">
 				<div class="modal-footer">
@@ -598,16 +612,22 @@ p {
 
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
    function checkout(){
 	  var h=$("h2").text();
 	  if(h==""){
-		  alert("空页面无法查询！");
+		  
+		  $('#deleteModal').modal('show'); 
+		  $("#title").text("图片搜索提示");
+		  $("#modalMessage").html("请先查询选择一个活动在进行搜索图片操作！");
+		  
 	      return 
 	  }
 	  var mfregex=$("#mfregex").val();
 	  if(mfregex==""){
-		  alert("查询条件不能为空！");
+		  $('#deleteModal').modal('show'); 
+		  $("#modalMessage").html("请输入要查找图片的关键字！");
+		  $("#title").text("图片搜索提示");
 	  }
 	  else{
 	  window.location.href ="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&mfregex="+mfregex;
@@ -632,11 +652,12 @@ p {
 				$(favorites).each(function() {
 					favoritesIds += this.value + ",";
 				});
-			}else if(o != null){
-				favoritesIds=o;
+			} else if (o != null) {
+				favoritesIds = o;
 			}
-			
-			$.ajax({
+
+			$
+					.ajax({
 						type : "POST",
 						url : "${pageContext.request.contextPath}/photoMessageAction/toMyFavorties",
 						data : "resourceId=" + favoritesIds,
@@ -644,42 +665,70 @@ p {
 						success : function(data) {
 							for (var i = 0; i < data.length; i++) {
 								var a = "collection_" + data[i].id;
-								$("#" + a).html("<a><i class='fa fa-heart'></i>已收藏</a>");
+								$("#" + a)
+										.html(
+												"<a><i class='fa fa-heart'></i>已收藏</a>");
 							}
 							/* 收藏成功提示 $('#successFavorites').modal('show'); */
 						}
 					});
 		}
-		
-		<!--  取消收藏-->
-		<%--function cancelfavorites(o){--%>
-			<%--var favoritesIds = "";--%>
-			<%--if (o == null) {--%>
-				<%--//获取所有选中状态下的收藏图片的id      --%>
-				<%--var favorites = $("input[name='ids']:checked");--%>
-				<%--$(favorites).each(function() {--%>
-					<%--favoritesIds += this.value + ",";--%>
-				<%--});--%>
-			<%--}else if(o != null){--%>
-				<%--favoritesIds=o;--%>
-			<%--}--%>
-			<%----%>
-			<%--$.ajax({--%>
-						<%--type : "POST",--%>
-						<%--url : "${pageContext.request.contextPath}/photoMessageAction/cancelMyFavorties",--%>
-						<%--data : "resourceId=" + favoritesIds,--%>
-						<%--dataType : "json",--%>
-						<%--success : function(data) {--%>
-							<%--for (var i = 0; i < data.length; i++) {--%>
-								<%--var a = "collection_" + data[i].id;--%>
-								<%--$("#"+a).attr("onclick","return tofavorites('"+data[i].id+"')")--%>
-								<%--$("#" + a) .html("<a><i class='fa fa-heart'></i>收藏</a>");--%>
-							<%--}--%>
-							<%--/* 收藏成功提示 $('#successFavorites').modal('show'); */--%>
-						<%--}--%>
-					<%--});--%>
-		<%--}--%>
 
+		<!--取消收藏-->
+	<%--function cancelfavorites(o){--%>
+		
+	<%--var favoritesIds = "";--%>
+		
+	<%--if (o == null) {--%>
+		
+	<%--//获取所有选中状态下的收藏图片的id      --%>
+		
+	<%--var favorites = $("input[name='ids']:checked");--%>
+		
+	<%--$(favorites).each(function() {--%>
+		
+	<%--favoritesIds += this.value + ",";--%>
+		
+	<%--});--%>
+		
+	<%--}else if(o != null){--%>
+		
+	<%--favoritesIds=o;--%>
+		
+	<%--}--%>
+		
+	<%----%>
+		
+	<%--$.ajax({--%>
+		
+	<%--type : "POST",--%>
+		
+	<%--url : "${pageContext.request.contextPath}/photoMessageAction/cancelMyFavorties",--%>
+		
+	<%--data : "resourceId=" + favoritesIds,--%>
+		
+	<%--dataType : "json",--%>
+		
+	<%--success : function(data) {--%>
+		
+	<%--for (var i = 0; i < data.length; i++) {--%>
+		
+	<%--var a = "collection_" + data[i].id;--%>
+		
+	<%--$("#"+a).attr("onclick","return tofavorites('"+data[i].id+"')")--%>
+		
+	<%--$("#" + a) .html("<a><i class='fa fa-heart'></i>收藏</a>");--%>
+		
+	<%--}--%>
+		
+	<%--/* 收藏成功提示 $('#successFavorites').modal('show'); */--%>
+		
+	<%--}--%>
+		
+	<%--});--%>
+		
+	<%--}--%>
+		
 	</script>
 
 

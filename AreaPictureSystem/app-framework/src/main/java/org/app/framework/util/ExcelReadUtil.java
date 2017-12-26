@@ -303,36 +303,4 @@ public class ExcelReadUtil {
 	    }   
      
      
-  
-//
-//	public static List method(Object obj) {
-//         Class clazz = obj.getClass();
-//         List list=new ArrayList();
-//         Field[] fields = obj.getClass().getDeclaredFields();//获得属性
-//       for (Field field : fields) {
-//        PropertyDescriptor pd;
-//		try {
-//			pd = new PropertyDescriptor(field.getName(),
-//			  clazz);
-//		    Method getMethod = pd.getReadMethod();//获得get方法
-//		      list.add(getMethod.getName()+"()");
-//		} catch (IntrospectionException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//    
-//                
-//        }
-//       return list;
-//    }
-     
-//     public static void main(String[] args) {
-//    	 ExcelReadUtil e=new ExcelReadUtil();
-//			List list=method(e);
-//			for(Object o:list){
-//				System.out.println(o);
-//		}
-//	}
-//     
-     
 }

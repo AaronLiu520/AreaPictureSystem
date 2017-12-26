@@ -40,6 +40,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -128,7 +129,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
         Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-         System.out.println(listFA.size());
         return PhotoTime.getPhotoTime(listFA,check);
     }
     
@@ -214,6 +214,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
             if (StringUtils.isNotEmpty(mfregex)) {
                 query = Query.query(Criteria.where("originalName").regex(pattern));
+                modelAndView.addObject("mfregex", mfregex);
             }
             query.addCriteria(Criteria.where("forderActivityId").is(checkId));
             query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC, "createTime"));
@@ -493,6 +494,92 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         }
         return null;
     }
+    
+    
+    
+    
+    
+    @RequestMapping("/findMyFavorites")
+    public ModelAndView findMyFavorites(HttpSession session,
+            @RequestParam(value = "sort", defaultValue = "DESC") String sort,
+            @RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
+            @RequestParam(value = "pageSize", defaultValue = "28") Integer pageSize,
+            @RequestParam(value = "mfregex", defaultValue = "") String mfregex){
+
+    	ModelAndView modelAndView = new ModelAndView();
+    	
+    	 modelAndView.setViewName("admin/photo-gallery/photoMessage/myFavorites");
+    	 
+    	 AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+    	 
+    	 Favorites favorites = new Favorites();
+    	 
+    	 List<Resource> listfavorites = new ArrayList<Resource>();
+    
+    	 
+    	 Pagination<Resource> pagination =null;
+			
+    	 
+    	 if(adminUser!=null){
+    		 //查询所有我收藏的资源
+    		 favorites =this.favoritesService.findFavoritesById(adminUser.getId());
+    		 
+    		 if(favorites.getResource().size()>0){
+    			 
+    			 listfavorites = favorites.getResource();
+    		 
+    		 }
+    		
+    	 }
+    	 if(pagination==null)
+				pagination = new Pagination<Resource>(pageNo, pageSize, listfavorites.size());
+    	 		List<Resource> list2=new ArrayList<Resource>();
+    	 	int pN=0;
+			int pS=0;
+			if(pageNo==1){
+				pN=0;
+				pS=10;
+			}else{
+				pN=(pageNo-1)*10;
+				pS=pageNo*pageSize;
+			}
+			for(int i=pN;i<pS;i++){
+				if(i<listfavorites.size()){
+					list2.add(listfavorites.get(i));
+				}
+				
+				
+			}
+			pagination.setDatas(list2);
+    	 
+    	 
+    	 modelAndView.addObject("pagination", pagination);
+    	 
+    	return modelAndView;
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 }

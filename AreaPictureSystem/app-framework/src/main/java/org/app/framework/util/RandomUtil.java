@@ -14,7 +14,4 @@ public class RandomUtil {
 	public static String getUUID() {
 		return StringUtil.replace("-", "", UUID.randomUUID().toString()) ;
 	}
-	public static void main(String[] args) {
-		System.out.println(getUUID());
-	}
 }

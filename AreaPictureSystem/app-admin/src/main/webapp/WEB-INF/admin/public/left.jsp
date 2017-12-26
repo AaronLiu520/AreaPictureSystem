@@ -87,7 +87,9 @@ li_style:hover {
 						</a>
 						<ul class="dropdown-menu animated fadeInRight m-t-xs">
 
-							<li><a href="${pageContext.request.contextPath}/picture/gerenIndex">个人图片库</a></li>
+							<li><a href="${pageContext.request.contextPath}/photoMessageAction/index/PERSION">个人图片库</a></li>
+							
+							<li><a href="${pageContext.request.contextPath}/photoMessageAction/findMyFavorites">我的收藏夹</a></li>
 
   		                    <li><a data-toggle="modal" data-target="#myModal2">修改头像</a></li>
 							

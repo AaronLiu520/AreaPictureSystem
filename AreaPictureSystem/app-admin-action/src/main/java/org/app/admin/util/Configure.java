@@ -29,10 +29,8 @@ public class Configure {
             in.close();
         } catch (FileNotFoundException e) {
             log.error("服务器配置文件没有找到");
-            System.out.println("服务器配置文件没有找到");
         } catch (Exception e) {
             log.error("服务器配置信息读取错误");
-            System.out.println("服务器配置信息读取错误");
         }
     }
 

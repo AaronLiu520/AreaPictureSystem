@@ -147,8 +147,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 		session.setAttribute("basePhotoTimeList", lbpt);
 		//个人 PERSION
-		session.setAttribute("photoTimeList",
-				getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
+		if(adminUser != null){
+			session.setAttribute("photoTimeList",
+					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
+		}
 		//获取所有的图片信息
 		Query query = new Query();
 
@@ -188,7 +190,6 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		query.addCriteria(Criteria.where("boundId").is(boundId));
 //		Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
 		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-		System.out.println(listFA.size());
 		return PhotoTime.getPhotoTime(listFA,check);
 	}
 

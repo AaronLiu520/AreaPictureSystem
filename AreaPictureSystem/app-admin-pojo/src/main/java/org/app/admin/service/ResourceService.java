@@ -243,8 +243,6 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 
 		}
 
-		System.out.println(list);
-
 	}
 	
 	

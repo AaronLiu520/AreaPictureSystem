@@ -61,7 +61,6 @@ public class StatisticsAction {
 		modelAndView.setViewName("admin/app-admin/statistics/arealist");
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		List<uploadStatistics> list = this.statisticsService.sortupload(adminUser.getAdminCompany().getId(),"area");
-		System.out.println(list.size());
 		modelAndView.addObject("list", list);
 		return modelAndView;
 	}

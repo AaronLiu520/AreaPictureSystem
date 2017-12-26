@@ -76,9 +76,6 @@ public class photoAction extends GeneralAction<AdminUser> {
         List<String> forderActivityList=this.getforderActivityList(BaseType.Type.PERSION.toString(),adminUser.getId());
         List list = this.resourceService.getMonthUploadNum(forderActivityList);
         modelAndView.addObject("uploadList1", list);
-        for (Object object : list) {
-			System.out.println(object);
-		}
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
         modelAndView.addObject("photoTimeList1",
@@ -180,14 +177,12 @@ public class photoAction extends GeneralAction<AdminUser> {
     public List<PhotoTime> getPhotoTimeList(String type,String check){
         Query query=super.craeteQueryWhere("type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-         System.out.println(listFA.size());
         return PhotoTime.getPhotoTime(listFA,check);
     }
     
     public List<PhotoTime> getPhotoTimeList1(String type,String check){
         Query query=super.craeteQueryWhere("type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-         System.out.println(listFA.size());
         return PhotoTime.getPhotoTime(listFA,check);
     }
     
@@ -201,7 +196,6 @@ public class photoAction extends GeneralAction<AdminUser> {
     public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
         Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-         System.out.println(listFA.size());
         return PhotoTime.getPhotoTime(listFA,check);
     }
 
