@@ -69,7 +69,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		Query query = new Query();
 		try {
 			AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-			if (UserType.SCHOOLADMIN.equals(adminUser.getUserType())) {
+			if (UserType.SCHOOLADMIN.equals(adminUser.getUserType())||adminUser.getAdminRole().getUserType().equals(UserType.SCHOOLADMIN)) {
 				query.addCriteria(Criteria.where("adminCompany").is(adminUser.getAdminCompany()));
 			}
 			modelAndView.addObject("pageList", this.adminUserService.find(query, AdminUser.class));
