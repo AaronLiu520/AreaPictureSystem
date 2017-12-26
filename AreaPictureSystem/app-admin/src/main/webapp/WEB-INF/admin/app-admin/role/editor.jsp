@@ -54,9 +54,9 @@
 									</div>
 									<div class="row">
 										<div class="col-sm-8">
-												<label class="col-sm-3 control-label">用户类型</label>
+												<label class="col-sm-3 control-label">角色类型</label>
 											<div class="col-sm-7 form-group">
-												<select class="form-control" name="userType" id="userType"
+												<%-- <select class="form-control" name="userType" id="userType"
 													required>
 													<option id="" value="">请选择用户类型</option>
 													<option id="TEACHER"
@@ -68,7 +68,10 @@
 													<option id="ADMINISTRATORS"
 														<c:if test="${bean.userType eq  'ADMINISTRATORS'}">selected</c:if>
 														value="ADMINISTRATORS">超级管理员</option>
-												</select>
+												</select> --%>
+												<input type="text" id="userType" value="${bean.userType}"
+													name="userType" class="form-control" placeholder="角色类型"
+													required>
 											</div>
 										</div>
 									</div>
@@ -174,7 +177,7 @@
 				messages : {
 					name : a + "请输入角色名称",
 					userType : {
-						required : a + "请选择用户类型"
+						required : a + "请输入角色类型"
 					}
 				}
 			});

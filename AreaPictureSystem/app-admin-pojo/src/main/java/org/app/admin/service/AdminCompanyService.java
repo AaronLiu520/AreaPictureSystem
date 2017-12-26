@@ -221,6 +221,52 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 		return error;
 	}
 
+	
+	
+	/**
+	 * 
+	* @Title: findtelPhone 
+	* @Description: TODO(根据手机号判断是否重复) 
+	* @param @param telPhone
+	* @param @return    设定文件 
+	* @return boolean    返回类型 
+	* @throws
+	 */
+	public boolean findtelPhone(String telPhone){
+		
+		Query query = new Query();
+		
+		query.addCriteria(Criteria.where("telPhone").is(telPhone));
+		
+		List<AdminCompany> list = this.find(query, AdminCompany.class);
+			
+		if(list.size()>0)
+			return true;
+		else
+			return false;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 
 	 * @Title: findproInfo @Description: TODO(获取上传进度) @param @param
@@ -238,4 +284,7 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 		public long lastnum = 0;// 还剩几条数据
 	}
 
+	
+	
+	
 }
