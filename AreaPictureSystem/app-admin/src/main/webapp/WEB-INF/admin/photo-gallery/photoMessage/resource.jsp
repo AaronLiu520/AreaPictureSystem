@@ -652,7 +652,7 @@ p {
 		}
 		
 		<!--  取消收藏-->
-		<%--function cancelfavorites(o){--%>
+		<%-- function cancelfavorites(o){--%>
 			<%--var favoritesIds = "";--%>
 			<%--if (o == null) {--%>
 				<%--//获取所有选中状态下的收藏图片的id      --%>
