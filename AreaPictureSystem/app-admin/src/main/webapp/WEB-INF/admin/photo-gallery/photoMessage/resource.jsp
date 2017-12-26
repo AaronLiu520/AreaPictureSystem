@@ -673,6 +673,38 @@ p {
 						}
 					});
 		}
+<<<<<<< HEAD
+=======
+		
+		<!--  取消收藏-->
+		<%-- function cancelfavorites(o){--%>
+			<%--var favoritesIds = "";--%>
+			<%--if (o == null) {--%>
+				<%--//获取所有选中状态下的收藏图片的id      --%>
+				<%--var favorites = $("input[name='ids']:checked");--%>
+				<%--$(favorites).each(function() {--%>
+					<%--favoritesIds += this.value + ",";--%>
+				<%--});--%>
+			<%--}else if(o != null){--%>
+				<%--favoritesIds=o;--%>
+			<%--}--%>
+			<%----%>
+			<%--$.ajax({--%>
+						<%--type : "POST",--%>
+						<%--url : "${pageContext.request.contextPath}/photoMessageAction/cancelMyFavorties",--%>
+						<%--data : "resourceId=" + favoritesIds,--%>
+						<%--dataType : "json",--%>
+						<%--success : function(data) {--%>
+							<%--for (var i = 0; i < data.length; i++) {--%>
+								<%--var a = "collection_" + data[i].id;--%>
+								<%--$("#"+a).attr("onclick","return tofavorites('"+data[i].id+"')")--%>
+								<%--$("#" + a) .html("<a><i class='fa fa-heart'></i>收藏</a>");--%>
+							<%--}--%>
+							<%--/* 收藏成功提示 $('#successFavorites').modal('show'); */--%>
+						<%--}--%>
+					<%--});--%>
+		<%--}--%>
+>>>>>>> beb659a7d5b9536eb151a74ef806d533b2cec73a
 
 		<!--取消收藏-->
 	<%--function cancelfavorites(o){--%>

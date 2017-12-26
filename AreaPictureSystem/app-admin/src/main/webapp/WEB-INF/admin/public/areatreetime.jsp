@@ -53,7 +53,7 @@
 
                         </ul>
                     </c:if>
-                    </li>
+                <!--     </li> -->
                 </c:forEach>
         <!-- 创建活动 -->
                 <li  data-jstree='{"type":"html"}'>
