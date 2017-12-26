@@ -251,11 +251,13 @@ p {
 					<!--
                 <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
                 -->
+					<c:if test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'}">
+						<button onclick="return tobatchDelete()" class="btn btn-danger "
+								style="display: none;" id="deletes" type="button">
+							<i class="fa fa-warning"> </i><span class="bold">批量删除</span>
+						</button>
+					</c:if>
 
-					<button onclick="return tobatchDelete()" class="btn btn-danger "
-						style="display: none;" id="deletes" type="button">
-						<i class="fa fa-warning"> </i><span class="bold">批量删除</span>
-					</button>
 
 					<button class="btn btn-primary " style="display: none;"
 						id="downloads" type="button" onclick="return todownload();">
