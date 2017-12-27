@@ -14,6 +14,7 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
 import org.app.admin.pojo.UploadFileLog;
 import org.app.admin.util.BaseType;
@@ -58,13 +59,16 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		List<Resource> lrs = this.find(query, Resource.class);
 		List<UploadFileLog> lufl = new LinkedList<>();
 		for (Resource resource : lrs) {
+			ForderActivity f=forderActivityService.findForderById(resource.getForderActivityId());
+			if(f!=null) {
 			UploadFileLog ufl = new UploadFileLog();
 			ufl.setDate(resource.getCreateDate());
 			ufl.setImgSize(resource.getImgInfoBean().getImgSize());
 			ufl.setName(resource.getOriginalName());
-			ufl.setPlace(returnUploadType(
-					forderActivityService.findForderById(resource.getForderActivityId()).getType().toString()));
+			ufl.setPlace(returnUploadType(f.getType().toString()
+					));
 			lufl.add(ufl);
+			}
 		}
 		return lufl;
 	}
