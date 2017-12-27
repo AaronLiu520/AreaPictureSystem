@@ -15,6 +15,7 @@ import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.admin.util.executor.SingletionThreadPoolExecutor;
 import org.app.admin.util.executor.Task;
 import org.app.framework.action.GeneralAction;
+import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.framework.util.Pagination;
 import org.app.framework.util.ZipCompress;
@@ -378,6 +379,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
         	fa.setCreatUser(au);
         if(au.getAdminCompany()!=null){
         	fa.setAdminCompany(au.getAdminCompany());
+        }
+        if(Common.isEmpty(fa.getBoundCompany())){
+        	fa.setBoundCompany(au.getAdminCompany().getId());
         }
         
         log.info(fa.getBoundId());

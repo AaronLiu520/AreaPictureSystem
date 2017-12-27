@@ -441,9 +441,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 			}
 			
-			if (getuserType.equals(UserType.SCHOOLADMIN)) {
+		/*	if (getuserType.equals(UserType.SCHOOLADMIN)) {
 				companyId="";
-			}
+			}*/
 			if (Common.isNotEmpty(companyId)) {
 				query.addCriteria(Criteria.where("boundCompany").is(companyId));
 			}
