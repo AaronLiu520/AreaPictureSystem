@@ -12,6 +12,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.service.StatisticsService;
 import org.app.admin.util.CompanyBean;
@@ -55,6 +57,8 @@ public class StatisticsAction {
 	* @return ModelAndView    返回类型 
 	* @throws
 	*/
+	@SystemErrorLog(description="查询区域统计出错")
+	@SystemControllerLog(description = "查看区域统计")
 	@RequestMapping("/arealist")
 	public ModelAndView  arealist(HttpSession session){
 		ModelAndView modelAndView  = new ModelAndView();
@@ -71,6 +75,8 @@ public class StatisticsAction {
 	 * @param session
 	 * @return
 	 */
+	@SystemErrorLog(description="查询企业统计出错")
+	@SystemControllerLog(description = "查看企业统计")
 	@RequestMapping("/companylist")
 	public ModelAndView  companylist(HttpSession session){
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);

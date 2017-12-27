@@ -2,6 +2,8 @@ package org.app.admin.action;
 
 import java.util.List;
 
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.Favorites;
 import org.app.admin.pojo.Label;
 import org.app.admin.service.FavoritesService;
@@ -21,7 +23,10 @@ public class FavoritesAction {
    
 	@Autowired
     private FavoritesService favoritesService;
-    
+	
+	
+	@SystemErrorLog(description="查询所有收藏出错")
+	@SystemControllerLog(description = "查询所有收藏")
 	@RequestMapping("/list")
     public ModelAndView list(){
     	ModelAndView modelAndView = new ModelAndView();

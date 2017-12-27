@@ -2,6 +2,8 @@ package org.app.admin.photo.action;
 
 
 import org.apache.commons.lang.StringUtils;
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.Resource;
 import org.app.admin.service.ResourceService;
 import org.app.admin.util.ConfigFileUtil;
@@ -37,6 +39,8 @@ public class FileStreamAction {
      * @param id
      * @param response
      */
+	@SystemErrorLog(description="获取缩略图出错")
+	@SystemControllerLog(description = "获取缩略图")
     @RequestMapping("/getImg/{id}")
     public void getThumbnailsImage(@PathVariable(value = "id")  String id , String type,
                                    HttpServletResponse response, HttpServletRequest request) {

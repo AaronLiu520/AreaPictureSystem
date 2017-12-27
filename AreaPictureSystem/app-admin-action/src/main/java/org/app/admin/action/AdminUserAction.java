@@ -3,6 +3,8 @@ package org.app.admin.action;
 import javax.annotation.Resources;
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
@@ -59,6 +61,8 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * @return
 	 */
 	@RequestMapping("/list")
+	@SystemErrorLog(description="查询用户信息出错")
+	@SystemControllerLog(description = "查询所有用户信息")
 	public ModelAndView list(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/app-admin/user/list");
@@ -100,7 +104,11 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		}
 		return modelAndView;// 返回
 	}
-
+	
+	
+	
+	@SystemErrorLog(description="添加或修改用户信息出错")
+	@SystemControllerLog(description = "添加或修改用户信息")
 	@RequestMapping("/createOrUpdateToFind")
 	public ModelAndView list(HttpSession session, AdminUser adminUser, String roleId, String companyId) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -135,6 +143,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * 
 	 * @return
 	 */
+
 	@RequestMapping("/login")
 	public ModelAndView login() {
 		ModelAndView modelAndView = new ModelAndView();
@@ -148,6 +157,8 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * @param session
 	 * @return ModelAndView
 	 */
+	@SystemErrorLog(description="用户登录出错")
+	@SystemControllerLog(description = "用户登录")
 	@RequestMapping("/checkLogin")
 	public ModelAndView checkLogin(HttpSession session, String username, String password) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -179,6 +190,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * 
 	 * @return
 	 */
+	@SystemErrorLog(description="访问登录出错")
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -198,6 +210,8 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * @param session
 	 * @return
 	 */
+	@SystemErrorLog(description="退出登录出错")
+	@SystemControllerLog(description = "退出")
 	@RequestMapping("/loginOut")
 	public ModelAndView loginOut(HttpSession session) {
 
@@ -215,6 +229,8 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * @Title: delete @Description: TODO(删除用户) @param @param id @param @return
 	 * 设定文件 @return ModelAndView 返回类型 @throws
 	 */
+	@SystemErrorLog(description="删除用户出错")
+	@SystemControllerLog(description = "删除用户")
 	@RequestMapping("/delete")
 	public ModelAndView delete(@RequestParam(defaultValue = "", value = "id") String id) {
 

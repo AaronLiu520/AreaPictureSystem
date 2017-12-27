@@ -1,6 +1,8 @@
 package org.app.admin.photo.action;
 
 import org.apache.commons.lang.StringUtils;
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.util.BaseType;
@@ -46,7 +48,9 @@ public class photoAction extends GeneralAction<AdminUser> {
     private ForderActivityService forderActivityService;
     @Autowired
     private org.app.admin.service.AdminCompanyService AdminCompanyService;
-
+    
+    
+	@SystemErrorLog(description="区域图片库出错")
     @RequestMapping("/areaIndex")
     public ModelAndView areaIndex(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
@@ -67,6 +71,7 @@ public class photoAction extends GeneralAction<AdminUser> {
      * @param session
      * @return
      */
+	@SystemErrorLog(description="个人图片库出错")
     @RequestMapping("/gerenIndex")
     public ModelAndView gerenIndex(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
@@ -89,6 +94,7 @@ public class photoAction extends GeneralAction<AdminUser> {
     * @return List<String>
     */
    
+	@SystemErrorLog(description="查询所有活动")
     public List<String>  getforderActivityList(String type,String boundId){
     	 Query query=new Query();
     	 //判断是个人则查询条件为boundId
@@ -118,6 +124,7 @@ public class photoAction extends GeneralAction<AdminUser> {
      * @param session
      * @return
      */
+	@SystemErrorLog(description="查询个人上传记录出错")
     @RequestMapping("/uploadfilelog")
     public ModelAndView upLoadFileLog(HttpSession session) {
     	ModelAndView modelAndView = new ModelAndView();
@@ -130,7 +137,7 @@ public class photoAction extends GeneralAction<AdminUser> {
     }
     
     
-
+	@SystemErrorLog(description="查询直属出错")
     @RequestMapping("/directlyIndex")
     public ModelAndView directlyIndex(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();
@@ -146,7 +153,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         return modelAndView;// 返回
     }
 
-
+	@SystemErrorLog(description="查询基层出错")
     @RequestMapping("/basicLevelIndex")
     public ModelAndView basicLevelIndex(HttpSession session) {
         ModelAndView modelAndView = new ModelAndView();

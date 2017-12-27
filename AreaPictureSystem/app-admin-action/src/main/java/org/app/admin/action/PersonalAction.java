@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.app.admin.annotation.SystemControllerLog;
+import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
@@ -50,6 +52,8 @@ public class PersonalAction extends GeneralAction<AdminUser> {
 		return modelAndView;
 	}
 
+	@SystemErrorLog(description="修改用户个人信息出错")
+	@SystemControllerLog(description = "修改用户个人信息")
 	@RequestMapping("/update")
 	public ModelAndView update(AdminUser adminUser, String roleId, String companyId, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -77,6 +81,8 @@ public class PersonalAction extends GeneralAction<AdminUser> {
 	 * 
 	 * @return
 	 */
+	@SystemErrorLog(description="修改用户个人信息出错")
+	@SystemControllerLog(description = "修改用户个人信息")
 	@RequestMapping("/change")
 	public ModelAndView change(HttpServletRequest request, HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
