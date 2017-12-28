@@ -345,7 +345,8 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: createActivity @Description: TODO(创建活动) @param @param
-	 * forderActivity @param @param adminUser 设定文件 @return void 返回类型 @throws
+	 *         forderActivity @param @param adminUser 设定文件 @return void
+	 *         返回类型 @throws
 	 */
 	public void creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id) {
 
@@ -409,9 +410,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: findForderActivityByforderActivityName @Description:
-	 * TODO(查询是否存在重复值) @param @param forderActivityName @param @param
-	 * adminUser @param @param companyId @param @return 设定文件 @return
-	 * List<ForderActivity> 返回类型 @throws
+	 *         TODO(查询是否存在重复值) @param @param forderActivityName @param @param
+	 *         adminUser @param @param companyId @param @return 设定文件 @return
+	 *         List<ForderActivity> 返回类型 @throws
 	 */
 	public List<ForderActivity> findForderActivityByforderActivityName(String forderActivityName, AdminUser adminUser,
 			String companyId, String type) {
@@ -440,10 +441,10 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				query.addCriteria(Criteria.where("boundId").is(userId));
 
 			}
-			
-		/*	if (getuserType.equals(UserType.SCHOOLADMIN)) {
-				companyId="";
-			}*/
+
+			/*
+			 * if (getuserType.equals(UserType.SCHOOLADMIN)) { companyId=""; }
+			 */
 			if (Common.isNotEmpty(companyId)) {
 				query.addCriteria(Criteria.where("boundCompany").is(companyId));
 			}
@@ -501,6 +502,29 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			}
 		}
 		return ls;
+	}
+
+	/**
+	 * 
+	 * @Title: findForderActivityByActivityNameType @Description:
+	 * TODO(通过活动名称，boundId，type查询是否已经存在该活动) @param @return 设定文件 @return
+	 * ForderActivity 返回类型 @throws
+	 */
+	public ForderActivity findForderActivityByActivityNameType(String forderActivityName, String boundId) {
+
+		Query query = new Query();
+
+		query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName))
+				.addCriteria(Criteria.where("boundId").is(boundId))
+				.addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
+		
+		ForderActivity forderActivity = this.findOneByQuery(query, ForderActivity.class);
+		
+		if(forderActivity != null)
+			return forderActivity;
+		else
+			return null;
+					
 	}
 
 }

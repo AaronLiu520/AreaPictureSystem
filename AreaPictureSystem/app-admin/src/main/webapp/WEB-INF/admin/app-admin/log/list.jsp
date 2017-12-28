@@ -6,7 +6,7 @@
 <html lang="en" class="app">
 <head>
 <meta charset="utf-8" />
-<title>企业单位</title>
+<title>日志管理</title>
 
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">

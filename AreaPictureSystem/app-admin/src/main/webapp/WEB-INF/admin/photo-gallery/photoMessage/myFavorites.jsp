@@ -141,6 +141,70 @@
 	}
 	
 	
+	
+	function tocopy(){
+		//将收藏的资源同步到自己的资源库中
+		var a = $("input[name='ids']:checked").length;
+
+		if (a == 0) {
+			
+			$("#delete").hide();
+
+			$("#modalMessage").text("请选择需要同步的图片！");
+			
+			$('#deleteModal').modal('show');
+
+		}else{
+			
+			var tb = $("input[name='ids']:checked");
+			//获取所有的id执行删除操作，使用ajax
+			var str = "";
+			$(tb).each(function(){
+				str +=this.value+",";
+			})
+			
+			if(str!=""){
+				
+				var tbId = str.substring(0,str.length-1);
+	
+				
+				$.ajax({
+					
+					type : "POST",
+						
+					url : "${pageContext.request.contextPath}/photoMessageAction/copyToMyPictures",
+						
+					data : "resourceId=" + tbId,
+						  
+					dataType : "text",
+						
+					success : function(data) {
+								
+						alert(data)
+						
+					/* 收藏成功提示 $('#successFavorites').modal('show'); */
+						
+					}
+						
+					});
+				
+			}
+			
+			
+		}
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 </script>
 
 <body>
@@ -204,11 +268,11 @@
 										for="checkall"> </label>
 								</div>
 
-							 	<!-- //TODO
+							
 							 		<button type="button" class="btn btn-primary" style="display: none;" id="tb" onclick="return tocopy();">
 										<i class="fa fa-copy"></i> &nbsp;同步至个人图片库 
 									</button> 
- -->
+ 
 
 								<button class="btn btn-primary " style="display: none;"
 									id="downloads" type="button" onclick="return todownload();">
@@ -244,6 +308,8 @@
 										<c:forEach items="${pagination.datas}" var="item"
 											varStatus="status">
 
+											<c:if test="${not empty item.id }">
+											
 											<li>
 												<!-- 已经将点击预览移植到图片层中 -->
 												<div class="file-box collection_${item.id }">
@@ -457,6 +523,13 @@
 											</a>
 
 											</li>
+											
+											</c:if>
+
+											
+											
+											<!-- end -->
+											
 										</c:forEach>
 									</ul>
 									

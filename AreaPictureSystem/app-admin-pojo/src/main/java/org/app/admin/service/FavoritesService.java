@@ -101,13 +101,17 @@ public class FavoritesService extends GeneralServiceImpl<Favorites> {
 					for (Resource newRes : listResource) {
 						boolean flag = true; // 标记是否存在该收藏资源
 						for (Resource hisRes : list) {
+							if(hisRes!=null){
 							if (newRes.getId().equals(hisRes.getId())) {
 								flag = true;
 								break;
 							} else {
 								flag = false;
 							}
-
+						}else{
+							newlist.add(newRes);
+							break;
+							}
 						}
 						// 如果不存在该资源则添加
 						if (!flag) {
