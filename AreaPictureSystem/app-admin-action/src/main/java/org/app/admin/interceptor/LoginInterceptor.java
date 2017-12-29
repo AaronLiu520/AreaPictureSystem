@@ -154,7 +154,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		//获取所有的图片信息
 		Query query = new Query();
 
-		query.addCriteria(Criteria.where("adminCompanyId").ne(null));
+		query.addCriteria(Criteria.where("adminCompanyId").ne(""));
 
 		Pagination<Resource> pagination = this.resourceService.findPaginationByQuery(query,1,12,Resource.class);
 

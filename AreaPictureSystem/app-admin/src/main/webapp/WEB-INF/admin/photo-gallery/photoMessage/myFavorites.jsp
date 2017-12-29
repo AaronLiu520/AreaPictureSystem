@@ -584,10 +584,7 @@
 				</div>
 				<input type="hidden" id="delete-id">
 				<div class="modal-footer">
-					<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-					<button type="button"
-						onclick="return todelete('${sessionScope.checkActivityId}');"
-						id="delete" class="btn btn-primary delete-confirm-btn">确认</button>
+					<button type="button" class="btn btn-primary delete-confirm-btn" data-dismiss="modal">关闭</button>
 				</div>
 			</div>
 		</div>

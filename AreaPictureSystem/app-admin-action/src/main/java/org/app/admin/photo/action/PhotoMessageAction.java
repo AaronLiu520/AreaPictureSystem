@@ -483,7 +483,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							newForderActivity.setAddress(oldForderActivity.getAddress());
 							newForderActivity.setAdminCompany(adminUser.getAdminCompany());
 							newForderActivity.setBoundCompany(adminUser.getAdminCompany().getId());
-							newForderActivity.setBoundId(oldForderActivity.getBoundId());
+							newForderActivity.setBoundId(adminUser.getId());
 							newForderActivity.setCreatUser(adminUser);
 							newForderActivity.setDescription(oldForderActivity.getDescription());
 							newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
@@ -494,7 +494,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 						}else{
 							newForderActivity = forderActivity;
 						}
-						
 
 						// 4,如果查询出来为空，那么执行添加
 						Resource newResource = new Resource();
