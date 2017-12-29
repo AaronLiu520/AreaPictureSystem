@@ -4,6 +4,16 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  
+  <filter>
+		<filter-name>XSSFilter</filter-name>
+		<filter-class>org.app.framework.util.XSSFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>XSSFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

@@ -519,7 +519,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		}
 
-		return "1";
+		return "true";
 
 	}
 
