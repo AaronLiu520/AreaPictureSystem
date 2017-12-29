@@ -29,44 +29,66 @@
 			<!-- .aside top jsp -->
 			<%@include file="public/top.jsp"%>
 			<div class="wrapper wrapper-content">
-				<!-- message center -->
-
-				<!-- index show new image message-->
-				<div class="row">
-
-					<c:forEach items="${resourcelist.datas}" var="item"
+			
+			
+			  <div class="ibox-content ">
+                        <div class="carousel slide" id="carousel2">
+                            <ol class="carousel-indicators">
+                                <li data-slide-to="0" data-target="#carousel2" class="active"></li>
+                                <li data-slide-to="1" data-target="#carousel2"></li>
+                                <li data-slide-to="2" data-target="#carousel2" class=""></li>
+                            </ol>
+                            
+                            <div class="carousel-inner">
+                            	<c:forEach items="${resourcelist.datas}" var="item" begin="0" end="${fn:length(resourcelist.datas)}" 
 						varStatus="status">
+                            
+                                <div class="item 	<c:if test="${status.index  eq '1'}">active</c:if>">
+                                <center>
+                                    <img alt="image" class="img-responsive" src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=max">
+                                    <div class="carousel-caption">
+                                        <p>名    称：${item.originalName } </p>
+                                        <p>上传者：${item.uploadPerson } </p>
+                                    </div>
+                                    </center>
+                                </div>
+                               </c:forEach>
+                            </div>
+                            <a data-slide="prev" href="carousel.html#carousel2" class="left carousel-control">
+                                <span class="icon-prev"></span>
+                            </a>
+                            <a data-slide="next" href="carousel.html#carousel2" class="right carousel-control">
+                                <span class="icon-next"></span>
+                            </a>
+                        </div>
+                    </div>
+			
+			
+			
+			<div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>图片库系统最近上传图片列表</h5>
+                    </div>
+                    <div class="ibox-content">
+	<c:forEach items="${resourcelist.datas}" var="item"
+						varStatus="status">
+                        <a class="fancybox" href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min"
+                         title="图片名称：${item.originalName }<br/>上传者：${item.uploadPerson }">
+                            <img alt="image" src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min" />
+                        </a>
+                       
+</c:forEach>
 
-						<div class="col-lg-3">
-							<div class="ibox float-e-margins">
-								<div class="ibox-title">
-									<h5>
-										<c:choose>
-											<c:when test="${fn:length(item.originalName)<15}">
-                                                                            ${item.originalName}
-                                                                        </c:when>
-											<c:otherwise>
-                                                                            ${fn:substring(item.originalName,0,15)}...
-                                                                        </c:otherwise>
-										</c:choose>
-									</h5>
-									<span style="font-size: 8px; color: #999999;">（上传者：${item.uploadPerson }）</span>
-								</div>
-								<div class="ibox-content">
-									<div class="item active">
-										<img alt="image" class="img-responsive"
-											src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min">
-									</div>
 
-								</div>
-							</div>
-						</div>
+                    </div>
+                </div>
+            </div>
 
-					</c:forEach>
-
-
-
-				</div>
+        </div>
+			
+			
 			</div>
 			<!-- end message center-->
 
