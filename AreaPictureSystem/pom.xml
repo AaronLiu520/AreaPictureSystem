@@ -34,6 +34,7 @@
   	<module>app-admin-action</module>
   	<module>app-admin-pojo</module>
   	<module>app-admin</module>
+      <module>app-web-portal</module>
   </modules>
 
 </project>
