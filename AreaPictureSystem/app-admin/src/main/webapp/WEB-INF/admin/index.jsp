@@ -18,6 +18,14 @@
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/assets/images/logo_title.png"
 	type="image/x-icon" />
+<style type="text/css">
+.box { 
+width: 650px; 
+height: 500px; 
+overflow: hidden; 
+margin:0 auto; 
+} 
+</style>
 </head>
 
 <body>
@@ -28,41 +36,9 @@
 		<div id="page-wrapper" class="gray-bg dashbard-1">
 			<!-- .aside top jsp -->
 			<%@include file="public/top.jsp"%>
-			<div class="wrapper wrapper-content">
+			<div class="wrapper wrapper-content" >
 			
-			
-			  <div class="ibox-content ">
-                        <div class="carousel slide" id="carousel2">
-                            <ol class="carousel-indicators">
-                                <li data-slide-to="0" data-target="#carousel2" class="active"></li>
-                                <li data-slide-to="1" data-target="#carousel2"></li>
-                                <li data-slide-to="2" data-target="#carousel2" class=""></li>
-                            </ol>
-                            
-                            <div class="carousel-inner">
-                            	<c:forEach items="${resourcelist.datas}" var="item" begin="0" end="${fn:length(resourcelist.datas)}" 
-						varStatus="status">
-                            
-                                <div class="item 	<c:if test="${status.index  eq '1'}">active</c:if>">
-                                <center>
-                                    <img alt="image" class="img-responsive" src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=max">
-                                    <div class="carousel-caption">
-                                        <p>名    称：${item.originalName } </p>
-                                        <p>上传者：${item.uploadPerson } </p>
-                                    </div>
-                                    </center>
-                                </div>
-                               </c:forEach>
-                            </div>
-                            <a data-slide="prev" href="carousel.html#carousel2" class="left carousel-control">
-                                <span class="icon-prev"></span>
-                            </a>
-                            <a data-slide="next" href="carousel.html#carousel2" class="right carousel-control">
-                                <span class="icon-next"></span>
-                            </a>
-                        </div>
-                    </div>
-			
+	
 			
 			
 			<div class="row">
