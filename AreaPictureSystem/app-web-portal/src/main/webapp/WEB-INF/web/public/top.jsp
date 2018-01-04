@@ -10,13 +10,12 @@
     <div class="header-right">
         <span class="menu"><img src="${pageContext.request.contextPath}/assets/images/menu.png" alt=""/></span>
         <ul class="nav1">
+        
             <!-- class="active"-->
-            <li><a id="index" class="" href="${pageContext.request.contextPath}/web/index">首页</a></li>
-            <li><a id="listPhotography" class="" href="${pageContext.request.contextPath}/web/listPhotography">摄影作品</a></li>
-            <li><a id="listGame"    class="" href="${pageContext.request.contextPath}/web/listGame">摄影比赛</a></li>
-            <li><a id="listGallery" class="" href="${pageContext.request.contextPath}/web/listGallery">相册</a></li>
-            <li><a id="listNews" class="" href="${pageContext.request.contextPath}/web/listNews">新闻</a></li>
-            <li><a id="about" class="" href="${pageContext.request.contextPath}/web/about">关于我们</a></li>
+            
+            <c:forEach  items="${sessionScope.webmenus }" var="item" varStatus="status">
+            	<li><a id="${item.id}" href="${pageContext.request.contextPath}/${item.webUrl}?type=${item.id}">${item.name}</a></li>
+            </c:forEach>
 
         </ul>
         <!-- script for menu -->

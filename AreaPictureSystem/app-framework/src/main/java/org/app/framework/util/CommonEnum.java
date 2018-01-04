@@ -30,4 +30,7 @@ public interface CommonEnum {
 	//项目地址
 	public final String PROJECTADDRESS="projectAddress";//不同区域、不公司的项目地址。
 
+	
+	public final String WEBMENUS="webmenus";//前台菜单
+
 }

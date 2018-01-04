@@ -74,7 +74,16 @@
 			<mvc:exclude-mapping path="/files/**" />
 			<mvc:exclude-mapping path="/uploadmr/**" />
 			<mvc:exclude-mapping path="/web/index" />
-			<bean class="org.app.web.interceptor.LoginInterceptor"></bean>
+			<mvc:exclude-mapping path="/adminUser/login" /><!-- 
+				访问登录页面 -->
+			<mvc:exclude-mapping path="/adminUser/checkLogin" /><!-- 
+				登录 -->
+			
+			<bean class="org.app.webAdmin.interceptor.LoginInterceptor"></bean>
+		</mvc:interceptor>
+		<mvc:interceptor>
+			<mvc:mapping path="/web/**" />
+			<bean class="org.app.webAdmin.interceptor.WebInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
 

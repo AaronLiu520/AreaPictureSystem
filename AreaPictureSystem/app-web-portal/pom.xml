@@ -20,9 +20,16 @@
         </dependency>
 
 
+
         <dependency>
             <groupId>org.cored</groupId>
-            <artifactId>app-framework</artifactId>
+            <artifactId>app-web-pojo</artifactId>
+            <version>${product.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.cored</groupId>
+            <artifactId>app-web-action</artifactId>
             <version>${product.version}</version>
         </dependency>
 
