@@ -526,5 +526,29 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			return null;
 					
 	}
+	
+	
+	/**
+	 * 通过活动的名称查询所有对应的活动
+	 */
+	public List<ForderActivity> findForderActivityByName(String forderActivityName){
+		
+		List<ForderActivity> list = new ArrayList<ForderActivity>();
+		
+		if(Common.isNotEmpty(forderActivityName)){
+			
+			Query query = new Query();
+			//查询所有非个人的活动
+			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName)).addCriteria(Criteria.where("type").ne(BaseType.Type.PERSION));
+			
+			
+			list= this.find(query, ForderActivity.class);
+			
+		}
+		
+		return list.size()>0?list:null;
+		
+	}
+	
 
 }

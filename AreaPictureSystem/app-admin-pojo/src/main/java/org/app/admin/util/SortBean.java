@@ -1,5 +1,6 @@
 package org.app.admin.util;
 
+import org.app.admin.pojo.AdminUser;
 
 /**
  * @描述：所有排行的基类
@@ -33,14 +34,33 @@ public class SortBean implements Comparable<SortBean> {
 		this.uploadnum = uploadnum;
 	}
 
+
+	public AdminUser getAdminUser() {
+		return adminUser;
+	}
+
+	public void setAdminUser(AdminUser adminUser) {
+		this.adminUser = adminUser;
+	}
+
+	
+	
+	
+
 	@Override
 	public String toString() {
-		return "SortBean [name=" + name + ", sortnum=" + sortnum + ", uploadnum=" + uploadnum + "]";
+		return "SortBean [name=" + name + ", sortnum=" + sortnum + ", uploadnum=" + uploadnum + ", adminUser="
+				+ adminUser + "]";
 	}
+
+
+
+
 
 	private String name;
     private int sortnum;
     private int uploadnum;
+    private AdminUser adminUser;
     
 	@Override
 	public int compareTo(SortBean o) {

@@ -12,7 +12,7 @@ import org.app.framework.pojo.GeneralBean;
 
 /** 
 * @ClassName: Setting 
-* @Description: TODO(这里用一句话描述这个类的作用) 
+* @Description: TODO(网站配置) 
 * @author fliay
 * @date 2018年1月4日 下午3:58:27 
 *  

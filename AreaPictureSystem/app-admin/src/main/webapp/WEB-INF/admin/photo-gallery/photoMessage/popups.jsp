@@ -61,7 +61,7 @@
 
 
 								<div class="form-group">
-									<label>活动时间：</label> <input type="text" placeholder="活动地址"
+									<label>活动时间：</label> <input type="text" placeholder="活动时间"
 										name="activityTime" id="activityTime" readonly="readonly"
 										class="form-control datainput" data-date-format="yyyy-mm-dd" required>
 								</div>

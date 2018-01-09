@@ -1,6 +1,5 @@
 package org.app.framework.util;
 
-
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -19,6 +18,7 @@ import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -37,12 +37,10 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.util.StringUtils;
 
 public class Common {
-	
 
-	
 	/**
 	 * String转换double
-	 *   
+	 * 
 	 * @param string
 	 * @return double
 	 */
@@ -80,7 +78,6 @@ public class Common {
 			return true;
 		}
 	}
-	
 
 	/**
 	 * 使用率计算
@@ -103,7 +100,7 @@ public class Common {
 	}
 
 	/**
-	 * 返回当前时间　格式：yyyy-MM-dd hh:mm:ss
+	 * 返回当前时间 格式：yyyy-MM-dd hh:mm:ss
 	 * 
 	 * @return String
 	 */
@@ -111,8 +108,9 @@ public class Common {
 		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return format1.format(new Date());
 	}
+
 	/**
-	 * 返回当前时间　格式：yyyy-MM-dd
+	 * 返回当前时间 格式：yyyy-MM-dd
 	 * 
 	 * @return String
 	 */
@@ -120,14 +118,12 @@ public class Common {
 		DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
 		return format1.format(new Date());
 	}
-	
-	
-	
-	public static Date fromStringToDate(String sdate){
-		 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		   ParsePosition pos = new ParsePosition(0);
-		   Date strtodate = formatter.parse(sdate, pos);
-		   return strtodate;
+
+	public static Date fromStringToDate(String sdate) {
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		ParsePosition pos = new ParsePosition(0);
+		Date strtodate = formatter.parse(sdate, pos);
+		return strtodate;
 	}
 
 	/**
@@ -176,7 +172,7 @@ public class Common {
 	 * 传入原图名称，，获得一个以时间格式的新名称
 	 * 
 	 * @param fileName
-	 *            　原图名称
+	 *            原图名称
 	 * @return
 	 */
 	public static String generateFileName(String fileName) {
@@ -212,7 +208,7 @@ public class Common {
 				return data;
 			}
 		} catch (Exception e) {
-			//e.printStackTrace();
+			// e.printStackTrace();
 			return null;
 		}
 
@@ -376,7 +372,6 @@ public class Common {
 		return b1.multiply(b2).doubleValue();
 	}
 
-
 	/**
 	 * 提供（相对）精确的除法运算。当发生除不尽的情况时，由scale参数指 定精度，以后的数字四舍五入。
 	 * 
@@ -396,8 +391,6 @@ public class Common {
 		BigDecimal b2 = new BigDecimal(Double.toString(v2));
 		return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
 	}
-
-	
 
 	/**
 	 * 将Map形式的键值对中的值转换为泛型形参给出的类中的属性值 t一般代表pojo类
@@ -522,7 +515,7 @@ public class Common {
 				String protocol = url.getProtocol();
 				// 如果是以文件的形式保存在服务器上
 				if ("file".equals(protocol)) {
-					//System.err.println("file类型的扫描");
+					// System.err.println("file类型的扫描");
 					// 获取包的物理路径
 					String filePath = URLDecoder.decode(url.getFile(), "UTF-8");
 					// 以文件的方式扫描整个包下的文件 并添加到集合中
@@ -530,7 +523,7 @@ public class Common {
 				} else if ("jar".equals(protocol)) {
 					// 如果是jar包文件
 					// 定义一个JarFile
-					//System.err.println("jar类型的扫描");
+					// System.err.println("jar类型的扫描");
 					JarFile jar;
 					try {
 						// 获取jar
@@ -566,7 +559,8 @@ public class Common {
 											classes.add(Class.forName(packageName + '.' + className));
 										} catch (ClassNotFoundException e) {
 											// log
-											// .error("添加用户自定义视图类错误 找不到此类的.class文件");
+											// .error("添加用户自定义视图类错误
+											// 找不到此类的.class文件");
 											e.printStackTrace();
 										}
 									}
@@ -594,7 +588,8 @@ public class Common {
 	 * @param recursive
 	 * @param classes
 	 */
-	public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive, Set<Class<?>> classes) {
+	public static void findAndAddClassesInPackageByFile(String packageName, String packagePath, final boolean recursive,
+			Set<Class<?>> classes) {
 		// 获取此包的目录 建立一个File
 		File dir = new File(packagePath);
 		// 如果不存在或者 也不是目录就直接返回
@@ -613,7 +608,8 @@ public class Common {
 		for (File file : dirfiles) {
 			// 如果是目录 则继续扫描
 			if (file.isDirectory()) {
-				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive, classes);
+				findAndAddClassesInPackageByFile(packageName + "." + file.getName(), file.getAbsolutePath(), recursive,
+						classes);
 			} else {
 				// 如果是java类文件 去掉后面的.class 只留下类名
 				String className = file.getName().substring(0, file.getName().length() - 6);
@@ -622,7 +618,8 @@ public class Common {
 					// classes.add(Class.forName(packageName + '.' +
 					// className));
 					// 经过回复同学的提醒，这里用forName有一些不好，会触发static方法，没有使用classLoader的load干净
-					classes.add(Thread.currentThread().getContextClassLoader().loadClass(packageName + '.' + className));
+					classes.add(
+							Thread.currentThread().getContextClassLoader().loadClass(packageName + '.' + className));
 				} catch (ClassNotFoundException e) {
 					// log.error("添加用户自定义视图类错误 找不到此类的.class文件");
 					e.printStackTrace();
@@ -630,10 +627,116 @@ public class Common {
 			}
 		}
 	}
+
+	/**
+	 * 
+	 * @Title: compare_date @Description: TODO(比较日期大小) @param @param
+	 * DATE1 @param @param DATE2 @param @return 设定文件 @return int 返回类型 @throws
+	 */
+	public static int compare_date(String DATE1, String DATE2) {
+
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			Date dt1 = df.parse(DATE1);
+			Date dt2 = df.parse(DATE2);
+			if (dt1.getTime() > dt2.getTime()) {
+				return -1;
+			} else if (dt1.getTime() < dt2.getTime()) {
+				return 1;
+			} else if (dt1.getTime() == dt2.getTime()) {
+				return 0;
+			}
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return -1;
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	* @Title: getDateByLastMonth 
+	* @Description: TODO(获取过去几个月的日期) 
+	* @param @param month
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
+	public static String  getDateByLastMonth(String lastManth){
+		
+		
+		Calendar cal = Calendar.getInstance();
+		cal.add(Calendar.MONTH, -Integer.valueOf(lastManth));
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH )+1;
+		int day =cal.get(Calendar.DATE);
+		String rmonth="";
+		String rday="";
+		if(month<10){
+			rmonth="0"+month;
+		}else{
+			rmonth=String.valueOf(month);
+		}
+		
+		if(day<10){
+			rday="0"+day;
+		}else{
+			rday=String.valueOf(day);
+		}
+		
+		return year+"-"+rmonth+"-"+rday;
+		
+	}
+	
+	
+	
+	
+	/**
+	 * 
+	* @Title: getDateNow 
+	* @Description: TODO(获取当前日期) 
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
+	public static String  getDateNow(){
+		
+		Calendar cal = Calendar.getInstance();
+		
+		int year = cal.get(Calendar.YEAR);
+		
+		int month = cal.get(Calendar.MONTH )+1;
+		
+		int day =cal.get(Calendar.DATE);
+		
+		String rmonth="";
+		String rday="";
+		if(month<10){
+			rmonth="0"+month;
+		}else{
+			rmonth=String.valueOf(month);
+		}
+		
+		if(day<10){
+			rday="0"+day;
+		}else{
+			rday=String.valueOf(day);
+		}
+		
+		return year+"-"+rmonth+"-"+rday;
+		
+	}
 	
 	
 	
 	
 	
 	
+	
+	
+	
+	
+
 }

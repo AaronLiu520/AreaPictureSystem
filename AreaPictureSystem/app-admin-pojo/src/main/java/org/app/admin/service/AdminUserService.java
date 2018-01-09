@@ -1,8 +1,13 @@
 package org.app.admin.service;
 
+import java.util.List;
+
 import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.util.BaseType;
 import org.app.framework.service.GeneralServiceImpl;
+import org.app.framework.util.Common;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -64,6 +69,45 @@ public class AdminUserService extends GeneralServiceImpl<AdminUser> {
 		
 		
 	}
+	
+	
+	
+	/**
+	 * 
+	* @Title: listUsers 
+	* @Description: TODO(查询为学校管理员，老师 的用户) 
+	* @param @return    设定文件 
+	* @return List<AdminUser>    返回类型 
+	* @throws
+	 */
+	public List<AdminUser> listUsers(String companyId){
+		
+		Query query = new Query();
+		
+		//获取所有用户类型为老师跟管理员的用户
+		query.addCriteria(Criteria.where("userType").in(BaseType.UserType.SCHOOLADMIN, BaseType.UserType.TEACHER));
+		
+		//如果企业ID不为空则查询该企业下的所有用户
+		if(Common.isNotEmpty(companyId)){
+			query.addCriteria(Criteria.where("adminCompany.$id").is(new ObjectId(companyId)));
+		}
+		
+		List<AdminUser> list = this.find(query, AdminUser.class);
+		
+		return list.size()>0?list:null;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 		
 }

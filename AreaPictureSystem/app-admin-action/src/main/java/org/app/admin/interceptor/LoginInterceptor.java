@@ -142,6 +142,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 				loadForderActivityType(BaseType.Type.BASEUTIS.toString(),100), null);
 		//加载所有的企业
 		List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
+		
+		
 		List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
 		List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
 
@@ -151,14 +153,10 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 			session.setAttribute("photoTimeList",
 					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
 		}
-		//获取所有的图片信息
-		Query query = new Query();
 
-		query.addCriteria(Criteria.where("adminCompanyId").ne(""));
-
-		Pagination<Resource> pagination = this.resourceService.findPaginationByQuery(query,1,12,Resource.class);
-
-		session.setAttribute("resourcelist", pagination);
+		
+		
+		
 	}
 
 

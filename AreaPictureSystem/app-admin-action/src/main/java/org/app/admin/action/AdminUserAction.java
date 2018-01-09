@@ -1,6 +1,11 @@
 package org.app.admin.action;
 
-import javax.annotation.Resources;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemControllerLog;
@@ -8,14 +13,15 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
-import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
-import org.app.admin.service.*;
-import org.app.admin.util.BaseType;
+import org.app.admin.service.AdminCompanyService;
+import org.app.admin.service.AdminRoleService;
+import org.app.admin.service.AdminUserService;
+import org.app.admin.service.ForderActivityService;
+import org.app.admin.service.ResourceService;
+import org.app.admin.service.StatisticsService;
 import org.app.admin.util.BaseType.UserType;
-import org.app.admin.util.PhotoTime;
-import org.app.admin.util.basetreetime.BaseTreeTime;
-import org.app.admin.util.basetreetime.LayerAdmonCompany;
+import org.app.admin.util.SortBean;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
@@ -23,16 +29,12 @@ import org.app.framework.util.Pagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 /**
  * 用户管理
@@ -53,6 +55,10 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	private ResourceService resourceService;//资源（图片）
 	@Autowired
 	private ForderActivityService forderActivityService;
+	
+	@Autowired
+	private StatisticsService statisticsService;
+	
 
 	/**
 	 * 用户查询
@@ -192,12 +198,63 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 */
 	@SystemErrorLog(description="访问登录出错")
 	@RequestMapping("/index")
-	public ModelAndView index(HttpSession session) {
+	public ModelAndView index(HttpSession session,
+			@RequestParam(value="companyName",defaultValue="")String companyName,
+			@RequestParam(value="forderActivityName",defaultValue="")String forderActivityName,
+		@RequestParam(value="month",defaultValue="")String month,
+		@RequestParam(value="start",defaultValue="")String start,
+		@RequestParam(value="end",defaultValue="")String end,
+		@RequestParam(value="type",defaultValue="")String type
+			){
+		
 		ModelAndView modelAndView = new ModelAndView();
-		//modelAndView.setViewName("admin/index");
+		
+		if(Common.isNotEmpty(companyName)){
+			modelAndView.addObject("companyId", companyName);
+		}
+		if(Common.isNotEmpty(forderActivityName)){
+			modelAndView.addObject("forderActivityName", forderActivityName);
+		}
+		if(Common.isNotEmpty(month)){
+			modelAndView.addObject("month", month);
+		}
+		if(Common.isNotEmpty(start)){
+			modelAndView.addObject("start", start);
+		}
+		if(Common.isNotEmpty(end)){
+			modelAndView.addObject("end", end);
+		}if(type.equals("1")){
+			modelAndView.addObject("triggerClick", "<script>$(function(){$('#b').trigger('click');})</script>");
+		}
+		
+		
 		modelAndView.setViewName("admin/index");
+		
+		//加载所有的企业
+		List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
+		
+		modelAndView.addObject("companyList", lac);
 
-			
+		//获取所有的图片信息
+		Query query = new Query();
+
+		query.addCriteria(Criteria.where("adminCompanyId").ne(""));
+
+		Pagination<Resource> pagination = this.resourceService.findPaginationByQuery(query,1,12,Resource.class);
+		
+		session.setAttribute("resourcelist", pagination);
+		
+		//获取所有的统计
+		Map<AdminUser,Integer> statisticsList = this.statisticsService.findUserUploadsNum(companyName, forderActivityName,start,end,month);
+		
+		List<SortBean>  listsort = null;
+		if(statisticsList!=null){
+			listsort = this.statisticsService.sortfindUserUploadsNum(statisticsList);
+		}
+		modelAndView.addObject("listsort", listsort);
+		
+		
+		
 			
 			return modelAndView;// 返回
 	}
@@ -257,5 +314,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		return modelAndView;
 
 	}
+	
+	
 
 }
