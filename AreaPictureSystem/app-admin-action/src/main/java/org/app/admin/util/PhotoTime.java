@@ -68,7 +68,7 @@ public class PhotoTime {
      * @return 前台展示队列
      * @return
      */
-    public static  List<PhotoTime> getPhotoTime(List<ForderActivity> listFA,String checkDate){
+    public static  List<PhotoTime> getPhotoTime(List<ForderActivity> listFA,String checkDate,boolean iscompany){
         List<PhotoTime> list=new ArrayList<PhotoTime>();
 
         for (ForderActivity fa:listFA) {
@@ -76,13 +76,22 @@ public class PhotoTime {
             boolean check=false;
 
             for (PhotoTime pts:list) {
-                if(fa.getCreateDate().equals(pts.getTime())/* && fa.getBoundCompany().equals(pts.getId())*/){
-                    check=true;
-                    pts.getList().add(fa);
-                    break;
+                //区域  与  基本层单  有冲突，需要使用 isCompany检查
+                if(iscompany){
+                    if(fa.getActivityTime().equals(pts.getTime())){
+                        check=true;
+                        pts.getList().add(fa);
+                        break;
+                    }
+                }else{
+                    if(fa.getActivityTime().equals(pts.getTime()) && fa.getBoundCompany().equals(pts.getId())){
+                        check=true;
+                        pts.getList().add(fa);
+                        break;
+                    }
                 }
-
             }
+
             //添加时间
             if(check==false){
                 pt.setTime(fa.getActivityTime());

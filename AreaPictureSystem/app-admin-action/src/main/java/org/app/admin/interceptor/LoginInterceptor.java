@@ -130,25 +130,16 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public void loadTreeMenu(HttpSession session){
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		// 区域   AREA
-		session.setAttribute("areaphotoTimeList", PhotoTime.getPhotoTime(loadForderActivityType(BaseType.Type.AREA.toString(),15), null));
-		
-		
-		
-		
-		
-		
-		
-		
-		
+		session.setAttribute("areaphotoTimeList", PhotoTime.getPhotoTime(loadForderActivityType(BaseType.Type.AREA.toString(),15), null,true));
 		
 
 		// 直属 DIRECTLYUTIS
 		session.setAttribute("directlyphotoTimeList", PhotoTime.getPhotoTime(
-				loadForderActivityType(BaseType.Type.DIRECTLYUTIS.toString(),15), null));
+				loadForderActivityType(BaseType.Type.DIRECTLYUTIS.toString(),15), null,true));
 
 		//基层单位 BASEUTIS,,
 		List<PhotoTime> lpt = PhotoTime.getPhotoTime(
-				loadForderActivityType(BaseType.Type.BASEUTIS.toString(),100), null);
+				loadForderActivityType(BaseType.Type.BASEUTIS.toString(),100), null,true);
 		//加载所有的企业
 		List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
 		
@@ -198,7 +189,9 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		query.addCriteria(Criteria.where("boundId").is(boundId));
 //		Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
 		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-		return PhotoTime.getPhotoTime(listFA,check);
+		
+		//TODO
+		return PhotoTime.getPhotoTime(listFA,check,false);
 	}
 
 }

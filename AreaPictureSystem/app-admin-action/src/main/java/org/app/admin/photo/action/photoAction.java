@@ -61,8 +61,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         modelAndView.addObject("uploadList", list);
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
-        modelAndView.addObject("photoTimeList",
-                getPhotoTimeList(BaseType.Type.AREA.toString(),null));
+        modelAndView.addObject("photoTimeList",  getPhotoTimeList(BaseType.Type.AREA.toString(),null,true));
         return modelAndView;// 返回
     }
     
@@ -83,8 +82,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         modelAndView.addObject("uploadList1", list);
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
-        modelAndView.addObject("photoTimeList1",
-                getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
+        modelAndView.addObject("photoTimeList1",getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId(),false));
         return modelAndView;// 返回
     }
     
@@ -148,8 +146,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         List<String> forderActivityList=this.getforderActivityList(BaseType.Type.DIRECTLYUTIS.toString(),adminUser.getAdminCompany().getId());
         List list = this.resourceService.getMonthUploadNum(forderActivityList,null);
         modelAndView.addObject("uploadList1", list);
-        modelAndView.addObject("photoTimeList",
-                getPhotoTimeList(BaseType.Type.DIRECTLYUTIS.toString(),null));
+        modelAndView.addObject("photoTimeList",getPhotoTimeList(BaseType.Type.DIRECTLYUTIS.toString(),null,true));
         return modelAndView;// 返回
     }
 
@@ -159,7 +156,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/basicLevel/index");//登录页面
 //        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-        List<PhotoTime> lpt= getPhotoTimeList1(String.valueOf(BaseType.Type.BASEUTIS.toString()),null);
+        List<PhotoTime> lpt= getPhotoTimeList(String.valueOf(BaseType.Type.BASEUTIS.toString()),null,false);
         //加载所有的企业
         List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);
         List<LayerAdmonCompany> llac= LayerAdmonCompany.LayerAdmonCompany(lac,lpt);
@@ -216,17 +213,18 @@ public class photoAction extends GeneralAction<AdminUser> {
    
 
 
-    public List<PhotoTime> getPhotoTimeList(String type,String check){
+    public List<PhotoTime> getPhotoTimeList(String type,String check,boolean flag){
         Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-        return PhotoTime.getPhotoTime(listFA,check);
+        //todo
+        return PhotoTime.getPhotoTime(listFA,check,flag);
     }
     
-    public List<PhotoTime> getPhotoTimeList1(String type,String check){
+/*    public List<PhotoTime> getPhotoTimeList1(String type,String check){
         Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
         return PhotoTime.getPhotoTime(listFA,check);
-    }
+    }*/
     
   /**
    * @描述  个人图片库的时间轴绑定个人Id   
@@ -235,10 +233,11 @@ public class photoAction extends GeneralAction<AdminUser> {
    * @param boundId
    * @return  
    */
-    public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
+    public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId,boolean flag){
         Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0","boundId",boundId);
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-        return PhotoTime.getPhotoTime(listFA,check);
+        //TODO
+        return PhotoTime.getPhotoTime(listFA,check,flag);
     }
 
 }

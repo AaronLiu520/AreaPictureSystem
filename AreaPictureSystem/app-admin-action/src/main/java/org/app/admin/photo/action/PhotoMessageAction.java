@@ -95,7 +95,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
-			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, null);
+			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, null,false);
 			// 加载所有的企业
 			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
 
@@ -108,10 +108,11 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		} else if (type.equals(BaseType.Type.PERSION.toString())) {
 			modelAndView.addObject("photoTimeList",
-					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null, adminUser.getId()));
+					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null, adminUser.getId(),false));
 		} else {
 			// 按日期进行分类,并且中当前菜单
-			modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, null));
+			//TODO
+			modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, null,false));
 		}
 
 		// TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
@@ -125,11 +126,11 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		return modelAndView;// 返回
 	}
 
-	public List<PhotoTime> getPhotoTimeListByPersionId(String type, String check, String boundId) {
+	public List<PhotoTime> getPhotoTimeListByPersionId(String type, String check, String boundId,boolean flag) {
 
 		Query query = super.craeteQueryWhere("listType.type", type, "parentId", "0", "boundId", boundId);
 		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-		return PhotoTime.getPhotoTime(listFA, check);
+		return PhotoTime.getPhotoTime(listFA, check,flag);
 	}
 
 	/**
@@ -182,7 +183,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
-			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, fa.getActivityTime());
+			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, fa.getActivityTime(),false);
 			// 加载所有的企业
 			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
 			modelAndView.addObject("listAdminCompany", lac);
@@ -194,7 +195,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		} else {
 
 			// 按日期进行分类,并且中当前菜单
-			modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, fa.getActivityTime()));
+			modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, fa.getActivityTime(),true));
 		}
 
 		// TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
