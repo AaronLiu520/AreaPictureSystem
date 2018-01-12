@@ -76,7 +76,7 @@ public class PhotoTime {
             boolean check=false;
 
             for (PhotoTime pts:list) {
-                if(fa.getCreateDate().equals(pts.getTime()) && fa.getBoundCompany().equals(pts.getId())){
+                if(fa.getCreateDate().equals(pts.getTime())/* && fa.getBoundCompany().equals(pts.getId())*/){
                     check=true;
                     pts.getList().add(fa);
                     break;

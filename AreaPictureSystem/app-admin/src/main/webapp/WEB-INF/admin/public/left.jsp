@@ -41,6 +41,15 @@
 	href="${pageContext.request.contextPath}/assets/admin/css/plugins/toastr/toastr.min.css"
 	rel="stylesheet">
 
+<link
+	href="${pageContext.request.contextPath}/assets/admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
+	rel="stylesheet">
+
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css"
+	media="all" />
+
 <style type="text/css">
 .modal.fade .user-modal-dialog {
 	padding: 5%;
@@ -132,6 +141,7 @@ li_style:hover {
 
 							<!-- Button trigger modal -->
 							<li><a data-toggle="modal" data-target="#myModal">个人资料</a></li>
+
 							<li><a data-toggle="model"
 								href="${pageContext.request.contextPath}/picture/uploadfilelog">上传记录</a>
 
@@ -190,7 +200,58 @@ li_style:hover {
 											</div>
 										</div>
 									</div>
+								</div> <!-- 修改登录密码 -->
+							<li><a data-toggle="modal" data-target="#EditPassword">密码修改</a></li>
+							<!-- Modal -->
+
+
+							<div class="modal inmodal" id="EditPassword" tabindex="-1"
+								role="dialog" aria-hidden="true">
+
+								<div class="modal-dialog">
+									<div class="modal-content animated bounceInRight">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal" id="EditPasswordClose">
+												<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+											</button>
+											<h4 class="modal-title">密码修改</h4>
+										</div>
+
+											<div class="modal-body">
+
+												<div class="form-group">
+													<label>旧密码：</label> <label for="foroldPassword" style="float: right;"
+														id="foroldPassword" class="control-label"></label> <input
+														type="text" placeholder="旧密码" name="oldPassword"
+														id="oldPassword" class="form-control"
+														onkeyup="return checkOldPassword();" required="required">
+												</div>
+												<div class="form-group">
+													<label>新密码：</label><label for="forpassword" style="float: right;"
+														id="forpassword" class="control-label"></label>  <input type="password" placeholder="新密码" required onkeyup="return checkinput();"
+														name="password" id="password" class="form-control">
+												</div>
+												<div class="form-group">
+													<label>确认密码：</label><label for="forpasswords" style="float: right;"
+														id="forpasswords" class="control-label"></label> <input type="password" placeholder="确认密码" onkeyup="return checkinput();"
+														name="passwords" id="passwords" required
+														class="form-control">
+												</div>
+
+											</div>
+											<div class="modal-footer">
+												<button type="button" onclick="return ajaxUpdatePassword();" id="submit" class="btn btn-primary">保存</button>
+											</div>
+									</div>
 								</div>
+
+
+							</div>
+
+							<!-- 修改密码end -->
+
+
+
 							<li class="divider"></li>
 							<li><a
 								href="${pageContext.request.contextPath}/adminUser/loginOut">安全退出</a>
@@ -285,61 +346,59 @@ li_style:hover {
 
 																<a
 																	href="${pageContext.request.contextPath}/${menu.url}?activeMenu=${menu.id}_${item.id}_${subitem.id}">${menu.name}</a>
-																</li>
-
-															</c:if>
-														</c:forEach>
-													</ul>
-													</li>
-												</c:when>
-												<c:otherwise>
-													<!-- 没有子菜单 -->
-													<c:choose>
-														<c:when
-															test="${fn:contains(sessionScope.webMenuSession,subitem.id)}">
-															<li class="active">
-														</c:when>
-														<c:otherwise>
-															<li>
-														</c:otherwise>
-													</c:choose>
-													<a
-														href="${pageContext.request.contextPath}/${subitem.url}?activeMenu=${subitem.id}_${item.id}">
-														<i class="fa ${subitem.icon}"></i> ${subitem.name}
-													</a>
-													</li>
-												</c:otherwise>
-											</c:choose>
-
-
-										</c:if>
-									</c:forEach>
-								</ul>
 								</li>
-							</c:when>
-							<c:otherwise>
-								<!-- active 打开 class="active"-->
-								<c:choose>
-									<c:when
-										test="${fn:contains(sessionScope.webMenuSession,item.id)}">
-										<li class="active">
-									</c:when>
-									<c:otherwise>
-										<li>
-									</c:otherwise>
-								</c:choose>
-								<!-- 没有子菜单 -->
-								<a
-									href="${pageContext.request.contextPath}/${item.url}?activeMenu=${item.id}">
-									<i class="fa ${item.icon}"></i> <span class="nav-label">
-										${item.name}</span>
-								</a>
-								</li>
-							</c:otherwise>
-						</c:choose>
-
 					</c:if>
 				</c:forEach>
+			</ul>
+			</li>
+			</c:when>
+			<c:otherwise>
+				<!-- 没有子菜单 -->
+				<c:choose>
+					<c:when
+						test="${fn:contains(sessionScope.webMenuSession,subitem.id)}">
+						<li class="active">
+					</c:when>
+					<c:otherwise>
+						<li>
+					</c:otherwise>
+				</c:choose>
+				<a
+					href="${pageContext.request.contextPath}/${subitem.url}?activeMenu=${subitem.id}_${item.id}">
+					<i class="fa ${subitem.icon}"></i> ${subitem.name}
+				</a>
+				</li>
+			</c:otherwise>
+			</c:choose>
+
+
+			</c:if>
+			</c:forEach>
+			</ul>
+			</li>
+			</c:when>
+			<c:otherwise>
+				<!-- active 打开 class="active"-->
+				<c:choose>
+					<c:when test="${fn:contains(sessionScope.webMenuSession,item.id)}">
+						<li class="active">
+					</c:when>
+					<c:otherwise>
+						<li>
+					</c:otherwise>
+				</c:choose>
+				<!-- 没有子菜单 -->
+				<a
+					href="${pageContext.request.contextPath}/${item.url}?activeMenu=${item.id}">
+					<i class="fa ${item.icon}"></i> <span class="nav-label">
+						${item.name}</span>
+				</a>
+				</li>
+			</c:otherwise>
+			</c:choose>
+
+			</c:if>
+			</c:forEach>
 
 
 
@@ -348,6 +407,43 @@ li_style:hover {
 		</div>
 
 	</nav>
+	
+	
+	
+	<!-- 弹出层提示 -->
+	<div class="modal inmodal fade" id="titleMessage" tabindex="-1"
+		role="dialog" aria-hidden="true" style="padding: 15%">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<span style="float: left; color: red; font-size: 18px;" id="title"></span>
+				</div>
+				<div class="modal-body" id="content">
+					<!-- <h3>您确认是否要删除此记录吗?</h3> -->
+				</div>
+				<div class="modal-footer">
+		
+					<button type="button" data-dismiss="modal"
+						class="btn btn-primary delete-confirm-btn">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	<!-- 主要的 scripts -->
 	<script
@@ -383,9 +479,21 @@ li_style:hover {
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/toastr/toastr.min.js"></script>
 
-	<link rel="stylesheet"
-		href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css"
-		media="all" />
+
+
+	<!-- 添加jqueryvalidate -->
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
+
+
+
+
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/commons.js">
+		
+	</script>
 
 	<c:if test="${not empty success}">
 		<script type="text/javascript">
@@ -499,7 +607,12 @@ li_style:hover {
 			window.location.href = "${pageContext.request.contextPath}/photoMessageAction/index/"
 					+ webType
 		}
+		
+
+		
+		
 	</script>
+
 
 </body>
 </html>

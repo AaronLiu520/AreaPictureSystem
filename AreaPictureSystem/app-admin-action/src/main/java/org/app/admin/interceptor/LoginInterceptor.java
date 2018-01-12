@@ -130,8 +130,17 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public void loadTreeMenu(HttpSession session){
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		// 区域   AREA
-		session.setAttribute("areaphotoTimeList", PhotoTime.getPhotoTime(
-				loadForderActivityType(BaseType.Type.AREA.toString(),15), null));
+		session.setAttribute("areaphotoTimeList", PhotoTime.getPhotoTime(loadForderActivityType(BaseType.Type.AREA.toString(),15), null));
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 		// 直属 DIRECTLYUTIS
 		session.setAttribute("directlyphotoTimeList", PhotoTime.getPhotoTime(
@@ -143,6 +152,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		//加载所有的企业
 		List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
 		
+		session.setAttribute("company", lac);
 		
 		List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
 		List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
@@ -170,8 +180,8 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public List<ForderActivity> loadForderActivityType(String type, int number){
 		Query query=new Query();
 		query.addCriteria(Criteria.where("parentId").is("0"));
-		query.addCriteria(Criteria.where("type").is(type));
-		query.with(new Sort(Sort.Direction.DESC, "createTime"));
+		query.addCriteria(Criteria.where("listType.type").is(type));
+		query.with(new Sort(Sort.Direction.DESC, "activityTime"));
 		Pagination<ForderActivity> p=this.forderActivityService.findPaginationByQuery(query,0,number,ForderActivity.class);
 		if(p==null) return null;
 
@@ -183,7 +193,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
 
 		Query query=new Query();
-		query.addCriteria(Criteria.where("type").is(type));
+		query.addCriteria(Criteria.where("listType.type").is(type));
 		query.addCriteria(Criteria.where("parentId").is(0));
 		query.addCriteria(Criteria.where("boundId").is(boundId));
 //		Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);

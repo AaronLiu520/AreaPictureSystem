@@ -6,6 +6,7 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.*;
 import org.app.admin.service.FavoritesService;
 import org.app.admin.service.ForderActivityService;
+import org.app.admin.service.InformationRegisterService;
 import org.app.admin.service.LabelService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.util.*;
@@ -15,6 +16,7 @@ import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.admin.util.executor.SingletionThreadPoolExecutor;
 import org.app.admin.util.executor.Task;
 import org.app.framework.action.GeneralAction;
+import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.framework.util.Pagination;
@@ -61,6 +63,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	private org.app.admin.service.AdminCompanyService AdminCompanyService;
 	@Autowired
 	private FavoritesService favoritesService;
+	@Autowired
+	private InformationRegisterService informationRegisterService;
+	
 
 	/**
 	 * 查找图片页面
@@ -83,7 +88,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		// TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
 
-		Query querylistFA = super.craeteQueryWhere("parentId", "0", "type", type);
+		Query querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type);
 
 		List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
 		// 如果用户是 BASEUTIS
@@ -122,7 +127,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 	public List<PhotoTime> getPhotoTimeListByPersionId(String type, String check, String boundId) {
 
-		Query query = super.craeteQueryWhere("type", type, "parentId", "0", "boundId", boundId);
+		Query query = super.craeteQueryWhere("listType.type", type, "parentId", "0", "boundId", boundId);
 		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
 		return PhotoTime.getPhotoTime(listFA, check);
 	}
@@ -166,10 +171,10 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		Query querylistFA = new Query();
 		// 如果用户是个人
 		if (type.equals(BaseType.Type.PERSION.toString())) {
-			querylistFA = super.craeteQueryWhere("parentId", "0", "type", type, "boundId", adminUser.getId());
+			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type, "boundId", adminUser.getId());
 
 		} else {
-			querylistFA = super.craeteQueryWhere("parentId", "0", "type", type);
+			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type);
 		}
 		List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
 
@@ -254,7 +259,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		ForderActivity f = forderActivityService.findForderById(forderActivityId);
 		String pd = null;
-		if (f.getType() == BaseType.Type.PERSION) {
+		if (f.getType() == BaseType.Type.PERSION.toString()) {
 			pd = "PERSION";
 		}
 
@@ -305,6 +310,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			r.getEditorImgInfo().setResourceAddress(resourceAddress);
 			r.getEditorImgInfo().setDescription(description);
 			this.resourceService.save(r);
+			
+			this.informationRegisterService.addInformationRegister(resourceName, person, photographer, resourceAddress);
+			
 		}
 		modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + activityId);
 
@@ -345,8 +353,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	 * @param session
 	 * @param fa
 	 * @return
-	 */
-	@SystemErrorLog(description = "创建活动出错")
+	 */ 
+	/*@SystemErrorLog(description = "创建活动出错")
 	@RequestMapping("/createActivity/{type}")
 	public ModelAndView createActivity(@PathVariable("type") String type, HttpSession session, ForderActivity fa) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -375,7 +383,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		return modelAndView;
 
 	}
-
+*/
 	/**
 	 * @param @param
 	 *            resourceId
@@ -488,7 +496,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							newForderActivity.setDescription(oldForderActivity.getDescription());
 							newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
 							newForderActivity.setParentId("0");
-							newForderActivity.setType(BaseType.Type.PERSION);	
+							newForderActivity.setType(BaseType.Type.PERSION.toString());	
 							this.forderActivityService.save(newForderActivity);
 							
 						}else{
@@ -627,5 +635,46 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		return modelAndView;
 
 	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/getInformationRegister")
+	@ResponseBody
+	@SystemErrorLog(description="查询快捷选项")
+	@SystemControllerLog(description = "查询快捷选项")
+	public BasicDataResult getInformationRegister() {
+
+		BasicDataResult result  =  this.informationRegisterService.togetInformationRegister();
+		System.out.println(result);
+		return result;
+
+	
+		
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

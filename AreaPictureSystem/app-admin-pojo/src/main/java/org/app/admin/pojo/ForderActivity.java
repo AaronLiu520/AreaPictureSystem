@@ -43,7 +43,8 @@ public class ForderActivity extends GeneralBean {
 	private String sumPotoCount;// 图片数量
 	private String boundId;// 绑定对象Id(个人)
 	private String boundCompany;// 绑定对象Id(公司)
-	private BaseType.Type type; // 区域，直属单位，个人（用于统计）
+	private List<Type> listType; // 区域，直属单位，个人（用于统计）
+	private String type;
 	private String description; // 描述
 	private String activityTime; // 活动时间
 /*	private Date createTime; // 创建时间
@@ -54,22 +55,6 @@ public class ForderActivity extends GeneralBean {
 	@DBRef
 	private AdminCompany adminCompany;//企业信息
 	private String parentId;// 付文件夹Id
-
-
-
-	
-	public AdminCompany getAdminCompany() {
-		return adminCompany;
-	}
-	public void setAdminCompany(AdminCompany adminCompany) {
-		this.adminCompany = adminCompany;
-	}
-	public String getBoundCompany() {
-		return boundCompany;
-	}
-	public void setBoundCompany(String boundCompany) {
-		this.boundCompany = boundCompany;
-	}
 	public String getForderActivityName() {
 		return forderActivityName;
 	}
@@ -94,16 +79,24 @@ public class ForderActivity extends GeneralBean {
 	public void setBoundId(String boundId) {
 		this.boundId = boundId;
 	}
-
-
-	public BaseType.Type getType() {
+	public String getBoundCompany() {
+		return boundCompany;
+	}
+	public void setBoundCompany(String boundCompany) {
+		this.boundCompany = boundCompany;
+	}
+	public List<Type> getListType() {
+		return listType;
+	}
+	public void setListType(List<Type> listType) {
+		this.listType = listType;
+	}
+	public String getType() {
 		return type;
 	}
-
-	public void setType(BaseType.Type type) {
+	public void setType(String type) {
 		this.type = type;
 	}
-
 	public String getDescription() {
 		return description;
 	}
@@ -134,15 +127,39 @@ public class ForderActivity extends GeneralBean {
 	public void setCreatUser(AdminUser creatUser) {
 		this.creatUser = creatUser;
 	}
+	public AdminCompany getAdminCompany() {
+		return adminCompany;
+	}
+	public void setAdminCompany(AdminCompany adminCompany) {
+		this.adminCompany = adminCompany;
+	}
 	public String getParentId() {
 		return parentId;
 	}
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
+	@Override
+	public String toString() {
+		return "ForderActivity [forderActivityName=" + forderActivityName + ", address=" + address + ", sumPotoCount="
+				+ sumPotoCount + ", boundId=" + boundId + ", boundCompany=" + boundCompany + ", listType=" + listType
+				+ ", type=" + type + ", description=" + description + ", activityTime=" + activityTime + ", folderSize="
+				+ folderSize + ", resource=" + resource + ", creatUser=" + creatUser + ", adminCompany=" + adminCompany
+				+ ", parentId=" + parentId + "]";
+	}
+	
+	
+	
+	
+	
+	
+	
 	
 
 
+
+	
+	
 
 
 }

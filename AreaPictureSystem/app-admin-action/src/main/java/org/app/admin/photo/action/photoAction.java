@@ -110,7 +110,7 @@ public class photoAction extends GeneralAction<AdminUser> {
     	  }
     	 }
     	
-         query.addCriteria(Criteria.where("type").is(type));
+         query.addCriteria(Criteria.where("listType.type").is(type));
          List<ForderActivity> lf=forderActivityService.find(query, ForderActivity.class);
          List<String> forderActivityList=new ArrayList<String>();
          for (ForderActivity forderActivity : lf) {
@@ -217,13 +217,13 @@ public class photoAction extends GeneralAction<AdminUser> {
 
 
     public List<PhotoTime> getPhotoTimeList(String type,String check){
-        Query query=super.craeteQueryWhere("type",type,"parentId", "0");
+        Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
         return PhotoTime.getPhotoTime(listFA,check);
     }
     
     public List<PhotoTime> getPhotoTimeList1(String type,String check){
-        Query query=super.craeteQueryWhere("type",type,"parentId", "0");
+        Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
         return PhotoTime.getPhotoTime(listFA,check);
     }
@@ -236,7 +236,7 @@ public class photoAction extends GeneralAction<AdminUser> {
    * @return  
    */
     public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
-        Query query=super.craeteQueryWhere("type",type,"parentId", "0","boundId",boundId);
+        Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0","boundId",boundId);
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
         return PhotoTime.getPhotoTime(listFA,check);
     }

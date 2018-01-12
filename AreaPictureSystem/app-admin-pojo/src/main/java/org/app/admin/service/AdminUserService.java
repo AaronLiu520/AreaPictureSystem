@@ -2,11 +2,14 @@ package org.app.admin.service;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminUser;
-import org.app.admin.util.BaseType;
 import org.app.framework.service.GeneralServiceImpl;
+import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
+import org.app.framework.util.CommonEnum;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -85,7 +88,7 @@ public class AdminUserService extends GeneralServiceImpl<AdminUser> {
 		Query query = new Query();
 		
 		//获取所有用户类型为老师跟管理员的用户
-		query.addCriteria(Criteria.where("userType").in(BaseType.UserType.SCHOOLADMIN, BaseType.UserType.TEACHER));
+		//query.addCriteria(Criteria.where("userType").in(BaseType.UserType.SCHOOLADMIN, BaseType.UserType.TEACHER));
 		
 		//如果企业ID不为空则查询该企业下的所有用户
 		if(Common.isNotEmpty(companyId)){
@@ -102,9 +105,63 @@ public class AdminUserService extends GeneralServiceImpl<AdminUser> {
 	
 	
 	
+	/**
+	 * 
+	* @Title: passwordByUserId 
+	* @Description: TODO(判断当前用户输入的密码是否正确) 
+	* @param @param session
+	* @param @param password
+	* @param @return    设定文件 
+	* @return BasicDataResult    返回类型 
+	* @throws
+	 */
+	public BasicDataResult passwordByUserId(HttpSession session,String password){
+		
+		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		
+		if(adminUser!=null){
+			
+			AdminUser newAdminUser = this.findOneById(adminUser.getId(),AdminUser.class);
+			
+			if(Common.isNotEmpty(password)&&newAdminUser.getPassword().equals(password)){
+				//密码正确  
+				return BasicDataResult.build(200, "密码正确", null);
+			}
+		}
+		return BasicDataResult.build(0, "密码错误", null);
+	}
 	
 	
 	
+	/**
+	 * 
+	* @Title: updatePassword 
+	* @Description: TODO(修改密码) 
+	* @param @param session
+	* @param @param password
+	* @param @return    设定文件 
+	* @return BasicDataResult    返回类型 
+	* @throws
+	 */
+	public BasicDataResult updatePassword(HttpSession session , String password){
+		
+		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		
+		if(adminUser!=null){
+			
+			AdminUser newAdminUser = this.findOneById(adminUser.getId(),AdminUser.class);
+			
+				newAdminUser.setPassword(password);
+				this.save(newAdminUser);
+				
+				return BasicDataResult.build(200, "修改密码成功", null);
+			
+		}
+		return BasicDataResult.build(0, "修改密码失败", null);
+		
+		
+		
+	}
 	
 	
 	

@@ -54,11 +54,11 @@
                     </c:if>
                     </li>
                 </c:forEach>
-             <li  data-jstree='{"type":"html"}'>
+     <!--         <li  data-jstree='{"type":"html"}'>
                     <span onclick="ActivityIndex('DIRECTLYUTIS');">
                         <i class="fa"></i>创建活动
                     </span>
-             </li>
+             </li> -->
             </ul>
        <!-- </li>
     </ul>-->

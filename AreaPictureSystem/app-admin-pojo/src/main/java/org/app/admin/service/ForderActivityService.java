@@ -17,11 +17,14 @@ import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
+import org.app.admin.pojo.Type;
 import org.app.admin.util.BaseType;
 import org.app.admin.util.BaseType.UserType;
 import org.app.framework.service.GeneralServiceImpl;
+import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -42,6 +45,9 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 	@Autowired
 	private AdminCompanyService adminCompanyService;
+	
+	@Autowired
+	private TypeService typeService;
 
 	/**
 	 * 
@@ -144,16 +150,18 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				newAdminUser = this.adminUserService.findAdminUserById(adminUser.getId());
 			}
 
-			// 获取前台传递给后台的值，并且通过枚举类型赋值
-			if (enumtype.equals(BaseType.Type.AREA)) {
-				forderActivity.setType(BaseType.Type.AREA);
-			} else if (enumtype.equals(BaseType.Type.DIRECTLYUTIS)) {
-				forderActivity.setType(BaseType.Type.DIRECTLYUTIS);
-			} else if (enumtype.equals(BaseType.Type.PERSION)) {
-				forderActivity.setType(BaseType.Type.PERSION);
-			} else {
-				forderActivity.setType(BaseType.Type.DIRECTLYUTIS);
-			}
+			// TODO
+
+			/*
+			 * // 获取前台传递给后台的值，并且通过枚举类型赋值 if
+			 * (enumtype.equals(BaseType.Type.AREA)) {
+			 * forderActivity.setType(BaseType.Type.AREA); } else if
+			 * (enumtype.equals(BaseType.Type.DIRECTLYUTIS)) {
+			 * forderActivity.setType(BaseType.Type.DIRECTLYUTIS); } else if
+			 * (enumtype.equals(BaseType.Type.PERSION)) {
+			 * forderActivity.setType(BaseType.Type.PERSION); } else {
+			 * forderActivity.setType(BaseType.Type.DIRECTLYUTIS); }
+			 */
 
 			/*
 			 * if (Common.isEmpty(forderActivity.getParentId())) {
@@ -287,14 +295,14 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			// 超级管理员
 			if (getuserType.equals(UserType.ADMINISTRATORS)) {
 
-				query.addCriteria(Criteria.where("type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
+				query.addCriteria(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
 						BaseType.Type.DIRECTLYUTIS));
 
 				List<ForderActivity> list = this.find(query, ForderActivity.class);
 
 				query = new Query();
 				query.addCriteria(Criteria.where("boundId").is(userId))
-						.addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
+						.addCriteria(Criteria.where("listType.type").is(BaseType.Type.PERSION));
 
 				listForderActivity = this.find(query, ForderActivity.class);
 
@@ -366,6 +374,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
 					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
 					editforderActivity.setType(forderActivity.getType());
+					editforderActivity.setListType(forderActivity.getListType());
 					if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
 						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
 						// 根据boundCompany获取企业信息
@@ -414,8 +423,8 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 *         adminUser @param @param companyId @param @return 设定文件 @return
 	 *         List<ForderActivity> 返回类型 @throws
 	 */
-	public List<ForderActivity> findForderActivityByforderActivityName(String forderActivityName, AdminUser adminUser,
-			String companyId, String type) {
+	public BasicDataResult findForderActivityByforderActivityName(String forderActivityName, AdminUser adminUser,
+			String companyId, String type, String activityTime) {
 
 		if (adminUser != null && Common.isNotEmpty(forderActivityName)) {
 
@@ -423,66 +432,40 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
 
-			UserType getuserType = adminUser.getUserType();
-
-			// 用户ID
-			String userId = adminUser.getId();
-
-			if (getuserType.equals(UserType.SCHOOLADMIN)) {
-				// 企业ID
-				companyId = "";
-				if (adminUser.getAdminCompany() != null) {
-					companyId = adminUser.getAdminCompany().getId();
-				}
-
-			}
-			if (getuserType.equals(UserType.TEACHER)) {
-
-				query.addCriteria(Criteria.where("boundId").is(userId));
-
+			if (Common.isNotEmpty(activityTime)) {
+				query.addCriteria(Criteria.where("activityTime").is(activityTime));
 			}
 
-			/*
-			 * if (getuserType.equals(UserType.SCHOOLADMIN)) { companyId=""; }
-			 */
-			if (Common.isNotEmpty(companyId)) {
-				query.addCriteria(Criteria.where("boundCompany").is(companyId));
-			}
+
 			if (Common.isNotEmpty(type)) {
-				query.addCriteria(Criteria.where("type").is(type));
+
+				List list = new ArrayList();
+				
+				String[] types = type.split(",");
+				
+				for(int i = 0;i<types.length;i++){
+					list.add(types[i]);
+					if(types[i].equals(BaseType.Type.BASEUTIS)){
+						query.addCriteria(Criteria.where("boundCompany").is(companyId));
+					}
+					
+					
+				}
+				ForderActivity forderActivity = null;
+
+				query.addCriteria(Criteria.where("listType.type").in(list));
+
+
+				forderActivity = this.findOneByQuery(query, ForderActivity.class);
+
+				if (forderActivity != null)
+					return BasicDataResult.build(200, "该所属单位在所选时间已经有相同活动了", null);
+				
 			}
-			/*
-			 * //超级管理员 if(getuserType.equals(UserType.ADMINISTRATORS)){
-			 * 
-			 * if(Common.isNotEmpty(companyId)){
-			 * query.addCriteria(Criteria.where("boundCompany").is(companyId));
-			 * if(Common.isNotEmpty(type)){
-			 * 
-			 * query.addCriteria(Criteria.where("type").is(type));
-			 * 
-			 * } }
-			 * 
-			 * }else if(getuserType.equals(UserType.SCHOOLADMIN)){ // 企业ID
-			 * companyId = ""; if(adminUser.getAdminCompany()!=null){ companyId
-			 * = adminUser.getAdminCompany().getId(); }
-			 * query.addCriteria(Criteria.where("boundCompany").is(companyId));
-			 * if(Common.isNotEmpty(type)){
-			 * 
-			 * query.addCriteria(Criteria.where("type").is(type));
-			 * 
-			 * } }else if(getuserType.equals(UserType.TEACHER)){
-			 * 
-			 * query.addCriteria(Criteria.where("boundId").is(userId));
-			 * 
-			 * }
-			 */
 
-			List<ForderActivity> list = this.find(query, ForderActivity.class);
-
-			return list;
 		}
 
-		return null;
+		return BasicDataResult.build(100, "", null);
 
 	}
 
@@ -507,8 +490,8 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	/**
 	 * 
 	 * @Title: findForderActivityByActivityNameType @Description:
-	 * TODO(通过活动名称，boundId，type查询是否已经存在该活动) @param @return 设定文件 @return
-	 * ForderActivity 返回类型 @throws
+	 *         TODO(通过活动名称，boundId，type查询是否已经存在该活动) @param @return 设定文件 @return
+	 *         ForderActivity 返回类型 @throws
 	 */
 	public ForderActivity findForderActivityByActivityNameType(String forderActivityName, String boundId) {
 
@@ -517,38 +500,36 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 		query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName))
 				.addCriteria(Criteria.where("boundId").is(boundId))
 				.addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
-		
+
 		ForderActivity forderActivity = this.findOneByQuery(query, ForderActivity.class);
-		
-		if(forderActivity != null)
+
+		if (forderActivity != null)
 			return forderActivity;
 		else
 			return null;
-					
+
 	}
-	
-	
+
 	/**
 	 * 通过活动的名称查询所有对应的活动
 	 */
-	public List<ForderActivity> findForderActivityByName(String forderActivityName){
-		
+	public List<ForderActivity> findForderActivityByName(String forderActivityName) {
+
 		List<ForderActivity> list = new ArrayList<ForderActivity>();
-		
-		if(Common.isNotEmpty(forderActivityName)){
-			
+
+		if (Common.isNotEmpty(forderActivityName)) {
+
 			Query query = new Query();
-			//查询所有非个人的活动
-			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName)).addCriteria(Criteria.where("type").ne(BaseType.Type.PERSION));
-			
-			
-			list= this.find(query, ForderActivity.class);
-			
+			// 查询所有非个人的活动
+			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName))
+					.addCriteria(Criteria.where("type").ne(BaseType.Type.PERSION));
+
+			list = this.find(query, ForderActivity.class);
+
 		}
-		
-		return list.size()>0?list:null;
-		
+
+		return list.size() > 0 ? list : null;
+
 	}
-	
 
 }

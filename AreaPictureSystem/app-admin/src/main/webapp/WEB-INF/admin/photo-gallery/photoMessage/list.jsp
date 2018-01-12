@@ -54,12 +54,8 @@
                         <div class="ibox float-e-margins">
                             <div class="ibox-content mailbox-content">
                                 <div class="file-manager">
-                                     <a class="btn btn-block btn-primary compose-mail"
-                                        data-toggle="modal" data-target="#CrateActivity">
-                                        创建活动
-                                    </a>
                                     <div class="space-25"></div>
-                                    <h5>导航器</h5>
+                                    <h5>活动日期</h5>
 
                                     <!-- 树形菜单类型-->
                                     <c:choose>

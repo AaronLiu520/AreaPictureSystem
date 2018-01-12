@@ -56,11 +56,11 @@
                 <!--     </li> -->
                 </c:forEach>
         <!-- 创建活动 -->
-                <li  data-jstree='{"type":"html"}'>
+           <!--      <li  data-jstree='{"type":"html"}'>
                     <span onclick="ActivityIndex('AREA');">
                         <i class="fa"></i>创建活动
                     </span>
-                </li>
+                </li> -->
             </ul>
        <!-- </li>
     </ul>-->

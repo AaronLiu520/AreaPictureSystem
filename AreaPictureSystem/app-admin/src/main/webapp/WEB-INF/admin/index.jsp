@@ -1,11 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@page isELIgnored="false"%>
 <!doctype html>
 <html lang="en" class="app">
 <head>
 <meta charset="utf-8" />
-<title>管理后台</title>
+<title>图片库系统后台</title>
+
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="">
@@ -15,9 +17,7 @@
 <meta name="renderer" content="webkit">
 <meta http-equiv="Cache-Control" content="no-siteapp" />
 <meta name="apple-mobile-web-app-title" content="WeChat" />
-<link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/assets/images/logo_title.png"
-	type="image/x-icon" />
+
 <style type="text/css">
 .box {
 	width: 650px;
@@ -27,6 +27,7 @@
 }
 </style>
 </head>
+
 <!-- 动态表格 -->
 <link
 	href="${pageContext.request.contextPath}/assets/admin/css/plugins/dataTables/dataTables.bootstrap.css"
@@ -34,17 +35,19 @@
 <link
 	href="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet" media="screen">
-
 <body>
 	<div id="wrapper">
-		<!-- .aside left menu-->
-		<%@include file="public/left.jsp"%>
-
+		<!-- .aside left menu -->
+<%@include file="public/left.jsp"%>
 		<div id="page-wrapper" class="gray-bg dashbard-1">
 			<!-- .aside top jsp -->
 			<%@include file="public/top.jsp"%>
 			<div class="wrapper wrapper-content">
-				<div class="ibox-content">
+				<div class="row">
+					<!-- 内容 -->
+					<div class="col-lg-12">
+						<div class="ibox float-e-margins">
+<div class="ibox-content">
 					<div class="row">
 						<div class="clients-list">
 							<ul class="nav nav-tabs">
@@ -60,24 +63,27 @@
 									<div class="row">
 										<div class="col-sm-12">
 											<div class="ibox float-e-margins">
-												<div class="ibox-content">
-													<c:forEach items="${resourcelist.datas}" var="item"
-														varStatus="status">
-														<a class="fancybox"
-															href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min"
-															title="图片名称：${item.originalName }<br/>上传者：${item.uploadPerson }">
-															<img alt="image"
-															src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min" />
-														</a>
-
-													</c:forEach>
-
-
-												</div>
+												<!-- 引入最新的活动 -->
+													
+													
+													<c:if test="${not empty forderActivityList }">
+													
+													<%@include file="index_forder.jsp"%>
+													
+													</c:if>
+													<c:if test="${not empty resourcelist }">
+													
+													<%@include file="index_resource.jsp"%>
+													
+													</c:if>
 											</div>
+											
+											
 										</div>
 
 									</div>
+
+
 								</div>
 								<div id="tab-2" class="tab-pane">
 
@@ -229,16 +235,23 @@
 
 
 
+
+							
+							
+							
+							
+							</div>	
+						
+					</div>
+
+
+				</div>
 			</div>
-
-
+			<%@include file="public/botton.jsp"%>
 		</div>
-		<!-- end message center-->
+	</div>
 
-		<%@include file="public/botton.jsp"%>
-	</div>
-	</div>
-	<!-- 动态数据表格，前台查询 -->
+<!-- 动态数据表格，前台查询 -->
 	<script>
 		$(document).ready(function() {
 			$('.summernote').summernote({
@@ -251,9 +264,6 @@
 
 		});
 	</script>
-
-
-
 
 
 
@@ -335,7 +345,7 @@
 			var data = "month=" + month + "&" + searchQuery1 + "=" + search1val
 					+ "&start=" + start + "&end=" + end + "&type=1";
 
-			window.location.href = "index?" + data;
+			window.location.href = "${pageContext.request.contextPath}/adminUser/index?" + data;
 
 		}
 	</script>
@@ -347,11 +357,10 @@
 		var month = '${month}';
 		var start = '${start}';
 		var end = '${end}';
-		if(month!=""){
+		if (month != "") {
 			$("#month").find("option[value=" + month + "]").attr("selected",
-			"selected");
+					"selected");
 		}
-
 
 		if (companyId != "" || forderActivityName != "" || start != ""
 				|| end != "") {
@@ -378,7 +387,6 @@
 
 
 	${triggerClick }
-
 
 </body>
 </html>

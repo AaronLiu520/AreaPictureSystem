@@ -34,7 +34,7 @@
 		if (o != null) {
 			var forderActivityName = "#" + o + "_forderActivityName";
 			var address = "#" + o + "_address";
-			var sumPotoCount = "#" + o + "_sumPotoCount";
+		/* 	var sumPotoCount = "#" + o + "_sumPotoCount"; */
 			var id = "#" + o + "_id";
 			var boundId = "#" + o + "_boundId";
 			var type = "#" + o + "_type";
@@ -46,23 +46,41 @@
 			$("#forderActivityNamehid")
 					.val($(forderActivityName).text().trim());
 			$("#address").val($(address).text().trim());
-			$("#sumPotoCount").val($(sumPotoCount).text().trim());
+/* 			$("#sumPotoCount").val($(sumPotoCount).text().trim()); */
 			$("#activityTime").val($(activityTime).text().trim());
 			$("#description").val($(description).text().trim());
-			$("#edit").val($(id).text().trim())
-			$("#type option:contains('" + $(type).text().trim() + "')").attr(
+			$("#edit").val($(id).text().trim());
+
+		/* 	$("#boundId option:contains('" + $(boundId).text().trim() + "')")
+					.attr("selected", true); */
+			$(
+					"#boundCompany option:contains('"
+							+ $(boundCompany).text().trim() + "')").attr(
 					"selected", true);
-			$("#boundId option:contains('" + $(boundId).text().trim() + "')")
-					.attr("selected", true);
-			$("#boundCompany option:contains('" + $(boundCompany).text().trim() + "')")
-					.attr("selected", true);
+			
+			
+			var aa = $(type).text().trim();
+			
+			if(aa.indexOf("区域") >= 0 ) { 
+			    $("#AREA").attr("checked","true");
+			} 
+			if(aa.indexOf("直属单位") >= 0 ) { 
+				$("#DIRECTLYUTIS").attr("checked","true");
+			} 
+			if(aa.indexOf("基层单位") >= 0 ) { 
+				$("#BASEUTIS").attr("checked","true");
+			} 
+			if(aa.indexOf("个人") >= 0 ) { 
+				$("#PERSION").attr("checked","true");
+			} 
+			
 			$("#toModal-form").trigger("click");
 
 		}
 
 	}
 
-	function save() {
+/* 	function save() {
 		$("#edit").val("");
 		$("#forderActivityName").val("");
 		$("#forderActivityNamehid").val("");
@@ -72,9 +90,9 @@
 		$("#description").val("");
 		$("#boundId").find("option[value='']").prop("selected", true);
 		$("#type").find("option[value='']").prop("selected", true);
-		$("#toModal-form").trigger("click");
+	
 	}
-</script>
+ */</script>
 
 
 
@@ -117,15 +135,15 @@
 									</div>
 
 								</c:if>
-								<p>
-									<!-- 添加区域帐号 onclick="addFormValue();"-->
+								<!-- 		<p>
+									添加区域帐号 onclick="addFormValue();"
 									<a href="#modal-form" id="toModal-form" data-toggle="modal">
 									</a>
 									<button class="btn btn-primary " onclick="return save();"
 										type="button">
 										<i class="fa fa-plus"></i>&nbsp;添加
 									</button>
-								<p>
+								<p> -->
 								<table
 									class="table table-striped table-bordered table-hover dataTables-example">
 									<thead>
@@ -134,7 +152,7 @@
 											<th>活动范围</th>
 											<th>学校</th>
 											<th>地址</th>
-											<th>最大图片数</th>
+											<!-- <th>最大图片数</th> -->
 											<td>活动时间</td>
 											<td>创建者</td>
 											<th>操作</th>
@@ -147,19 +165,25 @@
 											<div id="${item.id }_id" style="display: none;">${item.id}</div>
 											<tr class="gradeX">
 												<td id="${item.id }_forderActivityName">${item.forderActivityName}</td>
-												<td id="${item.id }_type"><c:if
-														test="${item.type eq 'AREA'}">
-														区域
-												</c:if> <c:if test="${item.type eq 'DIRECTLYUTIS'}">
-														直属单位
-												</c:if> <c:if test="${item.type eq 'BASEUTIS'}">
-														基层单位
-												</c:if> <c:if test="${item.type eq 'PERSION'}">
+												<td id="${item.id }_type"><c:forEach
+														items="${item.listType }" var="tp">
+														<c:if test="${tp.type eq 'AREA'}">
+														区域,
+												</c:if>
+														<c:if test="${tp.type eq 'DIRECTLYUTIS'}">
+														直属单位,
+												</c:if>
+														<c:if test="${tp.type eq 'BASEUTIS'}">
+														基层单位,
+												</c:if>
+														<c:if test="${tp.type eq 'PERSION'}">
 														个人
-												</c:if></td>
+												</c:if>
+
+													</c:forEach></td>
 												<td id="${item.id }_adminCompany">${item.adminCompany.name}</td>
 												<td id="${item.id }_address">${item.address}</td>
-												<td id="${item.id }_sumPotoCount">${item.sumPotoCount}</td>
+												<%-- <td id="${item.id }_sumPotoCount">${item.sumPotoCount}</td> --%>
 												<td id="${item.id }_activityTime">${item.activityTime}</td>
 												<td id="${item.id }_createUser">${item.creatUser.name}</td>
 												<td class="center"><a href="javascript:void(0);"
@@ -213,7 +237,7 @@
 
 	<!-- 添加活动模态框 start -->
 
-	<div id="modal-form" class="modal fade" aria-hidden="true"
+	<%-- <div id="modal-form" class="modal fade" aria-hidden="true"
 		style="margin-top: 6%;">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -240,65 +264,29 @@
 								</div>
 
 
+
+
+
+
 								<div class="form-group">
-									<label>图片上传最大数量：</label> <input type="text"
-										placeholder="图片上传最大数量" name="sumPotoCount" id="sumPotoCount"
-										class="form-control" required>
-								</div>
-
-
-								<!-- 管理员和个人都可以创建活动，个人创建的活动只能自己看，管理员可以创建个人活动跟单位活动 -->
-
-								<%-- 		<div class="form-group" >
-									<label>活动所属：</label>
-									 <select class="form-control m-b"
-										name="boundId" id="boundId">
-										<option value="${sessionScope.userSession.id}">个人</option>
-										<c:if test="${sessionScope.userSession.userType eq 'SCHOOLADMIN'}">
-										<option value="${sessionScope.userSession.adminCompany.id}">
-										单位
-										</option>
-										</c:if>
-										<c:if test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'}">
-										<option value="${sessionScope.userSession.adminCompany.id}" selected>
-										区域
-										</option>
-										</c:if>
+									<label>活动所属：</label> 
+									<div class="checkbox checkbox-inline">
+                                        <input type="checkbox" id="AREA" value="AREA" name="type">
+                                        <label for="AREA"> 区域 </label>
+                                    </div>
+									<div class="checkbox checkbox-inline">
+                                        <input type="checkbox" id="DIRECTLYUTIS" value="DIRECTLYUTIS" name="type">
+                                        <label for="DIRECTLYUTIS"> 直属单位 </label>
+                                    </div>
+									<div class="checkbox checkbox-inline">
+                                        <input type="checkbox" id="BASEUTIS" value="BASEUTIS" name="type">
+                                        <label for="BASEUTIS"> 基层单位</label>
+                                    </div>
+									<div class="checkbox checkbox-inline">
+                                        <input type="checkbox" id="PERSION" value="PERSION" name="type">
+                                        <label for="PERSION"> 个人 </label>
+                                    </div>
 									
-									</select>
-								</div>
-								 --%>
-								<%-- 	<c:if test="${sessionScope.userSession.userType eq 'SCHOOLADMIN'}">
-								<div class="form-group" style="display: none;">
-									<label>活动所属：</label> <select class="form-control m-b"
-										name="boundId" id="boundId">
-										<option value="${sessionScope.userSession.id}">个人</option>
-										<option value="${sessionScope.userSession.adminCompany.id}" selected>单位</option>
-									</select>
-								</div>
-								</c:if>
-								<c:if test="${sessionScope.userSession.userType eq 'ADMINISTRATORS' }">
-								<div class="form-group">
-									<label>活动范围：</label> <select class="form-control m-b"
-										name="boundId" id="boundId">
- 										<option value="${sessionScope.userSession.id}">个人</option> 
-										<option value="${sessionScope.userSession.adminCompany.id}">单位</option>
-									</select>
-								</div>
-								</c:if> --%>
-
-
-
-
-								<div class="form-group">
-									<label>活动所属：</label> <select class="form-control m-b"
-										name="type" id="type" onchange="return getrepletes('forderActivityName');" required="required">
-										<option value=""></option>
-										<option value="AREA">区域</option>
-										<option value="DIRECTLYUTIS">直属单位</option>
-										<option value="BASEUTIS">基层单位</option>
-										<option value="PERSION">个人</option>
-									</select>
 								</div>
 
 								<c:if
@@ -316,7 +304,7 @@
 
 
 								<div class="form-group">
-									<label>活动时间：</label> <input type="text" placeholder="活动地址"
+									<label>活动时间：</label> <input type="text" placeholder="活动时间"
 										name="activityTime" id="activityTime" readonly="readonly"
 										class="form-control datainput" data-date-format="yyyy-mm-dd" required>
 								</div>
@@ -348,7 +336,7 @@
 			</div>
 		</div>
 	</div>
-
+ --%>
 	<!-- 添加文件夹模态框 end -->
 
 
@@ -400,106 +388,10 @@
 		});
 	</script>
 
-	<!-- 添加jqueryvalidate -->
-	<script
-		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
-	<script type="text/javascript">
-		//ajax判断有没有重复
-		function getrepletes(o1) {
-			var r1 = $("#" + o1).val();//获取需要判断是否重复的属性
-			var r2 = $("#" + o1 + "hid").val();//该值的隐藏域值 判断如果是原始值则不变
-			
-			var boundCompany = $("#boundCompany").val();
-			if(boundCompany == null){
-				boundCompany="";
-			}
-			var type = $("#type").val();
-			if(type == null){
-				type="";
-			}
-			
-			
-			if (r1 != r2) {
-				$
-						.ajax({
-							type : "POST",
-							url : "ajaxgetRepletes",
-							data : o1 + "=" + r1+"&companyId="+boundCompany+"&type="+type,
-							dataType : "text",
-							success : function(msg) {
-								if (msg == "true") {
-									document.getElementById("for" + o1).innerHTML = "您当前已经创建过这个活动了！！";
-									document.getElementById("for" + o1).style.cssText = "float: right; color: red;";
-									$("#submit").attr("disabled", true);
-								} else {
-									$("#submit").attr("disabled", false);
-									document.getElementById("for" + o1).innerHTML = " ";
-								}
-							}
-						});
-			} else {
-				$("#submit").attr("disabled", false);
-				document.getElementById("for" + o1).innerHTML = " ";
-			}
-		}
-	</script>
 
-	<script type="text/javascript">
-		$.validator.setDefaults({
-			highlight : function(a) {
-				$(a).closest(".form-group").removeClass("has-success")
-						.addClass("has-error")
-			},
-			success : function(a) {
-				a.closest(".form-group").removeClass("has-error").addClass(
-						"has-success")
-			},
-			errorElement : "span",
-			errorPlacement : function(a, b) {
-				if (b.is(":radio") || b.is(":checkbox")) {
-					a.appendTo(b.parent().parent().parent())
-				} else {
-					a.appendTo(b.parent())
-				}
-			},
-			errorClass : "help-block m-b-none",
-			validClass : "help-block m-b-none"
-		});
-		$().ready(function() {
-			$("#commentForm").validate();
-			var a = "<i class='fa fa-times-circle'></i> ";
-			$("#signupForm").validate({
-				rules : {
-					forderActivityName : "required",
-					activityTime : {
-						required : true,
-					},
-					sumPotoCount : {
-						required : true,
-						digits:true
-					},
-					type :{
-						required:true,
-					}
-				},
-				messages : {
-					forderActivityName : a + "请输入活动名称",
-					activityTime : {
-						required : a + "请选择活动时间"
-					},
-					sumPotoCount : {
-						required : a + "请输入上传图片最大数量",
-						digits: a+"请输入正确的数字"
-					},
-					type : {
-						required : a+"请选择活动所属"
-					}
-				}
-			});
-		});
-	</script>
+
+
+
 
 
 

@@ -9,6 +9,7 @@
 package org.app.admin.action;
 
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
@@ -19,10 +20,14 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
+import org.app.admin.pojo.Type;
 import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
+import org.app.admin.service.TypeService;
+import org.app.admin.util.BaseType;
 import org.app.framework.action.GeneralAction;
+import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.slf4j.Logger;
@@ -32,6 +37,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -56,6 +62,9 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	
 	@Autowired
 	private AdminCompanyService adminCompanyService;
+	
+	@Autowired
+	private TypeService typeService;
 
 	/**
 	 * 
@@ -184,28 +193,26 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	 * @param response
 	 */
 	// TODO
-	@RequestMapping(value = "/ajaxgetRepletes", method = RequestMethod.POST)
+	@RequestMapping(value = "/ajaxgetRepletes")
+	@ResponseBody
 	@SystemErrorLog(description="查询重复活动出错")
 	@SystemControllerLog(description = "查询重复活动信息")
-	public void ajaxgetRepletes(
+	public BasicDataResult ajaxgetRepletes(
 			@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
 			@RequestParam(value = "companyId", defaultValue = "") String companyId,
 			@RequestParam(value = "type", defaultValue = "") String type,
-			PrintWriter printWriter,
-			HttpSession session, HttpServletResponse response) {
+			@RequestParam(value = "activityTime", defaultValue = "") String activityTime,
+			HttpSession session) {
 
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 
-		List<ForderActivity> list = this.forderActivityService.findForderActivityByforderActivityName(forderActivityName, adminUser,companyId,type);
+		BasicDataResult result  = this.forderActivityService.findForderActivityByforderActivityName(forderActivityName, adminUser,companyId,type,activityTime);
+		
+		
+		return result;
 
-		if (list.size()>0) {
-			printWriter.write("true");
-		} else {
-			printWriter.write("false");
-		}
-
-		printWriter.flush();
-		printWriter.close();
+	
+		
 
 	}
 	
@@ -247,8 +254,19 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		log.info("进去create!");
 		ModelAndView modelAndView = new ModelAndView();
 		
-		modelAndView.setViewName("redirect:/forderActivity/list");
+		if(Common.isNotEmpty(forderActivity.getType())){
+			
+			
+			List<Type> listType = this.typeService.addType(forderActivity.getType());
+
+			forderActivity.setListType(listType);
+			
+		}else{
+			modelAndView.addObject("error", "创建活动为选择活动所属");
+			return modelAndView;
+		}
 		
+		modelAndView.setViewName("redirect:/forderActivity/list");
 		
 		AdminUser adminUser=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		
