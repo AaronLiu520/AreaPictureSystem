@@ -658,6 +658,47 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	
 	
 	
+	@SystemErrorLog(description="查询图片出错")
+	@RequestMapping("/searchImgsByQuerys")
+	public ModelAndView searchImgsByQuerys(@RequestParam(defaultValue="",value="selectQuery")String selectQuery,
+			@RequestParam(value = "sort", defaultValue = "DESC") String sort,
+			@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+			@RequestParam(value = "pageSize", defaultValue = "50") int pageSize
+			){
+		
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("admin/photo-gallery/photoMessage/searchIndex");
+
+		
+		Pagination<Resource> pageList = new Pagination<Resource>();
+
+		Query query = new Query();
+
+		if (Common.isNotEmpty(selectQuery)) {
+			
+			Criteria cr = new Criteria();
+			
+			query.addCriteria(cr.orOperator(Criteria.where("originalName").regex(selectQuery),
+					Criteria.where("createDate").regex(selectQuery),
+					Criteria.where("extensionName").regex(selectQuery),
+					Criteria.where("uploadPerson").regex(selectQuery),
+					Criteria.where("editorImgInfo.resourceName").regex(selectQuery),
+					Criteria.where("editorImgInfo.person").regex(selectQuery),
+					Criteria.where("editorImgInfo.photographer").regex(selectQuery),
+					Criteria.where("editorImgInfo.resourceAddress").regex(selectQuery)));
+			
+		}
+		query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
+				"createTime"));
+		
+		pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
+		modelAndView.addObject("searchList", pageList);
+		modelAndView.addObject("selectQuery", selectQuery);
+
+		
+		return modelAndView;
+	}
+	
 	
 	
 	

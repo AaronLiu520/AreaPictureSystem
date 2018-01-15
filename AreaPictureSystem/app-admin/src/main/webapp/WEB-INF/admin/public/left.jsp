@@ -470,7 +470,7 @@ li_style:hover {
 	<!-- 全文搜索与查询 -->
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/summernote/summernote.min.js"></script>
-	<script
+	<script	
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/summernote/summernote-zh-CN.js"></script>
 	<!-- 树 -->
 	<script
@@ -487,13 +487,12 @@ li_style:hover {
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
 
-
-
-
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/assets/admin/commons.js">
 		
 	</script>
+
+
 
 	<c:if test="${not empty success}">
 		<script type="text/javascript">

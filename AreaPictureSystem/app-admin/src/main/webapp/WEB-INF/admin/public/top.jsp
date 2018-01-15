@@ -32,22 +32,20 @@
 					data-toggle="modal" style="display: none;"
 					data-target="#CrateActivity" style="width: 200px;"> </a>
 
-				<!--                      <a class="btn btn-block btn-primary compose-mail"
-                                       >
-                                        创建活动
-                                    </a>  -->
+		
+			</div>
+			
+					<form role="search" class="navbar-form-custom " method="post" 
+					action="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys">
 
-				<form role="search" class="navbar-form-custom" method="post"
-					action="search_results.html">
-
-					<div class="form-group">
+					<div class="form-group ">
 						<input type="text" placeholder="请输入您需要查找的内容 …"
-							class="form-control" name="top-search" id="top-search">
+							class="form-control" name="selectQuery"  id="selectQuery" value="${selectQuery}">
 					</div>
 
 
 				</form>
-			</div>
+			
 			<ul class="nav navbar-top-links navbar-right">
 				<li><span class="m-r-sm text-muted welcome-message"> <a
 						href="${pageContext.request.contextPath}/adminUser/index"

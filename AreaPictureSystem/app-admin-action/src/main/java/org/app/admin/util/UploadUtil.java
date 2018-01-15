@@ -39,7 +39,7 @@ public class UploadUtil {
         // 获取文件（真实）后缀名
         String prefix = FileOperateUtil.getFilePrefix(mpfile.getOriginalFilename());
         // 创建文件的新名字(当前的时间＋后缀)
-        String newFileName = new Date().getTime() + prefix;
+        String newFileName = new Date().getTime()+"-"+mpfile.getOriginalFilename();
         // 保存文件的新地址
         StringBuffer path = new StringBuffer(ec.getValueString("resourcesPath"));
 

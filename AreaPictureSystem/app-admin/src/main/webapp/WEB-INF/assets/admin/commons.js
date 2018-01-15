@@ -1,5 +1,16 @@
+	$(function() {
+
+		$("#checkall").click(function() {
+			var flag = $("[name=checkall]:checkbox").is(':checked');
+			$("[name=ids]:checkbox").each(function() {
+				$(this).prop("checked", flag);
+			})
+		})
+
+	})
+
 //left.jsp 修改密码检验就密码是否相同
-//js获取项目根路径，如： http://localhost:8083/uimcardprj  
+//js获取项目根路径，如： http://localhost:80	83/uimcardprj  
 function getRootPath(){  
     //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp  
     var curWwwPath=window.document.location.href;  
@@ -122,13 +133,159 @@ function ajaxUpdatePassword() {
 						$("#title").text("信息提示");
 						$("#content").html("<h3>"+msg.msg+"</h3>")
 					}
-					
-					
 				}
 			});
 		}
-		
+	}
+}
+
+
+
+
+//<!--取消收藏-->
+function cancelfavorites(o) {
+	var favoritesIds = "";
+
+	if (o == null) {
+
+		//获取所有选中状态下的收藏图片的id      
+
+		var favorites = $("input[name='ids']:checked");
+
+		$(favorites).each(function() {
+
+			favoritesIds += this.value + ",";
+
+		});
+
+	} else if (o != null) {
+
+		favoritesIds = o;
 
 	}
 
+	$
+			.ajax({
+
+				type : "POST",
+
+				url :getRootPath()+ "/photoMessageAction/cancelMyFavorties",
+
+				data : "resourceId=" + favoritesIds,
+
+				dataType : "json",
+
+				success : function(data) {
+
+					for (var i = 0; i < data.length; i++) {
+
+						var a = "collection_" + data[i].id;
+
+						$("." + a).remove();
+
+					}
+
+					/* 收藏成功提示 $('#successFavorites').modal('show'); */
+
+				}
+
+			});
+
 }
+
+
+//ajax收藏图片资源
+function tofavorites(o) {
+	var favoritesIds = "";
+	if (o == null) {
+		//获取所有选中状态下的收藏图片的id      
+		var favorites = $("input[name='ids']:checked");
+		$(favorites).each(function() {
+			favoritesIds += this.value + ",";
+		});
+	} else if (o != null) {
+		favoritesIds = o;
+	}
+
+	$
+			.ajax({
+				type : "POST",
+				url :  getRootPath()+"/photoMessageAction/toMyFavorties",
+				data : "resourceId=" + favoritesIds,
+				dataType : "json",
+				success : function(data) {
+					for (var i = 0; i < data.length; i++) {
+						var a = "collection_" + data[i].id;
+						$("#" + a)
+								.html(
+										"<a><i class='fa fa-heart'></i>已收藏</a>");
+					}
+					/* 收藏成功提示 $('#successFavorites').modal('show'); */
+				}
+			});
+}
+
+
+
+//图片下载
+function todownload() {
+	var a = $("input[name='ids']:checked").length;
+
+	if (a == 0) {
+		$("#delete").hide();
+
+		$("#modalMessage").text("请先选中需要下载的图片！");
+		
+		$('#deleteModal').modal('show');
+
+	}else{
+		
+		var downloadIds = $("input[name='ids']:checked");
+
+		//获取所有的id执行删除操作，使用ajax
+		var str = "";
+		$(downloadIds).each(function() {
+			str += this.value + ",";
+		});
+
+		if (str != "") {
+			var id = str.substring(0, str.length - 1);
+			 window.location.href = getRootPath()+"/photoMessageAction/download?id="
+					+ id ; 
+			  $("#downloads").attr("disabled","disabled");
+				 setTimeout(function(){
+		            $("#downloads").removeAttr("disabled");
+		        },5000)
+			 
+			 
+			 
+		} else {
+			window.location.href = document.URL;
+		}
+		
+	} 
+
+	
+
+}
+
+
+
+
+document.onkeydown = function (e) {
+    if (!e) e = window.event;
+    if ((e.keyCode || e.which) == 13) {
+        $("#btnSubmit").click();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

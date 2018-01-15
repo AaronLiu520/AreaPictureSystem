@@ -1,18 +1,42 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@page isELIgnored="false"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page isELIgnored="false"%> 
 <!doctype html>
 <html lang="en" class="app">
-<style>
-p {
-	height: 15px;
-}
+<head>  
+  <meta charset="utf-8" />
+  <title>图片管理</title>
+
+  
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="">
+  <meta name="keywords" content="index">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="Cache-Control" content="no-siteapp" />
+  <meta name="apple-mobile-web-app-title" content="WeChat" />
+</head>
+
+<!-- 上传控件 -->
+<link href="${pageContext.request.contextPath}/assets/admin/css/plugins/dropzone/basic.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/admin/css/plugins/dropzone/dropzone.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/admin/css/plugins/jsTree/style.min.css" rel="stylesheet">
+<link href="${pageContext.request.contextPath}/assets/admin/css/style.css?v=2.2.0" rel="stylesheet">
+
+<link rel="stylesheet"  href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css" media="all" />
+
+
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/Assets/tooltip/stylesheets/jquery.tooltip/jquery.tooltip.css" type="text/css" />
+
+<style type="text/css">
+    * {
+
+        list-style-type: none;
+    }
+
 
 </style>
-<link
-	href="${pageContext.request.contextPath}/assets/admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
-	rel="stylesheet">
-
+    
 <script type="text/javascript">
 	var i = 0;
 	function choose() {
@@ -37,54 +61,22 @@ p {
 		}
 	}
 </script>
-
-
-<script type="text/javascript">
-	function tobatchDelete() {
-		var a = $("input[name='ids']:checked").length;
-
-		if (a == 0) {
-			$("#delete").hide();
-
-			$("#modalMessage").text("请先选中需要删除的图片！");
-
-		} else {
-			$("#delete").show();
-
-			$("#modalMessage").text("确定要删除所有选中的图片吗？");
-		}
-
-		$('#deleteModal').modal('show');
-
-	}
-
-	function todelete(o) {
-
-		var delids = $("input[name='ids']:checked");
-
-		//获取所有的id执行删除操作，使用ajax
-		var str = "";
-		$(delids).each(function() {
-			str += this.value + ",";
-		});
-
-		if (str != "") {
-			var id = str.substring(0, str.length - 1);
-			window.location.href = "${pageContext.request.contextPath}/photoMessageAction/delete/${webType}?id="
-					+ id + "&activityId=" + o;
-		} else {
-			window.location.href = document.URL;
-		}
-
-	}
-	
-	
-</script>
-
-
+    
 <body>
-	<!-- 资源管理模块 -->
-	<div class="col-lg-9 animated fadeInRight">
+    <div id="wrapper">
+     <!-- .aside left menu -->
+	<%@include file="../../public/left.jsp" %>
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+        <!-- .aside top jsp -->
+           <%@include file="../../public/top.jsp" %>
+
+
+            <div class="wrapper wrapper-content">
+                <div class="row">
+                    <!-- 资源管理 -->
+
+<!-- 资源管理模块 -->
+	<div class="col-lg-12 animated fadeInRight">
 		<div class="mail-box-header">
 
 			<!-- 创建子文件夹 -->
@@ -104,24 +96,10 @@ p {
 
 
 
-			<div class="row">
+	<%-- 		<div class="row">
 				<div class="col-sm-8">
-					<c:choose>
-						<c:when test="${not empty fa}">
-							<h2>
-								<c:if test="${webType=='AREA'}"> 区域 </c:if>
-								<c:if test="${webType=='BASEUTIS'}"> 基层单位 </c:if>
-								<c:if test="${webType=='DIRECTLYUTIS'}"> 直属单位 </c:if>
-								《 ${fa.forderActivityName} 》
-							</h2>
 
-
-						</c:when>
-						<c:otherwise>
-							<h3>请先： 选择活动 或 创建活动</h3>
-						</c:otherwise>
-					</c:choose>
-
+							<h3>图片检索</h3>
 				</div>
 				<div class="col-sm-4">
 					<div class="input-group">
@@ -135,7 +113,7 @@ p {
 					</div>
 				</div>
 			</div>
-
+ --%>
 
 
 
@@ -150,42 +128,7 @@ p {
 
 
 
-				<c:if test="${not empty sessionScope.checkActivityId}">
-					<a data-toggle="modal" href="form_basic.html#modal-form">
-						<button class="btn btn-success " type="button">
-							<i class="fa fa-upload"> </i>&nbsp;&nbsp;<span class="bold">上传图片</span>
 
-						</button>
-					</a>
-
-
-					<div class="btn-group">
-						<button type="button" class="btn btn-primary dropdown-toggle"
-							data-toggle="dropdown">
-							按时间排列 <span class="caret"></span>
-						</button>
-
-
-
-						<ul class="dropdown-menu" role="menu">
-							<li><a
-								href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=ASC">升序</a></li>
-							<li><a
-								href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&sort=DESC">降序</a></li>
-						</ul>
-					</div>
-
-
-
-					<!--
-                <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
-                -->
-					<c:if test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'}">
-						<button onclick="return tobatchDelete()" class="btn btn-danger "
-								style="display: none;" id="deletes" type="button">
-							<i class="fa fa-warning"> </i><span class="bold">批量删除</span>
-						</button>
-					</c:if>
 
 
 					<button class="btn btn-primary " style="display: none;"
@@ -204,7 +147,6 @@ p {
 						<i class="fa fa-check-square-o"> </i> 选择
 					</button>
 
-				</c:if>
 			</div>
 		</div>
 
@@ -217,7 +159,7 @@ p {
 				<!--  gallery 相册弹出层-->
 				<div class="col-lg-12 gallery">
 					<ul style="display: initial;">
-						<c:forEach items="${listPhoto.datas}" var="item"
+						<c:forEach items="${searchList.datas}" var="item"
 							varStatus="status">
 
 							<li>
@@ -457,29 +399,29 @@ p {
 
 				<!-- 分页功能 -->
 				<div style="text-align: center; margin-bottom: 5px;">
-					<c:if test="${not empty listPhoto.datas}">
+					<c:if test="${not empty searchList.datas}">
 						<div class="btn-group" style="margin: 0 auto;">
 							<a
-								href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&pageNo=${listPhoto.upPage}"
+								href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&pageNo=${searchList.upPage}"
 								type="button" class="btn btn-white"> <i
 								class="fa fa-chevron-left"></i>
 							</a>
 
-							<c:forEach items="${listPhoto.navigatepageNums}" var="nav">
+							<c:forEach items="${searchList.navigatepageNums}" var="nav">
 								<c:choose>
 									<c:when test="${nav == newslist.pageNo}">
 										<a class="btn btn-white  active">${nav}</a>
 									</c:when>
 									<c:otherwise>
 										<a
-											href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&pageNo=${nav}"
+											href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&pageNo=${nav}"
 											class="btn btn-white">${nav}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 
 							<a
-								href="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&pageNo=${listPhoto.nextPage}"
+								href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&pageNo=${searchList.nextPage}"
 								type="button" class="btn btn-white"> <i
 								class="fa fa-chevron-right"></i>
 							</a>
@@ -492,89 +434,35 @@ p {
 	</div>
 
 
-	<!-- 删除弹出层提示 -->
-	<div class="modal inmodal fade" id="deleteModal" tabindex="-1"
-		role="dialog" aria-hidden="true" style="padding: 15%">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-					</button>
-					<span style="float: left; color: red; font-size: 18px;" id="title">信息提示</span>
-				</div>
-				<div class="modal-body">
-					<h3 id="modalMessage"></h3>
-				</div>
-				<input type="hidden" id="delete-id">
-				<div class="modal-footer">
-					<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-					<button type="button"
-						onclick="return todelete('${sessionScope.checkActivityId}');"
-						id="delete" class="btn btn-primary delete-confirm-btn">确认</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
 
 
-	<div class="modal inmodal fade" id="successFavorites" tabindex="-1"
-		role="dialog" aria-hidden="true" style="padding: 15%">
-		<div class="modal-dialog modal-sm">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">
-						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-					</button>
-					<span style="float: left; color: red; font-size: 18px;">图片收藏提示</span>
-				</div>
-				<div class="modal-body" >
-					<h3 id="">您喜欢的图片都已经收藏啦！</h3>
-				</div>
-				<input type="hidden" id="delete-id">
-				<div class="modal-footer">
-					<button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
-				</div>
-			</div>
-		</div>
-	</div>
+                </div>
+            </div>
+                <!-- 底部 -->
+                <%@include file="../../public/botton.jsp" %>
+        </div>
+    </div>
 
 
 
+    <!--javaScript event and JS-->
+    <%@include file="operate.jsp" %>
+    <!-- import popups -->
+    <%@include file="popups.jsp" %>
 
-	<script type="text/javascript">
-   function checkout(){
-	  var h=$("h2").text();
-	  if(h==""){
-		  
-		  $('#deleteModal').modal('show'); 
-		  $("#title").text("图片搜索提示");
-		  $("#modalMessage").html("请先查询选择一个活动在进行搜索图片操作！");
-		  
-	      return 
-	  }
-	  var mfregex=$("#mfregex").val();
-	  if(mfregex==""){
-		  $('#deleteModal').modal('show'); 
-		  $("#modalMessage").html("请输入要查找图片的关键字！");
-		  $("#title").text("图片搜索提示");
-	  }
-	  else{
-	  window.location.href ="${pageContext.request.contextPath}/photoMessageAction/checkActivity/${webType}?checkId=${sessionScope.checkActivityId}&type=${type}&mfregex="+mfregex;
-	  }
-	  }
-</script>
+    <!-- DROPZONE -->
+    <script src="${pageContext.request.contextPath}/assets/admin/js/plugins/dropzone/dropzone.js"></script>
+    <script src="${pageContext.request.contextPath}/assets/admin/Assets/js/zoom.min.js"></script>
 
-
-
-
-
-
-
-
-
-
+    <script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/assets/admin/Assets/tooltip/javascripts/jquery.tooltip.js"></script>
+    <script type="text/javascript">
+        $j = jQuery.noConflict();
+        $j(document).ready(function(){
+            $j("div.item").tooltip();
+        });
+    </script>
 
 
 

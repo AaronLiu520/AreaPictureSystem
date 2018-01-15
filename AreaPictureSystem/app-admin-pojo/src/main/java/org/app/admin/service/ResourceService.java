@@ -11,13 +11,14 @@ package org.app.admin.service;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
 import org.app.admin.pojo.UploadFileLog;
-import org.app.admin.util.BaseType;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -266,24 +267,37 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 	/**
 	 * 
 	 * @Title: getImageFile @Description: TODO(获取图片的路径并且转换成File) @param @param
-	 * id @param @return 设定文件 @return List<File> 返回类型 @throws
+	 *         id @param @return 设定文件 @return List<File> 返回类型 @throws
 	 */
-	public List<File> getImageFile(String id) {
-		List<File> listFile = new ArrayList();
+/*	public List<Map<String,String>> getImageFile(String id) {
+		List<Map<String,String>> listFile = new ArrayList<Map<String,String>>();
 
 		if (Common.isNotEmpty(id)) {
 
 			String[] ids = id.split(",");
 
 			for (int i = 0; i < ids.length; i++) {
+				
+				Map<String,String> map = new HashMap<String,String>();
 
 				Resource rs = this.findResourceByResourceId(ids[i]);
 
 				if (rs != null) {
 
-					String imgPath = rs.getOriginalPath() + rs.getImgCompressionBean().getMax_generateName();
+					String imgPath = null;
+					if (rs.getImgCompressionBean() != null) {
+						imgPath = rs.getOriginalPath() + rs.getImgCompressionBean().getMax_generateName();
+					} else {
+						imgPath = rs.getOriginalPath()+rs.getGenerateName();
+					}
 
 					File file = new File(imgPath);
+					
+					
+					
+					
+					
+					
 
 					listFile.add(file);
 
@@ -294,6 +308,38 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 
 		return listFile;
 
+	}*/
+	public List<File> getImageFile(String id) {
+		List<File> listFile = new ArrayList();
+		
+		if (Common.isNotEmpty(id)) {
+			
+			String[] ids = id.split(",");
+			
+			for (int i = 0; i < ids.length; i++) {
+				
+				Resource rs = this.findResourceByResourceId(ids[i]);
+				
+				if (rs != null) {
+					
+					String imgPath = null;
+					if (rs.getImgCompressionBean() != null) {
+						imgPath = rs.getOriginalPath() + rs.getImgCompressionBean().getMax_generateName();
+					} else {
+						imgPath = rs.getOriginalPath()+rs.getGenerateName();
+					}
+					
+					File file = new File(imgPath);
+					
+					listFile.add(file);
+					
+				}
+				
+			}
+		}
+		
+		return listFile;
+		
 	}
 
 	public List<Resource> findListResourceByCompanyId(String adminComanyId) {
@@ -314,9 +360,9 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 	/**
 	 * 
 	 * @Title: findResourceByResourceNameAndForderActivityId @Description:
-	 * TODO(收藏的时候查询是否已经存在该数据) @param @param boundId @param @param
-	 * forderActivityId @param @param generateName @param @return 设定文件 @return
-	 * List<Resource> 返回类型 @throws
+	 *         TODO(收藏的时候查询是否已经存在该数据) @param @param boundId @param @param
+	 *         forderActivityId @param @param generateName @param @return
+	 *         设定文件 @return List<Resource> 返回类型 @throws
 	 */
 	public Resource findResourceByResourceNameAndForderActivityId(String boundId, String forderActivityId,
 			String generateName) {
@@ -333,12 +379,5 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		return res;
 
 	}
-	
-	
-	
-	
-	
-	
-	
 
 }

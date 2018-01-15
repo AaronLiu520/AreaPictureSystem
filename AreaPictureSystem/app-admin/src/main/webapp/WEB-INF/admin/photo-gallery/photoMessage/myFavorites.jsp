@@ -88,41 +88,6 @@
 
 
 <script type="text/javascript">
-	function todownload() {
-		var a = $("input[name='ids']:checked").length;
-
-		if (a == 0) {
-			$("#delete").hide();
-
-			$("#modalMessage").text("请先选中需要下载的图片！");
-
-			$('#deleteModal').modal('show');
-
-		} else {
-
-			var downloadIds = $("input[name='ids']:checked");
-
-			//获取所有的id执行删除操作，使用ajax
-			var str = "";
-			$(downloadIds).each(function() {
-				str += this.value + ",";
-			});
-
-			if (str != "") {
-				var id = str.substring(0, str.length - 1);
-				window.location.href = "${pageContext.request.contextPath}/photoMessageAction/download?id="
-						+ id;
-				$("#downloads").attr("disabled", "disabled");
-				setTimeout(function() {
-					$("#downloads").removeAttr("disabled");
-				}, 5000)
-
-			} else {
-				window.location.href = document.URL;
-			}
-
-		}
-	}
 
 	function tocopy() {
 		//将收藏的资源同步到自己的资源库中
@@ -614,74 +579,18 @@
 
 
 
+<!-- <script type="text/javascript">
+	$(function() {
 
-	<script type="text/javascript">
-	<!--取消收藏-->
-		function cancelfavorites(o) {
-
-			var favoritesIds = "";
-
-			if (o == null) {
-
-				//获取所有选中状态下的收藏图片的id      
-
-				var favorites = $("input[name='ids']:checked");
-
-				$(favorites).each(function() {
-
-					favoritesIds += this.value + ",";
-
-				});
-
-			} else if (o != null) {
-
-				favoritesIds = o;
-
-			}
-
-			$
-					.ajax({
-
-						type : "POST",
-
-						url : "${pageContext.request.contextPath}/photoMessageAction/cancelMyFavorties",
-
-						data : "resourceId=" + favoritesIds,
-
-						dataType : "json",
-
-						success : function(data) {
-
-							for (var i = 0; i < data.length; i++) {
-
-								var a = "collection_" + data[i].id;
-
-								$("." + a).remove();
-
-							}
-
-							/* 收藏成功提示 $('#successFavorites').modal('show'); */
-
-						}
-
-					});
-
-		}
-	</script>
-
-	<script type="text/javascript">
-		$(function() {
-			$("#checkall").click(function() {
-				var flag = $("[name=checkall]:checkbox").is(':checked');
-				$("[name=ids]:checkbox").each(function() {
-					$(this).prop("checked", flag);
-				})
+		$("#checkall").click(function() {
+			var flag = $("[name=checkall]:checkbox").is(':checked');
+			$("[name=ids]:checkbox").each(function() {
+				$(this).prop("checked", flag);
 			})
-
 		})
-	</script>
 
-
+	})
+</script> -->
 
 </body>
 </html>
