@@ -71,6 +71,7 @@
 													<%@include file="index_forder.jsp"%>
 													
 													</c:if>
+													
 													<c:if test="${not empty resourcelist }">
 													
 													<%@include file="index_resource.jsp"%>

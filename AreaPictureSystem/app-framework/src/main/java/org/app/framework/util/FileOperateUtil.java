@@ -22,6 +22,7 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+@Repository("operateUtil")
 public class FileOperateUtil {
 	private static final String FILENAME = "fileName";
 	private static final String CONTENTTYPE = "contentType";
@@ -52,6 +53,11 @@ public class FileOperateUtil {
 	/**
 	 * 文件上传
 	 * 
+		// 固定参数值对
+		// .put(FileOperateUtil.STORENAME, zipName(storeName));
+		// map.put(FileOperateUtil.SIZE, new File(zipName).length());
+		// map.put(FileOperateUtil.SUFFIX, "zip");
+
 	 * @param request
 	 *            httpservletRequest
 	 * @param UPLOADDIR
@@ -65,7 +71,7 @@ public class FileOperateUtil {
 			throws Exception {
 
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = new HashMap<String, Object>();
+		
 
 		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
 
@@ -90,9 +96,14 @@ public class FileOperateUtil {
 		boolean has = false;
 
 		for (Iterator<Map.Entry<String, MultipartFile>> it = fileMap.entrySet().iterator(); it.hasNext();) {
-
+			
+			Map<String, Object> map = new HashMap<String, Object>();
+			
 			Map.Entry<String, MultipartFile> entry = it.next();
+			
 			MultipartFile mFile = entry.getValue();
+			
+			map.put(FileOperateUtil.NOFILE, false);
 			// 获取上传文件的名称
 			fileName = mFile.getOriginalFilename();
 			if (fileName.equals("") || fileName.equals(null)) {
@@ -112,9 +123,10 @@ public class FileOperateUtil {
 						has = true;
 					}
 				}
+				//标识后缀名
+				map.put(FileOperateUtil.HASSUFFIX, has);
 				if (has == false) {
 					// 设置表示上传文件符合文件要求
-					map.put(FileOperateUtil.HASSUFFIX, has);
 					result.add(map);
 					return result;
 				}
@@ -127,20 +139,14 @@ public class FileOperateUtil {
 
 			OutputStream outputStream = new FileOutputStream(destFile);
 			FileCopyUtils.copy(mFile.getInputStream(), outputStream);
-
+			map.put(FileOperateUtil.CONTENTTYPE, "application/octet-stream");
 			map.put(FileOperateUtil.SAVEPATH, path);
 			map.put(FileOperateUtil.FILENAME, fileName);
-			map.put(FileOperateUtil.NOFILE, false);
 			map.put(FileOperateUtil.SERVLETPATH, request.getContextPath() + UPLOADDIR + rname);
+			
+			
+			result.add(map);
 		}
-
-		// 固定参数值对
-		// .put(FileOperateUtil.STORENAME, zipName(storeName));
-		// map.put(FileOperateUtil.SIZE, new File(zipName).length());
-		// map.put(FileOperateUtil.SUFFIX, "zip");
-		map.put(FileOperateUtil.CONTENTTYPE, "application/octet-stream");
-		map.put(FileOperateUtil.HASSUFFIX, has);
-		result.add(map);
 		return result;
 	}
 
@@ -189,5 +195,64 @@ public class FileOperateUtil {
 		bis.close();
 		bos.close();
 	}
+	
+	
+	
+	
+	
+	
+	
+	/**
+	 * 
+	* @Title: uploadImg 
+	* @Description: TODO(单图片上传) 
+	* @param @param request
+	* @param @return    设定文件 
+	* @return String    返回类型 
+	* @throws
+	 */
+	public static String uploadImg(HttpServletRequest request) {
+		String rtimg="";
+		try {
+			String[] filetype = new String[] { "png", "jpeg", "gif", "jpg" };
+
+			String UPLOADDIR = File.separator + "FileUpload" + File.separator + "Img" + File.separator;
+			
+			
+			List<Map<String, Object>> result = upload(request, UPLOADDIR, filetype);
+			
+			
+			Boolean hasfile = (Boolean) result.get(0).get("nofile");
+			if (!hasfile) {
+
+				boolean has = (Boolean) result.get(0).get("hassuffix");
+				// 如果上传文件符合要求
+				if (has != false) {
+
+					 String img = (String) result.get(0).get("servletPath");
+					if (Common.isNotEmpty(img)) {
+						rtimg=img;
+					}
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return rtimg;
+
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

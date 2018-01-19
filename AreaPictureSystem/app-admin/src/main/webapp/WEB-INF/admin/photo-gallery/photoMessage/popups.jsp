@@ -3,9 +3,7 @@
 <%@page isELIgnored="false"%>
 <!doctype html>
 <html lang="en" class="app">
-<link
-	href="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/css/bootstrap-datetimepicker.min.css"
-	rel="stylesheet" media="screen">
+
 <body>
 
 
@@ -226,10 +224,9 @@
 					<div class="row">
 						<div class="ibox-content">
 							<form id="my-awesome-dropzone" class="dropzone"
-								action="${pageContext.request.contextPath}/photoMessageAction/uploadFile">
+								action="${pageContext.request.contextPath}/photoMessageAction/uploadFile/${webType}">
 								<div class="dropzone-previews"></div>
-								<input type="hidden" value="${sessionScope.checkActivityId}"
-									name="forderActivityId">
+								<input type="hidden" value="${sessionScope.checkActivityId}" name="forderActivityId">
 								<button onclick="uploadFile()" type="submit"
 									class="btn btn-primary pull-right">上传文件</button>
 							</form>
@@ -270,25 +267,6 @@
 
 
 
-
-
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/bootstrap-datetimepicker.js"
-		charset="UTF-8"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/locales/bootstrap-datetimepicker.zh-CN.js"
-		charset="UTF-8"></script>
-	<script type="text/javascript">
-		$('.datainput').datetimepicker({
-			weekStart : 1,
-			todayBtn : 1,
-			autoclose : 1,
-			todayHighlight : 1,
-			startView : 2,
-			minView : 2,
-			forceParse : 0
-		});
-	</script>
 
 <script type="text/javascript">
 

@@ -3,6 +3,7 @@ package org.app.webAdmin.action;
 import javax.servlet.http.HttpSession;
 
 import org.app.framework.action.GeneralAction;
+import org.app.framework.util.CommonEnum;
 import org.app.webAdmin.pojo.AdminMenu;
 import org.app.webAdmin.service.AdminMenuService;
 import org.slf4j.Logger;
@@ -75,6 +76,8 @@ public class WebMenuAction extends GeneralAction<AdminMenu> {
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
+		session.removeAttribute(CommonEnum.WEBMENUS);
+		session.removeAttribute(CommonEnum.WEBMENUSESSION);
 		return modelAndView;// 返回
 	}
 	
@@ -126,6 +129,8 @@ public class WebMenuAction extends GeneralAction<AdminMenu> {
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
+		session.removeAttribute(CommonEnum.WEBMENUS);
+		session.removeAttribute(CommonEnum.WEBMENUSESSION);
 		return modelAndView;
 	}
 

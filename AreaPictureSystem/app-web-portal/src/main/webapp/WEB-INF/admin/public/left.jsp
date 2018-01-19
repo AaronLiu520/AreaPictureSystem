@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page isELIgnored="false"%>
 <!doctype html>
 <html class="no-js">
@@ -39,6 +40,18 @@
 	rel="stylesheet">
 <link
 	href="${pageContext.request.contextPath}/assets/admin/css/plugins/toastr/toastr.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css"
+	media="all" />
+<link
+	href="${pageContext.request.contextPath}/assets/admin/css/plugins/summernote/summernote.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/assets/admin/css/plugins/summernote/summernote-bs3.css"
+	rel="stylesheet">
+<link
+	href="${pageContext.request.contextPath}/assets/admin/css/style.min.css?v=3.2.0"
 	rel="stylesheet">
 
 <style type="text/css">
@@ -128,6 +141,65 @@ li_style:hover {
 								</div>
 							</div>
 							</form>
+							<!-- 修改登录密码 -->
+							<li><a data-toggle="modal" data-target="#EditPassword">密码修改</a></li>
+							<!-- Modal -->
+
+
+							<div class="modal inmodal" id="EditPassword" tabindex="-1"
+								role="dialog" aria-hidden="true">
+
+								<div class="modal-dialog">
+									<div class="modal-content animated bounceInRight">
+										<div class="modal-header">
+											<button type="button" class="close" data-dismiss="modal"
+												id="EditPasswordClose">
+												<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
+											</button>
+											<h4 class="modal-title">密码修改</h4>
+										</div>
+
+										<div class="modal-body">
+
+											<div class="form-group">
+												<label>旧密码：</label> <label for="foroldPassword"
+													style="float: right;" id="foroldPassword"
+													class="control-label"></label> <input type="text"
+													placeholder="旧密码" name="editoldPassword"
+													id="editoldPassword" class="form-control"
+													onkeyup="return checkOldPassword();" required="required">
+											</div>
+											<div class="form-group">
+												<label>新密码：</label><label for="forpassword"
+													style="float: right;" id="forpassword"
+													class="control-label"></label> <input type="password"
+													placeholder="新密码" required onkeyup="return checkinput();"
+													name="editpassword" id="editpassword" class="form-control">
+											</div>
+											<div class="form-group">
+												<label>确认密码：</label><label for="forpasswords"
+													style="float: right;" id="forpasswords"
+													class="control-label"></label> <input type="password"
+													placeholder="确认密码" onkeyup="return checkinput();"
+													name="editpasswords" id="editpasswords" required
+													class="form-control">
+											</div>
+
+										</div>
+										<div class="modal-footer">
+											<button type="button" onclick="return ajaxUpdatePassword();"
+												id="submit" class="btn btn-primary">保存</button>
+										</div>
+									</div>
+								</div>
+
+
+							</div>
+
+							<!-- 修改密码end -->
+
+
+
 
 
 							<!-- Button trigger modal -->
@@ -322,6 +394,40 @@ li_style:hover {
 
 	</nav>
 
+
+	<!-- 弹出层提示 -->
+	<div class="modal inmodal fade" id="titleMessage" tabindex="-1"
+		role="dialog" aria-hidden="true" style="padding: 15%">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<span style="float: left; color: red; font-size: 18px;" id="title"></span>
+				</div>
+				<div class="modal-body" id="content">
+					<!-- <h3>您确认是否要删除此记录吗?</h3> -->
+				</div>
+				<div class="modal-footer">
+
+					<button type="button" data-dismiss="modal"
+						class="btn btn-primary delete-confirm-btn">确认</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
+
+
+
+
+
 	<!-- 主要的 scripts -->
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/jquery-2.1.1.min.js"></script>
@@ -344,7 +450,7 @@ li_style:hover {
 		src="${pageContext.request.contextPath}/assets/admin/js/hplus.js?v=2.2.0"></script>
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/pace/pace.min.js"></script>
-	<!-- 全文搜索与查询 -->
+	<!-- SUMMERNOTE -->
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/summernote/summernote.min.js"></script>
 	<script
@@ -356,123 +462,14 @@ li_style:hover {
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/toastr/toastr.min.js"></script>
 
-	<link rel="stylesheet"
-		href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css"
-		media="all" />
 
-	<c:if test="${not empty success}">
-		<script type="text/javascript">
-			toastr.success('${success}', '操作成功')
-		</script>
-	</c:if>
+	<!-- Jquery Validate -->
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
 
-	<c:if test="${not empty error}">
-		<script type="text/javascript">
-			toastr.error('${error}', '操作失败');
-		</script>
-	</c:if>
-	<!-- tree 树形 -->
-	<script>
-		// tree 时间轴
-		$(document).ready(function() {
-			<!--区域时间轴-->
-			$('#areatreetime').jstree({
-				'core' : {
-					'check_callback' : true
-				},
-				'plugins' : [ 'types', 'dnd' ],
-				'types' : {
-					'default' : {
-						'icon' : 'fa fa-folder'
-					},
-					'html' : {
-						'icon' : 'fa fa-file-code-o'
-					},
-					'svg' : {
-						'icon' : 'fa fa-file-picture-o'
-					},
-					'css' : {
-						'icon' : 'fa fa-file-code-o'
-					},
-					'img' : {
-						'icon' : 'fa fa-file-image-o'
-					},
-					'js' : {
-						'icon' : 'fa fa-file-text-o'
-					}
-
-				}
-			});
-			<!--直属时间轴-->
-			$('#directlytreetime').jstree({
-				'core' : {
-					'check_callback' : true
-				},
-				'plugins' : [ 'types', 'dnd' ],
-				'types' : {
-					'default' : {
-						'icon' : 'fa fa-folder'
-					},
-					'html' : {
-						'icon' : 'fa fa-file-code-o'
-					},
-					'svg' : {
-						'icon' : 'fa fa-file-picture-o'
-					},
-					'css' : {
-						'icon' : 'fa fa-file-code-o'
-					},
-					'img' : {
-						'icon' : 'fa fa-file-image-o'
-					},
-					'js' : {
-						'icon' : 'fa fa-file-text-o'
-					}
-
-				}
-			});
-			<!--个人时间轴-->
-			$('#basetreetime').jstree({
-				'core' : {
-					'check_callback' : true
-				},
-				'plugins' : [ 'types', 'dnd' ],
-				'types' : {
-					'default' : {
-						'icon' : 'fa fa-folder'
-					},
-					'html' : {
-						'icon' : 'fa fa-file-code-o'
-					},
-					'svg' : {
-						'icon' : 'fa fa-file-picture-o'
-					},
-					'css' : {
-						'icon' : 'fa fa-file-code-o'
-					},
-					'img' : {
-						'icon' : 'fa fa-file-image-o'
-					},
-					'js' : {
-						'icon' : 'fa fa-file-text-o'
-					}
-
-				}
-			});
-		});
-
-		// 时间轴（活动的单事件）
-		function checkActivityType(id, webType) {
-			window.location.href = "${pageContext.request.contextPath}/photoMessageAction/checkActivity/"
-					+ webType + "?checkId=" + id
-		}
-
-		// 时间轴（首页）
-		function ActivityIndex(webType) {
-			window.location.href = "${pageContext.request.contextPath}/photoMessageAction/index/"
-					+ webType
-		}
-	</script>
-
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/commons.js"> </script>
 </body>
 </html>

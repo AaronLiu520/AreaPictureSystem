@@ -5,8 +5,6 @@
 <html lang="en" class="app">
 <head>
     <meta charset="utf-8"/>
-    <title>奉贤区教工摄影网站</title>
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="keywords" content="index">
@@ -71,113 +69,94 @@
 <!-- 菜单头部 -->
 <jsp:include page="public/top.jsp"/>
 <!-- banner -->
-<div class="inner-banner"></div>
 
-<!--新闻公告-->
+
+<!--摄影作品展内容-->
 <div class="news">
     <div class="container">
-        <h3 class="tittle">新闻公告</h3>
-        <div class="news-article" style="margin-top: 1em;">
+        <h3 class="tittle">新闻列表</h3>
+        <div class="news-article">
+        
+        <c:forEach items="${pageList.datas }" var="items">
+         <div class="col-md-6 article-post">
+                <div class="col-md-3 post-meta">
+                    <div class="meta-icon">
+                        <div class="pic">
+                            <a href="${pageContext.request.contextPath}/web/newsDetail?id=${items.id}" > <i class="glyphicon glyphicon-picture"></i></a>
+                        </div>
+                    </div>
+                    <ul class="ad-info">
+                        <li>${items.newsDate }</li>
+                        <li> ${items.author }</li>
+                        <li> ${items.visit } 浏览数量</li>
+                    </ul>
+                    <div class="clearfix"> </div>
+                </div>
+                <div class="col-md-9 post-details">
+                    <a href="${pageContext.request.contextPath}/web/newsDetail?id=${items.id}" class="mask">
+                        <img src="${items.picture }" alt="image"  style="width: 417px;height: 268px;"
+                             class="img-responsive zoom-img"></a>
 
-            <div class="met">
-                <div class="comments-top-top">
-                    <div class="men" >
-                        <span class="glyphicon glyphicon-news" style="color:#ffffff;">2017.07.01</span>
-                    </div>
-                    <p class="men-it">李荣安教授的报告给了我们很好的启示，为我们打开了国际视野，指明了研究方向和实施路径，
-                        我们期待6日的“2017教育综改背景下的中小学德育创新论坛”李教授能给我们带来更完整更精彩的呈现！
-                    </p>
-                    <div class="clearfix"> </div>
+                    <a href="${pageContext.request.contextPath}/web/newsDetail?id=${items.id}"><h4>${items.newsTitle}</h4></a>
                 </div>
+                <!--post-details-->
+                <div class="clearfix"> </div>
             </div>
-            <div class="met">
-                <div class="comments-top-top">
-                    <div class="men" >
-                        <span class="glyphicon glyphicon-news" style="color:#ffffff;">2017.07.01</span>
-                    </div>
-                    <p class="men-it">李荣安教授的报告给了我们很好的启示，为我们打开了国际视野，指明了研究方向和实施路径，
-                        我们期待6日的“2017教育综改背景下的中小学德育创新论坛”李教授能给我们带来更完整更精彩的呈现！
-                    </p>
-                    <div class="clearfix"> </div>
-                </div>
-            </div>
-            <div class="met">
-                <div class="comments-top-top">
-                    <div class="men" >
-                        <span class="glyphicon glyphicon-news" style="color:#ffffff;">2017.07.01</span>
-                    </div>
-                    <p class="men-it">李荣安教授的报告给了我们很好的启示，为我们打开了国际视野，指明了研究方向和实施路径，
-                        我们期待6日的“2017教育综改背景下的中小学德育创新论坛”李教授能给我们带来更完整更精彩的呈现！
-                    </p>
-                    <div class="clearfix"> </div>
-                </div>
-            </div>
-            <div class="met">
-                <div class="comments-top-top">
-                    <div class="men" >
-                        <span class="glyphicon glyphicon-news" style="color:#ffffff;">2017.07.01</span>
-                    </div>
-                    <p class="men-it">李荣安教授的报告给了我们很好的启示，为我们打开了国际视野，指明了研究方向和实施路径，
-                        我们期待6日的“2017教育综改背景下的中小学德育创新论坛”李教授能给我们带来更完整更精彩的呈现！
-                    </p>
-                    <div class="clearfix"> </div>
-                </div>
-            </div>
-            <div class="met">
-                <div class="comments-top-top">
-                    <div class="men" >
-                        <span class="glyphicon glyphicon-news" style="color:#ffffff;">2017.07.01</span>
-                    </div>
-                    <p class="men-it">李荣安教授的报告给了我们很好的启示，为我们打开了国际视野，指明了研究方向和实施路径，
-                        我们期待6日的“2017教育综改背景下的中小学德育创新论坛”李教授能给我们带来更完整更精彩的呈现！
-                    </p>
-                    <div class="clearfix"> </div>
-                </div>
-            </div>
-            <div class="met">
-                <div class="comments-top-top">
-                    <div class="men" >
-                        <span class="glyphicon glyphicon-news" style="color:#ffffff;">2017.07.01</span>
-                    </div>
-                    <p class="men-it">李荣安教授的报告给了我们很好的启示，为我们打开了国际视野，指明了研究方向和实施路径，
-                        我们期待6日的“2017教育综改背景下的中小学德育创新论坛”李教授能给我们带来更完整更精彩的呈现！
-                    </p>
-                    <div class="clearfix"> </div>
-                </div>
-            </div>
-            <div class="met">
-                <div class="comments-top-top">
-                    <div class="men" >
-                        <span class="glyphicon glyphicon-news" style="color:#ffffff;">2017.07.01</span>
-                    </div>
-                    <p class="men-it">李荣安教授的报告给了我们很好的启示，为我们打开了国际视野，指明了研究方向和实施路径，
-                        我们期待6日的“2017教育综改背景下的中小学德育创新论坛”李教授能给我们带来更完整更精彩的呈现！
-                    </p>
-                    <div class="clearfix"> </div>
-                </div>
-            </div>
-
+        
+        
+        </c:forEach>
+           
+           
+           
+           
+           
+           
+           
+            
             <div class="clearfix"> </div>
         </div>
-        <!-- 分页功能-->
+        
+        
+        
+        
+        
+        
+        
         <div class="blog-pagenat">
-            <ul>
-                <li><a class="frist" href="#">Prev</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a class="last" href="#">Next</a></li>
-                <div class="clearfix"> </div>
-            </ul>
-        </div>
-        <!--//End-分页功能-->
+				<ul>
+						<li class="frist <c:if test="${pageList.pageNo  eq 1}">disabled</c:if>"><a
+						<c:if test="${pageList.pageNo  eq 1 }">href="javascript:void(0)"</c:if>
+						href="${pageContext.request.contextPath}/web/listNews?pageNo=${pageList.upPage}">
+						上一页 </a></li>
+						
+						
+						
+						<li><c:forEach items="${pageList.navigatepageNums}" var="nav">
+												<c:choose>
+													<c:when test="${nav == pageList.pageNo}">
+														<a class="active">${nav}</a>
+													</c:when>
+													<c:otherwise>
+														<a
+															href="${pageContext.request.contextPath}/web/listNews?pageNo=${nav}"
+															>${nav}</a>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
+						</li>
+						
+						
+						
+
+				<li><a href="${pageContext.request.contextPath}/web/listNews?pageNo=${pageList.nextPage}" class="last">
+																		下一页 </a></li>
+					<div class="clearfix"></div>
+				</ul>
+			</div>
+        
 
     </div>
 </div>
-
 
 <!-- 底部 -->
 <jsp:include page="public/botton.jsp"/>

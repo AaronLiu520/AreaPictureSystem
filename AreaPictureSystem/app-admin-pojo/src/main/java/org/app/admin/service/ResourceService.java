@@ -365,12 +365,17 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 	 *         设定文件 @return List<Resource> 返回类型 @throws
 	 */
 	public Resource findResourceByResourceNameAndForderActivityId(String boundId, String forderActivityId,
-			String generateName) {
+			String baseutisActivityId,String generateName) {
 
 		Query query = new Query();
-
+		
+		if(Common.isNotEmpty(forderActivityId)){
+			query.addCriteria(Criteria.where("forderActivityId").is(forderActivityId));
+		}
+		if(Common.isNotEmpty(forderActivityId)){
+			query.addCriteria(Criteria.where("baseutisActivityId").is(baseutisActivityId));
+		}
 		query.addCriteria(Criteria.where("boundId").is(boundId))
-				.addCriteria(Criteria.where("forderActivityId").is(forderActivityId))
 				.addCriteria(Criteria.where("generateName").is(generateName))
 				.addCriteria(Criteria.where("adminCompanyId").is(""));
 

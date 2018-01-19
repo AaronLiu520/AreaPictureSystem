@@ -1,16 +1,38 @@
 package org.app.admin.photo.action;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.regex.Pattern;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang.StringUtils;
 import org.app.admin.annotation.SystemControllerLog;
 import org.app.admin.annotation.SystemErrorLog;
-import org.app.admin.pojo.*;
+import org.app.admin.pojo.AdminCompany;
+import org.app.admin.pojo.AdminUser;
+import org.app.admin.pojo.Favorites;
+import org.app.admin.pojo.ForderActivity;
+import org.app.admin.pojo.Label;
+import org.app.admin.pojo.Resource;
 import org.app.admin.service.FavoritesService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.InformationRegisterService;
 import org.app.admin.service.LabelService;
 import org.app.admin.service.ResourceService;
-import org.app.admin.util.*;
-import org.app.admin.util.BaseType.Type;
+import org.app.admin.service.TypeService;
+import org.app.admin.util.BaseType;
+import org.app.admin.util.EditorImgBean;
+import org.app.admin.util.FileOperateUtil;
+import org.app.admin.util.PhotoTime;
+import org.app.admin.util.UploadUtil;
 import org.app.admin.util.basetreetime.BaseTreeTime;
 import org.app.admin.util.basetreetime.LayerAdmonCompany;
 import org.app.admin.util.executor.SingletionThreadPoolExecutor;
@@ -21,6 +43,7 @@ import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.framework.util.Pagination;
 import org.app.framework.util.ZipCompress;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,17 +58,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 @Controller
 @RequestMapping("/photoMessageAction")
@@ -65,6 +77,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	private FavoritesService favoritesService;
 	@Autowired
 	private InformationRegisterService informationRegisterService;
+	@Autowired
+	private TypeService typeService;
 	
 
 	/**
@@ -151,6 +165,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			@RequestParam(value = "mfregex", defaultValue = "") String mfregex, HttpSession session, String checkId) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
+		
+		String selectActivityId = "";
 		// 检查类型
 		if (!BaseType.checkType(type))
 			return null;
@@ -212,7 +228,16 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 				query = Query.query(Criteria.where("originalName").regex(pattern));
 				modelAndView.addObject("mfregex", mfregex);
 			}
-			query.addCriteria(Criteria.where("forderActivityId").is(checkId));
+			
+			if(type.equals(BaseType.Type.PERSION.toString())){
+				query.addCriteria(Criteria.where("personActivityId").is(fa.getPersonActivityId()));
+			}else if(type.equals(BaseType.Type.BASEUTIS.toString())){
+				query.addCriteria(Criteria.where("baseutisActivityId").is(fa.getBaseutisActivityId()));
+			}else{
+				query.addCriteria(Criteria.where("forderActivityId").is(checkId));
+			}
+			
+			
 			query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
 					"createTime"));
 			pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
@@ -253,22 +278,23 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	 * @throws IOException
 	 */
 	@SystemErrorLog(description = "文件上传出错")
-	@RequestMapping("/uploadFile")
-	public void uploadFile(HttpServletRequest request, PrintWriter printWriter, HttpSession session,
-			String forderActivityId, @RequestParam(value = "file[]", required = false) MultipartFile[] multipartFiles) {
+	@RequestMapping("/uploadFile/{type}")
+	public void uploadFile(HttpServletRequest request,@PathVariable("type") String type, PrintWriter printWriter, HttpSession session,
+			@RequestParam(defaultValue="",value="forderActivityId")String forderActivityId,
+			@RequestParam(value = "file[]", required = false) MultipartFile[] multipartFiles) {
+		
+		String typeId ="";
+	
 		// 获取 用户 session
 		AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		ForderActivity f = forderActivityService.findForderById(forderActivityId);
-		String pd = null;
-		if (f.getType() == BaseType.Type.PERSION.toString()) {
-			pd = "PERSION";
-		}
-
+		
+	
 		log.info("上传图片+活动ID" + forderActivityId);
 
 		for (MultipartFile mpfile : multipartFiles) {
 
-			Resource rf = UploadUtil.processResource(mpfile, au, forderActivityId, pd);
+			Resource rf = UploadUtil.processResource(mpfile, au,f,type);
 			log.info("文件信息:" + rf.toString());
 			// 更新到数据库
 			this.resourceService.insert(rf);
@@ -472,7 +498,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 					// 3,通过图片的名称，以及图片的所属活动id进行查询
 					Resource resource = this.resourceService.findResourceByResourceNameAndForderActivityId(
-							adminUser.getId(), res.getForderActivityId(), res.getGenerateName());
+							adminUser.getId(), res.getForderActivityId(),res.getBaseutisActivityId(), res.getGenerateName());
 					
 					//获取活动信息
 					ForderActivity oldForderActivity = this.forderActivityService.findOneById(res.getForderActivityId(),
@@ -496,7 +522,10 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							newForderActivity.setCreatUser(adminUser);
 							newForderActivity.setDescription(oldForderActivity.getDescription());
 							newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
+							newForderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
+							newForderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
 							newForderActivity.setParentId("0");
+							newForderActivity.setListType(this.typeService.addType("PERSION,"));
 							newForderActivity.setType(BaseType.Type.PERSION.toString());	
 							this.forderActivityService.save(newForderActivity);
 							
@@ -520,6 +549,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 						newResource.setOriginalPath(res.getOriginalPath());
 						newResource.setSource(res.getSource());
 						newResource.setUploadPerson(res.getUploadPerson());
+						newResource.setPersonActivityId(oldForderActivity.getPersonActivityId());
 						this.resourceService.save(newResource);
 					}
 				}

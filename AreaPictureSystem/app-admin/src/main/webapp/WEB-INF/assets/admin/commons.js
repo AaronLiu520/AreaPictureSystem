@@ -111,6 +111,15 @@ function checkinput() {
 	$("#forpasswords").html(result3);
 }
 
+//清空文本框信息
+function clear(){
+	$("#oldPassword").val("");
+	 $("#password").val("");
+	 $("#passwords").val("");
+}
+
+
+
 function ajaxUpdatePassword() {
 	checkinput();
 	var path =getRootPath()+"/adminUser/updatePassword".toString();
@@ -128,10 +137,12 @@ function ajaxUpdatePassword() {
 						$('#titleMessage').modal('show');
 						$("#title").text("信息提示");
 						$("#content").html("<h3>"+msg.msg+"</h3>")
+						clear();
 					}else{
 						$('#titleMessage').modal('show');
 						$("#title").text("信息提示");
 						$("#content").html("<h3>"+msg.msg+"</h3>")
+						clear();
 					}
 				}
 			});

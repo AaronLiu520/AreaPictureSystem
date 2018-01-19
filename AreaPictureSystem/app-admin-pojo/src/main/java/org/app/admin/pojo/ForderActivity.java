@@ -55,6 +55,9 @@ public class ForderActivity extends GeneralBean {
 	@DBRef
 	private AdminCompany adminCompany;//企业信息
 	private String parentId;// 付文件夹Id
+	private String personActivityId;//个人活动的ID
+	private String baseutisActivityId;//直属活动的ID
+	
 	public String getForderActivityName() {
 		return forderActivityName;
 	}
@@ -139,17 +142,18 @@ public class ForderActivity extends GeneralBean {
 	public void setParentId(String parentId) {
 		this.parentId = parentId;
 	}
-	@Override
-	public String toString() {
-		return "ForderActivity [forderActivityName=" + forderActivityName + ", address=" + address + ", sumPotoCount="
-				+ sumPotoCount + ", boundId=" + boundId + ", boundCompany=" + boundCompany + ", listType=" + listType
-				+ ", type=" + type + ", description=" + description + ", activityTime=" + activityTime + ", folderSize="
-				+ folderSize + ", resource=" + resource + ", creatUser=" + creatUser + ", adminCompany=" + adminCompany
-				+ ", parentId=" + parentId + "]";
+	public String getPersonActivityId() {
+		return personActivityId;
 	}
-	
-	
-	
+	public void setPersonActivityId(String personActivityId) {
+		this.personActivityId = personActivityId;
+	}
+	public String getBaseutisActivityId() {
+		return baseutisActivityId;
+	}
+	public void setBaseutisActivityId(String baseutisActivityId) {
+		this.baseutisActivityId = baseutisActivityId;
+	}
 	
 	
 	

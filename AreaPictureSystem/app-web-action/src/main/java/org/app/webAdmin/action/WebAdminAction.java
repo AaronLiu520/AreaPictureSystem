@@ -27,12 +27,23 @@ import org.springframework.web.servlet.ModelAndView;
 public class WebAdminAction extends GeneralAction<Object>{
 
 	
-	
+	/**
+	 * 
+	* @Title: setting 
+	* @Description: TODO(网站配置) 
+	* @param @return    设定文件 
+	* @return ModelAndView    返回类型 
+	* @throws
+	 */
 	@RequestMapping("/setting")
 	public ModelAndView setting(){
 		ModelAndView modelAndView = new ModelAndView();
 		
 		modelAndView.setViewName("admin/app-admin/webadmin/setting");
+		
+		
+		
+		
 		
 		return modelAndView;
 		

@@ -1,18 +1,19 @@
 package org.app.admin.util;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Date;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Date;
 
 public class UploadUtil {
      
@@ -30,7 +31,7 @@ public class UploadUtil {
      * @param forderActivityId
      * @return
      */
-    public static Resource processResource(MultipartFile mpfile,AdminUser au,String forderActivityId,String pd){
+    public static Resource processResource(MultipartFile mpfile,AdminUser au,ForderActivity f,String type){
        
     	Resource rf = new Resource();//  资源
         
@@ -61,15 +62,20 @@ public class UploadUtil {
 
         rf.setUploadPerson(au.getName());   // 1 上传者
         rf.setBoundId(au.getId());  // 2 绑定公司或个人Id
-        rf.setForderActivityId(forderActivityId);   // 3 文件夹Id或活动Id
+        
+        if(type.equals(BaseType.Type.AREA.toString())||type.equals(BaseType.Type.DIRECTLYUTIS.toString())){
+        	rf.setForderActivityId(f.getId());   // 3 文件夹Id或活动Id
+        }else if(type.equals(BaseType.Type.BASEUTIS.toString())){
+        	rf.setBaseutisActivityId(f.getBaseutisActivityId());
+        }else{
+        	rf.setPersonActivityId(f.getPersonActivityId());
+        }
+        
+        
         rf.setOriginalName(mpfile.getOriginalFilename());// 4 获取原文件（真实）的名字
         rf.setOriginalPath(path.toString());// 5 路径
         rf.setExtensionName(prefix);// 7 扩展名
         rf.setGenerateName(newFileName);// 8  生成的文件名
-        if(pd=="PERSION") {
-        	rf.setAdminCompanyId("");
-        	}else {
-        rf.setAdminCompanyId(au.getAdminCompany().getId());}
         log.info("后缀名:"+prefix);
         if (FileType.picture.toLowerCase().indexOf(prefix.toLowerCase()) !=-1) {
             rf.setFileType(FileType.picture);// 7 文件类型

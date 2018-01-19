@@ -62,11 +62,14 @@
 	<!--由于web.xml中设置是由springMVC拦截所有请求，于是在读取静态资源文件的时候就会受到影响（说白了就是读不到） 经过下面的配置，该标签的作用就是所有页面中引用/css/**的资源，都会从/resources/styles/
 		里面查找 -->
 	<mvc:resources mapping="/assets/**" location="/WEB-INF/assets/" />
+	<mvc:resources mapping="/FileUpload/**" location="/WEB-INF/FileUpload/" />
 	<!-- 拦截器 -->
 
 	<!-- 多个拦截器,顺序执行 -->
 	<!-- 如果不配置或/*,将拦截所有的Controller -->
 	<mvc:interceptors>
+		
+		
 		<mvc:interceptor>
 			<mvc:mapping path="/*/**" />
 			<mvc:mapping path="/*" />
@@ -78,9 +81,10 @@
 				访问登录页面 -->
 			<mvc:exclude-mapping path="/adminUser/checkLogin" /><!-- 
 				登录 -->
-			
 			<bean class="org.app.webAdmin.interceptor.LoginInterceptor"></bean>
 		</mvc:interceptor>
+		
+		
 		<mvc:interceptor>
 			<mvc:mapping path="/web/**" />
 			<bean class="org.app.webAdmin.interceptor.WebInterceptor"></bean>

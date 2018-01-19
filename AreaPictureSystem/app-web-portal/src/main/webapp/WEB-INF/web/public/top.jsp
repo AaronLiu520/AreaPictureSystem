@@ -3,9 +3,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@page isELIgnored="false"%>
 
+
+<%@include file="icon.jsp"%>	
+    <title>${websetting.title }</title>
 <div class="header">
     <div class="logo" style="padding: 20px 0px 0px 30px;width:25%">
-        <a href="index.html">奉贤区教工摄影网</a>
+        <a href="${pageContext.request.contextPath}/web/index">${websetting.webName }</a>
     </div>
     <div class="header-right">
         <span class="menu"><img src="${pageContext.request.contextPath}/assets/images/menu.png" alt=""/></span>

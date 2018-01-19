@@ -3,6 +3,7 @@ package org.app.webAdmin.action;
 import javax.servlet.http.HttpSession;
 
 import org.app.framework.action.GeneralAction;
+import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.webAdmin.pojo.AdminRole;
@@ -16,6 +17,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 /**
@@ -218,5 +220,67 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		return modelAndView;
 
 	}
+	
+	
+	
+	
+	/**
+	 * 
+	 * @Title: checkPassword @Description: TODO(这里用一句话描述这个方法的作用) @param @return
+	 * 设定文件 @return BasicDataResult 返回类型 @throws
+	 */
+
+	@RequestMapping("/checkPassword")
+	@ResponseBody
+	public BasicDataResult checkPassword(@RequestParam(defaultValue = "", value = "password") String password,
+			HttpSession session) {
+		BasicDataResult result = this.adminUserService.passwordByUserId(session, password);
+		return result;
+
+	}
+	
+	
+	@RequestMapping("/updatePassword")
+	@ResponseBody
+	public BasicDataResult updatePassword(HttpSession session,@RequestParam(defaultValue="",value="password")String password){
+		
+		
+		BasicDataResult result = this.adminUserService.updatePassword(session, password);
+		
+		if(result.getStatus().equals(200)){
+			// 注销session(后台登录）
+			session.removeAttribute(CommonEnum.USERSESSION);
+		}
+		
+		return result;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

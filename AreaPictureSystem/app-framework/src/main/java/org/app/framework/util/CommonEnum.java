@@ -1,6 +1,6 @@
 package org.app.framework.util;
 
-
+import java.io.File;
 
 /**
  * 常量信息（用户名session、上传文件地址等等。）
@@ -15,6 +15,12 @@ public interface CommonEnum {
 	public  final String UPLOADFILES="uploadFiles";
 	public  final String OK="ok";
 	public  final String ERROR="error";
+	
+	public final int SUCCESS =200;
+	public final int WRONG = 0;		
+	
+	
+	public final String NEWSFILE = "FileUpload"+File.separator+"news";
 	
 	/**
 	 * session 常量管理。
@@ -32,5 +38,8 @@ public interface CommonEnum {
 
 	
 	public final String WEBMENUS="webmenus";//前台菜单
+	
+	
+	public final String WEBSETTING = "websetting";//网站配置
 
 }

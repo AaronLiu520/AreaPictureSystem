@@ -9,6 +9,7 @@
 package org.app.admin.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -17,7 +18,6 @@ import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
-import org.app.admin.pojo.Type;
 import org.app.admin.util.BaseType;
 import org.app.admin.util.BaseType.UserType;
 import org.app.framework.service.GeneralServiceImpl;
@@ -295,39 +295,56 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			// 超级管理员
 			if (getuserType.equals(UserType.ADMINISTRATORS)) {
 
-				query.addCriteria(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
-						BaseType.Type.DIRECTLYUTIS));
+				   Criteria cr = new Criteria();
+				   			
+				   query.addCriteria(cr.orOperator(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
+							BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(userId)));
 
-				List<ForderActivity> list = this.find(query, ForderActivity.class);
+				 listForderActivity = this.find(query, ForderActivity.class);
 
-				query = new Query();
+
+			} else if (getuserType.equals(UserType.SCHOOLADMIN)) {
+
+				
+				
+				   Criteria cr = new Criteria();
+		   			
+				   query.addCriteria(cr.orOperator(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
+							BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(userId).andOperator(Criteria.where("listType.type").is(BaseType.Type.PERSION.toString()))));
+				
+				   query.addCriteria(Criteria.where("boundCompany").is(companyId));
+				
+				
+/*				query.addCriteria(Criteria.where("listType.type").in(BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
+						BaseType.Type.AREA)).addCriteria(Criteria.where("boundCompany").is(companyId));*/
+
+				/*List<ForderActivity> list*/ listForderActivity = this.find(query, ForderActivity.class);
+
+		/*		query = new Query();
 				query.addCriteria(Criteria.where("boundId").is(userId))
 						.addCriteria(Criteria.where("listType.type").is(BaseType.Type.PERSION));
 
 				listForderActivity = this.find(query, ForderActivity.class);
 
-				listForderActivity.addAll(list);
-
-			} else if (getuserType.equals(UserType.SCHOOLADMIN)) {
-
-				query.addCriteria(Criteria.where("type").in(BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
-						BaseType.Type.AREA)).addCriteria(Criteria.where("boundCompany").is(companyId));
-
-				List<ForderActivity> list = this.find(query, ForderActivity.class);
-
-				query = new Query();
-				query.addCriteria(Criteria.where("boundId").is(userId))
-						.addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
-
-				listForderActivity = this.find(query, ForderActivity.class);
-
-				listForderActivity.addAll(list);
+				listForderActivity.addAll(list);*/
 
 			} else if (getuserType.equals(UserType.TEACHER)) {
-
+				
+				
+			/*	   Criteria cr = new Criteria();
+		   			
+				   query.addCriteria(cr.orOperator(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
+							BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(userId).andOperator(Criteria.where("listType.type").is(BaseType.Type.PERSION.toString()))));
+				*/
+				   query.addCriteria(Criteria.where("boundCompany").is(companyId));
+				   
+				   query.addCriteria(Criteria.where("boundId").is(userId));
+				
+				   listForderActivity=this.find(query, ForderActivity.class);
+/*
 				query.addCriteria(Criteria.where("boundCompany").is(companyId))
 
-						.addCriteria(Criteria.where("type").in(BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
+						.addCriteria(Criteria.where("listType.type").in(BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
 								BaseType.Type.AREA));
 
 				List<ForderActivity> list = this.find(query, ForderActivity.class);
@@ -338,7 +355,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 				listForderActivity = this.find(query, ForderActivity.class);
 
-				listForderActivity.addAll(list);
+				listForderActivity.addAll(list);*/
 
 			}
 
@@ -350,21 +367,16 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 	}
 
-	/**
-	 * 
-	 * @Title: createActivity @Description: TODO(创建活动) @param @param
-	 *         forderActivity @param @param adminUser 设定文件 @return void
-	 *         返回类型 @throws
-	 */
+	
 	public void creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id) {
-
+		
 		if (adminUser != null && forderActivity != null) { // 判断adminUser,forderActiviy
-															// 是否为空
-
+			// 是否为空
+			
 			if (Common.isNotEmpty(id)) { // 如果id不为空执行休息
-
+				
 				ForderActivity editforderActivity = this.findForderById(id);
-
+				
 				if (editforderActivity != null) {
 					editforderActivity.setAddress(forderActivity.getAddress());
 					editforderActivity.setActivityTime(forderActivity.getActivityTime());
@@ -382,39 +394,54 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 								.findAdminCompanyById(forderActivity.getBoundCompany());
 						editforderActivity.setAdminCompany(adminCompany);
 					}
-
+					
 					this.save(editforderActivity);
 				}
-
+				
 			} else { // 执行添加活动
-
+				
 				if (Common.isEmpty(forderActivity.getBoundCompany())) { // 如果BoundCompany
-																		// 为空则添加默认自己单位
+					// 为空则添加默认自己单位
 					if (adminUser.getAdminCompany() == null) {
 						forderActivity.setBoundCompany("");
 					} else {
 						forderActivity.setBoundCompany(adminUser.getAdminCompany().getId());
 					}
 				}
-
+				
 				if (Common.isEmpty(forderActivity.getBoundId())) {
 					forderActivity.setBoundId(adminUser.getId());
 				}
-
+				
 				// 根据boundCompany获取企业信息
 				AdminCompany adminCompany = this.adminCompanyService
 						.findAdminCompanyById(forderActivity.getBoundCompany());
-
+				
+				
+				forderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
+				forderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
 				forderActivity.setAdminCompany(adminCompany);
 				forderActivity.setParentId("0");
 				forderActivity.setCreatUser(adminUser);
 				this.insert(forderActivity);
-
+				
 			}
-
+			
 		}
-
+		
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	/**
 	 * 
@@ -445,7 +472,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				
 				for(int i = 0;i<types.length;i++){
 					list.add(types[i]);
-					if(types[i].equals(BaseType.Type.BASEUTIS)){
+					if(types[i].equals(BaseType.Type.BASEUTIS.toString())){
 						query.addCriteria(Criteria.where("boundCompany").is(companyId));
 					}
 					

@@ -48,7 +48,9 @@ public class Resource extends GeneralBean {
 
     private String adminCompanyId;//企业ID
 
-
+	private String personActivityId;//个人活动的ID
+	
+	private String baseutisActivityId;//直属活动的ID
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -166,7 +168,23 @@ public class Resource extends GeneralBean {
         this.adminCompanyId = adminCompanyId;
     }
 
-    @Override
+    public String getPersonActivityId() {
+		return personActivityId;
+	}
+
+	public void setPersonActivityId(String personActivityId) {
+		this.personActivityId = personActivityId;
+	}
+
+	public String getBaseutisActivityId() {
+		return baseutisActivityId;
+	}
+
+	public void setBaseutisActivityId(String baseutisActivityId) {
+		this.baseutisActivityId = baseutisActivityId;
+	}
+
+	@Override
     public String toString() {
         return "Resource{" +
                 "uploadPerson='" + uploadPerson + '\'' +

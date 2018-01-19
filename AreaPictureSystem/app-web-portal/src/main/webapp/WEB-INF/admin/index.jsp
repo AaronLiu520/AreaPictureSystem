@@ -18,6 +18,9 @@
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/assets/images/logo_title.png"
 	type="image/x-icon" />
+	
+
+	
 <style type="text/css">
 .box { 
 width: 650px; 

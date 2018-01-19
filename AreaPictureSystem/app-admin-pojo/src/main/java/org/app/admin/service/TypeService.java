@@ -39,30 +39,7 @@ public class TypeService extends GeneralServiceImpl<Type> {
 			}
 			listType.add(type);
 		}
-		
-		/*for(int i=0;i<types.length;i++){
-			Type type = new Type();
-			if(types[i].equals(BaseType.Type.AREA.toString())){
-				type.setType(BaseType.Type.AREA);
-			}else if(types[i].equals(BaseType.Type.BASEUTIS.toString())){
-				type.setType(BaseType.Type.BASEUTIS);
-			}else if(types[i].equals(BaseType.Type.DIRECTLYUTIS.toString())){
-				type.setType(BaseType.Type.DIRECTLYUTIS);
-			}else if(types[i].equals(BaseType.Type.PERSION.toString())){
-				type.setType(BaseType.Type.PERSION);
-			}
-			
-			
-			Type t = this.findTypeByTy(type.getType());
-			
-			if(t == null){
-				this.save(type);
-				listType.add(type);
-			}else{
-				listType.add(t);
-			}
-		}*/
-		
+
 		return listType;
 	}
 	

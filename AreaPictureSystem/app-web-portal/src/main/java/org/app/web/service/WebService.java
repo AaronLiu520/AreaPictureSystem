@@ -16,6 +16,7 @@ import org.app.webAdmin.pojo.AdminMenu;
 import org.app.webAdmin.pojo.AdminUser;
 import org.app.webAdmin.service.AdminMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -47,7 +48,7 @@ public class WebService extends GeneralServiceImpl  {
 		Query query = new Query();
 		//获取所有属于前台的菜单
 		query.addCriteria(Criteria.where("isWebMenu").is(true)).addCriteria(Criteria.where("pid").ne("0"));
-		
+		query.with(new Sort(Sort.Direction.ASC, "orderby"));
 		List<AdminMenu> list = this.find(query, AdminMenu.class);
 		
 		return list.size()>0?list:null;

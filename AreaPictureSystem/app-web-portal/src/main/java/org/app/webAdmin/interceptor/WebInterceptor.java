@@ -7,15 +7,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.web.service.WebService;
 import org.app.webAdmin.pojo.AdminMenu;
+import org.app.webAdmin.pojo.Setting;
+import org.app.webAdmin.service.SettingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.MethodParameter;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -36,6 +38,10 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
 	
 	@Autowired 
 	private WebService webService;
+	
+	@Autowired
+	private SettingService settingService;
+	
 	/**
 	 * 在Controller方法前进行拦截<br>
 	 * 如果返回false <br>
@@ -52,14 +58,27 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
 
 		HttpSession session = request.getSession();
 		
+		boolean flag = false;
 		//检查用户是否登录过.
 		if (session.getAttribute(CommonEnum.WEBMENUS) != null) {
-			return true;
+			flag =true;
 		}else{
 			List<AdminMenu> list =this.webService.findAllWebMenu();
 			session.setAttribute(CommonEnum.WEBMENUS, list);
+			flag = true;
 		}
-		return true;
+		
+		if (session.getAttribute(CommonEnum.WEBSETTING) != null) {
+			flag =true;
+		}else{
+			//加载网站配置
+			Setting setting = this.settingService.findOneByQuery(new Query(), Setting.class);
+			session.setAttribute(CommonEnum.WEBSETTING, setting);
+			flag = true;
+		}
+		
+		
+		return flag;
 		
 	}
 

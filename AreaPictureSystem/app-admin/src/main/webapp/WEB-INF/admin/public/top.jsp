@@ -7,6 +7,9 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>顶部</title>
+<link
+	href="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/css/bootstrap-datetimepicker.min.css"
+	rel="stylesheet" media="screen">
 </head>
 <script type="text/javascript">
 	function tocleanForm() {
@@ -170,7 +173,7 @@
 						<input type="hidden" name="edit" id="edit">
 					</div>
 					<div class="modal-footer">
-						<button type="submit" id="submit" class="btn btn-primary">保存</button>
+						<button type="submit" id="createActivitySubmit" class="btn btn-primary">保存</button>
 					</div>
 				</form>
 			</div>
@@ -185,6 +188,25 @@
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
+
+
+<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/bootstrap-datetimepicker.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/js/locales/bootstrap-datetimepicker.zh-CN.js"
+		charset="UTF-8"></script>
+	<script type="text/javascript">
+		$('.datainput').datetimepicker({
+			weekStart : 1,
+			todayBtn : 1,
+			autoclose : 1,
+			todayHighlight : 1,
+			startView : 2,
+			minView : 2,
+			forceParse : 0
+		});
+	</script>
 
 
 
@@ -231,19 +253,19 @@
 							data : data,
 							dataType : "json",
 							success : function(msg) {
-								if (msg.status == '200') {
+								if (msg.status == 200) {
 									document.getElementById("for" + o1).innerHTML = msg.msg;
 									document.getElementById("for" + o1).style.cssText = "float: right; color: red;";
-									$("#submit").attr("disabled", true);
+									$("#createActivitySubmit").attr("disabled", "true");
 								} else {
-									$("#submit").attr("disabled", false);
+									$("#createActivitySubmit").attr("disabled", false);
 									document.getElementById("for" + o1).innerHTML = " ";
 								}
 							}
 						});
 			} else {
-				$("#submit").attr("disabled", false);
 				document.getElementById("for" + o1).innerHTML = " ";
+									$("#createActivitySubmit").attr("disabled", false);
 			}
 		}
 	</script>

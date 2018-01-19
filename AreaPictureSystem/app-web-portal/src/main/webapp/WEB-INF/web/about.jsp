@@ -5,8 +5,6 @@
 <html lang="en" class="app">
 <head>
     <meta charset="utf-8"/>
-    <title>奉贤区教工摄影网站</title>
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="keywords" content="index">

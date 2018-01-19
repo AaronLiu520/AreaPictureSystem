@@ -165,7 +165,8 @@
 											<div id="${item.id }_id" style="display: none;">${item.id}</div>
 											<tr class="gradeX">
 												<td id="${item.id }_forderActivityName">${item.forderActivityName}</td>
-												<td id="${item.id }_type"><c:forEach
+												<td id="${item.id }_type">
+												<c:forEach
 														items="${item.listType }" var="tp">
 														<c:if test="${tp.type eq 'AREA'}">
 														区域,

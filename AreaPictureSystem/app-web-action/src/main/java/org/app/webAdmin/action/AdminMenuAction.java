@@ -3,6 +3,7 @@ package org.app.webAdmin.action;
 import javax.servlet.http.HttpSession;
 
 import org.app.framework.action.GeneralAction;
+import org.app.framework.util.CommonEnum;
 import org.app.webAdmin.pojo.AdminMenu;
 import org.app.webAdmin.service.AdminMenuService;
 import org.slf4j.Logger;
@@ -69,10 +70,13 @@ public class AdminMenuAction extends GeneralAction<AdminMenu> {
 				else
 					this.adminMenuService.save(adminMenu);
 			}
+			// 清除前台菜单
 			log.info(adminMenu.toString());
 		} catch (Exception e) {
 			log.error(e.getMessage(),e);
 		}
+		
+
 		return modelAndView;// 返回
 	}
 	
@@ -95,7 +99,9 @@ public class AdminMenuAction extends GeneralAction<AdminMenu> {
 			}
 		} catch (Exception e) {
 		}
+		
 		return modelAndView;// 返回
+		
 	}
 	
 	/**

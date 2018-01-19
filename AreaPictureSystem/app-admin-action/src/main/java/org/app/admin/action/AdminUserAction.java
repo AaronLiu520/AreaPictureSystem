@@ -368,7 +368,10 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		
 		BasicDataResult result = this.adminUserService.updatePassword(session, password);
 		
-		
+		if(result.getStatus().equals(200)){
+			// 注销session(后台登录）
+			session.removeAttribute(CommonEnum.USERSESSION);
+		}
 		return result;
 		
 	}

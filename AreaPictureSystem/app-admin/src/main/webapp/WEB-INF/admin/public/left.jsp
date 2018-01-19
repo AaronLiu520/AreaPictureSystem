@@ -50,6 +50,8 @@
 	href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css"
 	media="all" />
 
+
+
 <style type="text/css">
 .modal.fade .user-modal-dialog {
 	padding: 5%;
@@ -478,18 +480,20 @@ li_style:hover {
 	<!-- 通知 -->
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/toastr/toastr.min.js"></script>
-
-
-
 	<!-- 添加jqueryvalidate -->
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
 
+
+
+
+
+
+
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/assets/admin/commons.js">
-		
 	</script>
 
 

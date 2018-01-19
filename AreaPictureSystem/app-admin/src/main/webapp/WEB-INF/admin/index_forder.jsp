@@ -4,23 +4,23 @@
 <!doctype html>
 <html lang="en" class="app">
 <body>
-	<div class="col-lg-12 gallery" style="margin-top: 10px;">
+	<div class="col-sm-12 gallery" >
 		<ul style="display: initial;">
+		
 			<c:forEach items="${forderActivityList.datas}" var="item"
 				varStatus="status">
 
-
-				<!-- 已经将点击预览移植到图片层中 -->
+					<!-- 已经将点击预览移植到图片层中 -->
 				<div class="file-box collection_${item.id }">
 					<div class="checkbox" name="checkboxs"
 						style="z-index: 999; position: absolute; margin-top: 3px; margin-left: 3px; display: none">
 						<input id="ids${item.id}" value="${item.id }" type="checkbox"
 							name="ids"> <label for="ids${item.id}"> </label>
 					</div>
-
 				</div>
+				
 
-				<div class="file-box collection">
+				<div class="file-box collection col-sm-2" style="height: 227px;" >
 
 					<div class="file">
 
@@ -28,7 +28,7 @@
 						<!--如果修改后的资源名称不为空-->
 
 
-						<div id="item_4" class=" image"
+						<div id="item_4 " class=" image"
 							style="height: 130px; text-align: center;">
 
 							<a
@@ -70,11 +70,7 @@
 									
 								</div>
 							</div>
-
-
 						</div>
-
-
 					</div>
 				</div>
 

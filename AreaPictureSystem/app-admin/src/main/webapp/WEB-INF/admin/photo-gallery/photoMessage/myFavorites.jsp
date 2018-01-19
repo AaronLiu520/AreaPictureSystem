@@ -46,10 +46,6 @@
 	list-style-type: none;
 }
 </style>
-<link
-	href="${pageContext.request.contextPath}/assets/admin/css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css"
-	rel="stylesheet">
-
 
 
 

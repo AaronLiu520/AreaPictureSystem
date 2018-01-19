@@ -256,9 +256,19 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		
 		if(Common.isNotEmpty(forderActivity.getType())){
 			
+			String[] types = forderActivity.getType().split(","); 
+			
+			
+			
+			
+		}
+		
+		/*
+		if(Common.isNotEmpty(forderActivity.getType())){
+			
 			
 			List<Type> listType = this.typeService.addType(forderActivity.getType());
-
+			
 			forderActivity.setListType(listType);
 			
 		}else{
@@ -271,9 +281,9 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		AdminUser adminUser=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		
 		this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit);
-		
+		*/
 		return modelAndView;
-		
+	
 	}
 	
 	
