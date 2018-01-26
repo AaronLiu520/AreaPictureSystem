@@ -20,7 +20,7 @@ public interface CommonEnum {
 	public final int WRONG = 0;		
 	
 	
-	public final String NEWSFILE = "FileUpload"+File.separator+"news";
+	public final String NEWSFILE = File.separator+"assets"+File.separator+"FileUpload"+File.separator+"Img"+File.separator;
 	
 	/**
 	 * session 常量管理。
@@ -41,5 +41,18 @@ public interface CommonEnum {
 	
 	
 	public final String WEBSETTING = "websetting";//网站配置
+	
+	public final String WEBUSERSESSION ="webUserSession";//投稿用户session
+	
+	public final String WEBINDEXBANANA = "webIndexBanana";//网站首页banana
+	
+	
+	public final String ABOUTUS="aboutus";//图片归属使用
+	
+	
+	
+	
+	
+	
 
 }

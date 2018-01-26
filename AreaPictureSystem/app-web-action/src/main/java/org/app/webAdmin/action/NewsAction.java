@@ -82,7 +82,7 @@ public class NewsAction extends GeneralAction<News> {
 		return modelAndView;
 
 	}
-/*
+
 	@RequestMapping("/editImgUpload")
 	@ResponseBody
 	public BasicDataResult editImgUpload(@RequestParam(value = "file", required = true) MultipartFile multipartFiles,
@@ -100,7 +100,7 @@ public class NewsAction extends GeneralAction<News> {
 
 		// 返回一个网络路径http://localhost:8080/app-web-portal/file/aa.jpg
 		// 不应该返回一个网络路径，应该是项目路径 ：/file/aa.jpg
- 		StringBuffer reponsePath = new StringBuffer(File.separator).append(CommonEnum.NEWSFILE)
+ 		StringBuffer reponsePath = new StringBuffer(File.separator).append("WEB-INF").append(File.separator).append(CommonEnum.NEWSFILE)
 				.append(File.separator).append(targetFileName);
 		basic.setData(reponsePath);
 		basic.setStatus(CommonEnum.SUCCESS);
@@ -173,7 +173,7 @@ public class NewsAction extends GeneralAction<News> {
 		modelAndView.setViewName("redirect:/news/listNews");
 
 		return modelAndView;
-	}*/
+	}
 	
 	
 	

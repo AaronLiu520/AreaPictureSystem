@@ -228,10 +228,12 @@ public class StatisticsService {
 
 				Query query = new Query();
 
-				query.addCriteria(Criteria.where("adminCompanyId").ne(""))
+			
+				
+				query.addCriteria(Criteria.where("personActivityId").is(null))
 						.addCriteria(Criteria.where("boundId").is(user.getId()));
 				
-				
+												  
 
 				if(Common.isNotEmpty(start)&&Common.isNotEmpty(end)&&Common.isEmpty(month)){
 				

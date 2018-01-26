@@ -139,7 +139,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 		//基层单位 BASEUTIS,,
 		List<PhotoTime> lpt = PhotoTime.getPhotoTime(
-				loadForderActivityType(BaseType.Type.BASEUTIS.toString(),100), null,true);
+				loadForderActivityType(BaseType.Type.BASEUTIS.toString(),100), null,false);
 		//加载所有的企业
 		List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
 		
@@ -152,7 +152,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		//个人 PERSION
 		if(adminUser != null){
 			session.setAttribute("photoTimeList",
-					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId()));
+					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId(),true));
 		}
 
 		
@@ -181,7 +181,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	}
 
 
-	public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId){
+	public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId,boolean flag){
 
 		Query query=new Query();
 		query.addCriteria(Criteria.where("listType.type").is(type));
@@ -191,7 +191,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
 		
 		//TODO
-		return PhotoTime.getPhotoTime(listFA,check,false);
+		return PhotoTime.getPhotoTime(listFA,check,flag);
 	}
 
 }

@@ -13,8 +13,28 @@
 </head>
 <script type="text/javascript">
 	function tocleanForm() {
-		$("#signupForm")[0].reset();
+		$("#edAREA").show();
+		$("#edDIRECTLYUTIS").show();
+		$("#edBASEUTIS").show();
+		$("#edPERSION").show();
 
+		$("#AREA").each(function(){  
+		     this.checked=false;
+		}); 
+		$("#DIRECTLYUTIS").each(function(){  
+		     this.checked=false;
+		}); 
+		$("#BASEUTIS").each(function(){  
+		     this.checked=false;
+		}); 
+		$("#PERSION").each(function(){  
+		     this.checked=false;
+		}); 
+		$("#boundCompany option:first").prop("selected", 'selected');  
+
+		
+		$("#signupForm")[0].reset();
+		 
 		$("#toModal-form").trigger("click");
 
 	}
@@ -110,7 +130,7 @@
 							onchange="return getrepletes('forderActivityName');">
 							<label>活动所属学校：</label> <select class="form-control m-b" onchange="return getrepletes('forderActivityName');"
 								name="boundCompany" id="boundCompany" required="required">
-								<option id="default" value="" selected="selected">----请选择所属学校----</option>
+								<option id="default"  selected="selected">----请选择所属学校----</option>
 								<c:forEach items="${company}" var="item" varStatus="status">
 									<option id="${item.id}" value="${item.id}">${item.name}</option>
 								</c:forEach>
@@ -129,23 +149,24 @@
 
 
 						<div class="form-group">
-							<label>活动所属：</label>
-							<div class="checkbox checkbox-inline">
+							<label>活动所属：${item.listType}</label>
+							<div class="checkbox checkbox-inline" id="edAREA">
 								<input type="checkbox" id="AREA" value="AREA" name="type"
 									onclick="return getrepletes('forderActivityName');"> <label
 									for="AREA"> 区域 </label>
 							</div>
-							<div class="checkbox checkbox-inline">
-								<input type="checkbox" id="DIRECTLYUTIS" value="DIRECTLYUTIS"
+							<div class="checkbox checkbox-inline" id="edDIRECTLYUTIS">
+								<input type="checkbox" id="DIRECTLYUTIS" value="DIRECTLYUTIS" 
 									onclick="return getrepletes('forderActivityName');"
 									name="type"> <label for="DIRECTLYUTIS"> 直属单位 </label>
 							</div>
-							<div class="checkbox checkbox-inline">
-								<input type="checkbox" id="BASEUTIS" value="BASEUTIS"
+							
+							<div class="checkbox checkbox-inline" id="edBASEUTIS">
+								<input type="checkbox" id="BASEUTIS" value="BASEUTIS" 
 									onclick="return getrepletes('forderActivityName');"
 									name="type"> <label for="BASEUTIS"> 基层单位</label>
 							</div>
-							<div class="checkbox checkbox-inline">
+							<div class="checkbox checkbox-inline" id="edPERSION">
 								<input type="checkbox" id="PERSION" value="PERSION" name="type"
 									onclick="return getrepletes('forderActivityName');"> <label
 									for="PERSION"> 个人 </label>
@@ -162,12 +183,12 @@
 						</div>
 						<input type="hidden" name="boundId" id="boundId"
 							value="${sessionScope.userSession.id}">
-						<c:if
+			<%-- 			<c:if
 							test="${sessionScope.userSession.userType != 'ADMINISTRATORS' }">
 							<input type="hidden" name="boundCompany" id="boundCompany"
 								value="${sessionScope.userSession.adminCompany.id}">
 
-						</c:if>
+						</c:if> --%>
 						<input type="hidden" name="parentId" id="parentId" value="0">
 						<input type="hidden" name="type" id="type" value="${webType}">
 						<input type="hidden" name="edit" id="edit">

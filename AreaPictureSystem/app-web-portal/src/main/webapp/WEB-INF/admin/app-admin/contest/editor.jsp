@@ -5,7 +5,7 @@
 <html lang="en" class="app">
 <head>
 <meta charset="utf-8" />
-<title>新闻管理</title>
+<title>比赛管理</title>
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="description" content="">
@@ -105,6 +105,19 @@
 													</div>
 												</div>
 
+														<div class="form-group col-sm-6">
+													<label class="col-sm-2 control-label">同时上传最大图片数</label>
+													<div class="col-sm-10">
+														<input type="text" name="maxPictureNum" id="maxPictureNum"
+															value="${contest.minPictureNum }" class="form-control"
+															placeholder="同时上传最大图片数">
+													</div>
+												</div>
+											</div>
+
+										<%-- 	<div class="col-sm-12">
+										
+												
 												<div class="form-group col-sm-6">
 													<label class="col-sm-2 control-label">最少图片数</label>
 													<div class="col-sm-10">
@@ -113,17 +126,7 @@
 															placeholder="最少图片数">
 													</div>
 												</div>
-											</div>
-
-											<div class="col-sm-12">
-												<div class="form-group col-sm-6">
-													<label class="col-sm-2 control-label">最大图片数</label>
-													<div class="col-sm-10">
-														<input type="text" name="maxPictureNum" id="maxPictureNum"
-															value="${contest.minPictureNum }" class="form-control"
-															placeholder="最大图片数">
-													</div>
-												</div>
+												
 												<div class="form-group col-sm-6">
 													<label class="col-sm-2 control-label">参赛人数上限</label>
 													<div class="col-sm-10">
@@ -133,7 +136,7 @@
 													</div>
 												</div>
 
-											</div>
+											</div> --%>
 											<div class="col-sm-12">
 												<div class="form-group  col-sm-6">
 													<label class="col-sm-2 control-label">开始时间</label>
@@ -191,10 +194,10 @@
 													<div class="col-sm-10">
 
 														<select class="form-control" name="openVote">
-															<option value="true"
-																<c:if test="${contest.openVote eq true }">selected </c:if>>禁用投票</option>
 															<option value="false"
-																<c:if test="${contest.openVote eq false }">selected </c:if>>启用投票</option>
+																<c:if test="${contest.openVote eq false }">selected </c:if>>禁用投票</option>
+															<option value="true"
+																<c:if test="${contest.openVote eq true }">selected </c:if>>启用投票</option>
 														</select>
 													</div>
 												</div>
@@ -222,12 +225,12 @@
 													<label class="col-sm-2 control-label">发布公告</label>
 													<div class="col-sm-10">
 
-														<select class="form-control" name="status">
+														<select class="form-control" name="announcements">
 															<option value="false"
 																<c:if test="${contest.announcements eq false }">selected </c:if>>不发布</option>
 															<option value="true"
 																<c:if test="${contest.announcements eq true }">selected </c:if>>发布</option>
-														
+
 														</select>
 
 
@@ -238,15 +241,28 @@
 													<div class="col-sm-10">
 
 														<select class="form-control" name="status">
-															<option value="false"
-																<c:if test="${contest.status eq true }">selected </c:if>>启用</option>
 															<option value="true"
+																<c:if test="${contest.status eq true }">selected </c:if>>启用</option>
+															<option value="false"
 																<c:if test="${contest.status eq false }">selected </c:if>>禁用</option>
 														</select>
 
 
 													</div>
 												</div>
+
+
+												 <div class="form-group col-sm-12">
+													<label class="col-sm-1 control-label">投票规则</label>
+													<div class="col-sm-11">
+														<textarea rows="5" 
+															style="resize: none; overflow: scroll;"
+															placeholder="投票规则" name="intro" id="intro"
+															class="form-control">${contest.intro }</textarea>
+													</div>
+												</div>
+												
+												
 											</div>
 
 
@@ -265,8 +281,8 @@
 
 											<div class="col-sm-12" style="padding-top: 20px;">
 
-												<button type="submit" class="btn btn-primary btn-lg" style="float: right;"
-													id="add-news-btn">保存</button>
+												<button type="submit" class="btn btn-primary btn-lg"
+													style="float: right;" id="add-news-btn">保存</button>
 											</div>
 
 

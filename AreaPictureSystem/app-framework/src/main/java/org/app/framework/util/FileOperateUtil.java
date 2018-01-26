@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,13 +25,14 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 @Repository("operateUtil")
 public class FileOperateUtil {
-	private static final String FILENAME = "fileName";
+	private static final String FILENAME = "fileName";      //文件名称
 	private static final String CONTENTTYPE = "contentType";
-	private static final String HASSUFFIX = "hassuffix";
-	private static final String SAVEPATH = "savepath";
-	private static final String NOFILE = "nofile";
-	private static final String RENAME = "reName";
-	private static final String SERVLETPATH = "servletPath";
+	private static final String HASSUFFIX = "hassuffix";     //是否满足后缀名
+	private static final String SAVEPATH = "savepath";       //存储硬盘路径
+	private static final String NOFILE = "nofile";           //是否满足文件
+	private static final String RENAME = "reName";           //重命名
+	private static final String SERVLETPATH = "servletPath"; //服务器路径
+	private static final String EXTENSION = "extension"; //文件后缀名
 
 	/***
 	 * 将上传的文件进行重命名
@@ -53,11 +55,10 @@ public class FileOperateUtil {
 	/**
 	 * 文件上传
 	 * 
-		// 固定参数值对
-		// .put(FileOperateUtil.STORENAME, zipName(storeName));
-		// map.put(FileOperateUtil.SIZE, new File(zipName).length());
-		// map.put(FileOperateUtil.SUFFIX, "zip");
-
+	 * // 固定参数值对 // .put(FileOperateUtil.STORENAME, zipName(storeName)); //
+	 * map.put(FileOperateUtil.SIZE, new File(zipName).length()); //
+	 * map.put(FileOperateUtil.SUFFIX, "zip");
+	 * 
 	 * @param request
 	 *            httpservletRequest
 	 * @param UPLOADDIR
@@ -71,7 +72,6 @@ public class FileOperateUtil {
 			throws Exception {
 
 		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
-		
 
 		MultipartHttpServletRequest mRequest = (MultipartHttpServletRequest) request;
 
@@ -96,13 +96,14 @@ public class FileOperateUtil {
 		boolean has = false;
 
 		for (Iterator<Map.Entry<String, MultipartFile>> it = fileMap.entrySet().iterator(); it.hasNext();) {
-			
+
 			Map<String, Object> map = new HashMap<String, Object>();
 			
+
 			Map.Entry<String, MultipartFile> entry = it.next();
-			
+
 			MultipartFile mFile = entry.getValue();
-			
+
 			map.put(FileOperateUtil.NOFILE, false);
 			// 获取上传文件的名称
 			fileName = mFile.getOriginalFilename();
@@ -123,8 +124,10 @@ public class FileOperateUtil {
 						has = true;
 					}
 				}
-				//标识后缀名
+				// 标识后缀名
 				map.put(FileOperateUtil.HASSUFFIX, has);
+				map.put(FileOperateUtil.EXTENSION, extension);//文件后缀名
+				
 				if (has == false) {
 					// 设置表示上传文件符合文件要求
 					result.add(map);
@@ -143,8 +146,7 @@ public class FileOperateUtil {
 			map.put(FileOperateUtil.SAVEPATH, path);
 			map.put(FileOperateUtil.FILENAME, fileName);
 			map.put(FileOperateUtil.SERVLETPATH, request.getContextPath() + UPLOADDIR + rname);
-			
-			
+
 			result.add(map);
 		}
 		return result;
@@ -195,33 +197,22 @@ public class FileOperateUtil {
 		bis.close();
 		bos.close();
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	/**
 	 * 
-	* @Title: uploadImg 
-	* @Description: TODO(单图片上传) 
-	* @param @param request
-	* @param @return    设定文件 
-	* @return String    返回类型 
-	* @throws
+	 * @Title: uploadImg @Description: TODO(单图片上传) @param @param
+	 * request @param @return 设定文件 @return String 返回类型 @throws
 	 */
 	public static String uploadImg(HttpServletRequest request) {
-		String rtimg="";
+		String rtimg = "";
 		try {
 			String[] filetype = new String[] { "png", "jpeg", "gif", "jpg" };
 
-			String UPLOADDIR = File.separator + "FileUpload" + File.separator + "Img" + File.separator;
-			
-			
-			List<Map<String, Object>> result = upload(request, UPLOADDIR, filetype);
-			
-			
+			// String UPLOADDIR = File.separator + "FileUpload" + File.separator
+			// + "Img" + File.separator;
+
+			List<Map<String, Object>> result = upload(request, CommonEnum.NEWSFILE, filetype);
+
 			Boolean hasfile = (Boolean) result.get(0).get("nofile");
 			if (!hasfile) {
 
@@ -229,9 +220,9 @@ public class FileOperateUtil {
 				// 如果上传文件符合要求
 				if (has != false) {
 
-					 String img = (String) result.get(0).get("servletPath");
+					String img = (String) result.get(0).get("servletPath");
 					if (Common.isNotEmpty(img)) {
-						rtimg=img;
+						rtimg = img;
 					}
 				}
 			}
@@ -242,6 +233,100 @@ public class FileOperateUtil {
 		return rtimg;
 
 	}
+
+	/**
+	 * 
+	 * @Title: uploadImgs @Description: TODO(多图片上传) @param @param
+	 * request @param @return 设定文件 @return String 返回类型 @throws
+	 */
+	public static List<Map<String, Object>> uploadImgs(MultipartFile[] files,HttpServletRequest request) {
+
+		String[] filetype = new String[] { "png", "jpeg", "gif", "jpg" ,"bmp"};
+		try {
+			List<Map<String,Object>> result = uploadFiles(files,request, CommonEnum.NEWSFILE);
+
+			return result;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	
+	
+	
+	public static List<Map<String,Object>> uploadFiles(MultipartFile[] files,HttpServletRequest request, String UPLOADDIR) throws IllegalStateException, IOException{
+		
+		List<Map<String, Object>> result = new ArrayList<Map<String, Object>>();
+
+		if(files!=null&&files.length>0){
+			
+			for(MultipartFile f:files){
+				
+				Map<String, Object> map = new HashMap<String, Object>();
+				
+				if(!f.isEmpty()){
+					//获取文件原名
+					String fileName = f.getOriginalFilename();
+					//重命名
+					String rName  = rname(fileName);
+					//服务器存储路径路径
+					String servletPath   = request.getContextPath() + UPLOADDIR;
+					// 上传目录
+					String uploadDir = request.getSession().getServletContext().getRealPath("/WEB-INF/") + UPLOADDIR;
+					// 判断文件目录是否存在，如果不存在则创建目录
+					File file = new File(uploadDir);
+					if (!file.exists()) {
+						file.mkdirs();
+					}
+					// 获取文件的后缀名
+					String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+					if(Common.isEmpty(extension)){
+						continue;
+					}
+					
+					String savepath = file + "/" + rName;// 存放位置\
+					File destFile = new File(savepath);
+					
+				    f.transferTo(destFile);
+				    
+				    map.put(FileOperateUtil.FILENAME, fileName);
+				    map.put(FileOperateUtil.RENAME, rName);
+				    map.put(FileOperateUtil.SERVLETPATH, servletPath+rName);
+				    map.put(FileOperateUtil.SAVEPATH, savepath);
+					map.put(FileOperateUtil.EXTENSION, extension);//文件后缀名
+					
+					result.add(map); 
+				    
+				}
+			}
+			
+		}
+		
+		return result;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

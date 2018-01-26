@@ -63,7 +63,8 @@
 		里面查找 -->
 	<mvc:resources mapping="/assets/**" location="/WEB-INF/assets/" />
 	<mvc:resources mapping="/FileUpload/**" location="/WEB-INF/FileUpload/" />
-	<!-- 拦截器 -->
+						     
+	<!-- 拦截器 -->			 
 
 	<!-- 多个拦截器,顺序执行 -->
 	<!-- 如果不配置或/*,将拦截所有的Controller -->
@@ -87,6 +88,7 @@
 		
 		<mvc:interceptor>
 			<mvc:mapping path="/web/**" />
+			<mvc:exclude-mapping path="/FileUpload/**" />
 			<bean class="org.app.webAdmin.interceptor.WebInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>

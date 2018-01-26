@@ -18,6 +18,7 @@ import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
+import org.app.admin.pojo.Type;
 import org.app.admin.util.BaseType;
 import org.app.admin.util.BaseType.UserType;
 import org.app.framework.service.GeneralServiceImpl;
@@ -368,7 +369,84 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	}
 
 	
-	public void creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id) {
+	public void creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id,List<List<Type>> listsType) {
+		
+		if (adminUser != null && forderActivity != null) {
+			
+			//如果id不为空执行修改
+			if(Common.isNotEmpty(id)){
+				ForderActivity editforderActivity = this.findForderById(id);
+				if (editforderActivity != null) {
+					editforderActivity.setAddress(forderActivity.getAddress());
+					editforderActivity.setActivityTime(forderActivity.getActivityTime());
+					editforderActivity.setCreatUser(adminUser);
+					editforderActivity.setDescription(forderActivity.getDescription());
+					editforderActivity.setFolderSize(forderActivity.getFolderSize());
+					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
+					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
+					editforderActivity.setType(forderActivity.getType());
+					editforderActivity.setListType(forderActivity.getListType());
+					if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
+						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
+						// 根据boundCompany获取企业信息
+						AdminCompany adminCompany = this.adminCompanyService
+								.findAdminCompanyById(forderActivity.getBoundCompany());
+						editforderActivity.setAdminCompany(adminCompany);
+					}
+					
+					this.save(editforderActivity);
+				}
+				
+			}else{
+				//执行添加
+				for(int i=0;i<listsType.size();i++){
+					if(adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU)){
+						//直属单位不能创建基层单位的活动
+						if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS)){
+							return;
+						}
+					}
+					
+					ForderActivity fo = new ForderActivity();
+					fo.setListType(listsType.get(i));
+					fo.setActivityTime(forderActivity.getActivityTime());
+					fo.setAddress(forderActivity.getAddress());
+					fo.setPersonActivityId(new ObjectId(new Date()).toString());
+					fo.setBaseutisActivityId(new ObjectId(new Date()).toString());
+					if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS)){
+						fo.setAdminCompany(adminUser.getAdminCompany());
+						fo.setBoundCompany(adminUser.getAdminCompany().getId());
+					}else{
+						
+						if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
+							fo.setBoundCompany(forderActivity.getBoundCompany());
+							// 根据boundCompany获取企业信息
+							AdminCompany adminCompany = this.adminCompanyService
+									.findAdminCompanyById(forderActivity.getBoundCompany());
+							fo.setAdminCompany(adminCompany);
+						}
+					}
+					
+					
+				
+					fo.setBoundId(adminUser.getId());
+					fo.setCreatUser(adminUser);
+					fo.setDescription(forderActivity.getDescription());
+					fo.setForderActivityName(forderActivity.getForderActivityName());
+					fo.setListType(listsType.get(i));
+					fo.setParentId("0");
+					
+					this.insert(fo);
+				}
+			}
+			
+		}
+		
+	}
+	
+	
+	
+/*	public void creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id) {
 		
 		if (adminUser != null && forderActivity != null) { // 判断adminUser,forderActiviy
 			// 是否为空
@@ -433,7 +511,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	
 	
 	
-	
+*/	
 	
 	
 	

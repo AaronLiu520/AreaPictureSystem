@@ -8,11 +8,8 @@
 */
 package org.app.admin.action;
 
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemControllerLog;
@@ -25,7 +22,6 @@ import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.service.TypeService;
-import org.app.admin.util.BaseType;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
@@ -35,7 +31,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -254,34 +249,18 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		log.info("进去create!");
 		ModelAndView modelAndView = new ModelAndView();
 		
-		if(Common.isNotEmpty(forderActivity.getType())){
-			
-			String[] types = forderActivity.getType().split(","); 
-			
-			
-			
-			
-		}
-		
-		/*
-		if(Common.isNotEmpty(forderActivity.getType())){
-			
-			
-			List<Type> listType = this.typeService.addType(forderActivity.getType());
-			
-			forderActivity.setListType(listType);
-			
-		}else{
-			modelAndView.addObject("error", "创建活动为选择活动所属");
-			return modelAndView;
-		}
-		
 		modelAndView.setViewName("redirect:/forderActivity/list");
 		
-		AdminUser adminUser=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		if(Common.isNotEmpty(forderActivity.getType())){
+			
 		
-		this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit);
-		*/
+			List<List<Type>> listsType = this.typeService.addType(forderActivity.getType());
+			
+				AdminUser adminUser=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+				
+				this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit,listsType);			
+		}
+
 		return modelAndView;
 	
 	}

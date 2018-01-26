@@ -74,46 +74,59 @@
 <!--摄影作品展内容-->
 <!--single-->
 <div class="single">
-	<c:if test="${not empty news }">
     <div class="container">
-        <h3 class="tittle">${news.newsTitle }</h3>
+        <h3 class="tittle">李荣安为奉贤区教育学院作报告</h3>
         <div class="article-post two">
-            <div class="col-md-4 post-meta">
+            <div class="col-md-3 post-meta">
                 <div class="meta-icon">
                     <div class="pic">
                         <a href="#" > <i class="glyphicon glyphicon-picture"></i></a>
                     </div>
                 </div>
                 <ul class="ad-info">
-                    <li>${news.newsDate}</li>
-                    <li>作   者：${news.author }</li>
-                    <li>访问量：${news.visit } </li>
+                    <li>2017-03-04</li>
+                    <li> <a href="#">谭剑英</a></li>
+                    <li> <a href="#">224 评论数量</a></li>
                 </ul>
                 <div class="clearfix"> </div>
             </div>
-            <div class="col-md-8 post-details s-page">
-            
-            	<div class="col-md-6">
-           <%--  	 <a href="#" class="mask">
-                    <img src="${news.picture}" alt="image" class="img-responsive zoom-img">
-                </a> --%>
-            	</div>
-            </div>
-            <div class="col-md-3 post-meta">
-            </div>
             <div class="col-md-9 post-details s-page">
-              <p>	${news.content}</p>
+                <a href="#" class="mask">
+                    <img src="${pageContext.request.contextPath}/assets/images/e7.jpg" alt="image" class="img-responsive zoom-img">
+                </a>
+                <!--
+                <a >
+                    <h4></h4>
+                </a>-->
+                <p>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   对“为什么要进行公民教育”，李教授作了比较详细的阐述。列举了17个要进行公民教育的原因，
+                    根据亚洲教育界领袖眼中的价值教育和公民素质，李教授认为最重要的原因有三：一为精神发展打下基础；
+                    二为增加个人责任感；三为帮助青年人形成反思和自律的人格，由此强调公民课程的第一重要点为道德、
+                    公民和个人自主与反思。
+
+                </p>
+                <p class="eget">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    李教授表示21世纪是知识建构的时代，“软实力”更为重要。因此，面对未来，我们需要一种以“未来”为取向的公民道德观，
+                    针对“软实力”的要求，公民道德的教育重点是帮助学生面对不可知的状况，使其能有坚韧的应变能力、适应能力和创造能力，
+                    此种能力也应该是德育赋予个体的一种面对急变社会的选择能力，以及保守重要价值观的能力。
+                </p>
+                <a href="#" class="mask">
+                    <img src="${pageContext.request.contextPath}/assets/images/e7_1.jpg" alt="image" class="img-responsive zoom-img">
+                </a>
+                <p class="eget">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   教育学院院长蒋东标充分肯定了李教授的报告。就国内的公民道德教育，蒋院也谈了自己的看法，认为中国传统文化价值
+                    观教育于未来孩子的发展，于他们应对21世纪的变化是有积极意义的；认为中西方由于传统价值观和思维方式的不同，
+                    对道德品质教育有不同的着力点，我们在坚守要义的基础上要注重汲取西方对于社会公共价值的理论；认为一个孩子能
+                    否很好地应对21世纪，除了技能之外，更重要的根本是他的价值观，是他的信念和坚守，因此，我们的公民道德教育
+                    要不忘本来，注重外来，面向未来。
+                    </b>
+                </p>
             </div>
-            
-            
-            
-            
-            
             <!--post-details-->
             <div class="clearfix"> </div>
         </div>
 
-        <!-- <div class="top-single">
+        <div class="top-single">
 
             <div class="top-comments">
                 <h3>224 评论数量</h3>
@@ -164,10 +177,11 @@
                         </div>
                 </form>
             </div>
-        </div> -->
+        </div>
     </div>
-    </c:if>
 </div>
+</div>
+
 
 <!-- 底部 -->
 <jsp:include page="public/botton.jsp"/>

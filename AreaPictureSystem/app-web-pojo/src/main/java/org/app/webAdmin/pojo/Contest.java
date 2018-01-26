@@ -42,7 +42,7 @@ public class Contest extends GeneralBean {
 	private boolean openVote; // 开启投票功能
 	private boolean openPublicVote;// 开启公开投票（如果不开启公开投票需要登录-通过图片库系统中导入老师的帐号密码判断）
 	private boolean announcements;//发布公告
-	
+	private String intro;//投票规则
 	
 	
 	public String getContestName() {
@@ -179,6 +179,14 @@ public class Contest extends GeneralBean {
 
 	public void setAnnouncements(boolean announcements) {
 		this.announcements = announcements;
+	}
+
+	public String getIntro() {
+		return intro;
+	}
+
+	public void setIntro(String intro) {
+		this.intro = intro;
 	}
 	
 	

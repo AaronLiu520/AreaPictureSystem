@@ -22,6 +22,7 @@ import org.app.admin.pojo.Favorites;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Label;
 import org.app.admin.pojo.Resource;
+import org.app.admin.pojo.Type;
 import org.app.admin.service.FavoritesService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.InformationRegisterService;
@@ -122,7 +123,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		} else if (type.equals(BaseType.Type.PERSION.toString())) {
 			modelAndView.addObject("photoTimeList",
-					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null, adminUser.getId(),false));
+					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null, adminUser.getId(),true));
 		} else {
 			// 按日期进行分类,并且中当前菜单
 			//TODO
@@ -193,6 +194,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		} else {
 			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type);
 		}
+		
 		List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
 
 		// 如果用户是 BASEUTIS
@@ -483,25 +485,31 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		String[] resourcesId = resourceId.split(",");
 
+		// 如果需要同步的资源大小大于0
 		if (resourcesId.length > 0) {
 
 			AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 
-			// 如果需要同步的资源大小大于0
 
 			for (int i = 0; i < resourcesId.length; i++) {
-				// 1.首先根据需要同步的资源id查询该条数据的记录
 
+				// 1.首先根据需要同步的资源id查询该条数据的记录
 				Resource res = this.resourceService.findResourceByResourceId(resourcesId[i]);
-				// 2,如果该图片已经收藏了，不会再次同步到个人图片库
 				if (res != null) {
 
-					// 3,通过图片的名称，以及图片的所属活动id进行查询
-					Resource resource = this.resourceService.findResourceByResourceNameAndForderActivityId(
-							adminUser.getId(), res.getForderActivityId(),res.getBaseutisActivityId(), res.getGenerateName());
+					// 2,如果该图片已经收藏了，不会再次同步到个人图片库
+					Resource resource = this.resourceService.findResourceByResourceName(adminUser.getId(), res.getGenerateName());
 					
+					// 3,通过图片的名称，以及图片的所属活动id进行查询
+					
+					String oldForderActivityId ="";
+					if(Common.isNotEmpty(res.getForderActivityId())){
+						oldForderActivityId=res.getForderActivityId();
+					}else if(Common.isNotEmpty(res.getBaseutisActivityId())){
+						oldForderActivityId=res.getBaseutisActivityId();
+					}
 					//获取活动信息
-					ForderActivity oldForderActivity = this.forderActivityService.findOneById(res.getForderActivityId(),
+					ForderActivity oldForderActivity = this.forderActivityService.findOneById(oldForderActivityId,
 							ForderActivity.class);
 					
 					//查询是否存在该个人的活动
@@ -511,9 +519,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 					if (resource == null) {
 						ForderActivity  newForderActivity = new ForderActivity();
 						//如果没有该活动则创建一个新的个人活动
+						// 4,如果查询出来为空，那么执行添加
 						if(forderActivity == null){
-							
-							
 							newForderActivity.setActivityTime(oldForderActivity.getActivityTime());
 							newForderActivity.setAddress(oldForderActivity.getAddress());
 							newForderActivity.setAdminCompany(adminUser.getAdminCompany());
@@ -522,18 +529,23 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							newForderActivity.setCreatUser(adminUser);
 							newForderActivity.setDescription(oldForderActivity.getDescription());
 							newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
-							newForderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
 							newForderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
+							newForderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
 							newForderActivity.setParentId("0");
-							newForderActivity.setListType(this.typeService.addType("PERSION,"));
+							List<Type> listType = new ArrayList<Type>();
+							Type t = new Type();
+							t.setType(BaseType.Type.PERSION);
+							listType.add(t);
+							newForderActivity.setListType(listType);
 							newForderActivity.setType(BaseType.Type.PERSION.toString());	
-							this.forderActivityService.save(newForderActivity);
 							
 						}else{
+							
 							newForderActivity = forderActivity;
 						}
-
-						// 4,如果查询出来为空，那么执行添加
+						
+						this.forderActivityService.save(newForderActivity);
+			
 						Resource newResource = new Resource();
 						newResource.setAdminCompanyId("");
 						newResource.setAdminuser(adminUser);
@@ -541,7 +553,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 						newResource.setEditorImgInfo(res.getEditorImgInfo());
 						newResource.setExtensionName(res.getExtensionName());
 						newResource.setFileType(res.getFileType());
-						newResource.setForderActivityId(newForderActivity.getId());
 						newResource.setGenerateName(res.getGenerateName());
 						newResource.setImgCompressionBean(res.getImgCompressionBean());
 						newResource.setImgInfoBean(res.getImgInfoBean());
@@ -549,15 +560,15 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 						newResource.setOriginalPath(res.getOriginalPath());
 						newResource.setSource(res.getSource());
 						newResource.setUploadPerson(res.getUploadPerson());
-						newResource.setPersonActivityId(oldForderActivity.getPersonActivityId());
+						newResource.setPersonActivityId(forderActivity.getPersonActivityId());
 						this.resourceService.save(newResource);
 					}
 				}
 			}
-
+				
 		}
-
 		return "true";
+
 
 	}
 

@@ -78,11 +78,11 @@
 <!-- start-smooth-scrolling -->
 </head>
 <body>
-	<!-- 菜单头部 -->
+		<!-- 菜单头部 -->
 	<jsp:include page="public/top.jsp" />
 	<!-- banner -->
 	<div class="inner-banner"></div>
-
+	
 	<!--新闻公告-->
 	<div class="news">
 		<div class="container">
@@ -95,7 +95,7 @@
 			</div>
 
 			<c:forEach items="${pageList.datas }" var="items">
-				<div class="slider-bottom"
+				<div class="slider-bottom"   
 					style="padding: 0px 0px 15px 0px; border-top: 0px solid #e8e8e8;">
 					<div class="container">
 						<div class="slider-grids">
@@ -108,7 +108,10 @@
 										发布人：${items.publisher }</div>
 								</c:if>
 
-								<p>${items.content }</p>
+								<div style="height: 200px;width:100%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">${items.content }</div>
+								
+								
+								
 								<c:if test="${now > items.startTime && now <  items.endTime }">
 									<a href="javascript:void(0)"
 										onclick="return toApply('${items.id}','${checkMenu}'); "
@@ -140,10 +143,6 @@
 
 
 
-
-
-
-
 			<!-- 分页功能-->
 			<div class="blog-pagenat" style="margin-bottom: 20px;">
 				<ul>
@@ -166,14 +165,32 @@
 					<li><a
 						href="${pageContext.request.contextPath}/web/listContest?pageNo=${pageList.nextPage}"
 						class="last"> 下一页 </a></li>
-					<div class="clearfix"></div>
 				</ul>
 			</div>
 
-			<!--//End-分页功能-->
+
 
 		</div>
 	</div>
+
+
+
+<c:if test="${not empty msg }">
+<script>
+$(function(){
+	alert("恭喜你，投稿成功！")
+
+	})
+
+</script>
+	</c:if>
+	
+	
+	
+
+
+
+
 
 
 	<!-- 底部 -->
@@ -199,5 +216,10 @@
 		id="toTopHover" style="opacity: 1;"> </span></a>
 	<!-- //smooth scrolling -->
 
+
+
+
+
 </body>
 </html>
+	

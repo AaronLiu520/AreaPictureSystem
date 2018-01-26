@@ -15,6 +15,15 @@
     </p>
 </div>
 
+
+
+
+<!-- Jquery Validate -->
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/jquery.validate.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/validate/messages_zh.min.js"></script>
+
 <!-- 引入通用js -->
 	<script
 		src="${pageContext.request.contextPath}/assets/web/js/common.js"></script>

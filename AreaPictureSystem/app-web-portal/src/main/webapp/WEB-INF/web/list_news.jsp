@@ -71,92 +71,64 @@
 <!-- banner -->
 
 
-<!--摄影作品展内容-->
+
+<!--新闻公告-->
 <div class="news">
     <div class="container">
-        <h3 class="tittle">新闻列表</h3>
-        <div class="news-article">
-        
-        <c:forEach items="${pageList.datas }" var="items">
-         <div class="col-md-6 article-post">
-                <div class="col-md-3 post-meta">
-                    <div class="meta-icon">
-                        <div class="pic">
-                            <a href="${pageContext.request.contextPath}/web/newsDetail?id=${items.id}" > <i class="glyphicon glyphicon-picture"></i></a>
-                        </div>
+        <h3 class="tittle">新闻公告</h3>
+        <div class="news-article" style="margin-top: 1em;">
+
+
+			<c:forEach items="${pageList.datas}" var="item" varStatus="status">
+			   <div class="met">
+                <div class="comments-top-top">
+                    <div class="men" >
+                    
+                        <span class="glyphicon glyphicon-news" style="color:#ffffff;float:">${item.newsDate }</span>
                     </div>
-                    <ul class="ad-info">
-                        <li>${items.newsDate }</li>
-                        <li> ${items.author }</li>
-                        <li> ${items.visit } 浏览数量</li>
-                    </ul>
+                    <a href="${pageContext.request.contextPath}/web/newsDetail?id=${item.id}"><p class="men-it" style="margin-top: 10px;">${item.newsTitle}</p></a>
                     <div class="clearfix"> </div>
                 </div>
-                <div class="col-md-9 post-details">
-                    <a href="${pageContext.request.contextPath}/web/newsDetail?id=${items.id}" class="mask">
-                        <img src="${items.picture }" alt="image"  style="width: 417px;height: 268px;"
-                             class="img-responsive zoom-img"></a>
-
-                    <a href="${pageContext.request.contextPath}/web/newsDetail?id=${items.id}"><h4>${items.newsTitle}</h4></a>
-                </div>
-                <!--post-details-->
-                <div class="clearfix"> </div>
             </div>
-        
-        
-        </c:forEach>
-           
-           
-           
-           
-           
-           
-           
-            
+                	
+			</c:forEach>
+         
+
             <div class="clearfix"> </div>
         </div>
-        
-        
-        
-        
-        
-        
-        
-        <div class="blog-pagenat">
+        <!-- 分页功能-->
+        	<!-- 分页功能-->
+			<div class="blog-pagenat" style="margin-bottom: 20px;">
 				<ul>
-						<li class="frist <c:if test="${pageList.pageNo  eq 1}">disabled</c:if>"><a
+					<li
+						class="frist <c:if test="${pageList.pageNo  eq 1}">disabled</c:if>"><a
 						<c:if test="${pageList.pageNo  eq 1 }">href="javascript:void(0)"</c:if>
 						href="${pageContext.request.contextPath}/web/listNews?pageNo=${pageList.upPage}">
-						上一页 </a></li>
-						
-						
-						
-						<li><c:forEach items="${pageList.navigatepageNums}" var="nav">
-												<c:choose>
-													<c:when test="${nav == pageList.pageNo}">
-														<a class="active">${nav}</a>
-													</c:when>
-													<c:otherwise>
-														<a
-															href="${pageContext.request.contextPath}/web/listNews?pageNo=${nav}"
-															>${nav}</a>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach>
-						</li>
-						
-						
-						
-
-				<li><a href="${pageContext.request.contextPath}/web/listNews?pageNo=${pageList.nextPage}" class="last">
-																		下一页 </a></li>
+							上一页 </a></li>
+					<li><c:forEach items="${pageList.navigatepageNums}" var="nav">
+							<c:choose>
+								<c:when test="${nav == pageList.pageNo}">
+									<a class="active">${nav}</a>
+								</c:when>
+								<c:otherwise>
+									<a
+										href="${pageContext.request.contextPath}/web/listNews?pageNo=${nav}">${nav}</a>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach></li>
+					<li><a
+						href="${pageContext.request.contextPath}/web/listNews?pageNo=${pageList.nextPage}"
+						class="last"> 下一页 </a></li>
 					<div class="clearfix"></div>
 				</ul>
 			</div>
-        
+
+			<!--//End-分页功能-->
+        <!--//End-分页功能-->
 
     </div>
 </div>
+
 
 <!-- 底部 -->
 <jsp:include page="public/botton.jsp"/>

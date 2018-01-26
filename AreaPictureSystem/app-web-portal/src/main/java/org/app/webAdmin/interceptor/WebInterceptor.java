@@ -7,11 +7,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.web.service.WebService;
 import org.app.webAdmin.pojo.AdminMenu;
+import org.app.webAdmin.pojo.Index;
 import org.app.webAdmin.pojo.Setting;
+import org.app.webAdmin.service.IndexService;
 import org.app.webAdmin.service.SettingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +43,9 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
 	@Autowired
 	private SettingService settingService;
 	
+	@Autowired
+	private IndexService indexService;
+	
 	/**
 	 * 在Controller方法前进行拦截<br>
 	 * 如果返回false <br>
@@ -68,6 +72,7 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
 			flag = true;
 		}
 		
+		
 		if (session.getAttribute(CommonEnum.WEBSETTING) != null) {
 			flag =true;
 		}else{
@@ -76,6 +81,18 @@ public class WebInterceptor extends HandlerInterceptorAdapter {
 			session.setAttribute(CommonEnum.WEBSETTING, setting);
 			flag = true;
 		}
+		
+		
+		
+		if (session.getAttribute(CommonEnum.WEBINDEXBANANA) != null) {
+			flag =true;
+		}else{
+			//加载网站配置
+			Index index = this.indexService.findOneByQuery(new Query(), Index.class);
+			session.setAttribute(CommonEnum.WEBINDEXBANANA, index);
+			flag = true;
+		}
+		
 		
 		
 		return flag;

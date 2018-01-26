@@ -56,6 +56,9 @@ public class ContestService extends GeneralServiceImpl<Contest> {
 				edit.setStatus(contest.isStatus());
 				edit.setVoteStartTime(contest.getVoteStartTime());
 				edit.setVoteEndTime(contest.getVoteEndTime());
+				edit.setAnnouncements(contest.isAnnouncements());
+				edit.setPublisherPhone(contest.getPublisherPhone());
+				edit.setIntro(contest.getIntro());
 				this.save(edit);
 			} else {
 			// 执行添加

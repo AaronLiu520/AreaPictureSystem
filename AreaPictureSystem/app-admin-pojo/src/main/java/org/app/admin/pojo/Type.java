@@ -38,6 +38,11 @@ public class Type extends GeneralBean{
 	public void setType(BaseType.Type type) {
 		this.type = type;
 	}
+
+	@Override
+	public String toString() {
+		return "Type [type=" + type + "]";
+	}
 	
 	
 

@@ -282,14 +282,66 @@ function todownload() {
 
 
 
+//图片同步
+function tocopy() {
+	//将收藏的资源同步到自己的资源库中
+	var a = $("input[name='ids']:checked").length;
 
-document.onkeydown = function (e) {
-    if (!e) e = window.event;
-    if ((e.keyCode || e.which) == 13) {
-        $("#btnSubmit").click();
-    }
+	if (a == 0) {
+
+		$("#delete").hide();
+
+		$("#modalMessage").text("请选择需要同步的图片！");
+
+		$('#deleteModal').modal('show');
+
+	} else {
+
+		var tb = $("input[name='ids']:checked");
+		//获取所有的id执行删除操作，使用ajax
+		var str = "";
+		$(tb).each(function() {
+			str += this.value + ",";
+		})
+
+		if (str != "") {
+
+			var tbId = str.substring(0, str.length - 1);
+
+			$
+					.ajax({
+
+						type : "POST",
+
+						url :  getRootPath()+"/photoMessageAction/copyToMyPictures",
+
+						data : "resourceId=" + tbId,
+
+						dataType : "text",
+
+						success : function(data) {
+
+							if (data == 'true') {
+								$("#modalMessage").text("图片同步成功！");
+
+								$('#deleteModal').modal('show');
+
+							} else {
+
+								$("#modalMessage").text("图片同步失败！");
+
+								$('#deleteModal').modal('show');
+							}
+
+						}
+
+					});
+
+		}
+
+	}
+
 }
-
 
 
 

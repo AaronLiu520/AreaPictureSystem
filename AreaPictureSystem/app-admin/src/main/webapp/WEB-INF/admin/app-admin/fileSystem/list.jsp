@@ -34,7 +34,7 @@
 		if (o != null) {
 			var forderActivityName = "#" + o + "_forderActivityName";
 			var address = "#" + o + "_address";
-		/* 	var sumPotoCount = "#" + o + "_sumPotoCount"; */
+			/* 	var sumPotoCount = "#" + o + "_sumPotoCount"; */
 			var id = "#" + o + "_id";
 			var boundId = "#" + o + "_boundId";
 			var type = "#" + o + "_type";
@@ -46,53 +46,82 @@
 			$("#forderActivityNamehid")
 					.val($(forderActivityName).text().trim());
 			$("#address").val($(address).text().trim());
-/* 			$("#sumPotoCount").val($(sumPotoCount).text().trim()); */
+			/* 			$("#sumPotoCount").val($(sumPotoCount).text().trim()); */
 			$("#activityTime").val($(activityTime).text().trim());
 			$("#description").val($(description).text().trim());
 			$("#edit").val($(id).text().trim());
 
-		/* 	$("#boundId option:contains('" + $(boundId).text().trim() + "')")
-					.attr("selected", true); */
+			/* 	$("#boundId option:contains('" + $(boundId).text().trim() + "')")
+						.attr("selected", true); */
 			$(
 					"#boundCompany option:contains('"
-							+ $(boundCompany).text().trim() + "')").attr(
+							+ $(boundCompany).text().trim() + "')").prop(
 					"selected", true);
-			
-			
+
 			var aa = $(type).text().trim();
+
+			if (aa.indexOf("区域") >= 0) {
+				$("#AREA").each(function(){  
+				     this.checked=true;
+				}); 
+				//$("#AREA").attr("checked", "true");
+				$("#edAREA").show();
+				$("#edDIRECTLYUTIS").show();
+				$("#edBASEUTIS").hide();
+				$("#edPERSION").hide();
+			}
+			if (aa.indexOf("直属单位") >= 0) {
+				//$("#DIRECTLYUTIS").attr("checked", "true");
+				$("#DIRECTLYUTIS").each(function(){  
+				     this.checked=true;
+				}); 
+				$("#edAREA").show();
+				$("#edDIRECTLYUTIS").show();
+				$("#edBASEUTIS").hide();
+				$("#edPERSION").hide();
+			}
+			if (aa.indexOf("基层单位") >= 0) {
+				$("#BASEUTIS").each(function(){  
+				     this.checked=true;
+				}); 
 			
-			if(aa.indexOf("区域") >= 0 ) { 
-			    $("#AREA").attr("checked","true");
-			} 
-			if(aa.indexOf("直属单位") >= 0 ) { 
-				$("#DIRECTLYUTIS").attr("checked","true");
-			} 
-			if(aa.indexOf("基层单位") >= 0 ) { 
-				$("#BASEUTIS").attr("checked","true");
-			} 
-			if(aa.indexOf("个人") >= 0 ) { 
-				$("#PERSION").attr("checked","true");
-			} 
-			
+				//$("#BASEUTIS").attr("checked", "true");
+				$("#edAREA").hide();
+				$("#edDIRECTLYUTIS").hide();
+				$("#edBASEUTIS").show();
+				$("#edPERSION").hide();
+			}
+			if (aa.indexOf("个人") >= 0) {
+				$("#PERSION").each(function(){  
+				     this.checked=true;
+				}); 
+				//$("#PERSION").attr("checked", "true");
+				$("#edAREA").hide();
+				$("#edDIRECTLYUTIS").hide();
+				$("#edBASEUTIS").hide();
+				$("#edPERSION").show();
+			}
+
 			$("#toModal-form").trigger("click");
 
 		}
 
 	}
 
-/* 	function save() {
-		$("#edit").val("");
-		$("#forderActivityName").val("");
-		$("#forderActivityNamehid").val("");
-		$("#address").val("");
-		$("#sumPotoCount").val("");
-		$("#activityTime").val("");
-		$("#description").val("");
-		$("#boundId").find("option[value='']").prop("selected", true);
-		$("#type").find("option[value='']").prop("selected", true);
+	/* 	function save() {
+	 $("#edit").val("");
+	 $("#forderActivityName").val("");
+	 $("#forderActivityNamehid").val("");
+	 $("#address").val("");
+	 $("#sumPotoCount").val("");
+	 $("#activityTime").val("");
+	 $("#description").val("");
+	 $("#boundId").find("option[value='']").prop("selected", true);
+	 $("#type").find("option[value='']").prop("selected", true);
 	
-	}
- */</script>
+	 }
+	 */
+</script>
 
 
 
@@ -145,7 +174,7 @@
 									</button>
 								<p> -->
 								<table
-									class="table table-striped table-bordered table-hover dataTables-example">
+									class="table table-striped table-bordered table-hover dataTables-example" >
 									<thead>
 										<tr>
 											<th>活动名称</th>
@@ -165,8 +194,7 @@
 											<div id="${item.id }_id" style="display: none;">${item.id}</div>
 											<tr class="gradeX">
 												<td id="${item.id }_forderActivityName">${item.forderActivityName}</td>
-												<td id="${item.id }_type">
-												<c:forEach
+												<td id="${item.id }_type"><c:forEach
 														items="${item.listType }" var="tp">
 														<c:if test="${tp.type eq 'AREA'}">
 														区域,

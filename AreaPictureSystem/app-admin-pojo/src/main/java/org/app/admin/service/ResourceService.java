@@ -62,12 +62,16 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		for (Resource resource : lrs) {
 			ForderActivity f = forderActivityService.findForderById(resource.getForderActivityId());
 			if (f != null) {
-				UploadFileLog ufl = new UploadFileLog();
-				ufl.setDate(resource.getCreateDate());
-				ufl.setImgSize(resource.getImgInfoBean().getImgSize());
-				ufl.setName(resource.getOriginalName());
-				ufl.setPlace(returnUploadType(f.getType().toString()));
-				lufl.add(ufl);
+				for(int i=0;i<f.getListType().size();i++){
+					UploadFileLog ufl = new UploadFileLog();
+					ufl.setDate(resource.getCreateDate());
+					ufl.setImgSize(resource.getImgInfoBean().getImgSize());
+					ufl.setName(resource.getOriginalName());
+					ufl.setPlace(returnUploadType(f.getListType().get(i).toString()));
+					lufl.add(ufl);
+					
+				}
+				
 			}
 		}
 		return lufl;
@@ -364,20 +368,14 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 	 *         forderActivityId @param @param generateName @param @return
 	 *         设定文件 @return List<Resource> 返回类型 @throws
 	 */
-	public Resource findResourceByResourceNameAndForderActivityId(String boundId, String forderActivityId,
-			String baseutisActivityId,String generateName) {
+	public Resource findResourceByResourceName(String boundId,String generateName) {
 
 		Query query = new Query();
 		
-		if(Common.isNotEmpty(forderActivityId)){
-			query.addCriteria(Criteria.where("forderActivityId").is(forderActivityId));
-		}
-		if(Common.isNotEmpty(forderActivityId)){
-			query.addCriteria(Criteria.where("baseutisActivityId").is(baseutisActivityId));
-		}
 		query.addCriteria(Criteria.where("boundId").is(boundId))
-				.addCriteria(Criteria.where("generateName").is(generateName))
-				.addCriteria(Criteria.where("adminCompanyId").is(""));
+		.addCriteria(Criteria.where("generateName").is(generateName))
+		.addCriteria(Criteria.where("personActivityId").ne(null));
+		
 
 		Resource res = this.findOneByQuery(query, Resource.class);
 

@@ -86,7 +86,7 @@
 										<div class="col-sm-8">
 											<label class="col-sm-4 control-label">网站icon</label>
 											<div class="col-sm-8 form-group">
-														<input id="myfile" name="iconFile" type="file" multiple="true">
+												<input id="myfile" name="iconFile" type="file"><!--  multiple="true" -->
 											</div>
 										</div>
 									</div>
