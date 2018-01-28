@@ -235,12 +235,26 @@ $().ready(
 									if (data.status == 200) {
 										$("#userLoginForm")[0].reset()
 										$("#userLoginFormclosed").trigger("click");
-										window.location.href=getRootPath()+"/web/toApply?contestId="+$("#contestId").val()+"&type="+$("#type").val();
+										if($("#types").val()=='type1'){
+											$('#myModal3').modal('show');
+										}
+										if($("#types").val()=='type2'){
+											$('#myModal4').modal('show');
+										}
+										$("#changeModal").attr("data-target","#myModal3");
+										$("#changeModal2").attr("data-target","#myModal4");
+										//登录成功获取已经添加的信息
+										getUsersUploads($("#contestId").val(),'type1');
+										getMyContestImages($("#contestId").val(),'type2');
+										
+										
 									} else {
 										$("#userLoginForm")[0].reset()
 										$("#modelLabel").html("登录失败");
 										$("#modelContent").html( "<center>" + data.msg+ "</center>");
 										$('#titleModel').modal('show');
+										$("#changeModal").attr("data-target","#myModal2");
+										$("#changeModal2").attr("data-target","#myModal2");
 									}
 
 								}
@@ -392,6 +406,60 @@ jQuery.validator
 
 
 
+//点击直接投稿获取已经创建该活动的投稿id
+function getUsersUploads(o,o2){
+	
+	$("#types").val(o2)
+	
+	$.ajax({
+		type : "POST",
+		url : getRootPath() + "/web/getUsersUpload",
+		data : "contestId="+o,
+		dataType : "json",
+		success : function(data) {
+			if(data.status == 200){
+				if(data.data!=null){
+					$("#nowNum").text(nowNum);
+					$("#theme").val(data.data.theme);
+					$("#introduce").html(data.data.introduce);
+					$("#editId").val(data.data.id);
+					
+				}
+			}/*else{
+				$("#modelLabel").html("信息提示");
+				 $("#modelContent").html("<center>"+data.msg+"</center>");
+				 $('#titleModel').modal('show');
+				 
+				$('#myModal2').modal('show');
+				
+			}*/
+		}
+	});
+	
+}
+
+
+
+//
+function getMyContestImages(o,o2){
+	$("#types").val(o2)
+	$.ajax({
+		type : "POST",
+		url : getRootPath() + "/web/getMyContestImages",
+		data : "contestId="+o,
+		dataType : "json",
+		success : function(data) {
+			
+			
+				
+				
+			
+		}
+	});
+	
+	
+	
+}
 
 
 

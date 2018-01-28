@@ -119,8 +119,7 @@
 		<div class="container">
 			<h3 class="tittle">${contest.contestName}报名投稿：</h3>
 
-<input type="hidden" id="contestId" value="${contest.id }" name="contestId"> 
-<input type="hidden" id="type" value="${checkMenu}" name="type"> 
+
 
 
 			<c:if test="${contest.maxPictureNum > 0}">
@@ -153,17 +152,35 @@
 						data-target="#myModal1" class="hvr-rectangle-in button">注册投稿</a>
 					<c:if test="${empty sessionScope.webUserSession.accountName }">
 						<a href="javascript:void(0)" id="changeModal"
+							onclick="return getUsersUploads('${contest.id}','type1');"
 							style="margin-top: 10px; margin-bottom: 20px;"
-							data-toggle="modal" data-target="#toLogin"
-							class="hvr-rectangle-in button">登录投稿</a>
+							data-toggle="modal" data-target="#myModal2"
+							class="hvr-rectangle-in button">直接投稿</a>
 					</c:if>
 					<c:if test="${not empty sessionScope.webUserSession.accountName }">
-						<a href="${pageContext.request.contextPath}/web/toApply?contestId=${contest.id}&type=${checkMenu}" 
+						<a href="javascript:void(0)" id="changeModal"
+							onclick="return getUsersUploads('${contest.id}','type1');"
 							style="margin-top: 10px; margin-bottom: 20px;"
-							class="hvr-rectangle-in button">登录投稿</a>
+							data-toggle="modal" data-target="#myModal3"
+							class="hvr-rectangle-in button">直接投稿</a>
 					</c:if>
 				</c:if>
+					<c:if test="${empty sessionScope.webUserSession.accountName }">
+					<a href="javascript:void(0)" id="changeModal2"
+							onclick="return getMyContestImages('${contest.id}','type2');"
+							style="margin-top: 10px; margin-bottom: 20px;"
+							data-toggle="modal" data-target="#myModal2"
+							class="hvr-rectangle-in button">我的投稿</a>
+					</c:if>
+					<c:if test="${not empty sessionScope.webUserSession.accountName }">
+						<a href="javascript:void(0)" id="changeModal2"
+							onclick="return getMyContestImages('${contest.id}','type2');"
+							style="margin-top: 10px; margin-bottom: 20px;"
+							data-toggle="modal" data-target="#myModal4"
+							class="hvr-rectangle-in button">我的投稿</a>
+					</c:if>
 				
+				<input type="text" id="types" value="" name="types">
 				
 			</div>
 
@@ -241,7 +258,7 @@
 
 
 	<!-- 登陆模态框（Modal） -->
-	<div class="modal fade" id=toLogin tabindex="-1" role="dialog"
+	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -259,8 +276,6 @@
 								name="accountName" id="accountName" class="form-control "
 								required>
 						</div>
-
-
 
 						<div class="form-group">
 							<label>密码：</label> <input type="password" placeholder="密码"
@@ -311,7 +326,8 @@
 									name="theme" id="theme" class="form-control " required>
 							</div>
 							<!-- 活动ID  -->
-							
+							<input type="hidden" id="contestId" value="${contest.id }"
+								name="contestId"> 
 								<input type="hidden" id="editId"
 								name="editId">
 
@@ -437,6 +453,11 @@
 
 		});
 	</script>
+
+
+
+
+
 
 
 

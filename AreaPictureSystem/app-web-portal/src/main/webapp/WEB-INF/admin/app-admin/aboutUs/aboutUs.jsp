@@ -155,7 +155,7 @@
 			language : 'zh',
 			uploadUrl : '#',
 			allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg', 'bmp' ],
-			dropZoneTitle : "请上传需要进行投稿的图片！",
+			dropZoneTitle : "展示教师照片上传！",
 			showUpload : false,// 是否显示上传按钮
 			showCaption : false,// 是否显示标题
 			showPreview : true,// 显示预览

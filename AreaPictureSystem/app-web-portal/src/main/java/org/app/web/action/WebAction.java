@@ -12,11 +12,13 @@ import org.app.framework.util.CommonEnum;
 import org.app.framework.util.Pagination;
 import org.app.web.pojo.WebPortal;
 import org.app.web.service.WebService;
+import org.app.webAdmin.pojo.AboutUs;
 import org.app.webAdmin.pojo.Contest;
 import org.app.webAdmin.pojo.Index;
 import org.app.webAdmin.pojo.News;
 import org.app.webAdmin.pojo.Users;
 import org.app.webAdmin.pojo.UsersUploads;
+import org.app.webAdmin.service.AboutUsService;
 import org.app.webAdmin.service.ContestImagesService;
 import org.app.webAdmin.service.ContestService;
 import org.app.webAdmin.service.IndexService;
@@ -65,6 +67,9 @@ public class WebAction extends GeneralAction<WebPortal> {
 	
 	@Autowired
 	private IndexService indexService;
+	
+	@Autowired
+	private AboutUsService aboutUsSercice;
 
 	/**
 	 * 网站首页
@@ -243,8 +248,16 @@ public class WebAction extends GeneralAction<WebPortal> {
 	 */
 	@RequestMapping("/apply")
 	public ModelAndView apply(HttpSession session, @RequestParam(value = "type", defaultValue = "") String type,
-			@RequestParam(value = "id", defaultValue = "") String id) {
-
+			@RequestParam(value = "id", defaultValue = "") String id,
+			@ModelAttribute("contestId") String contestId,
+			@ModelAttribute("checkMenu") String checkMenu
+			) {
+		//TODO
+		if(Common.isNotEmpty(contestId)){
+			
+		}
+		
+		
 		session.setAttribute("checkMenu", Common.isNotEmpty(type) ? type : null);
 
 		ModelAndView modelAndView = new ModelAndView();
@@ -272,6 +285,14 @@ public class WebAction extends GeneralAction<WebPortal> {
 		session.setAttribute("checkMenu", Common.isNotEmpty(type) ? type : null);
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("web/about");
+		
+		List<AboutUs> aboutus = this.aboutUsSercice.find(new Query(),AboutUs.class);
+		
+		if(aboutus.size()>0){
+			modelAndView.addObject("aboutus", aboutus.get(0));
+		}
+		
+		
 		return modelAndView;// 返回
 	}
 
@@ -437,5 +458,65 @@ public class WebAction extends GeneralAction<WebPortal> {
 
 		return result;
 	}
+	
+	
+	@RequestMapping("/toMyApply")
+	public ModelAndView toMyApply(){
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.setViewName("/web/myApply");
+
+		
+		return modelAndView;
+		
+		
+		
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
+	//TODO
+	@RequestMapping("/toApply")
+	public ModelAndView toApply( @RequestParam(defaultValue = "", value = "contestId") String contestId,
+			HttpSession session,RedirectAttributes model,
+			 @RequestParam(value = "type", defaultValue = "") String type){
+		
+		session.setAttribute("checkMenu", Common.isNotEmpty(type) ? type : null);
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		modelAndView.setViewName("/web/toApply");
+		
+		
+		Users users = (Users) session.getAttribute(CommonEnum.WEBUSERSESSION);
+		
+		
+		if(users == null){
+			modelAndView.setViewName("redirect:/web/apply");
+			model.addFlashAttribute("contestId", contestId);
+			model.addFlashAttribute("checkMenu", type);
+			return modelAndView;
+		}
+		//通过比赛id查询,userid查询数据
+		
+		
+		
+		
+		
+		return modelAndView;
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+
 
 }
