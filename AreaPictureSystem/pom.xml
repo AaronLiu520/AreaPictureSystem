@@ -27,8 +27,7 @@
 		<!-- Test -->
 		<junit.version>4.11</junit.version>
 	</properties>
- 
- 
+  
   <modules>
   	<module>app-framework</module>
   	<module>app-admin-action</module>

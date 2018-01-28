@@ -99,7 +99,11 @@ public class WebAction extends GeneralAction<WebPortal> {
 
 		List<Contest> listContest = this.contestService.find(query, Contest.class);
 		
-		modelAndView.addObject("contest", listContest.get(0));
+		if(listContest.size() > 0){
+			
+			modelAndView.addObject("contest", listContest.get(0));
+		}
+		
 		
 
 		modelAndView.setViewName("web/index");
