@@ -245,7 +245,7 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	@SystemErrorLog(description="创建活动出错")
 	@RequestMapping("/creatOrEditActivity")
 	public ModelAndView creatOrEditActivity(HttpSession session,ForderActivity forderActivity
-			,@RequestParam(value="edit",defaultValue="")String edit){
+			,@RequestParam(value="edit",defaultValue="")String edit,RedirectAttributes ra){
 		log.info("进去create!");
 		ModelAndView modelAndView = new ModelAndView();
 		
@@ -258,7 +258,11 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 			
 				AdminUser adminUser=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 				
-				this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit,listsType);			
+				if(!this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit,listsType)){
+				    modelAndView.setViewName("redirect:/adminUser/index"); 
+					ra.addFlashAttribute("error", "直属单位无法创建基层活动");
+				}
+		
 		}
 
 		return modelAndView;
