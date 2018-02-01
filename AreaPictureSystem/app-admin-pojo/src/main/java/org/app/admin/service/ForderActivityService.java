@@ -369,7 +369,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	}
 
 	
-	public void creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id,List<List<Type>> listsType) {
+	public boolean creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id,List<List<Type>> listsType) {
 		
 		if (adminUser != null && forderActivity != null) {
 			
@@ -403,7 +403,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					if(adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU)){
 						//直属单位不能创建基层单位的活动
 						if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS)){
-							return;
+							return false;
 						}
 					}
 					
@@ -441,6 +441,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			}
 			
 		}
+		return true;
 		
 	}
 	
