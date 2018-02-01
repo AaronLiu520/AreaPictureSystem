@@ -68,8 +68,8 @@
 <body>
 <!-- 菜单头部 -->
 <jsp:include page="public/top.jsp"/>
-<!-- banner -->
-<div class="inner-banner"></div>
+	<!-- banner -->
+	<jsp:include page="public/inner-banana.jsp" />
 
 <!--摄影作品展内容-->
 <!--single-->

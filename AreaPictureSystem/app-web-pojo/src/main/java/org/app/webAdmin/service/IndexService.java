@@ -2,6 +2,7 @@ package org.app.webAdmin.service;
 
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.BasicDataResult;
+import org.app.framework.util.Common;
 import org.app.webAdmin.pojo.Index;
 import org.app.webAdmin.pojo.Setting;
 import org.springframework.data.mongodb.core.query.Query;
@@ -44,7 +45,9 @@ public class IndexService extends GeneralServiceImpl<Index> {
 			this.insert(index);
 			return BasicDataResult.build(200, "添加成功", index);
 		}else{
-			ind.setBanana(index.getBanana().replaceAll("\\\\", "/"));
+			if(Common.isNotEmpty(index.getBanana())){
+				ind.setBanana(index.getBanana().replaceAll("\\\\", "/"));
+			}
 			ind.setBananaContent(index.getBananaContent());
 			ind.setBananaTitle(index.getBananaTitle());
 			ind.setGoodContestImages(index.getGoodContestImages());

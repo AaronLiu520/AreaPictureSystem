@@ -34,6 +34,7 @@ public class Users extends GeneralBean {
 	private String accountName;
 	private String password;
 	private String phone;
+	private boolean status;//使用状态
 	public String getName() {
 		return name;
 	}
@@ -70,12 +71,19 @@ public class Users extends GeneralBean {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
+	
+	public boolean isStatus() {
+		return status;
+	}
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
 	@Override
 	public String toString() {
 		return "Users [name=" + name + ", school=" + school + ", email=" + email + ", accountName=" + accountName
-				+ ", password=" + password + ", phone=" + phone + "]";
+				+ ", password=" + password + ", phone=" + phone + ", status=" + status + "]";
 	}
-	
+
 	
 	
 	

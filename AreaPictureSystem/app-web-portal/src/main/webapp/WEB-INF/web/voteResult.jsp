@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <%@page isELIgnored="false"%>
 <!doctype html>
 <html lang="en" class="app">
@@ -11,27 +12,32 @@
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
 <meta name="renderer" content="webkit">
-<meta http-equiv="Cache-ControMl" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
 <meta name="apple-mobile-web-app-title" content="WeChat" />
-
+<!-- 
+<link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css"
+	rel="stylesheet"> -->
 <link href="${pageContext.request.contextPath}/assets/css/bootstrap.css"
 	rel="stylesheet" type="text/css" media="all" />
+
 <link href="${pageContext.request.contextPath}/assets/css/style.css"
 	rel="stylesheet" type="text/css" media="all" />
-<!--fonts-->
-<style type="text/css">
-.inner-banner {
-	background: url('${index.banana}') no-repeat 0px 0px;
-	background-size: cover;
-	-webkit-background-size: cover;
-	-o-background-size: cover;
-	-ms-background-size: cover;
-	-moz-background-size: cover;
-	min-height: 150px;
-}
-</style>
-<!--//fonts-->
+
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/admin/Assets/css/zoom.css"
+	media="all" />
+
+
+
+
+
 <script type="application/x-javascript">
+	
+	
+	
+	
+	
 	 addEventListener("load", function () {
         setTimeout(hideURLbar, 0);
     }, false);
@@ -39,7 +45,22 @@
     function hideURLbar() {
         window.scrollTo(0, 1);
     } 
+
+
+
+
+
+
+
+
+
+
+
+
 </script>
+
+
+
 <!-- //for-mobile-apps -->
 <!-- js -->
 <script type="text/javascript"
@@ -83,7 +104,15 @@
 		});
 	});
 </script>
-<!-- start-smooth-scrolling -->
+<!-- 模态框 -->
+<script
+	src="${pageContext.request.contextPath}/assets/admin/js/jquery-2.1.1.min.js"></script>
+<script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js"
+	type="text/javascript"></script>
+<script
+	src="http://apps.bdimg.com/libs/fancybox/2.1.5/jquery.fancybox.js"
+	type="text/javascript"></script>
+
 </head>
 <body>
 	<!-- 菜单头部 -->
@@ -91,100 +120,97 @@
 	<!-- banner -->
 	<jsp:include page="public/inner-banana.jsp" />
 
-	<!--奉贤区教工摄影介绍-->
-	<div class="about two">
+
+	<div class="contact">
 		<div class="container">
-			<h3 class="tittle">关于我们</h3>
-			<div class="about-top">
-				<div class="col-md-7 about-top-right">
-					<h4>奉贤区教育学院摄影教工</h4>
-					<p>
-						${aboutus.aboutUsContent }
-					</p>
+			<h3>投票结果</h3>
+
+
+			<button type="button" id="loading-example-btn"
+				onClick="javascript :history.back(-1);" class="label label-default"
+				style="margin-top: 10px;">返回</button>
+
+
+
+
+
+			<div class="col-md-12 contact-in">
+
+				<div class="bs-docs-example">
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>票数</th>
+								<th>姓名</th>
+								<th>主题</th>
+								<th>上传图片数</th>
+							</tr>
+						</thead>
+						<tbody>
+							<c:forEach items="${listUsersUploads}" var="items"
+								varStatus="status">
+
+								<tr>
+									<td>${items.poll }</td>
+									<td>${items.users.name }</td>
+									<td>${items.theme }</td>
+									<td>${fn:length(items.listContestImages)}</td>
+								</tr>
+							</c:forEach>
+
+
+						</tbody>
+					</table>
 				</div>
-				<div class="col-md-5 about-top-left">
-					<img src="${aboutus.aboutUsPic }" style="width:355px;height: 355px;"
-						class="img-responsive" alt="" />
-				</div>
-				<div class="clearfix"></div>
+
 			</div>
 		</div>
+
 	</div>
 
 
 
-	<!--top-games-section-->
-	<div class="top-games-section">
-		<div class="container">
-			<!--sreen-gallery-cursual-->
-			<div class="top-games">
-				<h3>教工摄影团队</h3>
-			</div>
-			<div class="g-views" style="margin-bottom: 20px;">
-				<ul id="flexiselDemo3">
-				
-				<c:forEach items="${aboutus.listTeachers }" var="item" varStatus="status">
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy"> <img style="width: 256px;height: 177px;"
-								src="${item.originalPath}" />
-							</a>
-							<div class="lightbox-target" id="goofy">
-								<img
-									src="${item.originalPath}" />
-								<a class="lightbox-close" href="#"> </a>
 
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-					</c:forEach>
-					
-				</ul>
-				<script type="text/javascript">
-					$(window).load(function() {
-						$("#flexiselDemo3").flexisel({
-							visibleItems : 4,
-							animationSpeed : 1000,
-							autoPlay : true,
-							autoPlaySpeed : 3000,
-							pauseOnHover : false,
-							enableResponsiveBreakpoints : true,
-							responsiveBreakpoints : {
-								portrait : {
-									changePoint : 480,
-									visibleItems : 3
-								},
-								landscape : {
-									changePoint : 640,
-									visibleItems : 3
-								},
-								tablet : {
-									changePoint : 768,
-									visibleItems : 3
-								}
-							}
-						});
-					});
-				</script>
-				<script type="text/javascript"
-					src="${pageContext.request.contextPath}/assets/js/jquery.flexisel.js"></script>
-			</div>
-		</div>
-	</div>
 
+	<!-- DROPZONE -->
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/js/plugins/dropzone/dropzone.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/assets/admin/Assets/js/zoom.min.js"></script>
+
+	<script type="text/javascript"
+		src="http://code.jquery.com/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/assets/admin/Assets/tooltip/javascripts/jquery.tooltip.js"></script>
+	<script type="text/javascript">
+		$j = jQuery.noConflict();
+		$j(document).ready(function() {
+			$j("div.item").tooltip();
+		});
+	</script>
 
 	<!-- 底部 -->
 	<jsp:include page="public/botton.jsp" />
 
+
 	<!-- smooth scrolling -->
 	<script type="text/javascript">
 		$(document).ready(function() {
+
 			$().UItoTop({
 				easingType : 'easeOutQuart'
 			});
+
 		});
 	</script>
+
+
+
+
+
+
+
+
 
 </body>
 </html>

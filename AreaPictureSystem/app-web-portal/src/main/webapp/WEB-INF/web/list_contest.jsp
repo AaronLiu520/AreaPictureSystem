@@ -76,13 +76,27 @@
 	});
 </script>
 <!-- start-smooth-scrolling -->
+
+<!-- 模态框 -->
+<script
+	src="${pageContext.request.contextPath}/assets/admin/js/jquery-2.1.1.min.js"></script>
+<script src="http://www.jq22.com/jquery/bootstrap-3.3.4.js"
+	type="text/javascript"></script>
+<script
+	src="http://apps.bdimg.com/libs/fancybox/2.1.5/jquery.fancybox.js"
+	type="text/javascript"></script>
+
+
+
+
+
+
 </head>
 <body>
 		<!-- 菜单头部 -->
 	<jsp:include page="public/top.jsp" />
 	<!-- banner -->
-	<div class="inner-banner"></div>
-	
+	<jsp:include page="public/inner-banana.jsp" />
 	<!--新闻公告-->
 	<div class="news">
 		<div class="container">
@@ -111,25 +125,25 @@
 								<div style="height: 200px;width:100%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">${items.content }</div>
 								
 								
-								
+								<div style="margin-top: 20px;">
 								<c:if test="${now > items.startTime && now <  items.endTime }">
 									<a href="javascript:void(0)"
 										onclick="return toApply('${items.id}','${checkMenu}'); "
-										class="hvr-rectangle-in button">我要报名</a>
+										class="hvr-rectangle-in button">比赛详情</a>
 								</c:if>
 
 								<c:if test="${items.openVote eq true}">
 									<c:if
 										test="${now > items.voteStartTime && now <  items.voteEndTime }">
-										<a href="#" class="hvr-rectangle-in button">我要参与投票</a>
+										<a href="${pageContext.request.contextPath}/web/votelist?contestId=${items.id}" class="hvr-rectangle-in button">我要参与投票</a>
 									</c:if>
 
 									<c:if test="${now > items.voteEndTime }">
-										<a href="#" class="hvr-rectangle-out label-default">投票已结束(查看结果)</a>
+										<a href="${pageContext.request.contextPath}/web/voteResult?contestId=${items.id}" class="hvr-rectangle-out label-default">投票已结束(查看结果)</a>
 									</c:if>
 
 								</c:if>
-
+</div>
 
 							</div>
 
@@ -172,22 +186,6 @@
 
 		</div>
 	</div>
-
-
-
-<c:if test="${not empty msg }">
-<script>
-$(function(){
-	alert("恭喜你，投稿成功！")
-
-	})
-
-</script>
-	</c:if>
-	
-	
-	
-
 
 
 

@@ -201,7 +201,7 @@
 														</select>
 													</div>
 												</div>
-												<div class="form-group col-sm-6">
+												<%-- <div class="form-group col-sm-6">
 													<label class="col-sm-2 control-label">公开投票</label>
 													<div class="col-sm-10">
 
@@ -212,7 +212,7 @@
 																<c:if test="${contest.openPublicVote eq false }">selected </c:if>>公开投票</option>
 														</select>
 													</div>
-												</div>
+												</div> --%>
 
 
 											</div>

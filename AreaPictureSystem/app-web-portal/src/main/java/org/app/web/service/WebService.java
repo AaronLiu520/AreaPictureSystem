@@ -133,7 +133,7 @@ public class WebService extends GeneralServiceImpl  {
 			return BasicDataResult.build(202, "所属学校不能为空", null);
 		}
 		try{
-			
+			users.setStatus(true);
 			this.usersService.save(users);
 		}catch(Exception e){
 			e.printStackTrace();
@@ -154,6 +154,7 @@ public class WebService extends GeneralServiceImpl  {
 	* @return BasicDataResult    返回类型 
 	* @throws
 	 */
+	@SuppressWarnings("unused")
 	public BasicDataResult userLogin(Users users){
 		
 		
@@ -170,11 +171,21 @@ public class WebService extends GeneralServiceImpl  {
 		
 		Users u  = this.usersService.findOneByQuery(query, Users.class);
 		
+		if(u == null){
+			return BasicDataResult.build(400, "登录失败，用户名或密码错误！", null);
+		}
+		
+		
+		if(u.isStatus()==false){
+			return BasicDataResult.build(203, "您登录的帐号已经被禁用，请与管理员联系", null);
+		}
+		
 		if(u!=null){
 			return BasicDataResult.build(200, "登录成功",u);
 		}
 		
 		return BasicDataResult.build(400, "登录失败，用户名或密码错误！", null);
+		
 	}
 	
 	

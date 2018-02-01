@@ -68,233 +68,91 @@
 <body>
 <!-- 菜单头部 -->
 <jsp:include page="public/top.jsp"/>
-<!-- banner -->
-<div class="inner-banner"></div>
-
+	<!-- banner -->
+	<jsp:include page="public/inner-banana.jsp" />
 <!--摄影作品展内容-->
 <div class="news">
     <div class="container">
         <h3 class="tittle">教工摄影作品展</h3>
         <div class="news-article">
-            <div class="col-md-6 article-post">
+        
+        
+        
+        
+        
+        
+        <c:forEach items="${pageList.datas }" var="items" varStatus="status">
+        
+         <div class="col-md-6 article-post">
                 <div class="col-md-3 post-meta">
                     <div class="meta-icon">
                         <div class="pic">
-                            <a href="${pageContext.request.contextPath}/web/page" > <i class="glyphicon glyphicon-picture"></i></a>
+                            <a href="${pageContext.request.contextPath}/web/listGallery?id=${items.id}" > <i class="glyphicon glyphicon-picture"></i></a>
                         </div>
                     </div>
                     <ul class="ad-info">
-                        <li>2017-03-04</li>
-                        <li> <a href="#">谭剑英</a></li>
-                        <li> <a href="#">224 评论数量</a></li>
+                        <li>${items.createDate }</li>
+                        <li> <a href="#">${items.users.name }</a></li>
+                        <li> <a href="#">${items.poll } 票</a></li>
                     </ul>
                     <div class="clearfix"> </div>
                 </div>
                 <div class="col-md-9 post-details">
-                    <a href="${pageContext.request.contextPath}/web/page" class="mask">
-                        <img src="${pageContext.request.contextPath}/assets/images/e7.jpg" alt="image"
+                    <a href="${pageContext.request.contextPath}/web/listGallery?id=${items.id}" class="mask">
+                        <img src="${items.listContestImages[0].originalPath}" alt="image"
                              class="img-responsive zoom-img"></a>
 
-                    <a href="${pageContext.request.contextPath}/web/page"><h4>李荣安为奉贤区教育学院作报告</h4></a>
+                    <a href="${pageContext.request.contextPath}/web/listGallery?id=${items.id}"><h4>${items.theme }</h4></a>
                     <p>
-                        因此，面对未来，我们需要一种以“未来”为取向的公民道德观，针对“软实力”的要求，
-                        公民道德的教育重点是帮助学生面对不可知的状况，使其能有坚韧的应变能力、适应能力和创造能力，
-                        此种能力也应该是德育赋予个体的一种面对急变社会的选择能力，以及保守重要价值观的能力。
+                     ${items.introduce }
                     </p>
                     <div class="read two">
-                        <a class="button" href="single.html"><img src="${pageContext.request.contextPath}/assets/images/read.png" alt="" /></a>
+                        <a class="button" href="${pageContext.request.contextPath}/web/listGallery?id=${items.id}"><img src="${pageContext.request.contextPath}/assets/images/read.png" alt="" /></a>
                     </div>
                 </div>
                 <!--post-details-->
                 <div class="clearfix"> </div>
             </div>
-            <div class="col-md-6 article-post">
-                <div class="col-md-3 post-meta">
-                    <div class="meta-icon">
-                        <div class="pic">
-                            <a href="single.html" > <i class="glyphicon glyphicon-picture"></i></a>
-                        </div>
-                    </div>
-                    <ul class="ad-info">
-                        <li>2017-02-11</li>
-                        <li> <a href="#">王进</a></li>
-                        <li> <a href="#">214 评论数量</a></li>
-                    </ul>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="col-md-9 post-details">
-                    <a href="single.html" class="mask">
-                        <img src="${pageContext.request.contextPath}/assets/images/e8.jpg" alt="image"
-                             class="img-responsive zoom-img">
-                    </a>
-
-                    <a href="single.html"><h4>上海市野生动物园一角</h4></a>
-                    <p>
-                        那些主要表现人物的活动与情节，反映的是一定的生活主题，被摄者的相貌并不很突出的摄影作品，
-                        不管它是近景也好，全身也好，只能属于人物摄影的范畴。当然，从广义上来说，人像摄影拍的是人
-                        ，它也属于人物摄影。人像摄影以刻画和描绘被摄者的外貌与神态为自己的表现任务，应人物相貌鲜明。
-                    </p>
-                    <div class="read two">
-                        <a class="button" href="single.html">
-                            <img src="${pageContext.request.contextPath}/assets/images/read.png" alt="" />
-                        </a>
-                    </div>
-                </div>
-                <!--post-details-->
-                <div class="clearfix"> </div>
-            </div>
-            <div class="col-md-6 article-post">
-                <div class="col-md-3 post-meta">
-                    <div class="meta-icon">
-                        <div class="pic">
-                            <a href="single.html" > <i class="glyphicon glyphicon-picture"></i></a>
-                        </div>
-                    </div>
-                    <ul class="ad-info">
-                        <li>2017-12-15</li>
-                        <li> <a href="#">李春华</a></li>
-                        <li> <a href="#">19 评论数量</a></li>
-                    </ul>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="col-md-9 post-details">
-                    <a href="" class="mask">
-                        <img src="${pageContext.request.contextPath}/assets/images/e1.jpg" alt="image"
-                             class="img-responsive zoom-img">
-                    </a>
-                    <a href=""><h4>欧洲女模摄影艺术</h4></a>
-                    <p>
-                        那些主要表现人物的活动与情节，反映的是一定的生活主题，被摄者的相貌并不很突出的摄影作品，
-                        不管它是近景也好，全身也好，只能属于人物摄影的范畴。当然，从广义上来说，人像摄影拍的是人
-                        ，它也属于人物摄影。人像摄影以刻画和描绘被摄者的外貌与神态为自己的表现任务，应人物相貌鲜明。
-                    </p>
-                    <div class="read two">
-                        <a class="button" href="single.html">
-                            <img src="${pageContext.request.contextPath}/assets/images/read.png" alt="" /></a>
-                    </div>
-                </div>
-                <!--post-details-->
-                <div class="clearfix"> </div>
-            </div>
-            <div class="col-md-6 article-post">
-                <div class="col-md-3 post-meta">
-                    <div class="meta-icon">
-                        <div class="pic">
-                            <a href="single.html" > <i class="glyphicon glyphicon-picture"></i></a>
-                        </div>
-                    </div>
-                    <ul class="ad-info">
-                        <li>2017-06-11</li>
-                        <li> <a href="#">谭剑英</a></li>
-                        <li> <a href="#">24 评论数量</a></li>
-                    </ul>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="col-md-9 post-details">
-                    <a href="#" class="mask">
-                        <img src="${pageContext.request.contextPath}/assets/images/e2.jpg" alt="image"
-                             class="img-responsive zoom-img">
-                    </a>
-                    <a href="#"><h4>中国男模平面摄影图</h4></a>
-                    <p>
-                        那些主要表现人物的活动与情节，反映的是一定的生活主题，被摄者的相貌并不很突出的摄影作品，
-                        不管它是近景也好，全身也好，只能属于人物摄影的范畴。当然，从广义上来说，人像摄影拍的是人
-                        ，它也属于人物摄影。人像摄影以刻画和描绘被摄者的外貌与神态为自己的表现任务，应人物相貌鲜明。
-                    </p>
-                    <div class="read two">
-                        <a class="button" href="#">
-                            <img src="${pageContext.request.contextPath}/assets/images/read.png" alt="" />
-                        </a>
-                    </div>
-                </div>
-                <!--post-details-->
-                <div class="clearfix"> </div>
-            </div>
-            <div class="col-md-6 article-post">
-                <div class="col-md-3 post-meta">
-                    <div class="meta-icon">
-                        <div class="pic">
-                            <a href="single.html" > <i class="glyphicon glyphicon-picture"></i></a>
-                        </div>
-                    </div>
-                    <ul class="ad-info">
-                        <li>2017-05-19</li>
-                        <li> <a href="#">陈平华</a></li>
-                        <li> <a href="#">100 评论数量</a></li>
-                    </ul>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="col-md-9 post-details">
-                    <a href="single.html" class="mask">
-                        <img src="${pageContext.request.contextPath}/assets/images/e3.jpg" alt="image"
-                             class="img-responsive zoom-img">
-                    </a>
-
-                    <a href="single.html"><h4>美国40岁模特的人生记录</h4></a>
-                    <p>
-                        那些主要表现人物的活动与情节，反映的是一定的生活主题，被摄者的相貌并不很突出的摄影作品，
-                        不管它是近景也好，全身也好，只能属于人物摄影的范畴。当然，从广义上来说，人像摄影拍的是人
-                        ，它也属于人物摄影。人像摄影以刻画和描绘被摄者的外貌与神态为自己的表现任务，应人物相貌鲜明。
-                    </p>
-                    <div class="read two">
-                        <a class="button" href="single.html"><img src="${pageContext.request.contextPath}/assets/images/read.png" alt="" /></a>
-                    </div>
-                </div>
-                <!--post-details-->
-                <div class="clearfix"> </div>
-            </div>
-            <div class="col-md-6 article-post">
-                <div class="col-md-3 post-meta">
-                    <div class="meta-icon">
-                        <div class="pic">
-                            <a href="single.html" > <i class="glyphicon glyphicon-picture"></i></a>
-                        </div>
-                    </div>
-                    <ul class="ad-info">
-                        <li>2017-04-09</li>
-                        <li> <a href="#">谭剑英</a></li>
-                        <li> <a href="#">124 评论数量</a></li>
-                    </ul>
-                    <div class="clearfix"> </div>
-                </div>
-                <div class="col-md-9 post-details">
-                    <a href="single.html" class="mask">
-                        <img src="${pageContext.request.contextPath}/assets/images/e4.jpg" alt="image"
-                             class="img-responsive zoom-img"></a>
-
-                    <a href="single.html"><h4>上海奉贤区车展会摄影</h4></a>
-                    <p>
-                        那些主要表现人物的活动与情节，反映的是一定的生活主题，被摄者的相貌并不很突出的摄影作品，
-                        不管它是近景也好，全身也好，只能属于人物摄影的范畴。当然，从广义上来说，人像摄影拍的是人
-                        ，它也属于人物摄影。人像摄影以刻画和描绘被摄者的外貌与神态为自己的表现任务，应人物相貌鲜明。
-                    </p>
-                    <div class="read two">
-                        <a class="button" href="single.html">
-                            <img src="${pageContext.request.contextPath}/assets/images/read.png" alt="" />
-                        </a>
-                    </div>
-                </div>
-                <!--post-details-->
-                <div class="clearfix"> </div>
-            </div>
+        
+        </c:forEach>
+        
+           
 
             <div class="clearfix"> </div>
         </div>
-        <!-- 分页功能-->
-        <div class="blog-pagenat">
-            <ul>
-                <li><a class="frist" href="#">Prev</a></li>
-                <li><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a class="last" href="#">Next</a></li>
-                <div class="clearfix"> </div>
-            </ul>
-        </div>
-        <!--//End-分页功能-->
+        
+        
+        
+        
+        
+        
+        
+        
+        
+     	<!-- 分页功能-->
+			<div class="blog-pagenat" style="margin-bottom: 20px;">
+				<ul>
+					<li
+						class="frist <c:if test="${pageList.pageNo  eq 1}">disabled</c:if>"><a
+						<c:if test="${pageList.pageNo  eq 1 }">href="javascript:void(0)"</c:if>
+						href="${pageContext.request.contextPath}/web/listPhotography?pageNo=${pageList.upPage}">
+							上一页 </a></li>
+					<li><c:forEach items="${pageList.navigatepageNums}" var="nav">
+							<c:choose>
+								<c:when test="${nav == pageList.pageNo}">
+									<a class="active">${nav}</a>
+								</c:when>
+								<c:otherwise>
+									<a
+										href="${pageContext.request.contextPath}/web/listPhotography?pageNo=${nav}">${nav}</a>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach></li>
+					<li><a
+						href="${pageContext.request.contextPath}/web/listPhotography?pageNo=${pageList.nextPage}"
+						class="last"> 下一页 </a></li>
+				</ul>
+			</div>
 
     </div>
 </div>

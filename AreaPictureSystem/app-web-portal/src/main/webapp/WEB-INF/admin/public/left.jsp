@@ -74,17 +74,9 @@ li_style:hover {
 				<li class="nav-header">
 
 					<div class="dropdown profile-element">
-						<span style="float: left; padding-right: 10px;"> <c:choose>
-								<c:when test="${sessionScope.userSession.headImage==''}">
+						<span style="float: left; padding-right: 10px;"> 
 									<img alt="image" class="img-circle"
 										src="${pageContext.request.contextPath}/assets/admin/img/profile_small.jpg" />
-								</c:when>
-								<c:otherwise>
-									<img alt="image" class="img-circle"
-										src="${pageContext.request.contextPath}/user/getImg"
-										width="64" />
-								</c:otherwise>
-							</c:choose>
 
 
 

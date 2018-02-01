@@ -5,11 +5,10 @@
         html{height:100%;}
         body{min-height:100%;margin:0;padding:0;position:relative;}
 
-        .main{padding-bottom:100px;}
-        .footer{position:absolute;bottom:0;width:100%;height:20px; }
+        .footer{position:absolute;bottom:0;width:100%;height:20px;}
     </style>
 
-<div class="footer" style="margin-top: 50px;">
+<div class="footer" style="margin-top: 10px;">
     <p style="color:#7E7E7E;text-align: center;padding-top: 15px;">
        ${websetting.copyRight}
     </p>

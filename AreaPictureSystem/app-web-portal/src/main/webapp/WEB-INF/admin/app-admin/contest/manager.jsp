@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <%@page isELIgnored="false"%> 
 <!doctype html>
 <html lang="en" class="app">
@@ -32,7 +33,7 @@
                      <div class="col-lg-12">
                             <div class="ibox float-e-margins">
                                 <div class="ibox-title">
-                                    <h5>比赛管理
+                                    <h5>参赛管理
                                     </h5>
                                     <div class="ibox-tools">
                                         <a class="collapse-link">
@@ -43,10 +44,8 @@
                                 </div>
                                 <div class="ibox-content">
                                       <p>
-                                        <a href="editor">
-                                    		<button  class="btn btn-primary " type="button"><i class="fa fa-plus"  >
-                                    		</i>&nbsp;添加</button>
-                                    	</a>
+                                    		<a href="${pageContext.request.contextPath}/contest/listContest" class="btn btn-primary " type="button"><i class="fa fa-mail-reply"  >
+                                    		</i>&nbsp;返回</a>
                            			 </p>
 
                             <p>
@@ -54,61 +53,32 @@
                                 <thead>
                                     <tr>
                                     	<th>主题</th>
-                                        <th>开始时间</th>
-                                        <th>结束时间</th>
-                                        <th>投票开始时间</th>
-                                        <th>投票结束时间</th>
-                                        <th>发布人</th>
-                                        <th>状态</th>
-                                     <!--    <th>可参赛人数</th> -->
-                                        <th>比赛类别</th>
-                                        <th>开启投票</th>
-                                    <!--     <th>公开投票</th> -->
-                                        <th>发布公告</th>
-                                        <th>排序</th>
+                                    	<th>作者</th>
+                                    	<th>所属单位</th>
+                                    	<th>电话</th>
+                                    	<th>邮箱地址</th>
+                                    	<th>创建时间</th>
+                                    	<th>上传图片数量</th>
+                                    	<th>当前票数</th>
                                         <th>操作</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                <c:forEach items="${pageList}" var="item" varStatus="status">
-                                    <tr class="gradeX" ondblclick="return findUploads('${item.id}');">
-                                    	<td>${item.contestName}</td>
-                                        <td>${item.startTime}</td>
-                                        <td>${item.endTime}</td>
-                                        <td>${item.voteStartTime}</td>
-                                        <td>${item.voteEndTime}</td>
-                                        <td>${item.publisher}</td>
-                                         <td>
-                                       	<c:if test="${item.status == 'true'}">启用</c:if>
-                                       	<c:if test="${item.status == 'false'}">禁用</c:if>
-                                        </td>
-                                      <%--   <td>${item.participants}</td> --%>
-                                        
-                                          <td>
-                                       	<c:if test="${item.contestType == 'true'}">区域</c:if>
-                                       	<c:if test="${item.contestType == 'false'}">内部</c:if>
-                                        </td>
-                                          <td>
-                                       	<c:if test="${item.openVote == 'true'}">已开启</c:if>
-                                       	<c:if test="${item.openVote == 'false'}">未开启</c:if>
-                                        </td>
-                                  <%--         <td>
-                                       	<c:if test="${item.openPublicVote == 'true'}">登录投票</c:if>
-                                       	<c:if test="${item.openPublicVote == 'false'}">公开投票</c:if>
-                                        </td> --%>
-                                          <td>
-                                       	<c:if test="${item.announcements == 'true'}">已发公告</c:if>
-                                       	<c:if test="${item.announcements == 'false'}">未发公告</c:if>
-                                        </td>
-                                        <td>${item.sort}</td>
+                                    <tr class="gradeX"  ondblclick="return findImgs('${item.id}');" >
+                                    	<td>${item.theme}</td>
+                                        <td>${item.users.name}</td>
+                                        <td>${item.users.school}</td>
+                                        <td>${item.users.phone}</td>
+                                        <td>${item.users.email}</td>
+                                        <td>${item.createDate}</td>
+                                        <td>${fn:length(item.listContestImages)}</td>
+                                        <td>${item.poll}</td>
                                         <td class="center">
-                                            <button  onclick="return findUploads('${item.id}')" type="button" class="btn btn-primary btn-xs edit-news" data-id="1">查看投稿</button>
+                                     	  <button  onclick="return findUploadsImgs('${item.id}')" type="button" class="btn btn-primary btn-xs edit-news" data-id="1">查看投稿图片</button>
                                             
-                                            <a href="editor?id=${item.id}">
-                                            <button type="button" class="btn btn-primary btn-xs edit-news" data-id="1">编辑</button>
-                                            </a>
                                             <button type="button" class="btn  btn-warning btn-xs delete-news" data-id="1"
-                                             onclick="deleteAlert('${item.id}')">删除</button>
+                                             onclick="deleteAlert('${item.id}','${item.contestId }')">删除</button>
                                         </td>
                                     </tr>
                                 </c:forEach>
@@ -149,27 +119,27 @@
     
 
  <script type="text/javascript">
- 		
- 	   function findUploads(o){
- 	    	window.location.href="${pageContext.request.contextPath}/contest/manager?id="+o;
- 	    }
- 		
- 
- 
  	
  	var deleteId;
+ 	var contestId;
  	//删除提示窗口
- 	function deleteAlert(id) {
+ 	function deleteAlert(id,o2) {
  		 $('#deleteModal6').modal('show');
  		deleteId=id;
+ 		contestId = o2;
+ 		
  		
  	}
  	//删除记录
  	function deleteById() {
- 		window.location.href = "delete?id="+deleteId;
+ 		window.location.href = "deleteUsersUploads?id="+deleteId+"&contestId="+contestId;
  	}
  	
- 	
+ 	function findUploadsImgs(o){
+ 		
+ 		window.location.href = "findImages?id="+o;
+ 		
+ 	}
  </script>
  
 <script>
@@ -184,13 +154,8 @@ $(document).ready(function () {
 
     // validate the comment form when it is submitted
     $("#add-news-form").validate();//初始化from验证
-    
-    
 });
 </script>
-
-
-
 
 </body>
 </html>

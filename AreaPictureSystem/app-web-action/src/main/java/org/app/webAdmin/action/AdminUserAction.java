@@ -1,5 +1,8 @@
 package org.app.webAdmin.action;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 
 import org.app.framework.action.GeneralAction;
@@ -8,11 +11,18 @@ import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.webAdmin.pojo.AdminRole;
 import org.app.webAdmin.pojo.AdminUser;
+import org.app.webAdmin.pojo.Contest;
+import org.app.webAdmin.pojo.Statistics;
+import org.app.webAdmin.pojo.UsersUploads;
 import org.app.webAdmin.service.AdminRoleService;
 import org.app.webAdmin.service.AdminUserService;
+import org.app.webAdmin.service.ContestImagesService;
+import org.app.webAdmin.service.ContestService;
+import org.app.webAdmin.service.UsersUploadsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +42,12 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	private AdminUserService adminUserService;
 	@Autowired
 	private AdminRoleService adminRoleService;
+	@Autowired
+	private UsersUploadsService usersUploadsService;
+	@Autowired
+	private ContestImagesService contestImagesService;
+	@Autowired
+	private ContestService contestService;
 
 
 	/**
@@ -161,10 +177,36 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@RequestMapping("/index")
 	public ModelAndView index(HttpSession session) {
 		ModelAndView modelAndView = new ModelAndView();
-		//modelAndView.setViewName("admin/index");
 		modelAndView.setViewName("admin/index");
-
+		
+		List<Statistics> lists = new ArrayList<Statistics>();
+		
+		
+		//获取所有的比赛信息
+		List<Contest> listContest = this.contestService.find(new Query(), Contest.class);
+		
+		for(Contest c:listContest){
+			Statistics st = new Statistics();
 			
+			Query query = new Query();
+			
+			query.addCriteria(Criteria.where("contestId").is(c.getId()));
+			
+			List<UsersUploads> listUsersUploads = this.usersUploadsService.find(query, UsersUploads.class);
+			
+			st.setContest(c);
+			st.setUsersUploads(listUsersUploads);
+			int polls = 0;
+			
+			for(UsersUploads up:listUsersUploads){
+				polls+=up.getPoll();
+			}
+			st.setPolls(polls);
+			lists.add(st);
+			
+		}
+		
+		modelAndView.addObject("lists", lists);
 			
 			return modelAndView;// 返回
 	}

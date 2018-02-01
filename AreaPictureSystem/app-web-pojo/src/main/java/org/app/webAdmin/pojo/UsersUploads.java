@@ -22,7 +22,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
  * 
  */
 @Document
-public class UsersUploads extends GeneralBean {
+public class UsersUploads extends GeneralBean implements Comparable<UsersUploads>{
 
 	/** 
 	* @Fields serialVersionUID : TODO(用一句话描述这个变量表示什么) 
@@ -39,22 +39,18 @@ public class UsersUploads extends GeneralBean {
 
 	private String contestId;// 活动id
 	
-	private String file;
-	
 	private int maxNum; //最大图片数量
 	
 	private int nowNum; //目前数量
 	
 	private String images;//反馈图片
+	@DBRef
+	private List<ContestImages> listContestImages;
 	
+	private int  poll; //最新票数
 	
+	private boolean goodPhotography;//优秀作品
 	
-	
-	
-	
-	
-/*	@DBRef
-	private List<ContestImages> listContestImages;*/
 
 	public String getTheme() {
 		return theme;
@@ -102,13 +98,6 @@ public class UsersUploads extends GeneralBean {
 				+ ", contestId=" + contestId + "]";
 	}
 
-	public String getFile() {
-		return file;
-	}
-
-	public void setFile(String file) {
-		this.file = file;
-	}
 
 	public int getMaxNum() {
 		return maxNum;
@@ -132,6 +121,54 @@ public class UsersUploads extends GeneralBean {
 
 	public void setImages(String images) {
 		this.images = images;
+	}
+
+	public List<ContestImages> getListContestImages() {
+		return listContestImages;
+	}
+
+	public void setListContestImages(List<ContestImages> listContestImages) {
+		this.listContestImages = listContestImages;
+	}
+
+	public int getPoll() {
+		return poll;
+	}
+
+	public void setPoll(int poll) {
+		this.poll = poll;
+	}
+
+	
+	
+	
+	
+	
+	public boolean isGoodPhotography() {
+		return goodPhotography;
+	}
+
+	public void setGoodPhotography(boolean goodPhotography) {
+		this.goodPhotography = goodPhotography;
+	}
+
+	/* (非 Javadoc) 
+	* <p>Title: compareTo</p> 
+	* <p>Description: </p> 
+	* @param o
+	* @return 
+	* @see java.lang.Comparable#compareTo(java.lang.Object) 
+	*/
+	public int compareTo(UsersUploads o) {
+		if(this.poll<o.getPoll()){
+			return 1;
+		}else if(this.poll>o.getPoll()){
+			return -1;
+		}else{
+			return 0;
+		}
+		
+		
 	}
 
 

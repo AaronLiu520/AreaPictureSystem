@@ -112,24 +112,16 @@
 	<!-- 菜单头部 -->
 	<jsp:include page="public/top.jsp" />
 	<!-- banner -->
-	<div class="inner-banner"></div>
-
-
+	<jsp:include page="public/inner-banana.jsp" />
+	
 	<div class="contact">
 		<div class="container">
 			<h3 class="tittle">${contest.contestName}报名投稿：</h3>
+<button type="button" id="loading-example-btn"  onClick="javascript :history.back(-1);" class="label label-default" style="margin-top: 10px;">返回</button>
+
 
 <input type="hidden" id="contestId" value="${contest.id }" name="contestId"> 
-<input type="hidden" id="type" value="${checkMenu}" name="type"> 
 
-
-			<c:if test="${contest.maxPictureNum > 0}">
-				<input type="hidden" id="maxPictureNum"
-					value="${contest.maxPictureNum }">
-			</c:if>
-			<c:if test="${contest.maxPictureNum eq ''}">
-				maxpictureNum<input type="text" id="maxPictureNum" value="9999">
-			</c:if>
 
 
 			<div class="col-md-12 contact-in">
@@ -151,17 +143,17 @@
 					<a href="javascript:void(0)"
 						style="margin-top: 10px; margin-bottom: 20px;" data-toggle="modal"
 						data-target="#myModal1" class="hvr-rectangle-in button">注册投稿</a>
-					<c:if test="${empty sessionScope.webUserSession.accountName }">
+				<%-- 	<c:if test="${empty sessionScope.webUserSession.accountName }"> --%>
 						<a href="javascript:void(0)" id="changeModal"
 							style="margin-top: 10px; margin-bottom: 20px;"
 							data-toggle="modal" data-target="#toLogin"
 							class="hvr-rectangle-in button">登录投稿</a>
-					</c:if>
-					<c:if test="${not empty sessionScope.webUserSession.accountName }">
-						<a href="${pageContext.request.contextPath}/web/toApply?contestId=${contest.id}&type=${checkMenu}" 
+			<%-- 		</c:if> --%>
+			<%-- 		<c:if test="${not empty sessionScope.webUserSession.accountName }">
+						<a href="${pageContext.request.contextPath}/web/toApply?contestId=${contest.id}&type=${sessionScope.checkMenu}" 
 							style="margin-top: 10px; margin-bottom: 20px;"
 							class="hvr-rectangle-in button">登录投稿</a>
-					</c:if>
+					</c:if> --%>
 				</c:if>
 				
 				
@@ -200,9 +192,17 @@
 
 						<div class="form-group">
 							<label>邮箱地址：</label> <input type="text" placeholder="邮箱地址"
-								name="email" id="email" class="form-control " required>
+								name="email" id="email" class="form-control" required>
 						</div>
-
+				<button type="button" onclick="return registerSendEmail();" disabled="disabled"  class="btn registerSendEmail"  style="padding-top: 5px;">获取验证码</button>
+					
+						<div class="form-group" style="margin-top: 20px;">
+							<label>验证码：</label> <input type="text" placeholder="验证码"
+								name="code" id="registerCode" class="form-control " 
+								required>
+						</div>
+					
+					<!-- onblur="return checkCode();" onkeyup="return checkCode();" -->
 						<div class="form-group">
 							<label>手机号：</label> <input type="text" placeholder="手机号"
 								name="phone" id="phone" class="form-control " required>
@@ -228,7 +228,7 @@
 					<div class="modal-footer">
 						<button type="button" id="closed" class="btn btn-default"
 							data-dismiss="modal">关闭</button>
-						<button type="submit" class="btn btn-primary">提交</button>
+						<button type="submit" class="btn btn-primary">注册</button>
 					</div>
 
 
@@ -241,7 +241,7 @@
 
 
 	<!-- 登陆模态框（Modal） -->
-	<div class="modal fade" id=toLogin tabindex="-1" role="dialog"
+	<div class="modal fade" id="toLogin" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -254,6 +254,7 @@
 					</div>
 					<div class="modal-body">
 
+				<input type="hidden" id="loginType" value="${sessionScope.checkMenu}" name="type">
 						<div class="form-group">
 							<label>账号：</label> <input type="text" placeholder="帐号"
 								name="accountName" id="accountName" class="form-control "
@@ -270,11 +271,67 @@
 					</div>
 					<div class="modal-footer">
 
-					<!-- 	<a href="#">忘记密码？</a> -->
+					 	<a href="#" data-toggle="modal" data-target="#RetrievePassword">忘记密码？</a>
 						<button type="button" id="userLoginFormclosed"
 							style="display: none;" class="btn btn-default"
 							data-dismiss="modal">关闭</button>
-						<button type="submit" class="btn btn-primary">提交</button>
+						<button type="submit" class="btn btn-primary">登录</button>
+					</div>
+
+
+				</form>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
+	
+	
+	<!-- 登陆模态框（Modal） -->
+	<div class="modal fade" id="RetrievePassword" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<form method="post" id="RetrievePasswordForm">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal"
+							aria-hidden="true">&times;</button>
+						<h4 class="modal-title" id="myModalLabel">密码找回</h4>
+					</div>
+				<input type="hidden" id="loginType" value="${sessionScope.checkMenu}" name="type">
+					<div class="modal-body">
+						
+						<div class="form-group">
+							<label>邮箱：</label> <input type="text" placeholder="请输入邮箱地址"
+								name="checkemail" id="checkemail"  class="form-control"
+								required>
+						</div>
+						<button type="button" onclick="return sendEmail();"  class="btn getEmailCode" style="padding-top: 5px;">获取验证码</button>
+						
+						     
+						<div class="form-group" style="margin-top: 20px;">
+							<label>验证码：</label> <input type="text" placeholder="验证码"
+								name="code" id="code" class="form-control "
+								required>
+						</div>
+
+						<div class="form-group">
+							<label>密码：</label> <input type="password" placeholder="密码"
+								name="newpassword1" id="newpassword1" class="form-control " required>
+						</div>
+						<div class="form-group">
+							<label>确认密码：</label> <input type="password" placeholder="确认密码"
+								name="newpassword2" id="newpassword2" class="form-control " required>
+						</div>
+						<input type="hidden" id="id">
+					</div>
+					<div class="modal-footer">
+
+						<button type="button" id="userLoginFormclosed"
+							style="display: none;" class="btn btn-default"
+							data-dismiss="modal">关闭</button>
+						<button type="submit" class="btn btn-primary">保存</button>
 					</div>
 
 
@@ -285,114 +342,6 @@
 		<!-- /.modal -->
 	</div>
 
-
-	<!-- 模态框（Modal） 上传图片 -->
-	<div class="modal fade showUpload" id="myModal3" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="width: 50%; height: 300%">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">您已经成功登录，可进行上传图片操作</h4>
-					<br>
-					<c:if test="${not empty contest.maxPictureNum }">
-						<h5>当前比赛可支持同时上传${contest.maxPictureNum }张图片</h5>
-					</c:if>
-				</div>
-						<form method="post" id="uploadImgForm"
-						action="${pageContext.request.contextPath}/web/addUsersUpload"
-						enctype="multipart/form-data">
-
-						<div class="modal-body">
-
-							<div class="form-group">
-								<label>主题：</label> <input type="text" placeholder="上传图片主题"
-									name="theme" id="theme" class="form-control " required>
-							</div>
-							<!-- 活动ID  -->
-							
-								<input type="hidden" id="editId"
-								name="editId">
-
-
-							<div class="form-group">
-								<label>上传图片</label> <input id="file" name="file" type="file"
-									multiple>
-							</div>
-
-
-							<div class="form-group">
-								<label>图片背景：</label>
-								<textarea placeholder="上传图片背景介绍" rows="5" cols="7"
-									style="resize: none; overflow: scroll;" name="introduce"
-									id="introduce" class="form-control " required></textarea>
-							</div>
-
-						</div>
-
-						<div class="modal-footer">
-
-							<a href="${pageContext.request.contextPath}/web/loginOut">注销</a>
-							<button type="button" id="userLoginFormclosed"
-								style="display: none;" class="btn btn-default"
-								data-dismiss="modal">关闭</button>
-							<button type="submit" class="btn btn-primary">保存</button>
-						</div>
-					</form>
-
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal -->
-	</div>
-	<!-- 模态框（Modal） 查看我上传的图片 -->
-	<div class="modal fade showUpload" id="myModal4" tabindex="-1"
-		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog" style="width: 80%; height: 200%">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">比赛名称：${contest.contestName}</h4>
-					<br>
-					<c:if test="${not empty contest.maxPictureNum }">
-						<h5>您已经投稿了上传${contest.maxPictureNum }张图片</h5>
-					</c:if>
-				</div>
-				<div id="first">
-
-						<div class="modal-body">
-
-
-
-					<div class="lightBoxGallery">
-                            <a href="img/p_big1.jpg" title="图片" data-gallery=""><img src="img/p1.jpg"></a>
-                            <a href="img/p_big2.jpg" title="图片" data-gallery=""><img src="img/p2.jpg"></a>
-                            <a href="img/p_big3.jpg" title="图片" data-gallery=""><img src="img/p3.jpg"></a>
-
-					</div>
-
-
-
-
-
-						</div>
-
-						<div class="modal-footer">
-
-							<a href="${pageContext.request.contextPath}/web/loginOut">注销</a>
-							<button type="button" id="userLoginFormclosed"
-								style="display: none;" class="btn btn-default"
-								data-dismiss="modal">关闭</button>
-						</div>
-				</div>
-
-			</div>
-			<!-- /.modal-content -->
-		</div>
-		<!-- /.modal -->
-	</div>
 
 
 	<!-- 信息提示模态框（Modal） -->

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%> 
 <%@page isELIgnored="false"%>
 <!doctype html>
 <html lang="en" class="app">
@@ -18,16 +19,17 @@
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/assets/images/logo_title.png"
 	type="image/x-icon" />
-	
 
-	
+<!-- 动态表格 -->
+	<link href="${pageContext.request.contextPath}/assets/admin/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
+
 <style type="text/css">
-.box { 
-width: 650px; 
-height: 500px; 
-overflow: hidden; 
-margin:0 auto; 
-} 
+.box {
+	width: 650px;
+	height: 500px;
+	overflow: hidden;
+	margin: 0 auto;
+}
 </style>
 </head>
 
@@ -39,35 +41,47 @@ margin:0 auto;
 		<div id="page-wrapper" class="gray-bg dashbard-1">
 			<!-- .aside top jsp -->
 			<%@include file="public/top.jsp"%>
-			<div class="wrapper wrapper-content" >
-			
-	
-			
-			
-			<div class="row">
-            <div class="col-sm-12">
-                <div class="ibox float-e-margins">
-                    <div class="ibox-title">
-                        <h5>图片库系统最近上传图片列表</h5>
-                    </div>
-                    <div class="ibox-content">
-	<c:forEach items="${resourcelist.datas}" var="item"
-						varStatus="status">
-                        <a class="fancybox" href="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min"
-                         title="图片名称：${item.originalName }<br/>上传者：${item.uploadPerson }">
-                            <img alt="image" src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=min" />
-                        </a>
-                       
-</c:forEach>
+			<div class="wrapper wrapper-content">
 
+				<div class="row">
+					<div class="col-sm-12">
+					
+				 <!-- 内容 -->
+                     <div class="col-lg-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>比赛信息
+                                    </h5>
+                                </div>
+                                <div class="ibox-content">
 
+                            <p>
+                             <table class="table table-striped table-bordered table-hover dataTables-example">
+                                <thead>
+                                    <tr>
+                                    	<th>比赛名称</th>
+                                        <th>参赛人数</th>
+                                        <th>投票总数</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                               <c:forEach items="${lists}" var="item" varStatus="status">
+                                    <tr class="gradeX">
+                                    	<td>${item.contest.contestName}</td>
+                                        <td>${fn:length(item.usersUploads)}</td>
+                                        <td>${item.polls}</td>
+                                    </tr>
+                                </c:forEach>
+                                </tbody>
+
+                            </table>
                     </div>
                 </div>
-            </div>
+					</div>
 
-        </div>
-			
-			
+				</div>
+
+
 			</div>
 			<!-- end message center-->
 
@@ -75,6 +89,20 @@ margin:0 auto;
 		</div>
 	</div>
 	</div>
+ 
+<script>
+$(document).ready(function () {
+    $('.summernote').summernote({
+        lang: 'zh-CN',
+        onImageUpload: function(files, editor, $editable) {
+          sendFile(files[0], editor, $editable);
+        }
+    });
+    $('.dataTables-example').dataTable();//表格
 
+    // validate the comment form when it is submitted
+    $("#add-news-form").validate();//初始化from验证
+});
+</script>
 </body>
 </html>

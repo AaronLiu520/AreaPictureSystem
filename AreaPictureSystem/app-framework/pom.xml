@@ -182,6 +182,17 @@
 		 <artifactId>aspectjweaver</artifactId>
 		 <version>1.8.9</version>
 	 </dependency>
+	 
+	 		<!-- http://mvnrepository.com/artifact/org.apache.commons/commons-email -->
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-email</artifactId>
+			<version>1.4</version>
+		</dependency>
+	 
+	 
+	 
+	 
 
 	</dependencies>
 </project>

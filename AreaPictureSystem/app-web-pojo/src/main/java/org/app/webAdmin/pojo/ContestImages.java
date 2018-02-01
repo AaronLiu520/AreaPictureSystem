@@ -44,7 +44,7 @@ public class ContestImages  extends GeneralBean{
 	    
 	    private String belongTo;		//图片所属
 	    
-	    
+	    private boolean goodImg;//优秀图片
 	    
 		public String getBelongTo() {
 			return belongTo;
@@ -117,6 +117,14 @@ public class ContestImages  extends GeneralBean{
 		}
 		public void setUsersUploads(UsersUploads usersUploads) {
 			this.usersUploads = usersUploads;
+		}
+		
+		
+		public boolean isGoodImg() {
+			return goodImg;
+		}
+		public void setGoodImg(boolean goodImg) {
+			this.goodImg = goodImg;
 		}
 		@Override
 		public String toString() {

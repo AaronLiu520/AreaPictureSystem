@@ -3,6 +3,8 @@ package org.app.webAdmin.service;
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
 import org.app.webAdmin.pojo.Users;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -40,5 +42,36 @@ public class UsersService extends GeneralServiceImpl<Users> {
 		}
 
 	}
+	
+	
+	/**
+	 * 
+	* @Title: findUsersByEmail 
+	* @Description: TODO(通过用户的邮箱地址查询用户信息) 
+	* @param @return    设定文件 
+	* @return Users    返回类型 
+	* @throws
+	 */
+	public Users findUsersByEmail(String email){
+		
+		Query query = new Query();
+		
+		query.addCriteria(Criteria.where("email").is(email));
+		
+		Users users = this.findOneByQuery(query, Users.class);
+		
+		return users;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

@@ -68,9 +68,8 @@
 <body>
 <!-- 菜单头部 -->
 <jsp:include page="public/top.jsp"/>
-<!-- banner -->
-
-
+	<!-- banner -->
+	<jsp:include page="public/inner-banana.jsp" />
 
 <!--新闻公告-->
 <div class="news">

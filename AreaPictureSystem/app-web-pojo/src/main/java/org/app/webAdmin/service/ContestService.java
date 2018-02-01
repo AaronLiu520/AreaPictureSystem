@@ -1,9 +1,12 @@
 package org.app.webAdmin.service;
 
+import javax.servlet.http.HttpSession;
+
 import org.app.framework.service.GeneralServiceImpl;
 import org.app.framework.util.Common;
 import org.app.webAdmin.pojo.Contest;
-import org.app.webAdmin.pojo.News;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -68,5 +71,20 @@ public class ContestService extends GeneralServiceImpl<Contest> {
 		}
 
 	}
+	
+	
+	public Contest findContestByUsersIdContestId(String contestId){
+		
+		Query query = new Query();
+		
+		query.addCriteria(Criteria.where("_id").is(contestId));
+		
+		Contest contest =this.findOneById(contestId, Contest.class);
+		
+		return contest==null?null:contest;
+		
+	}
+	
+	
 
 }

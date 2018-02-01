@@ -105,6 +105,11 @@
 	</div>
 
 	<!--优秀做品展-->
+	
+	
+	<c:if test="${not empty usersUploads.listContestImages }">
+	
+	
 	<div class="top-games-section">
 		<div class="container">
 			<!--sreen-gallery-cursual-->
@@ -116,121 +121,31 @@
                 但它仍以表现被照者的相貌为主，而且，相当一部分人像摄影作品只交待被摄者的形象，并没有具体的情节。
             </p>-->
 			</div>
+			
 			<div class="g-views">
 				<ul id="flexiselDemo3">
+				
+					<c:forEach items="${usersUploads.listContestImages}" var="items" varStatus="status">
+					
 					<li>
 						<div class="biseller-column">
 							<a class="lightbox" href="#goofy"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_9.jpg" />
+								src="${items.originalPath }" />
 							</a>
 							<div class="lightbox-target" id="goofy">
 								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_9.jpg" />
+										src="${items.originalPath }" />
 								<a class="lightbox-close" href="#"> </a>
 
 								<div class="clearfix"></div>
 							</div>
 						</div>
 					</li>
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy1"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_2.jpg" />
-							</a>
-							<div class="lightbox-target" id="goofy1">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_2.jpg" />
-								<a class="lightbox-close" href="#"> </a>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy2"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_3.jpg" />
-							</a>
-							<div class="lightbox-target" id="goofy2">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_3.jpg" />
-								<a class="lightbox-close" href="#"> </a>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy4"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_11.jpg" />
-							</a>
-							<div class="lightbox-target" id="goofy4">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_11.jpg" />
-								<a class="lightbox-close" href="#"> </a>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy5"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_13.jpg" />
-							</a>
-							<div class="lightbox-target" id="goofy5">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_13.jpg" />
-								<a class="lightbox-close" href="#"> </a>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy6"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_7.jpg" />
-							</a>
-							<div class="lightbox-target" id="goofy6">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_7.jpg" />
-								<a class="lightbox-close" href="#"> </a>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy7"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_14.jpg" />
-							</a>
-							<div class="lightbox-target" id="goofy7">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_14.jpg" />
-								<a class="lightbox-close" href="#"> </a>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy3"> <img
-								src="${pageContext.request.contextPath}/assets/images/zp_4.jpg" />
-							</a>
-							<div class="lightbox-target" id="goofy3">
-								<img
-									src="${pageContext.request.contextPath}/assets/images/zp_4.jpg" />
-								<a class="lightbox-close" href="#"> </a>
-
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
+					
+					
+					</c:forEach>
+					
+					
 				</ul>
 				<script type="text/javascript">
 					$(window).load(function() {
@@ -263,7 +178,7 @@
 			</div>
 		</div>
 	</div>
-
+</c:if>
 	<c:if test="${not empty contest }">
 		<!-- 摄影比赛通知 -->
 		<div class="slider-bottom">
@@ -277,22 +192,27 @@
 							<p class="para-text">${contest.content }</p>
 
 						</div>
-							<div>
+							<div style="margin-top: 10px;">
 					<%-- 		
 							
 							<c:if test="${now > contest.startTime && now <  contest.endTime }">
 									<a href="javascript:void(0)"
 										class="hvr-rectangle-in button">我要报名</a>
 								</c:if> --%>
-						<c:if test="${contest.openVote eq true}">
-							<c:if
-								test="${now > contest.voteStartTime && now <  contest.voteEndTime }">
-								<a href="#" class="hvr-rectangle-in button">我要参与投票</a>
-							</c:if>
+								<c:if test="${contest.openVote eq true}">
+										<c:if
+										test="${now > contest.voteStartTime && now <  contest.voteEndTime }">
+										<a href="${pageContext.request.contextPath}/web/votelist?contestId=${contest.id}" class="hvr-rectangle-in button">我要参与投票</a>
+									</c:if>
+								<c:if test="${now > contest.startTime && now <  contest.endTime }">
+									<a href="javascript:void(0)"
+										onclick="return toApply('${contest.id}','${checkMenu}'); "
+										class="hvr-rectangle-in button">比赛详情</a>
+								</c:if>
 
 							<c:if test="${now > contest.voteEndTime }">
-								<a href="#" class="hvr-rectangle-out label-default">投票已结束(查看结果)</a>
-							</c:if>
+										<a href="${pageContext.request.contextPath}/web/voteResult?contestId=${contest.id}" class="hvr-rectangle-out label-default">投票已结束(查看结果)</a>
+									</c:if>
 						<a href="#" class="hvr-rectangle-in button" data-toggle="modal"
 								data-target="#myModal2">投票规则详情</a>
 						</c:if>
