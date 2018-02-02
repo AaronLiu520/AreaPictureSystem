@@ -15,19 +15,25 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.pojo.Favorites;
 import org.app.admin.pojo.ForderActivity;
+import org.app.admin.pojo.Resource;
 import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.AdminRoleService;
 
 import org.app.admin.service.AdminUserService;
+import org.app.admin.service.FavoritesService;
+import org.app.admin.service.ResourceService;
 import org.app.admin.util.BaseType;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.CommonEnum;
 import org.app.framework.util.FileOperateUtil;
 import org.app.framework.util.PinyinTool;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -57,6 +63,16 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 
 	@Autowired
 	private AdminRoleService adminRoleService;
+	
+	@Autowired
+	private FavoritesService favoritesService;
+	
+	@Autowired
+	private ResourceService resourceService;
+	
+	
+	
+	
 
 
 	/**
@@ -109,6 +125,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 						//添加企业信息成功后，创建一个企业管理员帐号。
 						this.adminCompanyService.insert(adminCompany);
 						AdminUser au=createSuperAdminUser(adminCompany);
+						
 						adminCompany.setAdminUser(au);
 						this.adminCompanyService.save(adminCompany);//重新更新。
 					}
@@ -130,6 +147,8 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		superAdminUser.setName(adminCompany.getName()+"管理员");
 		superAdminUser.setUserName(adminCompany.getTelPhone());
 		superAdminUser.setPassword(adminCompany.getTelPhone());
+		superAdminUser.setTel(adminCompany.getTelPhone());
+		superAdminUser.setEmail(adminCompany.getEmail());
 		superAdminUser.setUserType(BaseType.UserType.SCHOOLADMIN);//学校管理员
 		// 获取管理员ROLE
 		AdminRole ac=this.adminRoleService.findOneByQuery(
@@ -183,6 +202,32 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		try {
 			if (!id.isEmpty() && !id.equals("0")) {// 删除
 				AdminCompany am = this.adminCompanyService.findOneById(id, AdminCompany.class);
+				//2018年2月2日 16:29:52 添加了删除企业对应的用户  start
+				Query query = new Query();
+				query.addCriteria(Criteria.where("adminCompany.$id").is(new ObjectId(am.getId())));
+				
+				List<AdminUser> listadminUsers = this.adminUserService.find(query, AdminUser.class);
+				
+				//获取所有的adminUser
+				for(AdminUser adminUser:listadminUsers){
+					 query = new Query();
+					 query.addCriteria(Criteria.where("adminUser.$id").is(new ObjectId(adminUser.getId())));
+					 //我的收藏
+					 List<Favorites> listFavorites = this.favoritesService.find(query, Favorites.class);
+					for(Favorites favorites :listFavorites){
+						//删除我的收藏
+						this.favoritesService.remove(favorites);
+					}
+					//我的收藏
+					List<Resource> listResource = this.resourceService.find(query, Resource.class);
+					for(Resource resource :listResource){
+						//删除我的收藏
+						this.resourceService.remove(resource);
+					}
+					this.adminUserService.remove(adminUser);
+				}
+				
+				//end
 				adminCompanyService.remove(am);
 
 			}

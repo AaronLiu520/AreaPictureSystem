@@ -53,132 +53,10 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	private ForderActivityService forderActivityService;
 
 	@Autowired
-	private ResourceService resourceService;
-	
-	@Autowired
 	private AdminCompanyService adminCompanyService;
-	
+
 	@Autowired
 	private TypeService typeService;
-
-	/**
-	 * 
-	 * @Title: list @Description: TODO(这里用一句话描述这个方法的作用) @param @param
-	 *         session @param @param parentId 父文件夹id @param @param id
-	 *         当前文件夹id @param @return 设定文件 @return ModelAndView 返回类型 @throws
-	 */
-//	@RequestMapping("/list")
-//	@SystemErrorLog(description="查询活动出错")
-//	@SystemControllerLog(description = "查询活动信息")
-//	public ModelAndView list(HttpSession session, @ModelAttribute("parentId") String parentId,
-//			@RequestParam(value = "id", defaultValue = "") String id) {
-//		log.info("查询所有的文件夹");
-//
-//		ModelAndView modelAndView = new ModelAndView();
-//
-//		modelAndView.setViewName("admin/app-admin/fileSystem/list");
-//
-//		// 查询所有文件夹，包括子目录
-//		List<ForderActivity> list = this.forderActivityService.listForderActivity(parentId, id);
-//
-//		modelAndView.addObject("listForderActivity", list);
-//		if (list != null) {
-//			for (ForderActivity f : list) {
-//				id = f.getParentId();
-//			}
-//		}
-//
-//		if (Common.isNotEmpty(id) && !("0").equals(id)) {
-//			modelAndView.addObject("id", id);
-//			// 当前目录
-//			ForderActivity forderActivity = this.forderActivityService.findForderById(id);
-//
-//			if (forderActivity != null) {
-//
-//				modelAndView.addObject("forderActivity", forderActivity);
-//
-//			}
-//
-//			// 上级目录
-//
-//			ForderActivity parentForderActivity = this.forderActivityService
-//					.findForderById(forderActivity.getParentId());
-//
-//			if (parentForderActivity != null) {
-//
-//				modelAndView.addObject("parentForderActivity", parentForderActivity);
-//
-//			}
-//		} else if (Common.isNotEmpty(parentId) && Common.isEmpty(id)) {
-//			// 直接获取上级目录
-//			ForderActivity parentForderActivity = this.forderActivityService.findForderById(parentId);
-//
-//			if (parentForderActivity != null) {
-//
-//				modelAndView.addObject("parentForderActivity", parentForderActivity);
-//			}
-//		}
-//		return modelAndView;
-//	}
-
-	/**
-	 * 
-	 * @Title: createForderActivity @Description: TODO(添加文件夹) @param @param
-	 *         forderActivity ForderActivity对象 @param @param Enumtype
-	 *         接受界面的枚举枚举值 @param @return 设定文件 @return ModelAndView 返回类型 @throws
-	 */
-//	@RequestMapping("/createForder")
-//	@SystemErrorLog(description="创建活动出错")
-//	@SystemControllerLog(description = "创建活动信息")
-//	public ModelAndView createForderActivity(HttpSession session,
-//			 ForderActivity forderActivity,
-//			@RequestParam(value = "Enumtype", defaultValue = "") String Enumtype,
-//			@RequestParam(value = "editid", defaultValue = "") String editid, RedirectAttributes model) {
-//		log.info("进行编辑文件夹操作");
-//		ModelAndView modelAndView = new ModelAndView();
-//
-//		modelAndView.setViewName("redirect:/forderActivity/list");
-//
-//		String message = this.forderActivityService.createForder(forderActivity, Enumtype, session, editid);
-//
-//		if (Common.isNotEmpty(forderActivity.getParentId())) {
-//
-//			model.addFlashAttribute("parentId", forderActivity.getParentId());
-//
-//		}
-//		log.info(message);
-//
-//		return modelAndView;
-//	}
-
-	/**
-	 * 
-	 * @Title: delete @Description: TODO(这里用一句话描述这个方法的作用) @param @param
-	 *         model @param @param id 删除的id包括集合 @param @param parentId
-	 *         删除后需要显示的文件夹 @param @return 设定文件 @return ModelAndView 返回类型 @throws
-	 */
-//	@RequestMapping("/delete")
-//	@SystemErrorLog(description="删除活动出错")
-//	@SystemControllerLog(description = "删除活动信息")
-//	public ModelAndView delete(RedirectAttributes model, @RequestParam(value = "id", defaultValue = "") String id,
-//			@RequestParam(value = "parentId", defaultValue = "") String parentId) {
-//		ModelAndView modelAndView = new ModelAndView();
-//
-//		modelAndView.setViewName("redirect:/forderActivity/list");
-//
-//		if (Common.isNotEmpty(id)) {
-//
-//			this.forderActivityService.delete(id);
-//
-//		}
-//		if (Common.isNotEmpty(parentId)) {
-//
-//			model.addFlashAttribute("parentId", parentId);
-//		}
-//
-//		return modelAndView;
-//
-//	}
 
 	/**
 	 * 通过ajax获取相同目录下是否存在重复文件夹名称的信息
@@ -190,88 +68,78 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	// TODO
 	@RequestMapping(value = "/ajaxgetRepletes")
 	@ResponseBody
-	@SystemErrorLog(description="查询重复活动出错")
+	@SystemErrorLog(description = "查询重复活动出错")
 	@SystemControllerLog(description = "查询重复活动信息")
 	public BasicDataResult ajaxgetRepletes(
 			@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
 			@RequestParam(value = "companyId", defaultValue = "") String companyId,
 			@RequestParam(value = "type", defaultValue = "") String type,
-			@RequestParam(value = "activityTime", defaultValue = "") String activityTime,
-			HttpSession session) {
+			@RequestParam(value = "activityTime", defaultValue = "") String activityTime, HttpSession session) {
 
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 
-		BasicDataResult result  = this.forderActivityService.findForderActivityByforderActivityName(forderActivityName, adminUser,companyId,type,activityTime);
-		
-		
+		BasicDataResult result = this.forderActivityService.findForderActivityByforderActivityName(forderActivityName,
+				adminUser, companyId, type, activityTime);
+
 		return result;
 
-	
-		
-
 	}
-	
+
 	/**
 	 * 活动管理获取所有活动
 	 */
-	@SystemControllerLog(description="查询所有活动")
-	@SystemErrorLog(description="查询所有活动出错")
+	@SystemControllerLog(description = "查询所有活动")
+	@SystemErrorLog(description = "查询所有活动出错")
 	@RequestMapping("/list")
-	public ModelAndView list(HttpSession session){
+	public ModelAndView list(HttpSession session) {
 		log.info("forder list");
-		ModelAndView modelAndView =new ModelAndView();
-		
+		ModelAndView modelAndView = new ModelAndView();
+
 		modelAndView.setViewName("admin/app-admin/fileSystem/list");
+
+		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+
+		List<ForderActivity> listForderActivity = this.forderActivityService.findForderActivityByUserType(null,
+				adminUser);
+
+		List<AdminCompany> listAdminCompany = this.adminCompanyService.listCompay();// 获取所有的企业信息
+
+		modelAndView.addObject("pageList", listForderActivity);
+
+		modelAndView.addObject("company", listAdminCompany);
+
+		return modelAndView;
+	}
+
+	@SystemControllerLog(description = "创建活动")
+	@SystemErrorLog(description = "创建活动出错")
+	@RequestMapping("/creatOrEditActivity")
+	@ResponseBody
+	public BasicDataResult creatOrEditActivity(HttpSession session, ForderActivity forderActivity,
+			@RequestParam(value = "edit", defaultValue = "") String edit, RedirectAttributes ra) {
+		log.info("进去create!");
+
+		ModelAndView modelAndView = new ModelAndView();
+
+		modelAndView.setViewName("redirect:/forderActivity/list");
+		
+		if(Common.isEmpty(forderActivity.getType())){
+			return BasicDataResult.build(203, "请选择活动所属", null);
+		}
+		
+		List<List<Type>> listsType = this.typeService.addType(forderActivity.getType());
 		
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		
-	
-		List<ForderActivity> listForderActivity = this.forderActivityService.findForderActivityByUserType(null,adminUser);
 		
-		List<AdminCompany> listAdminCompany = this.adminCompanyService.listCompay();//获取所有的企业信息
-		
-		modelAndView.addObject("pageList",listForderActivity);
-		
-		modelAndView.addObject("company", listAdminCompany);
-		
-		
-		return modelAndView;
-	}
-	
-	
-	
-	
-	@SystemControllerLog(description="创建活动")
-	@SystemErrorLog(description="创建活动出错")
-	@RequestMapping("/creatOrEditActivity")
-	public ModelAndView creatOrEditActivity(HttpSession session,ForderActivity forderActivity
-			,@RequestParam(value="edit",defaultValue="")String edit,RedirectAttributes ra){
-		log.info("进去create!");
-		ModelAndView modelAndView = new ModelAndView();
-		
-		modelAndView.setViewName("redirect:/forderActivity/list");
-		
-		if(Common.isNotEmpty(forderActivity.getType())){
-			
-		
-			List<List<Type>> listsType = this.typeService.addType(forderActivity.getType());
-			
-				AdminUser adminUser=(AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-				
-				if(!this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit,listsType)){
-				    modelAndView.setViewName("redirect:/adminUser/index"); 
-					ra.addFlashAttribute("error", "直属单位无法创建基层活动");
-				}
-		
-		}
+		BasicDataResult result = this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit, listsType);
 
-		return modelAndView;
-	
+		
+		return result;
 	}
-	
-	
+
 	@RequestMapping("/delete")
-	@SystemErrorLog(description="删除活动出错")
+	@SystemErrorLog(description = "删除活动出错")
 	@SystemControllerLog(description = "删除活动信息")
 	public ModelAndView delete(RedirectAttributes model, @RequestParam(value = "id", defaultValue = "") String id) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -286,22 +154,5 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		return modelAndView;
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

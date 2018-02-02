@@ -369,13 +369,16 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	}
 
 	
-	public boolean creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id,List<List<Type>> listsType) {
+	public BasicDataResult creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id,List<List<Type>> listsType) {
 		
 		if (adminUser != null && forderActivity != null) {
 			
 			//如果id不为空执行修改
 			if(Common.isNotEmpty(id)){
 				ForderActivity editforderActivity = this.findForderById(id);
+				if(editforderActivity == null){
+					return BasicDataResult.build(203, "未能找到当前的活动，请刷新后再试！", null);
+				}
 				if (editforderActivity != null) {
 					editforderActivity.setAddress(forderActivity.getAddress());
 					editforderActivity.setActivityTime(forderActivity.getActivityTime());
@@ -385,7 +388,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
 					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
 					editforderActivity.setType(forderActivity.getType());
-					editforderActivity.setListType(forderActivity.getListType());
+					editforderActivity.setListType(listsType.get(0));
 					if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
 						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
 						// 根据boundCompany获取企业信息
@@ -395,15 +398,21 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					}
 					
 					this.save(editforderActivity);
+					return BasicDataResult.build(200, "修改活动成功", true);
 				}
 				
 			}else{
 				//执行添加
 				for(int i=0;i<listsType.size();i++){
-					if(adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU)){
+					
+					if(adminUser.getAdminCompany()==null){
+						 return BasicDataResult.build(203, "您所使用的账户未分配所属企业，请联系管理员！", null);
+					}
+					
+					if(adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU.toString())){
 						//直属单位不能创建基层单位的活动
-						if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS)){
-							return false;
+						if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())){
+							return BasicDataResult.build(203, "您是直属单位，不能创建属于基层单位的活动！", null);
 						}
 					}
 					
@@ -413,7 +422,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					fo.setAddress(forderActivity.getAddress());
 					fo.setPersonActivityId(new ObjectId(new Date()).toString());
 					fo.setBaseutisActivityId(new ObjectId(new Date()).toString());
-					if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS)){
+					if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())){
 						fo.setAdminCompany(adminUser.getAdminCompany());
 						fo.setBoundCompany(adminUser.getAdminCompany().getId());
 					}else{
@@ -437,11 +446,12 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					fo.setParentId("0");
 					
 					this.insert(fo);
+					return BasicDataResult.build(200, "添加活动成功", true);
 				}
 			}
 			
 		}
-		return true;
+		 return BasicDataResult.build(400, "添加活动过程中发生未知错误，请与管理员联系", null);
 		
 	}
 	

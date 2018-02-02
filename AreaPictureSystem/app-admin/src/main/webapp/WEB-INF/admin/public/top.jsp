@@ -102,7 +102,7 @@
 				</div>
 
 				<form method="post" id="signupForm"
-					action="${pageContext.request.contextPath}/forderActivity/creatOrEditActivity">
+					action="#">
 					<div class="modal-body">
 						<div class="form-group">
 							<label>活动名称：</label><label for="forderActivityName"
@@ -201,7 +201,27 @@
 		</div>
 	</div>
 
-
+	<!-- 信息提示模态框（Modal） -->
+	<div class="modal fade" id="titleModel" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true"
+		style="margin-top: 10%;">
+		<div class="modal-dialog" style="width: 300px; height: 200px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="modelLabel"></h4>
+				</div>
+				<div class="modal-body" id="modelContent"></div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">确定
+					</button>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal -->
+	</div>
 
 
 	<!-- 添加jqueryvalidate -->
@@ -353,6 +373,32 @@
 					type : {
 						required : ""
 					}
+				},submitHandler : function(form) { // 验证通过后的执行方法
+					// 当前的form通过ajax方式提交（用到jQuery.Form文件）
+					$.ajax({
+						type : "POST",
+						url : "${pageContext.request.contextPath}/forderActivity/creatOrEditActivity",
+						data : $("#signupForm").serialize(),
+						dataType : "json",
+						success : function(data) {
+							if (data.status == 200) {
+								$("#signupForm")[0].reset()
+							/* 	$("#modelLabel").html("信息提示");
+								$("#modelContent").html(
+										"<center>" + data.msg
+												+ "</center>");
+								$('#titleModel').modal('show'); */
+								location.reload(1000);
+								//$("#signupForm").modal("hide");
+							} else {
+								$("#modelLabel").html("信息提示");
+								$("#modelContent").html(
+										"<center>" + data.msg
+												+ "</center>");
+								$('#titleModel').modal('show');
+							}
+						}
+					});
 				}
 			});
 		});

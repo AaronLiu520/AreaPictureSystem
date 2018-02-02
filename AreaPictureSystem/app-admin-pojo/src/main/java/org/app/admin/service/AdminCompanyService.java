@@ -111,13 +111,10 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 				importAdminCompany.setTelPhone(resultexcel[i][j + 4]);
 				importAdminCompany.setEmail(resultexcel[i][j + 5]);
 				String nature = resultexcel[i][j + 6];
-				if (nature.equals("直属单位 ")) {
+				
+				if (nature.toString().equals("直属单位")) {
 					importAdminCompany.setNature(BaseType.CompanyNature.ZHISHU);
-				} /*
-					 * else if(type.equals("基层单位")){
-					 * importAdminCompany.setType(BaseType.CompanyType.JICHENG);
-					 * }
-					 */else {
+				}else {
 					importAdminCompany.setNature(BaseType.CompanyNature.JICHENG);
 				}
 
@@ -137,8 +134,19 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 				query.addCriteria(Criteria.where("telPhone").is(telPhone));
 				// 通过用户的手机号查询是否存在该信息
 				AdminCompany adminCompany = this.findOneByQuery(query, AdminCompany.class);
-
-				// 如果存在该企业的信息
+				
+				//2018年2月2日 15:54:36  修改后的导入企业
+				if(adminCompany !=null){
+					
+					error += "导入文件过程中出现已经存在的手机号码，第<b>&nbsp&nbsp" + (i + 2)
+							+ "&nbsp&nbsp</b>行出现重复内容为<b>&nbsp&nbsp导入企业的联系人手机号:"+telPhone+"请手动去修改该条信息！&nbsp&nbsp</b></br>";
+					continue;
+				}
+				
+				
+				
+				//2018年2月2日 15:50:13  修改 导入企业如果出现重复的手机号则不让他导入，反馈到页面并且提示
+				/*// 如果存在该企业的信息
 				if (adminCompany != null) {
 					if (adminCompany.getTelPhone().equals(telPhone)) {
 						adminCompany.setAddress(importAdminCompany.getAddress());
@@ -155,7 +163,7 @@ public class AdminCompanyService extends GeneralServiceImpl<AdminCompany> {
 						// 执行更新操作。
 						this.save(adminCompany);
 					}
-				}
+				}*/
 
 				if (adminCompany == null) {
 					// 通过手机号判断是否存在该用户的帐号
