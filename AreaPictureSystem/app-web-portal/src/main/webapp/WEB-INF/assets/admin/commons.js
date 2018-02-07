@@ -308,14 +308,14 @@ $().ready(function() {
 			},
 			endTime : {
 				required : a+"请选择截止时间",
-			/*	compareDate : a+ "活动截止时间必须大于开始时间"*/
+				compareDate : a+ "活动截止时间必须大于开始时间"
 			},
 			voteStartTime : {
 				required : a+"请选择投票开始时间"
 			},
 			voteEndTime : {
 				required : a+"请选择投票截止时间",
-	/*			compareDate : a+ "投票截止时间必须大于开始时间"*/
+				compareDate : a+ "投票截止时间必须大于开始时间"
 			},
 			minPictureNum : {
 				digits : a+ "请输入正确的数字"
@@ -343,15 +343,13 @@ jQuery.validator.addMethod("isMobile", function(value, element) {
 }, "请正确填写您的手机号码");
 
 //手机号码验证
-/*jQuery.validator.addMethod("compareDate", function(value, element, param) {
+jQuery.validator.addMethod("compareDate", function(value, element, param) {
 	  var startDate = jQuery(param).val();
-	    var date1 = new Date(Date.parse(startDate.replace("-", "/")));
+	    var date1 = new Date(Date.parse(startDate.replace("-", "/")));	
 	    var date2 = new Date(Date.parse(value.replace("-", "/")));
 	    return date1 < date2;
 }, "开始时间不能大于结束时间");
 
-
-*/
 
 
 

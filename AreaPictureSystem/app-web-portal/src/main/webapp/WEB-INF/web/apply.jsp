@@ -194,7 +194,7 @@
 							<label>邮箱地址：</label> <input type="text" placeholder="邮箱地址"
 								name="email" id="email" class="form-control" required>
 						</div>
-				<button type="button" onclick="return registerSendEmail();" disabled="disabled"  class="btn registerSendEmail"  style="padding-top: 5px;">获取验证码</button>
+				<button type="button" onclick="return registerSendEmail();" disabled="disabled"  class="btn registerSendEmail reSendTime"  style="padding-top: 5px;">获取验证码</button>
 					
 						<div class="form-group" style="margin-top: 20px;">
 							<label>验证码：</label> <input type="text" placeholder="验证码"
@@ -307,7 +307,7 @@
 								name="checkemail" id="checkemail"  class="form-control"
 								required>
 						</div>
-						<button type="button" onclick="return sendEmail();"  class="btn getEmailCode" style="padding-top: 5px;">获取验证码</button>
+						<button type="button" onclick="return sendEmail();"  class="btn getEmailCode reSendTime" style="padding-top: 5px;">获取验证码</button>
 						
 						     
 						<div class="form-group" style="margin-top: 20px;">
@@ -386,7 +386,6 @@
 
 		});
 	</script>
-
 
 
 

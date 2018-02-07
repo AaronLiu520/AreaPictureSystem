@@ -144,6 +144,26 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	 * @return ModelAndView
 	 */
 	@RequestMapping("/checkLogin")
+	@ResponseBody
+	public BasicDataResult checkLogin(HttpSession session, String username, String password) {
+		
+		Query query = new Query();
+		
+		query.addCriteria(Criteria.where("userName").is(username)).addCriteria(Criteria.where("password").is(password));
+		
+		// 检查帐号登录
+		AdminUser au = this.adminUserService.findOneByQuery(
+				super.craeteQueryWhere("userName", username, "password", password), AdminUser.class);
+		if (au != null) {// 不等于空,保存用户帐号信息
+			// 加载权限
+			session.setAttribute("listMenu", au.getAdminRole().getListMenu());
+			session.setAttribute(CommonEnum.USERSESSION, au);
+			return BasicDataResult.build(200, "登录成功", true);
+		}
+		
+		return BasicDataResult.build(203, "用户名或密码错误", false);
+	}
+/*	@RequestMapping("/checkLogin")
 	public ModelAndView checkLogin(HttpSession session, String username, String password) {
 		ModelAndView modelAndView = new ModelAndView();
 		//modelAndView.setViewName("redirect:/adminUser/index");
@@ -158,7 +178,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 				// 加载权限
 				session.setAttribute("listMenu", au.getAdminRole().getListMenu());
 				session.setAttribute(CommonEnum.USERSESSION, au);
-
+				
 			} else {
 				// 返回到登录。对应跟目录地址
 				modelAndView.setViewName("redirect:/adminUser/login");
@@ -168,7 +188,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		}
 		return modelAndView;// 返回
 	}
-
+*/
 	/**
 	 * 登录成功后，重定向
 	 * 

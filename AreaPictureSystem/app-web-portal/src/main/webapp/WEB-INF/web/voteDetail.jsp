@@ -138,14 +138,14 @@
 						<c:forEach items="${usersUploads.listContestImages}" var="item"
 							varStatus="status">
 
-							<li style="list-style-type: none"><a target="_blank"
+							<li style="list-style-type: none;"><a target="_blank"
 								href="${item.originalPath}">
 
 									<div class="file-box">
 
 										<div class="file">
 												<div class=" col-md-4">
-													<img alt="300x200" style="width: 300px; height: 200px;"
+													<img alt="300x200" style="width: 300px; height: 200px;  margin-top: 5px;"
 														src="${item.originalPath}" />
 												</div>
 

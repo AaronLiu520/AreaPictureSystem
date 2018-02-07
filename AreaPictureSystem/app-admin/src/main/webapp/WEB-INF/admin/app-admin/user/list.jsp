@@ -31,7 +31,7 @@
                     <!-- 内容 -->
                      <div class="col-lg-12">
                             <div class="ibox float-e-margins">
-                                <div class="ibox-title">
+                         <%--        <div class="ibox-title">
                                     <h5>用户管理
                                     	<c:if test="${not empty param.error}">
                                     		<span style="color:red;padding-left: 100px;">友情提示：您添加的名称、登录帐号信息已经存在</span>
@@ -43,7 +43,7 @@
                                         </a>
                                         
                                     </div>
-                                </div>
+                                </div> --%>
                                 <div class="ibox-content">
                                       <p>
                                         <a href="editor">

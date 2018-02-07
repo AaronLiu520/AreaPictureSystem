@@ -46,7 +46,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 	@Autowired
 	private AdminCompanyService adminCompanyService;
-	
+
 	@Autowired
 	private TypeService typeService;
 
@@ -175,7 +175,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					forderActivity.setParentId("0");
 				}
 				forderActivity.setResource(new ArrayList<Resource>());
-				forderActivity.setCreatUser(newAdminUser);
+				forderActivity.setAdminUser(newAdminUser);
 				forderActivity.setFolderSize(0l);
 				// 新建文件夹
 				this.insert(forderActivity);
@@ -257,7 +257,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 		if (Common.isNotEmpty(forderActivityName)) {
 			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
 		} else if (Common.isNotEmpty(userId)) {
-			query.addCriteria(Criteria.where("creatUser.id").is(userId));
+			query.addCriteria(Criteria.where("adminUser.id").is(userId));
 		}
 		query.addCriteria(Criteria.where("parentId").is(parentId));
 
@@ -296,67 +296,81 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			// 超级管理员
 			if (getuserType.equals(UserType.ADMINISTRATORS)) {
 
-				   Criteria cr = new Criteria();
-				   			
-				   query.addCriteria(cr.orOperator(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
-							BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(userId)));
+				Criteria cr = new Criteria();
 
-				 listForderActivity = this.find(query, ForderActivity.class);
+				query.addCriteria(cr.orOperator(Criteria.where("listType.type").in(BaseType.Type.AREA,
+						BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS), Criteria.where("boundId").is(userId)));
 
+				listForderActivity = this.find(query, ForderActivity.class);
 
 			} else if (getuserType.equals(UserType.SCHOOLADMIN)) {
 
-				
-				
-				   Criteria cr = new Criteria();
-		   			
-				   query.addCriteria(cr.orOperator(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
-							BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(userId).andOperator(Criteria.where("listType.type").is(BaseType.Type.PERSION.toString()))));
-				
-				   query.addCriteria(Criteria.where("boundCompany").is(companyId));
-				
-				
-/*				query.addCriteria(Criteria.where("listType.type").in(BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
-						BaseType.Type.AREA)).addCriteria(Criteria.where("boundCompany").is(companyId));*/
+				Criteria cr = new Criteria();
 
-				/*List<ForderActivity> list*/ listForderActivity = this.find(query, ForderActivity.class);
+				query.addCriteria(cr.orOperator(
+						Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
+								BaseType.Type.DIRECTLYUTIS),
+						Criteria.where("boundId").is(userId)
+								.andOperator(Criteria.where("listType.type").is(BaseType.Type.PERSION.toString()))));
 
-		/*		query = new Query();
-				query.addCriteria(Criteria.where("boundId").is(userId))
-						.addCriteria(Criteria.where("listType.type").is(BaseType.Type.PERSION));
+				query.addCriteria(Criteria.where("boundCompany").is(companyId));
 
-				listForderActivity = this.find(query, ForderActivity.class);
+				/*
+				 * query.addCriteria(Criteria.where("listType.type").in(BaseType
+				 * .Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
+				 * BaseType.Type.AREA)).addCriteria(Criteria.where(
+				 * "boundCompany").is(companyId));
+				 */
 
-				listForderActivity.addAll(list);*/
+				/* List<ForderActivity> list */ listForderActivity = this.find(query, ForderActivity.class);
+
+				/*
+				 * query = new Query();
+				 * query.addCriteria(Criteria.where("boundId").is(userId))
+				 * .addCriteria(Criteria.where("listType.type").is(BaseType.Type
+				 * .PERSION));
+				 * 
+				 * listForderActivity = this.find(query, ForderActivity.class);
+				 * 
+				 * listForderActivity.addAll(list);
+				 */
 
 			} else if (getuserType.equals(UserType.TEACHER)) {
-				
-				
-			/*	   Criteria cr = new Criteria();
-		   			
-				   query.addCriteria(cr.orOperator(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
-							BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(userId).andOperator(Criteria.where("listType.type").is(BaseType.Type.PERSION.toString()))));
-				*/
-				   query.addCriteria(Criteria.where("boundCompany").is(companyId));
-				   
-				   query.addCriteria(Criteria.where("boundId").is(userId));
-				
-				   listForderActivity=this.find(query, ForderActivity.class);
-/*
-				query.addCriteria(Criteria.where("boundCompany").is(companyId))
 
-						.addCriteria(Criteria.where("listType.type").in(BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
-								BaseType.Type.AREA));
+				/*
+				 * Criteria cr = new Criteria();
+				 * 
+				 * query.addCriteria(cr.orOperator(Criteria.where(
+				 * "listType.type").in(BaseType.Type.AREA,
+				 * BaseType.Type.BASEUTIS,
+				 * BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(
+				 * userId).andOperator(Criteria.where("listType.type").is(
+				 * BaseType.Type.PERSION.toString()))));
+				 */
+				query.addCriteria(Criteria.where("boundCompany").is(companyId));
 
-				List<ForderActivity> list = this.find(query, ForderActivity.class);
-
-				query = new Query();
-				query.addCriteria(Criteria.where("boundId").is(userId))
-						.addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
+				query.addCriteria(Criteria.where("boundId").is(userId));
 
 				listForderActivity = this.find(query, ForderActivity.class);
-
-				listForderActivity.addAll(list);*/
+				/*
+				 * query.addCriteria(Criteria.where("boundCompany").is(companyId
+				 * ))
+				 * 
+				 * .addCriteria(Criteria.where("listType.type").in(BaseType.Type
+				 * .BASEUTIS, BaseType.Type.DIRECTLYUTIS, BaseType.Type.AREA));
+				 * 
+				 * List<ForderActivity> list = this.find(query,
+				 * ForderActivity.class);
+				 * 
+				 * query = new Query();
+				 * query.addCriteria(Criteria.where("boundId").is(userId))
+				 * .addCriteria(Criteria.where("type").is(BaseType.Type.PERSION)
+				 * );
+				 * 
+				 * listForderActivity = this.find(query, ForderActivity.class);
+				 * 
+				 * listForderActivity.addAll(list);
+				 */
 
 			}
 
@@ -368,21 +382,21 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 	}
 
-	
-	public BasicDataResult creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id,List<List<Type>> listsType) {
-		
+	public BasicDataResult creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id,
+			List<List<Type>> listsType) {
+
 		if (adminUser != null && forderActivity != null) {
-			
-			//如果id不为空执行修改
-			if(Common.isNotEmpty(id)){
+
+			// 如果id不为空执行修改
+			if (Common.isNotEmpty(id)) {
 				ForderActivity editforderActivity = this.findForderById(id);
-				if(editforderActivity == null){
+				if (editforderActivity == null) {
 					return BasicDataResult.build(203, "未能找到当前的活动，请刷新后再试！", null);
 				}
 				if (editforderActivity != null) {
 					editforderActivity.setAddress(forderActivity.getAddress());
 					editforderActivity.setActivityTime(forderActivity.getActivityTime());
-					editforderActivity.setCreatUser(adminUser);
+					editforderActivity.setAdminUser(adminUser);
 					editforderActivity.setDescription(forderActivity.getDescription());
 					editforderActivity.setFolderSize(forderActivity.getFolderSize());
 					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
@@ -396,37 +410,37 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 								.findAdminCompanyById(forderActivity.getBoundCompany());
 						editforderActivity.setAdminCompany(adminCompany);
 					}
-					
+
 					this.save(editforderActivity);
 					return BasicDataResult.build(200, "修改活动成功", true);
 				}
-				
-			}else{
-				//执行添加
-				for(int i=0;i<listsType.size();i++){
-					
-					if(adminUser.getAdminCompany()==null){
-						 return BasicDataResult.build(203, "您所使用的账户未分配所属企业，请联系管理员！", null);
+
+			} else {
+				// 执行添加
+				for (int i = 0; i < listsType.size(); i++) {
+
+					if (adminUser.getAdminCompany() == null) {
+						return BasicDataResult.build(203, "您所使用的账户未分配所属企业，请联系管理员！", null);
 					}
-					
-					if(adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU.toString())){
-						//直属单位不能创建基层单位的活动
-						if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())){
+
+					if (adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU.toString())) {
+						// 直属单位不能创建基层单位的活动
+						if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())) {
 							return BasicDataResult.build(203, "您是直属单位，不能创建属于基层单位的活动！", null);
 						}
 					}
-					
+
 					ForderActivity fo = new ForderActivity();
 					fo.setListType(listsType.get(i));
 					fo.setActivityTime(forderActivity.getActivityTime());
 					fo.setAddress(forderActivity.getAddress());
 					fo.setPersonActivityId(new ObjectId(new Date()).toString());
 					fo.setBaseutisActivityId(new ObjectId(new Date()).toString());
-					if(listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())){
+					if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())) {
 						fo.setAdminCompany(adminUser.getAdminCompany());
 						fo.setBoundCompany(adminUser.getAdminCompany().getId());
-					}else{
-						
+					} else {
+
 						if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
 							fo.setBoundCompany(forderActivity.getBoundCompany());
 							// 根据boundCompany获取企业信息
@@ -435,102 +449,84 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 							fo.setAdminCompany(adminCompany);
 						}
 					}
-					
-					
-				
+
 					fo.setBoundId(adminUser.getId());
-					fo.setCreatUser(adminUser);
+					fo.setAdminUser(adminUser);
 					fo.setDescription(forderActivity.getDescription());
 					fo.setForderActivityName(forderActivity.getForderActivityName());
 					fo.setListType(listsType.get(i));
 					fo.setParentId("0");
-					
+
 					this.insert(fo);
-					return BasicDataResult.build(200, "添加活动成功", true);
 				}
+				return BasicDataResult.build(200, "添加活动成功", true);
 			}
-			
+
 		}
-		 return BasicDataResult.build(400, "添加活动过程中发生未知错误，请与管理员联系", null);
-		
+		return BasicDataResult.build(400, "添加活动过程中发生未知错误，请与管理员联系", null);
+
 	}
-	
-	
-	
-/*	public void creatOrEditActivity(ForderActivity forderActivity, AdminUser adminUser, String id) {
-		
-		if (adminUser != null && forderActivity != null) { // 判断adminUser,forderActiviy
-			// 是否为空
-			
-			if (Common.isNotEmpty(id)) { // 如果id不为空执行休息
-				
-				ForderActivity editforderActivity = this.findForderById(id);
-				
-				if (editforderActivity != null) {
-					editforderActivity.setAddress(forderActivity.getAddress());
-					editforderActivity.setActivityTime(forderActivity.getActivityTime());
-					editforderActivity.setCreatUser(adminUser);
-					editforderActivity.setDescription(forderActivity.getDescription());
-					editforderActivity.setFolderSize(forderActivity.getFolderSize());
-					editforderActivity.setForderActivityName(forderActivity.getForderActivityName());
-					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
-					editforderActivity.setType(forderActivity.getType());
-					editforderActivity.setListType(forderActivity.getListType());
-					if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
-						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
-						// 根据boundCompany获取企业信息
-						AdminCompany adminCompany = this.adminCompanyService
-								.findAdminCompanyById(forderActivity.getBoundCompany());
-						editforderActivity.setAdminCompany(adminCompany);
-					}
-					
-					this.save(editforderActivity);
-				}
-				
-			} else { // 执行添加活动
-				
-				if (Common.isEmpty(forderActivity.getBoundCompany())) { // 如果BoundCompany
-					// 为空则添加默认自己单位
-					if (adminUser.getAdminCompany() == null) {
-						forderActivity.setBoundCompany("");
-					} else {
-						forderActivity.setBoundCompany(adminUser.getAdminCompany().getId());
-					}
-				}
-				
-				if (Common.isEmpty(forderActivity.getBoundId())) {
-					forderActivity.setBoundId(adminUser.getId());
-				}
-				
-				// 根据boundCompany获取企业信息
-				AdminCompany adminCompany = this.adminCompanyService
-						.findAdminCompanyById(forderActivity.getBoundCompany());
-				
-				
-				forderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
-				forderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
-				forderActivity.setAdminCompany(adminCompany);
-				forderActivity.setParentId("0");
-				forderActivity.setCreatUser(adminUser);
-				this.insert(forderActivity);
-				
-			}
-			
-		}
-		
-	}
-	
-	
-	
-*/	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/*
+	 * public void creatOrEditActivity(ForderActivity forderActivity, AdminUser
+	 * adminUser, String id) {
+	 * 
+	 * if (adminUser != null && forderActivity != null) { //
+	 * 判断adminUser,forderActiviy // 是否为空
+	 * 
+	 * if (Common.isNotEmpty(id)) { // 如果id不为空执行休息
+	 * 
+	 * ForderActivity editforderActivity = this.findForderById(id);
+	 * 
+	 * if (editforderActivity != null) {
+	 * editforderActivity.setAddress(forderActivity.getAddress());
+	 * editforderActivity.setActivityTime(forderActivity.getActivityTime());
+	 * editforderActivity.setCreatUser(adminUser);
+	 * editforderActivity.setDescription(forderActivity.getDescription());
+	 * editforderActivity.setFolderSize(forderActivity.getFolderSize());
+	 * editforderActivity.setForderActivityName(forderActivity.
+	 * getForderActivityName());
+	 * editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
+	 * editforderActivity.setType(forderActivity.getType());
+	 * editforderActivity.setListType(forderActivity.getListType()); if
+	 * (Common.isNotEmpty(forderActivity.getBoundCompany())) {
+	 * editforderActivity.setBoundCompany(forderActivity.getBoundCompany()); //
+	 * 根据boundCompany获取企业信息 AdminCompany adminCompany = this.adminCompanyService
+	 * .findAdminCompanyById(forderActivity.getBoundCompany());
+	 * editforderActivity.setAdminCompany(adminCompany); }
+	 * 
+	 * this.save(editforderActivity); }
+	 * 
+	 * } else { // 执行添加活动
+	 * 
+	 * if (Common.isEmpty(forderActivity.getBoundCompany())) { // 如果BoundCompany
+	 * // 为空则添加默认自己单位 if (adminUser.getAdminCompany() == null) {
+	 * forderActivity.setBoundCompany(""); } else {
+	 * forderActivity.setBoundCompany(adminUser.getAdminCompany().getId()); } }
+	 * 
+	 * if (Common.isEmpty(forderActivity.getBoundId())) {
+	 * forderActivity.setBoundId(adminUser.getId()); }
+	 * 
+	 * // 根据boundCompany获取企业信息 AdminCompany adminCompany =
+	 * this.adminCompanyService
+	 * .findAdminCompanyById(forderActivity.getBoundCompany());
+	 * 
+	 * 
+	 * forderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
+	 * forderActivity.setBaseutisActivityId(new ObjectId(new
+	 * Date()).toString()); forderActivity.setAdminCompany(adminCompany);
+	 * forderActivity.setParentId("0"); forderActivity.setCreatUser(adminUser);
+	 * this.insert(forderActivity);
+	 * 
+	 * }
+	 * 
+	 * }
+	 * 
+	 * }
+	 * 
+	 * 
+	 * 
+	 */
 
 	/**
 	 * 
@@ -540,45 +536,62 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	 *         List<ForderActivity> 返回类型 @throws
 	 */
 	public BasicDataResult findForderActivityByforderActivityName(String forderActivityName, AdminUser adminUser,
-			String companyId, String type, String activityTime) {
+			String companyId, List<List<Type>> types, String activityTime) {
 
-		if (adminUser != null && Common.isNotEmpty(forderActivityName)) {
+		if (adminUser != null && Common.isNotEmpty(forderActivityName)&&Common.isNotEmpty(activityTime)) {
 
-			Query query = new Query();
+		
 
-			query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
-
-			if (Common.isNotEmpty(activityTime)) {
-				query.addCriteria(Criteria.where("activityTime").is(activityTime));
-			}
-
-
-			if (Common.isNotEmpty(type)) {
-
-				List list = new ArrayList();
+			if (types.size() > 0) {
 				
-				String[] types = type.split(",");
-				
-				for(int i = 0;i<types.length;i++){
-					list.add(types[i]);
-					if(types[i].equals(BaseType.Type.BASEUTIS.toString())){
-						query.addCriteria(Criteria.where("boundCompany").is(companyId));
+				for (List<Type> list : types) {
+					
+					Query query = new Query();
+
+					query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
+
+					if (Common.isNotEmpty(activityTime)) {
+						query.addCriteria(Criteria.where("activityTime").is(activityTime));
 					}
 					
+					for(int i =0;i<list.size();i++){
+						System.out.println(list.get(i).getType());
+						
+						if (list.get(i).getType().equals(BaseType.Type.BASEUTIS)) {
+							query.addCriteria(Criteria.where("boundCompany").is(companyId));
+						}
+						ForderActivity forderActivity = null;
+						query.addCriteria(Criteria.where("listType.type").is(list.get(i).getType()));
+						forderActivity = this.findOneByQuery(query, ForderActivity.class);
+						
+						String aa="";
+						if (forderActivity != null){
+							if(list.get(i).getType().equals(BaseType.Type.BASEUTIS)){
+								aa="相同时间已经创建过所选单位的<b>基层单位</b>活动了";
+							}
+							if(list.get(i).getType().equals(BaseType.Type.AREA)){
+								aa="相同时间<b>区域单位</b>已经有一个相同的活动了";
+							}
+							if(list.get(i).getType().equals(BaseType.Type.DIRECTLYUTIS)){
+								aa="相同时间<b>直属单位</b>已经有一个相同的活动了";
+							}
+							
+							if(list.get(i).getType().equals(BaseType.Type.PERSION)){
+								aa="您已经创建过一个相同名称<b>个人</b>活动了！";
+							}
+							
+							return BasicDataResult.build(203, aa, null);
+						}
+							
+							
+					}
 					
 				}
-				ForderActivity forderActivity = null;
-
-				query.addCriteria(Criteria.where("listType.type").in(list));
-
-
-				forderActivity = this.findOneByQuery(query, ForderActivity.class);
-
-				if (forderActivity != null)
-					return BasicDataResult.build(200, "该所属单位在所选时间已经有相同活动了", null);
+				
+				return BasicDataResult.build(200, "未找到重复活动", null);
+				
 				
 			}
-
 		}
 
 		return BasicDataResult.build(100, "", null);

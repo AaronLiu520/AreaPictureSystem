@@ -480,6 +480,21 @@ jQuery.validator
 				}, "请正确填写您的手机号码");
 
 function sendEmail() {
+	var mail = $('#checkemail').val();
+	if (mail != '') {// 判断
+		var reg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\.[a-zA-Z0-9_-]{2,3}){1,2})$/;
+		if (!reg.test(mail)) {
+			$("#modelLabel").html("信息提示");
+			$("#modelContent").html("<center>邮箱格式不正确，请重新填写</center>");
+			$('#titleModel').modal('show');
+			return false;
+		}
+	}else{
+		$("#modelLabel").html("信息提示");
+		$("#modelContent").html("<center>邮箱地址不能为空</center>");
+		$('#titleModel').modal('show');
+		return false;
+	}
 
 	$.ajax({
 		type : "POST",
@@ -492,7 +507,13 @@ function sendEmail() {
 				$("#modelLabel").html("信息提示");
 				$("#modelContent").html("<center>" + data.msg + "</center>");
 				$('#titleModel').modal('show');
+				time();
+			}else {
+				$("#modelLabel").html("信息提示");
+				$("#modelContent").html("<center>" + data.msg + "</center>");
+				$('#titleModel').modal('show');
 			}
+		
 		}
 	});
 
@@ -509,6 +530,11 @@ function registerSendEmail() {
 			$('#titleModel').modal('show');
 			return false;
 		}
+	}else{
+		$("#modelLabel").html("信息提示");
+		$("#modelContent").html("<center>邮箱地址不能为空</center>");
+		$('#titleModel').modal('show');
+		return false;
 	}
 	$.ajax({
 		type : "POST",
@@ -520,6 +546,7 @@ function registerSendEmail() {
 				$("#modelLabel").html("信息提示");
 				$("#modelContent").html("<center>" + data.msg + "</center>");
 				$('#titleModel').modal('show');
+				time();
 			} else {
 				$("#modelLabel").html("信息提示");
 				$("#modelContent").html("<center>" + data.msg + "</center>");
@@ -529,3 +556,27 @@ function registerSendEmail() {
 	});
 
 }
+
+//倒计时
+var wait = 60;
+function time() {
+	if (wait == 0) {
+		$(".reSendTime").attr("disabled", false);
+		$(".reSendTime").text("获取验证码");
+		wait = 60;
+	} else {
+		$(".reSendTime").attr("disabled", "disabled");
+		$(".reSendTime").text("重新发送(" + wait + ")");
+		wait--;
+		setTimeout(function() {
+			time()
+		}, 1000)
+	}
+}
+
+
+
+
+
+
+

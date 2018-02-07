@@ -212,11 +212,11 @@
 		
 		//点击删除按钮之后将图片所在input清空
 		$(".fileinput-remove-button").click(function(e){
-			$("#aboutUsPic").val('');
+			$("#aboutUsPic").val("");
 		})
 		//点击删除按钮之后将图片所在input清空
 		$(".fileinput-remove").click(function(e){
-			$("#aboutUsPic").val('');
+			$("#aboutUsPic").val("");
 		})
 		
 		

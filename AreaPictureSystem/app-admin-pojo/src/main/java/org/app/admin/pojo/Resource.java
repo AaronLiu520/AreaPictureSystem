@@ -35,7 +35,7 @@ public class Resource extends GeneralBean {
     private String generateName;        // 1 生成名（新名字）
 
     @DBRef
-    private AdminUser adminuser;        //用户Id
+    private AdminUser adminUser;        //用户Id
     @DBRef
     private Source source;        //资源流
 
@@ -120,15 +120,16 @@ public class Resource extends GeneralBean {
         this.generateName = generateName;
     }
 
-    public AdminUser getAdminuser() {
-        return adminuser;
-    }
 
-    public void setAdminuser(AdminUser adminuser) {
-        this.adminuser = adminuser;
-    }
+    public AdminUser getAdminUser() {
+		return adminUser;
+	}
 
-    public Source getSource() {
+	public void setAdminUser(AdminUser adminUser) {
+		this.adminUser = adminUser;
+	}
+
+	public Source getSource() {
         return source;
     }
 
@@ -185,22 +186,22 @@ public class Resource extends GeneralBean {
 	}
 
 	@Override
-    public String toString() {
-        return "Resource{" +
-                "uploadPerson='" + uploadPerson + '\'' +
-                ", boundId='" + boundId + '\'' +
-                ", forderActivityId='" + forderActivityId + '\'' +
-                ", originalName='" + originalName + '\'' +
-                ", originalPath='" + originalPath + '\'' +
-                ", extensionName='" + extensionName + '\'' +
-                ", fileType='" + fileType + '\'' +
-                ", generateName='" + generateName + '\'' +
-                ", adminuser=" + adminuser +
-                ", source=" + source +
-                ", imgInfoBean=" + imgInfoBean +
-                ", editorImgInfo=" + editorImgInfo +
-                ", imgCompressionBean=" + imgCompressionBean +
-                '}';
-    }
+	public String toString() {
+		return "Resource [uploadPerson=" + uploadPerson + ", boundId=" + boundId + ", forderActivityId="
+				+ forderActivityId + ", originalName=" + originalName + ", originalPath=" + originalPath
+				+ ", extensionName=" + extensionName + ", fileType=" + fileType + ", generateName=" + generateName
+				+ ", adminUser=" + adminUser + ", source=" + source + ", imgInfoBean=" + imgInfoBean
+				+ ", editorImgInfo=" + editorImgInfo + ", imgCompressionBean=" + imgCompressionBean
+				+ ", adminCompanyId=" + adminCompanyId + ", personActivityId=" + personActivityId
+				+ ", baseutisActivityId=" + baseutisActivityId + "]";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 }
 

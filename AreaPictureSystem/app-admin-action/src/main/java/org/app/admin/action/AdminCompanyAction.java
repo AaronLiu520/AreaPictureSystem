@@ -23,6 +23,7 @@ import org.app.admin.service.AdminRoleService;
 
 import org.app.admin.service.AdminUserService;
 import org.app.admin.service.FavoritesService;
+import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.util.BaseType;
 import org.app.framework.action.GeneralAction;
@@ -70,7 +71,8 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	@Autowired
 	private ResourceService resourceService;
 	
-	
+	@Autowired
+	private ForderActivityService forderActivityService;
 	
 	
 
@@ -218,12 +220,33 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 						//删除我的收藏
 						this.favoritesService.remove(favorites);
 					}
-					//我的收藏
+		/*			//我的收藏
 					List<Resource> listResource = this.resourceService.find(query, Resource.class);
 					for(Resource resource :listResource){
 						//删除我的收藏
 						this.resourceService.remove(resource);
+					}*/
+					
+					//删除企业所有的活动
+					List<ForderActivity> listForderActivity = this.forderActivityService.find(query, ForderActivity.class);
+					
+					for(ForderActivity f:listForderActivity){
+						//删除对应的活动
+						this.forderActivityService.remove(f);
 					}
+					
+					
+					// 我的资源
+					query = new Query();
+					
+					query.addCriteria(Criteria.where("boundId").is(adminUser.getId()));
+					
+					List<Resource> listResource = this.resourceService.find(query, Resource.class);
+					for (Resource resource : listResource) {
+						// 删除我的收藏
+						this.resourceService.remove(resource);
+					}
+					
 					this.adminUserService.remove(adminUser);
 				}
 				

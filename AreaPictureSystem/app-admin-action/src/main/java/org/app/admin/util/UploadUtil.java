@@ -61,16 +61,15 @@ public class UploadUtil {
         }
 
         rf.setUploadPerson(au.getName());   // 1 上传者
-        rf.setBoundId(au.getId());  // 2 绑定公司或个人Id
+        rf.setBoundId(au.getId());  // 个人Id
         
-        if(type.equals(BaseType.Type.AREA.toString())||type.equals(BaseType.Type.DIRECTLYUTIS.toString())){
-        	rf.setForderActivityId(f.getId());   // 3 文件夹Id或活动Id
-        }else if(type.equals(BaseType.Type.BASEUTIS.toString())){
+        rf.setForderActivityId(f.getId());   // 3 文件夹Id或活动Id
+      /*  if(type.equals(BaseType.Type.AREA.toString())||type.equals(BaseType.Type.DIRECTLYUTIS.toString())){
+        }else*/ if(type.equals(BaseType.Type.BASEUTIS.toString())){
         	rf.setBaseutisActivityId(f.getBaseutisActivityId());
-        }else{
+        }else if(type.equals(BaseType.Type.PERSION.toString())){
         	rf.setPersonActivityId(f.getPersonActivityId());
         }
-        
         
         rf.setOriginalName(mpfile.getOriginalFilename());// 4 获取原文件（真实）的名字
         rf.setOriginalPath(path.toString());// 5 路径

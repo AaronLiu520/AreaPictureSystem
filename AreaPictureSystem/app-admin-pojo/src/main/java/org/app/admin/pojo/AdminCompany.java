@@ -92,6 +92,12 @@ public class AdminCompany extends GeneralBean {
 	public void setAdminUser(AdminUser adminUser) {
 		this.adminUser = adminUser;
 	}
+	@Override
+	public String toString() {
+		return "AdminCompany [name=" + name + ", shorts=" + shorts + ", address=" + address + ", contacts=" + contacts
+				+ ", telPhone=" + telPhone + ", email=" + email + ", remark=" + remark + ", nature=" + nature
+				+ ", type=" + type + ", adminUser=" + adminUser + "]";
+	}
 
 	
 

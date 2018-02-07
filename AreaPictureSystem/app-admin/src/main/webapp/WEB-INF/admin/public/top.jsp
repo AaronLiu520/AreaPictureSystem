@@ -17,7 +17,8 @@
 		$("#edDIRECTLYUTIS").show();
 		$("#edBASEUTIS").show();
 		$("#edPERSION").show();
-
+		$("#boundCompany").attr("disabled", false);
+		
 		$("#AREA").each(function(){  
 		     this.checked=false;
 		}); 
@@ -33,7 +34,7 @@
 		$("#boundCompany option:first").prop("selected", 'selected');  
 
 		
-		$("#signupForm")[0].reset();
+		$("#CrateActivityForm")[0].reset();
 		 
 		$("#toModal-form").trigger("click");
 
@@ -101,7 +102,7 @@
 					<h4 class="modal-title">创建活动／文件夹</h4>
 				</div>
 
-				<form method="post" id="signupForm"
+				<form method="post" id="CrateActivityForm"
 					action="#">
 					<div class="modal-body">
 						<div class="form-group">
@@ -295,12 +296,12 @@
 							dataType : "json",
 							success : function(msg) {
 								if (msg.status == 200) {
+									$("#createActivitySubmit").attr("disabled", false);
+									document.getElementById("for" + o1).innerHTML = " ";
+								} else {
 									document.getElementById("for" + o1).innerHTML = msg.msg;
 									document.getElementById("for" + o1).style.cssText = "float: right; color: red;";
 									$("#createActivitySubmit").attr("disabled", "true");
-								} else {
-									$("#createActivitySubmit").attr("disabled", false);
-									document.getElementById("for" + o1).innerHTML = " ";
 								}
 							}
 						});
@@ -345,10 +346,47 @@
 		$().ready(function() {
 			$("#commentForm").validate();
 			var a = "<i class='fa fa-times-circle'></i> ";
-			$("#signupForm").validate({
+			$("#CrateActivityForm").validate({
 				rules : {
 					forderActivityName : "required",
-					boundCompany : "required",
+					boundCompany :{
+						required : true,
+						remote : {
+							url :"${pageContext.request.contextPath}/forderActivity/findCompanyType",
+							type : "POST",
+							data : {
+								boundCompany : function() {
+									return $("#boundCompany").val();
+								}
+							},
+							dataType : "json",
+							dataFilter : function(data, type) {
+								var jsondata = $.parseJSON(data);
+								if (jsondata.status == 200) {
+									if(jsondata.data=="JICHENG"){
+										
+										$("#DIRECTLYUTIS").each(function(){  
+										     this.checked=false;
+										}); 
+										$("#edDIRECTLYUTIS").hide();
+										$("#edBASEUTIS").show();
+									}
+									if(jsondata.data=="ZHISHU"){
+										$("#BASEUTIS").each(function(){  
+										     this.checked=false;
+										}); 
+										$("#edBASEUTIS").hide();
+										$("#edDIRECTLYUTIS").show();
+									}
+									
+									
+									return true;
+								}
+								return false;
+							}
+						},
+						
+					},
 					activityTime : {
 						required : true,
 					},
@@ -378,18 +416,18 @@
 					$.ajax({
 						type : "POST",
 						url : "${pageContext.request.contextPath}/forderActivity/creatOrEditActivity",
-						data : $("#signupForm").serialize(),
+						data : $("#CrateActivityForm").serialize(),
 						dataType : "json",
 						success : function(data) {
 							if (data.status == 200) {
-								$("#signupForm")[0].reset()
+								$("#CrateActivityForm")[0].reset()
 							/* 	$("#modelLabel").html("信息提示");
 								$("#modelContent").html(
 										"<center>" + data.msg
 												+ "</center>");
 								$('#titleModel').modal('show'); */
 								location.reload(1000);
-								//$("#signupForm").modal("hide");
+								//$("#CrateActivityForm").modal("hide");
 							} else {
 								$("#modelLabel").html("信息提示");
 								$("#modelContent").html(

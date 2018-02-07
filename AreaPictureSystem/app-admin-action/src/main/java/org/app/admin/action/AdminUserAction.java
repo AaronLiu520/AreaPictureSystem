@@ -10,11 +10,13 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminRole;
 import org.app.admin.pojo.AdminUser;
+import org.app.admin.pojo.Favorites;
 import org.app.admin.pojo.ForderActivity;
 import org.app.admin.pojo.Resource;
 import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.AdminRoleService;
 import org.app.admin.service.AdminUserService;
+import org.app.admin.service.FavoritesService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.service.StatisticsService;
@@ -26,6 +28,7 @@ import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
 import org.app.framework.util.CommonEnum;
 import org.app.framework.util.Pagination;
+import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +64,9 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 	@Autowired
 	private StatisticsService statisticsService;
+
+	@Autowired
+	private FavoritesService favoritesService;
 
 	/**
 	 * 用户查询
@@ -167,7 +173,26 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@SystemErrorLog(description = "用户登录出错")
 	@SystemControllerLog(description = "用户登录")
 	@RequestMapping("/checkLogin")
-	public ModelAndView checkLogin(HttpSession session, String username, String password) {
+	@ResponseBody
+	public BasicDataResult checkLogin(HttpSession session, String username, String password) {
+		
+		Query query = new Query();
+		
+		query.addCriteria(Criteria.where("userName").is(username)).addCriteria(Criteria.where("password").is(password));
+		
+		// 检查帐号登录
+		AdminUser au = this.adminUserService.findOneByQuery(
+				super.craeteQueryWhere("userName", username, "password", password), AdminUser.class);
+		if (au != null) {// 不等于空,保存用户帐号信息
+			// 加载权限
+			session.setAttribute("listMenu", au.getAdminRole().getListMenu());
+			session.setAttribute(CommonEnum.USERSESSION, au);
+			return BasicDataResult.build(200, "登录成功", true);
+		}
+		
+		return BasicDataResult.build(203, "用户名或密码错误", false);
+	}
+/*	public ModelAndView checkLogin(HttpSession session, String username, String password) {
 		ModelAndView modelAndView = new ModelAndView();
 		// modelAndView.setViewName("redirect:/adminUser/index");
 		modelAndView.setViewName("redirect:/adminUser/index");
@@ -190,7 +215,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 			log.error("用户登录异常：" + e.toString());
 		}
 		return modelAndView;// 返回
-	}
+	}*/
 
 	/**
 	 * 登录成功后，重定向
@@ -334,6 +359,42 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 				if (adminUser != null) {
 
+					Query query = new Query();
+					
+					query.addCriteria(Criteria.where("adminUser.$id").is(new ObjectId(adminUser.getId())));
+					// 我的收藏
+					List<Favorites> listFavorites = this.favoritesService.find(query, Favorites.class);
+					for (Favorites favorites : listFavorites) {
+						// 删除我的收藏
+						this.favoritesService.remove(favorites);
+					}
+					
+					
+					
+					//删除企业所有的活动
+					List<ForderActivity> listForderActivity = this.forderActivityService.find(query, ForderActivity.class);
+					
+					for(ForderActivity f:listForderActivity){
+						//删除对应的活动
+						this.forderActivityService.remove(f);
+					}
+					
+					
+					
+					// 我的资源
+					query = new Query();
+					
+					query.addCriteria(Criteria.where("boundId").is(adminUser.getId()));
+					
+					List<Resource> listResource = this.resourceService.find(query, Resource.class);
+					for (Resource resource : listResource) {
+						// 删除我的收藏
+						this.resourceService.remove(resource);
+					}
+				
+					
+					
+
 					this.adminUserService.remove(adminUser);
 
 				}
@@ -348,7 +409,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	/**
 	 * 
 	 * @Title: checkPassword @Description: TODO(这里用一句话描述这个方法的作用) @param @return
-	 * 设定文件 @return BasicDataResult 返回类型 @throws
+	 *         设定文件 @return BasicDataResult 返回类型 @throws
 	 */
 
 	@RequestMapping("/checkPassword")
@@ -359,35 +420,47 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		return result;
 
 	}
-	
-	
+
 	@RequestMapping("/updatePassword")
 	@ResponseBody
-	public BasicDataResult updatePassword(HttpSession session,@RequestParam(defaultValue="",value="password")String password){
-		
-		
+	public BasicDataResult updatePassword(HttpSession session,
+			@RequestParam(defaultValue = "", value = "password") String password) {
+
 		BasicDataResult result = this.adminUserService.updatePassword(session, password);
-		
-		if(result.getStatus().equals(200)){
+
+		if (result.getStatus().equals(200)) {
 			// 注销session(后台登录）
 			session.removeAttribute(CommonEnum.USERSESSION);
 		}
 		return result;
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	@RequestMapping("/checkUserName")
+	@ResponseBody
+	public BasicDataResult checkUserName(HttpSession session,
+			@RequestParam(defaultValue = "", value = "userName") String userName,
+			@RequestParam(defaultValue = "", value = "hidUserName") String hidUserName) {
+		
+		if(!hidUserName.trim().equals(userName.trim())){
+			if (Common.isEmpty(userName)) {
+				return BasicDataResult.build(203, "请先添加用户名", null);
+			}
+
+			Query query = new Query();
+
+			query.addCriteria(Criteria.where("userName").is(userName));
+
+			Boolean b = this.adminUserService.exists(query, AdminUser.class);
+
+			if (b) {
+				return BasicDataResult.build(200, "用户名已经存在", true);
+			}
+
+		}
+		return BasicDataResult.build(200, "", false);
+		
+
+	}
 
 }

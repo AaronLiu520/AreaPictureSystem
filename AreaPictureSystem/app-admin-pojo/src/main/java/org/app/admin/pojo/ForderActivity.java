@@ -51,7 +51,7 @@ public class ForderActivity extends GeneralBean {
 */	private Long folderSize; // 文件夹大小
 	private List<Resource> resource;// 资源集合
 	@DBRef
-	private AdminUser creatUser;//创建者
+	private AdminUser adminUser;//创建者
 	@DBRef
 	private AdminCompany adminCompany;//企业信息
 	private String parentId;// 付文件夹Id
@@ -124,11 +124,11 @@ public class ForderActivity extends GeneralBean {
 	public void setResource(List<Resource> resource) {
 		this.resource = resource;
 	}
-	public AdminUser getCreatUser() {
-		return creatUser;
+	public AdminUser getAdminUser() {
+		return adminUser;
 	}
-	public void setCreatUser(AdminUser creatUser) {
-		this.creatUser = creatUser;
+	public void setAdminUser(AdminUser adminUser) {
+		this.adminUser = adminUser;
 	}
 	public AdminCompany getAdminCompany() {
 		return adminCompany;

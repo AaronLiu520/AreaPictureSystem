@@ -42,6 +42,7 @@
 		<div id="page-wrapper" class="gray-bg dashbard-1">
 			<!-- .aside top jsp -->
 			<%@include file="public/top.jsp"%>
+			
 			<div class="wrapper wrapper-content">
 				<div class="row">
 					<!-- 内容 -->

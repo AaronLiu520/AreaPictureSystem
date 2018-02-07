@@ -58,12 +58,15 @@
 							+ $(boundCompany).text().trim() + "')").prop(
 					"selected", true);
 
+					$("#boundCompany").attr("disabled", true)	
+						
+						
 			var aa = $(type).text().trim();
 
 			if (aa.indexOf("区域") >= 0) {
-				$("#AREA").each(function(){  
-				     this.checked=true;
-				}); 
+				$("#AREA").each(function() {
+					this.checked = true;
+				});
 				//$("#AREA").attr("checked", "true");
 				$("#edAREA").show();
 				$("#edDIRECTLYUTIS").show();
@@ -72,19 +75,19 @@
 			}
 			if (aa.indexOf("直属单位") >= 0) {
 				//$("#DIRECTLYUTIS").attr("checked", "true");
-				$("#DIRECTLYUTIS").each(function(){  
-				     this.checked=true;
-				}); 
+				$("#DIRECTLYUTIS").each(function() {
+					this.checked = true;
+				});
 				$("#edAREA").show();
 				$("#edDIRECTLYUTIS").show();
 				$("#edBASEUTIS").hide();
 				$("#edPERSION").hide();
 			}
 			if (aa.indexOf("基层单位") >= 0) {
-				$("#BASEUTIS").each(function(){  
-				     this.checked=true;
-				}); 
-			
+				$("#BASEUTIS").each(function() {
+					this.checked = true;
+				});
+
 				//$("#BASEUTIS").attr("checked", "true");
 				$("#edAREA").hide();
 				$("#edDIRECTLYUTIS").hide();
@@ -92,9 +95,9 @@
 				$("#edPERSION").hide();
 			}
 			if (aa.indexOf("个人") >= 0) {
-				$("#PERSION").each(function(){  
-				     this.checked=true;
-				}); 
+				$("#PERSION").each(function() {
+					this.checked = true;
+				});
 				//$("#PERSION").attr("checked", "true");
 				$("#edAREA").hide();
 				$("#edDIRECTLYUTIS").hide();
@@ -174,7 +177,7 @@
 									</button>
 								<p> -->
 								<table
-									class="table table-striped table-bordered table-hover dataTables-example" >
+									class="table table-striped table-bordered table-hover dataTables-example">
 									<thead>
 										<tr>
 											<th>活动名称</th>
@@ -214,7 +217,7 @@
 												<td id="${item.id }_address">${item.address}</td>
 												<%-- <td id="${item.id }_sumPotoCount">${item.sumPotoCount}</td> --%>
 												<td id="${item.id }_activityTime">${item.activityTime}</td>
-												<td id="${item.id }_createUser">${item.creatUser.name}</td>
+												<td id="${item.id }_createUser">${item.adminUser.name}</td>
 												<td class="center"><a href="javascript:void(0);"
 													onclick="return edit('${item.id}');">
 														<button type="button"

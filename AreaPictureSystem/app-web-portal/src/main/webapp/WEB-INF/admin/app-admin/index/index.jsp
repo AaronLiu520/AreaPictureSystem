@@ -57,6 +57,10 @@
 											</div>
 										</div>
 									</div>
+									
+								<input type="hidden" value="${index.banana }" name="banana" id="banana">
+									
+									
 									<div class="hr-line-dashed"></div>
 
 									<div class="row">
@@ -132,7 +136,6 @@
 		type="text/javascript"></script>
 
 
-
 	<script>
 	$("#myfile").fileinput({
 			 maxFileCount : 1, //表示允许同时上传的最大文件个数
@@ -143,14 +146,24 @@
 			showPreview : true,//显示预览
 			browseClass : "btn btn-primary btn-lg",
 		    initialPreview: [
+		    	<c:if test='${not empty index.banana }'>
 		    	"<img src='${index.banana}' class='file-preview-image' style='width:auto;height:160px;'>",  
-		
+		    </c:if>
+
     ], 
 		});
 
 
 
-
+	//点击删除按钮之后将图片所在input清空
+	$(".fileinput-remove-button").click(function(e){
+		$("#banana").val("");
+	})
+	//点击删除按钮之后将图片所在input清空
+	$(".fileinput-remove").click(function(e){
+		$("#banana").val("");
+	})
+	
 
  
 	</script>

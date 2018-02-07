@@ -127,13 +127,13 @@
 				
 					<c:forEach items="${usersUploads.listContestImages}" var="items" varStatus="status">
 					
-					<li>
+					<li >
 						<div class="biseller-column">
-							<a class="lightbox" href="#goofy"> <img
+							<a class="lightbox" href="#goofy"> <img style="height: 176px;"
 								src="${items.originalPath }" />
 							</a>
 							<div class="lightbox-target" id="goofy">
-								<img
+								<img 
 										src="${items.originalPath }" />
 								<a class="lightbox-close" href="#"> </a>
 

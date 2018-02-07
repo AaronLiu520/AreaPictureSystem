@@ -67,6 +67,10 @@
 								</c:forEach>
 										
 										</small>
+											<br />
+										<small>
+										所属单位：${item.adminCompany.name}
+										</small>
 									
 								</div>
 							</div>

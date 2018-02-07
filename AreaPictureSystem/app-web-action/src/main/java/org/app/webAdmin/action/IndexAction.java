@@ -56,17 +56,22 @@ public class IndexAction extends GeneralAction<Index> {
 
 
 	@RequestMapping("/saveIndex")
-	public ModelAndView saveIndex(HttpSession session,HttpServletRequest request, @ModelAttribute("index") Index index,
+	public ModelAndView saveIndex(HttpSession session,
+			HttpServletRequest request,
+			@RequestParam MultipartFile[] bananaImg,
+			@ModelAttribute("index") Index index,
 			@RequestParam(defaultValue="",value="editid")String editid) {
 		ModelAndView modelAndView = new ModelAndView();
-		
-		String img = this.operateUtil.uploadImg(request);
-		if(Common.isNotEmpty(img)){
-			index.setBanana(img);
+/*		if(Common.isEmpty(index.getBanana())){
+			String img = this.operateUtil.uploadImg(request);
+			if(Common.isNotEmpty(img)){
+				index.setBanana(img);
+			}
 		}
-		this.indexService.SaveOrUpdateSetting(index,editid);
+		*/
+		this.indexService.SaveOrUpdateSetting(index,editid,bananaImg,request);
 		
-		session.removeAttribute(CommonEnum.WEBSETTING);//清空网站配置
+		session.removeAttribute(CommonEnum.WEBINDEXBANANA);
 
 		modelAndView.setViewName("redirect:/index/list");
 

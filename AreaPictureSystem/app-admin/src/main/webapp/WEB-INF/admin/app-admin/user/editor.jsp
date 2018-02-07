@@ -36,7 +36,7 @@
 								<h5>用户管理</h5>
 							</div>
 							<div class="ibox-content">
-								<form role="form" id="signupForm"  action="createOrUpdateToFind" method="post" class="form-horizontal m-t" >
+								<form role="form" id="CreateUsersForm"  action="createOrUpdateToFind" method="post" class="form-horizontal m-t" >
 									<div class="row">
 										<div class="col-sm-5">
 											<label class="col-sm-4 control-label">姓 名</label>
@@ -54,6 +54,7 @@
 											</div>
 										</div>
 									</div>
+									<input type="hidden" name="hidUserName" id="hidUserName" value="${bean.userName}">
 									
 									<div class="hr-line-dashed"></div>
 									<div class="row">
@@ -298,12 +299,42 @@
 		$().ready(function() {
 			$("#commentForm").validate();
 			var a = "<i class='fa fa-times-circle'></i> ";
-			$("#signupForm").validate({
+			$("#CreateUsersForm").validate({
 				rules : {
 					name : "required",
 					userName : {
 						required : true,
-						minlength : 2
+						minlength : 2,
+						remote : {
+							url : getRootPath() + "/adminUser/checkUserName",
+							type : "POST",
+							data : {
+								userName : function() {
+									return $("#userName").val();
+								},
+								hidUserName:function(){
+									return $("#hidUserName").val();
+								}
+							},
+							dataType : "json",
+							dataFilter : function(data, type) {
+								var jsondata = $.parseJSON(data);
+								if (jsondata.status == 200) {
+									if(jsondata.data==true){
+										return false;
+									}else{
+										return true;
+									}
+								}else{
+									$("#modelLabel").html("信息提示");
+									$("#modelContent").html(
+											"<center>" + jsondata.msg
+													+ "</center>");
+									$('#titleModel').modal('show');									
+								return false;
+								}
+							}
+						},
 					},
 					password : {
 						required : true,
@@ -342,7 +373,8 @@
 					name : a + "请输入你的姓名",
 					userName : {
 						required : a + "请输入您的用户名",
-						minlength : a + "用户名必须两个字符以上"
+						minlength : a + "用户名必须两个字符以上",
+						remote: a+"添加的用户已经存在"
 					},
 					password : {
 						required : a + "请输入您的密码",

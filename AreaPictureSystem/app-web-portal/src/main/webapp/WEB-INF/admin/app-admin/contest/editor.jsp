@@ -201,6 +201,24 @@
 														</select>
 													</div>
 												</div>
+												
+													<div class="form-group col-sm-6">
+													<label class="col-sm-2 control-label">状态</label>
+													<div class="col-sm-10">
+
+														<select class="form-control" name="status">
+															<option value="true"
+																<c:if test="${contest.status eq true }">selected </c:if>>启用</option>
+															<option value="false"
+																<c:if test="${contest.status eq false }">selected </c:if>>禁用</option>
+														</select>
+
+
+													</div>
+												</div>
+												
+												
+												
 												<%-- <div class="form-group col-sm-6">
 													<label class="col-sm-2 control-label">公开投票</label>
 													<div class="col-sm-10">
@@ -236,21 +254,7 @@
 
 													</div>
 												</div>
-												<div class="form-group col-sm-6">
-													<label class="col-sm-2 control-label">状态</label>
-													<div class="col-sm-10">
-
-														<select class="form-control" name="status">
-															<option value="true"
-																<c:if test="${contest.status eq true }">selected </c:if>>启用</option>
-															<option value="false"
-																<c:if test="${contest.status eq false }">selected </c:if>>禁用</option>
-														</select>
-
-
-													</div>
-												</div>
-
+											
 
 												 <div class="form-group col-sm-12">
 													<label class="col-sm-1 control-label">投票规则</label>

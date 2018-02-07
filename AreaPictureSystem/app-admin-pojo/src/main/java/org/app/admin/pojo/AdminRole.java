@@ -19,16 +19,25 @@ public class AdminRole extends GeneralBean {
 	private String reamrk;//备注
 	@DBRef
 	private List<AdminMenu> listMenu;//角色的菜单；
+	private String userType;
 	
-	private UserType userType;
+	
 	
 		
-	public UserType getUserType() {
+	public String getUserType() {
+		return userType;
+	}
+	public void setUserType(String userType) {
+		this.userType = userType;
+	}
+	/*
+	 private UserType userType;
+	 public UserType getUserType() {
 		return userType;
 	}
 	public void setUserType(UserType userType) {
 		this.userType = userType;
-	}
+	}*/
 	public String getName() {
 		return name;
 	}

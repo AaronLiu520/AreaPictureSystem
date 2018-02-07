@@ -205,6 +205,13 @@ function cancelfavorites(o) {
 }
 
 
+
+
+
+
+
+
+
 //ajax收藏图片资源
 function tofavorites(o) {
 	var favoritesIds = "";
@@ -218,8 +225,7 @@ function tofavorites(o) {
 		favoritesIds = o;
 	}
 
-	$
-			.ajax({
+	$.ajax({
 				type : "POST",
 				url :  getRootPath()+"/photoMessageAction/toMyFavorties",
 				data : "resourceId=" + favoritesIds,

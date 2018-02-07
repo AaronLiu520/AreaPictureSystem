@@ -77,9 +77,14 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 			@RequestParam(value = "activityTime", defaultValue = "") String activityTime, HttpSession session) {
 
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		
+		
+		List<List<Type>> listsType = this.typeService.addType(type);
+		
+		
 
 		BasicDataResult result = this.forderActivityService.findForderActivityByforderActivityName(forderActivityName,
-				adminUser, companyId, type, activityTime);
+				adminUser, companyId, listsType, activityTime);
 
 		return result;
 
@@ -154,5 +159,28 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		return modelAndView;
 
 	}
+	
+	@RequestMapping("/findCompanyType")
+	@ResponseBody
+	public BasicDataResult findCompanyType(String boundCompany){
+		
+		if(Common.isEmpty(boundCompany)){
+			return BasicDataResult.build(203, "请先选择活动所属学校", null);
+		}
+		
+		AdminCompany adminCompany = this.adminCompanyService.findOneById(boundCompany, AdminCompany.class);
+		
+		if(adminCompany == null){
+			return BasicDataResult.build(203, "未能找到学校的信息，请尝试刷新页面", null);
+		}
+		
+		return BasicDataResult.build(200, "获取成功", adminCompany.getNature());
+	}
+	
+	
+	
+	
+	
+	
 
 }

@@ -526,7 +526,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							newForderActivity.setAdminCompany(adminUser.getAdminCompany());
 							newForderActivity.setBoundCompany(adminUser.getAdminCompany().getId());
 							newForderActivity.setBoundId(adminUser.getId());
-							newForderActivity.setCreatUser(adminUser);
+							newForderActivity.setAdminUser(adminUser);
 							newForderActivity.setDescription(oldForderActivity.getDescription());
 							newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
 							newForderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
@@ -548,7 +548,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			
 						Resource newResource = new Resource();
 						newResource.setAdminCompanyId("");
-						newResource.setAdminuser(adminUser);
+						newResource.setAdminUser(adminUser);
 						newResource.setBoundId(adminUser.getId());
 						newResource.setEditorImgInfo(res.getEditorImgInfo());
 						newResource.setExtensionName(res.getExtensionName());
