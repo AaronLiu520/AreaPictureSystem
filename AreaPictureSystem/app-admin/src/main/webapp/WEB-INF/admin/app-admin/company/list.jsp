@@ -129,7 +129,7 @@
 					<span style="float: left; color: red; font-size: 18px;">删除提示</span>
 				</div>
 				<div class="modal-body">
-					<h3>您确认是否要删除此记录吗?</h3>
+					<h3><font color="red">您确认是否要删除此记录吗?（删除企业会将企业中的所有帐号以及上传的数据清空请谨慎操作！）</font></h3>
 				</div>
 				<input type="hidden" id="delete-id">
 				<div class="modal-footer">

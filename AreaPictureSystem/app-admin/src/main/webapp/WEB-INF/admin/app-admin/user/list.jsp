@@ -106,7 +106,7 @@
                     <span style="float: left;color: red;font-size: 18px;">删除提示</span>
                 </div>
                 <div class="modal-body">
-                 <h3>您确认是否要删除此记录吗?</h3>
+                 <h3><font color="red">您确认是否要删除此记录吗?（删除用户会将用户上传的图片数据全部清除，请谨慎操作！）</font></h3>
                 </div>
                 <input type="hidden" id="delete-id"> 
                 <div class="modal-footer">

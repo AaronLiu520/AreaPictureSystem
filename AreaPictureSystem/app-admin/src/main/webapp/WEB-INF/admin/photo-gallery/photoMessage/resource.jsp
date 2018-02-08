@@ -193,11 +193,13 @@ p {
 						<i class="fa fa-check"></i>&nbsp;下载
 					</button>
 
-
+					<c:if test="${webType  ne 'PERSION' }">
+					
 					<button class="btn btn-warning " onclick="return tofavorites();"
 						style="display: none;" id="favorites" type="button">
-						<i class="fa fa-heart"> </i> 收藏
+						<i class="fa fa-heart"> </i> 收藏 
 					</button>
+					</c:if>
 
 					<button class="btn btn-default " id="choose" type="button"
 						onclick="return choose();">

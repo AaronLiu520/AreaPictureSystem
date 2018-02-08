@@ -195,7 +195,7 @@
 	<jsp:include page="public/botton.jsp" />
 
 	<!-- smooth scrolling -->
-	<script type="text/javascript">
+<!-- 	<script type="text/javascript">
 		$(document).ready(function() {
 			/*
 			    var defaults = {
@@ -212,8 +212,8 @@
 	</script>
 	<a href="#" id="toTop" style="display: block;"> <span
 		id="toTopHover" style="opacity: 1;"> </span></a>
-	<!-- //smooth scrolling -->
-
+	//smooth scrolling
+ -->
 
 
 

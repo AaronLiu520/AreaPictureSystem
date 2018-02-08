@@ -628,7 +628,7 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 
 		query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName))
 				.addCriteria(Criteria.where("boundId").is(boundId))
-				.addCriteria(Criteria.where("type").is(BaseType.Type.PERSION));
+				.addCriteria(Criteria.where("listType.type").is(BaseType.Type.PERSION));
 
 		ForderActivity forderActivity = this.findOneByQuery(query, ForderActivity.class);
 

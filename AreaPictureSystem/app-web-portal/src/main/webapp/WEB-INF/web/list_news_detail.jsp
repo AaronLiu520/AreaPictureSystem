@@ -86,7 +86,7 @@
                 <ul class="ad-info">
                     <li>${news.newsDate }</li>
                     <li> <a href="#">${news.author }</a></li>
-                    <li> <a href="#">${news.visit} 评论数量</a></li>
+                  <%--   <li> <a href="#">${news.visit} 评论数量</a></li> --%>
                 </ul>
                 <div class="clearfix"> </div>
             </div>

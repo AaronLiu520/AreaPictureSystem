@@ -501,12 +501,13 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 					Resource resource = this.resourceService.findResourceByResourceName(adminUser.getId(), res.getGenerateName());
 					
 					// 3,通过图片的名称，以及图片的所属活动id进行查询
+					if(Common.isEmpty(res.getForderActivityId())){
+						continue;
+					}
 					
 					String oldForderActivityId ="";
 					if(Common.isNotEmpty(res.getForderActivityId())){
 						oldForderActivityId=res.getForderActivityId();
-					}else if(Common.isNotEmpty(res.getBaseutisActivityId())){
-						oldForderActivityId=res.getBaseutisActivityId();
 					}
 					//获取活动信息
 					ForderActivity oldForderActivity = this.forderActivityService.findOneById(oldForderActivityId,
@@ -561,7 +562,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 						newResource.setSource(res.getSource());
 						newResource.setUploadPerson(res.getUploadPerson());
 						newResource.setPersonActivityId(forderActivity.getPersonActivityId());
-						this.resourceService.save(newResource);
+						this.resourceService.insert(newResource);
 					}
 				}
 			}
@@ -731,6 +732,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		}
 		query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
 				"createTime"));
+		
+		query.addCriteria(Criteria.where("personActivityId").is(null));
 		
 		pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
 		modelAndView.addObject("searchList", pageList);
