@@ -11,7 +11,7 @@
 	-o-background-size: cover;
 	-ms-background-size: cover;
 	-moz-background-size: cover;
-	min-height: 730px;
+	min-height: 300px;
 }
 
 
@@ -21,8 +21,14 @@
 <div class="banner">
 	<div class="container">
 		<div class="banner-info text-center">
+		
+		<c:if test="${not empty webIndexBanana.bananaTitle}">
 			<h1>${webIndexBanana.bananaTitle }</h1>
+		</c:if>	
+		<c:if test="${not empty webIndexBanana.bananaContent}">
 			<p> ${webIndexBanana.bananaContent } </p>
+		</c:if>	
+		
 		</div>
 	</div>
 </div>

@@ -33,6 +33,41 @@ public class Index  extends GeneralBean{
 	private String bananaContent;//banana中显示的内容
 	private String toPublic;//公告
 	private List<ContestImages> goodContestImages;//优秀作品
+	
+	private String newsbanana;
+	private String photographybanana;
+	private String contestbanana;
+	private String aboutUsbanana;
+	
+	
+	
+	
+	public String getNewsbanana() {
+		return newsbanana;
+	}
+	public void setNewsbanana(String newsbanana) {
+		this.newsbanana = newsbanana;
+	}
+	
+	
+	public String getPhotographybanana() {
+		return photographybanana;
+	}
+	public void setPhotographybanana(String photographybanana) {
+		this.photographybanana = photographybanana;
+	}
+	public String getContestbanana() {
+		return contestbanana;
+	}
+	public void setContestbanana(String contestbanana) {
+		this.contestbanana = contestbanana;
+	}
+	public String getAboutUsbanana() {
+		return aboutUsbanana;
+	}
+	public void setAboutUsbanana(String aboutUsbanana) {
+		this.aboutUsbanana = aboutUsbanana;
+	}
 	public String getBanana() {
 		return banana;
 	}

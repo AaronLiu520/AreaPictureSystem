@@ -109,12 +109,26 @@
 	src="http://apps.bdimg.com/libs/fancybox/2.1.5/jquery.fancybox.js"
 	type="text/javascript"></script>
 
+<style type="text/css">
+.inner-banner {
+	background: url('${webIndexBanana.contestbanana}') no-repeat 0px 0px;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	-ms-background-size: cover;
+	-moz-background-size: cover;
+	min-height: 150px;
+}
+</style>
+
+
+
 </head>
 <body>
-	<!-- 菜单头部 -->
+		<!-- 菜单头部 -->
 	<jsp:include page="public/top.jsp" />
 	<!-- banner -->
-	<jsp:include page="public/inner-banana.jsp" />
+	<div class="inner-banner"></div>
 
 
 	<div class="contact">

@@ -16,9 +16,9 @@
 <!-- 
 <link href="http://www.jq22.com/jquery/bootstrap-3.3.4.css"
 	rel="stylesheet"> -->
-	<link href="${pageContext.request.contextPath}/assets/css/bootstrap.css"
+<link href="${pageContext.request.contextPath}/assets/css/bootstrap.css"
 	rel="stylesheet" type="text/css" media="all" />
-	
+
 <link href="${pageContext.request.contextPath}/assets/css/style.css"
 	rel="stylesheet" type="text/css" media="all" />
 
@@ -36,6 +36,7 @@
 	
 	
 	
+	
 	 addEventListener("load", function () {
         setTimeout(hideURLbar, 0);
     }, false);
@@ -43,6 +44,7 @@
     function hideURLbar() {
         window.scrollTo(0, 1);
     } 
+
 
 
 
@@ -107,20 +109,34 @@
 	src="http://apps.bdimg.com/libs/fancybox/2.1.5/jquery.fancybox.js"
 	type="text/javascript"></script>
 
+<style type="text/css">
+.inner-banner {
+	background: url('${webIndexBanana.contestbanana}') no-repeat 0px 0px;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	-ms-background-size: cover;
+	-moz-background-size: cover;
+	min-height: 150px;
+}
+</style>
+
+
 </head>
 <body>
 	<!-- 菜单头部 -->
 	<jsp:include page="public/top.jsp" />
 	<!-- banner -->
-	<jsp:include page="public/inner-banana.jsp" />
-	
+	<div class="inner-banner"></div>
+
 	<div class="contact">
 		<div class="container">
 			<h3 class="tittle">${contest.contestName}报名投稿：</h3>
-<button type="button" id="loading-example-btn"  onClick="javascript :history.back(-1);" class="label label-default" style="margin-top: 10px;">返回</button>
+			<!-- <button type="button" id="loading-example-btn"  onClick="javascript :history.back(-1);" class="label label-default" style="margin-top: 10px;">返回</button>
+ -->
 
-
-<input type="hidden" id="contestId" value="${contest.id }" name="contestId"> 
+			<input type="hidden" id="contestId" value="${contest.id }"
+				name="contestId">
 
 
 
@@ -143,20 +159,19 @@
 					<a href="javascript:void(0)"
 						style="margin-top: 10px; margin-bottom: 20px;" data-toggle="modal"
 						data-target="#myModal1" class="hvr-rectangle-in button">注册投稿</a>
-				<%-- 	<c:if test="${empty sessionScope.webUserSession.accountName }"> --%>
-						<a href="javascript:void(0)" id="changeModal"
-							style="margin-top: 10px; margin-bottom: 20px;"
-							data-toggle="modal" data-target="#toLogin"
-							class="hvr-rectangle-in button">登录投稿</a>
-			<%-- 		</c:if> --%>
-			<%-- 		<c:if test="${not empty sessionScope.webUserSession.accountName }">
+					<%-- 	<c:if test="${empty sessionScope.webUserSession.accountName }"> --%>
+					<a href="javascript:void(0)" id="changeModal"
+						style="margin-top: 10px; margin-bottom: 20px;" data-toggle="modal"
+						data-target="#toLogin" class="hvr-rectangle-in button">登录投稿</a>
+					<%-- 		</c:if> --%>
+					<%-- 		<c:if test="${not empty sessionScope.webUserSession.accountName }">
 						<a href="${pageContext.request.contextPath}/web/toApply?contestId=${contest.id}&type=${sessionScope.checkMenu}" 
 							style="margin-top: 10px; margin-bottom: 20px;"
 							class="hvr-rectangle-in button">登录投稿</a>
 					</c:if> --%>
 				</c:if>
-				
-				
+
+
 			</div>
 
 
@@ -194,15 +209,16 @@
 							<label>邮箱地址：</label> <input type="text" placeholder="邮箱地址"
 								name="email" id="email" class="form-control" required>
 						</div>
-				<button type="button" onclick="return registerSendEmail();" disabled="disabled"  class="btn registerSendEmail reSendTime"  style="padding-top: 5px;">获取验证码</button>
-					
+						<button type="button" onclick="return registerSendEmail();"
+							disabled="disabled" class="btn registerSendEmail reSendTime"
+							style="padding-top: 5px;">获取验证码</button>
+
 						<div class="form-group" style="margin-top: 20px;">
 							<label>验证码：</label> <input type="text" placeholder="验证码"
-								name="code" id="registerCode" class="form-control " 
-								required>
+								name="code" id="registerCode" class="form-control " required>
 						</div>
-					
-					<!-- onblur="return checkCode();" onkeyup="return checkCode();" -->
+
+						<!-- onblur="return checkCode();" onkeyup="return checkCode();" -->
 						<div class="form-group">
 							<label>手机号：</label> <input type="text" placeholder="手机号"
 								name="phone" id="phone" class="form-control " required>
@@ -254,7 +270,8 @@
 					</div>
 					<div class="modal-body">
 
-				<input type="hidden" id="loginType" value="${sessionScope.checkMenu}" name="type">
+						<input type="hidden" id="loginType"
+							value="${sessionScope.checkMenu}" name="type">
 						<div class="form-group">
 							<label>账号：</label> <input type="text" placeholder="帐号"
 								name="accountName" id="accountName" class="form-control "
@@ -271,7 +288,7 @@
 					</div>
 					<div class="modal-footer">
 
-					 	<a href="#" data-toggle="modal" data-target="#RetrievePassword">忘记密码？</a>
+						<a href="#" data-toggle="modal" data-target="#RetrievePassword">忘记密码？</a>
 						<button type="button" id="userLoginFormclosed"
 							style="display: none;" class="btn btn-default"
 							data-dismiss="modal">关闭</button>
@@ -285,11 +302,11 @@
 		</div>
 		<!-- /.modal -->
 	</div>
-	
-	
+
+
 	<!-- 登陆模态框（Modal） -->
-	<div class="modal fade" id="RetrievePassword" tabindex="-1" role="dialog"
-		aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="RetrievePassword" tabindex="-1"
+		role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
 
@@ -299,30 +316,32 @@
 							aria-hidden="true">&times;</button>
 						<h4 class="modal-title" id="myModalLabel">密码找回</h4>
 					</div>
-				<input type="hidden" id="loginType" value="${sessionScope.checkMenu}" name="type">
+					<input type="hidden" id="loginType"
+						value="${sessionScope.checkMenu}" name="type">
 					<div class="modal-body">
-						
+
 						<div class="form-group">
 							<label>邮箱：</label> <input type="text" placeholder="请输入邮箱地址"
-								name="checkemail" id="checkemail"  class="form-control"
-								required>
+								name="checkemail" id="checkemail" class="form-control" required>
 						</div>
-						<button type="button" onclick="return sendEmail();"  class="btn getEmailCode reSendTime" style="padding-top: 5px;">获取验证码</button>
-						
-						     
+						<button type="button" onclick="return sendEmail();"
+							class="btn getEmailCode reSendTime" style="padding-top: 5px;">获取验证码</button>
+
+
 						<div class="form-group" style="margin-top: 20px;">
 							<label>验证码：</label> <input type="text" placeholder="验证码"
-								name="code" id="code" class="form-control "
-								required>
+								name="code" id="code" class="form-control " required>
 						</div>
 
 						<div class="form-group">
 							<label>密码：</label> <input type="password" placeholder="密码"
-								name="newpassword1" id="newpassword1" class="form-control " required>
+								name="newpassword1" id="newpassword1" class="form-control "
+								required>
 						</div>
 						<div class="form-group">
 							<label>确认密码：</label> <input type="password" placeholder="确认密码"
-								name="newpassword2" id="newpassword2" class="form-control " required>
+								name="newpassword2" id="newpassword2" class="form-control "
+								required>
 						</div>
 						<input type="hidden" id="id">
 					</div>

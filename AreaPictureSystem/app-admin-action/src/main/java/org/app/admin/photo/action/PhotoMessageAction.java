@@ -480,7 +480,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	@SystemErrorLog(description = "同步至个人图片库")
 	@RequestMapping("/copyToMyPictures")
 	@ResponseBody
-	public String copyToMyPictures(@RequestParam(defaultValue = "", value = "resourceId") String resourceId,
+	public BasicDataResult copyToMyPictures(@RequestParam(defaultValue = "", value = "resourceId") String resourceId,
 			HttpSession session) {
 
 		String[] resourcesId = resourceId.split(",");
@@ -517,11 +517,14 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 					ForderActivity forderActivity = this.forderActivityService
 							.findForderActivityByActivityNameType(oldForderActivity.getForderActivityName(), adminUser.getId());
 
-					if (resource == null) {
+					//如果图片没有收藏
+					if(resource == null){
 						ForderActivity  newForderActivity = new ForderActivity();
 						//如果没有该活动则创建一个新的个人活动
 						// 4,如果查询出来为空，那么执行添加
+						String personActivityId=null;
 						if(forderActivity == null){
+							 personActivityId=new ObjectId(new Date()).toString();
 							newForderActivity.setActivityTime(oldForderActivity.getActivityTime());
 							newForderActivity.setAddress(oldForderActivity.getAddress());
 							newForderActivity.setAdminCompany(adminUser.getAdminCompany());
@@ -531,7 +534,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							newForderActivity.setDescription(oldForderActivity.getDescription());
 							newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
 							newForderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
-							newForderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
+							newForderActivity.setPersonActivityId(personActivityId);
 							newForderActivity.setParentId("0");
 							List<Type> listType = new ArrayList<Type>();
 							Type t = new Type();
@@ -539,14 +542,14 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							listType.add(t);
 							newForderActivity.setListType(listType);
 							newForderActivity.setType(BaseType.Type.PERSION.toString());	
-							
-						}else{
-							
-							newForderActivity = forderActivity;
+							this.forderActivityService.insert(newForderActivity);
 						}
 						
-						this.forderActivityService.save(newForderActivity);
-			
+						if(Common.isNotEmpty(personActivityId)){
+							forderActivity = new ForderActivity();
+							forderActivity.setPersonActivityId(personActivityId);
+						}
+						
 						Resource newResource = new Resource();
 						newResource.setAdminCompanyId("");
 						newResource.setAdminUser(adminUser);
@@ -561,15 +564,74 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 						newResource.setOriginalPath(res.getOriginalPath());
 						newResource.setSource(res.getSource());
 						newResource.setUploadPerson(res.getUploadPerson());
+						
+						
 						newResource.setPersonActivityId(forderActivity.getPersonActivityId());
 						this.resourceService.insert(newResource);
+					
 					}
+					
 				}
 			}
+			return BasicDataResult.build(200, "同步成功", true);
 				
+		}else{
+			
+			return BasicDataResult.build(203, "请选择需要同步的图片", false);
 		}
-		return "true";
+			
 
+		
+		
+		
+		/*
+		if (resource == null) {
+			ForderActivity  newForderActivity = new ForderActivity();
+			//如果没有该活动则创建一个新的个人活动
+			// 4,如果查询出来为空，那么执行添加
+			if(forderActivity == null){
+				newForderActivity.setActivityTime(oldForderActivity.getActivityTime());
+				newForderActivity.setAddress(oldForderActivity.getAddress());
+				newForderActivity.setAdminCompany(adminUser.getAdminCompany());
+				newForderActivity.setBoundCompany(adminUser.getAdminCompany().getId());
+				newForderActivity.setBoundId(adminUser.getId());
+				newForderActivity.setAdminUser(adminUser);
+				newForderActivity.setDescription(oldForderActivity.getDescription());
+				newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
+				newForderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
+				newForderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
+				newForderActivity.setParentId("0");
+				List<Type> listType = new ArrayList<Type>();
+				Type t = new Type();
+				t.setType(BaseType.Type.PERSION);
+				listType.add(t);
+				newForderActivity.setListType(listType);
+				newForderActivity.setType(BaseType.Type.PERSION.toString());	
+				
+			}else{
+				
+				newForderActivity = forderActivity;
+			}
+			
+			this.forderActivityService.save(newForderActivity);
+
+			Resource newResource = new Resource();
+			newResource.setAdminCompanyId("");
+			newResource.setAdminUser(adminUser);
+			newResource.setBoundId(adminUser.getId());
+			newResource.setEditorImgInfo(res.getEditorImgInfo());
+			newResource.setExtensionName(res.getExtensionName());
+			newResource.setFileType(res.getFileType());
+			newResource.setGenerateName(res.getGenerateName());
+			newResource.setImgCompressionBean(res.getImgCompressionBean());
+			newResource.setImgInfoBean(res.getImgInfoBean());
+			newResource.setOriginalName(res.getOriginalName());
+			newResource.setOriginalPath(res.getOriginalPath());
+			newResource.setSource(res.getSource());
+			newResource.setUploadPerson(res.getUploadPerson());
+			newResource.setPersonActivityId(forderActivity.getPersonActivityId());
+			this.resourceService.insert(newResource);
+		}*/
 
 	}
 
@@ -660,9 +722,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		int pS = 0;
 		if (pageNo == 1) {
 			pN = 0;
-			pS = 10;
+			pS = pageSize;
 		} else {
-			pN = (pageNo - 1) * 10;
+			pN = (pageNo - 1) * pageSize;
 			pS = pageNo * pageSize;
 		}
 		for (int i = pN; i < pS; i++) {

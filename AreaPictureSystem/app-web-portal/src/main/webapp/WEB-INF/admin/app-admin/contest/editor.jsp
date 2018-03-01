@@ -60,7 +60,23 @@
 															placeholder="比赛主题" required="required">
 													</div>
 												</div>
-												<div class="form-group col-sm-6">
+												
+														
+													<div class="form-group col-sm-6">
+													<label class="col-sm-2 control-label">比赛状态</label>
+													<div class="col-sm-10">
+
+														<select class="form-control" name="status">
+															<option value="true"
+																<c:if test="${contest.status eq true }">selected </c:if>>启用</option>
+															<option value="false"
+																<c:if test="${contest.status eq false }">selected </c:if>>禁用</option>
+														</select>
+
+
+													</div>
+												</div>
+										<%-- 		<div class="form-group col-sm-6">
 													<label class="col-sm-2 control-label">比赛类别</label>
 													<div class="col-sm-10">
 
@@ -71,7 +87,7 @@
 																<c:if test="${contest.contestType eq true }">selected </c:if>>内部</option>
 														</select>
 													</div>
-												</div>
+												</div> --%>
 
 											</div>
 											<div class="col-sm-12">
@@ -109,7 +125,7 @@
 													<label class="col-sm-2 control-label">同时上传最大图片数</label>
 													<div class="col-sm-10">
 														<input type="text" name="maxPictureNum" id="maxPictureNum"
-															value="${contest.minPictureNum }" class="form-control"
+															value="${contest.maxPictureNum }" class="form-control"
 															placeholder="同时上传最大图片数">
 													</div>
 												</div>
@@ -201,21 +217,7 @@
 														</select>
 													</div>
 												</div>
-												
-													<div class="form-group col-sm-6">
-													<label class="col-sm-2 control-label">状态</label>
-													<div class="col-sm-10">
-
-														<select class="form-control" name="status">
-															<option value="true"
-																<c:if test="${contest.status eq true }">selected </c:if>>启用</option>
-															<option value="false"
-																<c:if test="${contest.status eq false }">selected </c:if>>禁用</option>
-														</select>
-
-
-													</div>
-												</div>
+										
 												
 												
 												
@@ -238,7 +240,7 @@
 
 											<div class="col-sm-12">
 
-
+<%-- 
 												<div class="form-group col-sm-6">
 													<label class="col-sm-2 control-label">发布公告</label>
 													<div class="col-sm-10">
@@ -253,7 +255,7 @@
 
 
 													</div>
-												</div>
+												</div> --%>
 											
 
 												 <div class="form-group col-sm-12">

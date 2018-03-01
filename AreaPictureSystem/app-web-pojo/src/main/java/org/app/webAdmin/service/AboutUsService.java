@@ -66,7 +66,9 @@ public class AboutUsService extends GeneralServiceImpl<AboutUs> {
 				getAboutUs.setAboutUsContent(aboutUs.getAboutUsContent());
 				getAboutUs.setAboutUsPic(aboutUs.getAboutUsPic());
 				if(list.size()>0){
-					getAboutUs.setListTeachers(list);
+				List<ContestImages> clist = getAboutUs.getListTeachers();
+					clist.addAll(list);
+					getAboutUs.setListTeachers(clist);
 				}
 				this.save(getAboutUs);
 			} else {

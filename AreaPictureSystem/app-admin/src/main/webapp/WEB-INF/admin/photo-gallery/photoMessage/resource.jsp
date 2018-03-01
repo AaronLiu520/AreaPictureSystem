@@ -180,7 +180,7 @@ p {
 					<!--
                 <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
                 -->
-					<c:if test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'}">
+					<c:if test="${sessionScope.userSession.userType eq 'ADMINISTRATORS' or webType  eq 'PERSION' }">
 						<button onclick="return tobatchDelete()" class="btn btn-danger "
 								style="display: none;" id="deletes" type="button">
 							<i class="fa fa-warning"> </i><span class="bold">批量删除</span>

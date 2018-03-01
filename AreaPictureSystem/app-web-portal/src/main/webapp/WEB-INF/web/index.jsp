@@ -129,7 +129,7 @@
 					
 					<li >
 						<div class="biseller-column">
-							<a class="lightbox" href="#goofy"> <img style="height: 176px;"
+							<a class="lightbox" href="#goofy"> <img style="height: 176px;margin-bottom: 20px;" 
 								src="${items.originalPath }" />
 							</a>
 							<div class="lightbox-target" id="goofy">
@@ -179,26 +179,26 @@
 		</div>
 	</div>
 </c:if>
-	<c:if test="${not empty contest }">
+	<%-- <c:if test="${not empty contest }">
 		<!-- 摄影比赛通知 -->
-		<div class="slider-bottom">
+		<div class="slider-bottom" style="padding-bottom: 80px;">
 			<div class="container">
 				<div class="slider-grids">
 					<div class="col-md-12 slider-grid">
 						<h3>${contest.contestName }</h3>
-						<a href="javascript:void(0);" data-toggle="modal" data-target="#myModal3">查看详情</a>
+						<!-- <a href="javascript:void(0);" data-toggle="modal" data-target="#myModal3">查看详情</a> -->
 						<div
 							style="height: 200px; width: 100%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
 							<p class="para-text">${contest.content }</p>
 
 						</div>
 							<div style="margin-top: 10px;">
-					<%-- 		
+							
 							
 							<c:if test="${now > contest.startTime && now <  contest.endTime }">
 									<a href="javascript:void(0)"
 										class="hvr-rectangle-in button">我要报名</a>
-								</c:if> --%>
+								</c:if>
 								<c:if test="${contest.openVote eq true}">
 										<c:if
 										test="${now > contest.voteStartTime && now <  contest.voteEndTime }">
@@ -226,10 +226,10 @@
 			</div>
 		</div>
 
-	</c:if>
+	</c:if> --%>
 
-	<!-- 投票规则模态框（Modal） -->
-	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"
+	<!-- 投票规则模态框（Modal）  -->
+<%--隐藏投票规则 	<div class="modal fade" id="myModal2" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" style="width: 500px; height: 500px;">
 			<div class="modal-content">
@@ -246,16 +246,16 @@
 			<!-- /.modal-content -->
 		</div>
 		<!-- /.modal -->
-	</div>
+	</div> --%>
 	
 	<!-- 投票规则模态框（Modal） -->
-	<div class="modal fade" id="myModal3" tabindex="-1" role="dialog"
+<%-- 隐藏投票详细信息  	<div class="modal fade" id="myModal3" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog" >
 			<div class="modal-content">
 			<div class="modal-header">
 					${contest.contestName } 详细信息
-				</div>
+			</div>
 			<div class="modal-body">
 				
 				${contest.content }
@@ -266,7 +266,7 @@
 			<!-- /.modal-content -->
 		</div>
 		<!-- /.modal -->
-	</div>
+	</div> --%>
 
 	<!-- 底部 -->
 	<jsp:include page="public/botton.jsp" />

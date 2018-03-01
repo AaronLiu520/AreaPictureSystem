@@ -7,7 +7,7 @@
 <head>
 
 <meta charset="utf-8">
-<title>奉贤区教职工摄影网站</title>
+<title>奉贤区图片库系统</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -81,7 +81,7 @@
 <h1>${area.name} - 电子班排授权系统－管理后台  ${area.namePingYing}<sup>V2016</sup></h1>
 -->
 	<h1>
-		奉贤区教职工摄影网站－管理后台 <sup>V2018</sup>
+		奉贤区图片库系统－管理后台 <sup>V2018</sup>
 	</h1>
 
 	<div class="login" style="margin-top: 50px;">

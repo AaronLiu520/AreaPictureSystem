@@ -55,7 +55,7 @@
                                     <tr>
                                     	<th>标题</th>
                                         <th>作者</th>
-                                        <th>访问量</th>
+                                 <!--        <th>访问量</th> -->
                                         <th>排序</th>
                                         <th>状态</th>
                                         <th>操作</th>
@@ -66,7 +66,7 @@
                                     <tr class="gradeX">
                                     	<td>${item.newsTitle}</td>
                                         <td>${item.author}</td>
-                                        <td>${item.visit}</td>
+                                   <%--      <td>${item.visit}</td> --%>
                                         <td>${item.sort}</td>
                                         <td>
                                        	<c:if test="${item.status == 'true'}">禁用</c:if>

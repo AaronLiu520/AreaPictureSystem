@@ -59,6 +59,10 @@ public class IndexAction extends GeneralAction<Index> {
 	public ModelAndView saveIndex(HttpSession session,
 			HttpServletRequest request,
 			@RequestParam MultipartFile[] bananaImg,
+			@RequestParam MultipartFile[] newsbananaImg,
+			@RequestParam MultipartFile[] photographybananaImg,
+			@RequestParam MultipartFile[] contestbananaImg,
+			@RequestParam MultipartFile[] aboutUsbananaImg,
 			@ModelAttribute("index") Index index,
 			@RequestParam(defaultValue="",value="editid")String editid) {
 		ModelAndView modelAndView = new ModelAndView();
@@ -69,7 +73,7 @@ public class IndexAction extends GeneralAction<Index> {
 			}
 		}
 		*/
-		this.indexService.SaveOrUpdateSetting(index,editid,bananaImg,request);
+		this.indexService.SaveOrUpdateSetting(index,editid,bananaImg,request,newsbananaImg,photographybananaImg,contestbananaImg,aboutUsbananaImg);
 		
 		session.removeAttribute(CommonEnum.WEBINDEXBANANA);
 
@@ -96,6 +100,42 @@ public class IndexAction extends GeneralAction<Index> {
 
 		return modelAndView;
 
+	}
+	
+	
+	@RequestMapping("/delete")
+	public ModelAndView delete(String type) {
+		ModelAndView modelAndView = new ModelAndView();
+		
+		if(Common.isNotEmpty(type)){
+			
+			Index index = this.indexService.findOneByQuery(new Query(), Index.class);
+			
+			if(index !=null){
+				if("banana".equals(type)){
+					index.setBanana("");
+				}
+				if("newsbanana".equals(type)){
+					index.setNewsbanana("");
+				}
+				if("photographybanana".equals(type)){
+					index.setPhotographybanana("");
+				}
+				if("contestbanana".equals(type)){
+					index.setContestbanana("");
+				}
+				if("aboutUsbanana".equals(type)){
+					index.setAboutUsbanana("");
+				}
+			this.indexService.save(index);	
+			}
+		}
+		
+		
+		modelAndView.setViewName("redirect:/index/list");
+		
+		return modelAndView;
+		
 	}
 
 }

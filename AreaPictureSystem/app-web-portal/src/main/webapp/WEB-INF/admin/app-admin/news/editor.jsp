@@ -90,7 +90,7 @@
 											<label class="col-sm-2 control-label">创建时间</label>
 											<div class="col-sm-10">
 											
-											<input type="text" placeholder="活动时间"
+											<input type="text" placeholder="创建时间"
 										name="newsDate" id="newsDate" readonly="readonly" value="${news.newsDate }"
 										class="form-control datainput" data-date-format="yyyy-mm-dd" required>
 											</div>

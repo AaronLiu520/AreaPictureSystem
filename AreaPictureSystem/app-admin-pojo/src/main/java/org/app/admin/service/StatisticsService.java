@@ -235,7 +235,7 @@ public class StatisticsService {
 				
 												  
 
-				if(Common.isNotEmpty(start)&&Common.isNotEmpty(end)&&Common.isEmpty(month)){
+				if(Common.isNotEmpty(start)&&Common.isNotEmpty(end)){
 				
 					int result = Common.compare_date(start, end);
 					
@@ -247,7 +247,7 @@ public class StatisticsService {
 				
 				}
 				
-				if(Common.isNotEmpty(month)){
+				if(Common.isNotEmpty(month)&&(Common.isEmpty(start)||Common.isEmpty(end))){
 
 					query.addCriteria(Criteria.where("createDate").gte(Common.getDateByLastMonth(month)).lte(Common.getDateNow()));
 				

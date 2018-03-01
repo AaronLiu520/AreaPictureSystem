@@ -90,6 +90,65 @@
 									</div>
 
 									<div class="hr-line-dashed"></div>
+									
+									
+									
+										<div class="row">
+										<div class="col-sm-8">
+											<label class="col-sm-4 control-label">新闻动态banana</label>
+											<div class="col-sm-8 form-group">
+												<input id="newsbananafile" name="newsbananaImg" type="file">
+												<!--  multiple="true" -->
+											</div>
+										</div>
+									</div>
+									
+									
+									
+									<div class="hr-line-dashed"></div>
+									
+										<div class="row">
+										<div class="col-sm-8">
+											<label class="col-sm-4 control-label">摄影作品banana</label>
+											<div class="col-sm-8 form-group">
+												<input id="photographybananafile" name="photographybananaImg" type="file">
+												<!--  multiple="true" -->
+											</div>
+										</div>
+									</div>
+									<div class="hr-line-dashed"></div>
+									
+									
+										<div class="row">
+										<div class="col-sm-8">
+											<label class="col-sm-4 control-label">摄影比赛banana</label>
+											<div class="col-sm-8 form-group">
+												<input id="contestbananafile" name="contestbananaImg" type="file">
+												<!--  multiple="true" -->
+											</div>
+										</div>
+									</div>
+									
+									
+									
+									<div class="hr-line-dashed"></div>
+									
+									
+										<div class="row">
+										<div class="col-sm-8">
+											<label class="col-sm-4 control-label">关于我们banana</label>
+											<div class="col-sm-8 form-group">
+												<input id="aboutUsbananafile" name="aboutUsbananaImg" type="file">
+												<!--  multiple="true" -->
+											</div>
+										</div>
+									</div>
+									
+									
+									
+									<div class="hr-line-dashed"></div>
+									
+									
 									<div class="row">
 										<div class="col-sm-8">
 											<label class="col-sm-4 control-label">公告</label>
@@ -138,32 +197,260 @@
 
 	<script>
 	$("#myfile").fileinput({
-			 maxFileCount : 1, //表示允许同时上传的最大文件个数
-			allowedFileExtensions : [ 'jpg', 'gif', 'png', 'jpeg' ],//接收的文件后缀
-			language : 'zh', //设置语言
-			showUpload : false,//是否显示上传按钮
-			showCaption : false,//是否显示标题
-			showPreview : true,//显示预览
-			browseClass : "btn btn-primary btn-lg",
-		    initialPreview: [
-		    	<c:if test='${not empty index.banana }'>
-		    	"<img src='${index.banana}' class='file-preview-image' style='width:auto;height:160px;'>",  
-		    </c:if>
+		language : 'zh',
+		uploadUrl : '#',
+		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg', 'bmp' ],
+		showUpload : false,//是否显示上传按钮
+		showCaption : false,//是否显示标题
+		showPreview : true,//显示预览
+		showRemove:false,
+		dropZoneEnabled : false,//是否显示拖拽区域
+		maxFileSize : 1024 * 10, // 单位为kb，如果为0表示不限制文件大小
+		// browseClass : "btn btn-primary btn-lg",//上传选择按钮样式
+		overwriteInitial : false,
+		initialPreviewAsData : false, // 配置上传后是否显示预览
+						initialPreview : [
+							<c:if test="${not empty index.banana }">
+							<c:forEach items="${index.banana }" var="item" varStatus="status">
+						"<div class='kv-file-content'><img src='${index.banana}' class='kv-preview-data file-preview-image' title='p3.jpg' alt='p3.jpg' style='width:600px;height:200px;'></div>"+
+						"<div class='file-thumbnail-footer'>"+
+						"<div class='file-thumb-progress hide'><div class='progress '></div></div>"+
+						"<div class='file-actions'>"+
+						"<div class='file-footer-buttons'>"+
+						"<button type='button' class='kv-file-remove btn btn-xs btn-default' onclick=todelete('banana'); title='Remove file'>"+
+						"<i class='glyphicon glyphicon-trash text-danger'></i></button></div>"+ 
+						"<div class='clearfix'></div></div></div>",		
+							</c:forEach>
 
-    ], 
+							</c:if>
+
+						],
+						previewSettings : {
+							image : {
+								width : "600px",
+								height : "200px"
+							},
+						},
+		// 去掉图片上的缩略图按钮
+		layoutTemplates : {
+			//actionDelete : '', //去除上传预览的缩略图中的删除图标
+			actionUpload : '',//去除上传预览缩略图中的上传图片；
+			//actionZoom : '' //去除上传预览缩略图中的查看详情预览的缩略图标。
+		},
+
 		});
-
-
-
-	//点击删除按钮之后将图片所在input清空
-	$(".fileinput-remove-button").click(function(e){
-		$("#banana").val("");
-	})
-	//点击删除按钮之后将图片所在input清空
-	$(".fileinput-remove").click(function(e){
-		$("#banana").val("");
-	})
 	
+	
+	
+	
+	
+	
+	
+	
+	$("#newsbananafile").fileinput({
+		language : 'zh',
+		uploadUrl : '#',
+		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg', 'bmp' ],
+		showUpload : false,//是否显示上传按钮
+		showCaption : false,//是否显示标题
+		showPreview : true,//显示预览
+		showRemove:false,
+		dropZoneEnabled : false,//是否显示拖拽区域
+		maxFileSize : 1024 * 10, // 单位为kb，如果为0表示不限制文件大小
+		// browseClass : "btn btn-primary btn-lg",//上传选择按钮样式
+		overwriteInitial : false,
+		initialPreviewAsData : false, // 配置上传后是否显示预览
+						initialPreview : [
+							<c:if test="${not empty index.newsbanana }">
+							<c:forEach items="${index.newsbanana }" var="item" varStatus="status">
+						"<div class='kv-file-content'><img src='${index.newsbanana}' class='kv-preview-data file-preview-image' title='p3.jpg' alt='p3.jpg' style='width:600px;height:200px;'></div>"+
+						"<div class='file-thumbnail-footer'>"+
+						"<div class='file-thumb-progress hide'><div class='progress '></div></div>"+
+						"<div class='file-actions'>"+
+						"<div class='file-footer-buttons'>"+
+						"<button type='button' class='kv-file-remove btn btn-xs btn-default' onclick=todelete('newsbanana'); title='Remove file'>"+
+						"<i class='glyphicon glyphicon-trash text-danger'></i></button></div>"+ 
+						"<div class='clearfix'></div></div></div>",		
+							</c:forEach>
+
+							</c:if>
+
+						],
+						previewSettings : {
+							image : {
+								width : "600px",
+								height : "200px"
+							},
+						},
+		// 去掉图片上的缩略图按钮
+		layoutTemplates : {
+			//actionDelete : '', //去除上传预览的缩略图中的删除图标
+			actionUpload : '',//去除上传预览缩略图中的上传图片；
+			//actionZoom : '' //去除上传预览缩略图中的查看详情预览的缩略图标。
+		},
+
+		});
+	
+	
+	
+	
+	
+	$("#photographybananafile").fileinput({
+		language : 'zh',
+		uploadUrl : '#',
+		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg', 'bmp' ],
+		showUpload : false,//是否显示上传按钮
+		showCaption : false,//是否显示标题
+		showPreview : true,//显示预览
+		showRemove:false,
+		dropZoneEnabled : false,//是否显示拖拽区域
+		maxFileSize : 1024 * 10, // 单位为kb，如果为0表示不限制文件大小
+		// browseClass : "btn btn-primary btn-lg",//上传选择按钮样式
+		overwriteInitial : false,
+		initialPreviewAsData : false, // 配置上传后是否显示预览
+						initialPreview : [
+							<c:if test="${not empty index.photographybanana }">
+							<c:forEach items="${index.photographybanana }" var="item" varStatus="status">
+						"<div class='kv-file-content'><img src='${index.photographybanana}' class='kv-preview-data file-preview-image' title='p3.jpg' alt='p3.jpg' style='width:600px;height:200px;'></div>"+
+						"<div class='file-thumbnail-footer'>"+
+						"<div class='file-thumb-progress hide'><div class='progress '></div></div>"+
+						"<div class='file-actions'>"+
+						"<div class='file-footer-buttons'>"+
+						"<button type='button' class='kv-file-remove btn btn-xs btn-default' onclick=todelete('photographybanana'); title='Remove file'>"+
+						"<i class='glyphicon glyphicon-trash text-danger'></i></button></div>"+ 
+						"<div class='clearfix'></div></div></div>",		
+							</c:forEach>
+
+							</c:if>
+
+						],
+						previewSettings : {
+							image : {
+								width : "600px",
+								height : "200px"
+							},
+						},
+		// 去掉图片上的缩略图按钮
+		layoutTemplates : {
+			//actionDelete : '', //去除上传预览的缩略图中的删除图标
+			actionUpload : '',//去除上传预览缩略图中的上传图片；
+			//actionZoom : '' //去除上传预览缩略图中的查看详情预览的缩略图标。
+		},
+
+		});
+	
+	
+	
+	
+	
+	$("#contestbananafile").fileinput({
+		language : 'zh',
+		uploadUrl : '#',
+		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg', 'bmp' ],
+		showUpload : false,//是否显示上传按钮
+		showCaption : false,//是否显示标题
+		showPreview : true,//显示预览
+		showRemove:false,
+		dropZoneEnabled : false,//是否显示拖拽区域
+		maxFileSize : 1024 * 10, // 单位为kb，如果为0表示不限制文件大小
+		// browseClass : "btn btn-primary btn-lg",//上传选择按钮样式
+		overwriteInitial : false,
+		initialPreviewAsData : false, // 配置上传后是否显示预览
+						initialPreview : [
+							<c:if test="${not empty index.contestbanana }">
+							<c:forEach items="${index.contestbanana }" var="item" varStatus="status">
+						"<div class='kv-file-content'><img src='${index.contestbanana}' class='kv-preview-data file-preview-image' title='p3.jpg' alt='p3.jpg' style='width:600px;height:200px;'></div>"+
+						"<div class='file-thumbnail-footer'>"+
+						"<div class='file-thumb-progress hide'><div class='progress '></div></div>"+
+						"<div class='file-actions'>"+
+						"<div class='file-footer-buttons'>"+
+						"<button type='button' class='kv-file-remove btn btn-xs btn-default' onclick=todelete('contestbanana'); title='Remove file'>"+
+						"<i class='glyphicon glyphicon-trash text-danger'></i></button></div>"+ 
+						"<div class='clearfix'></div></div></div>",		
+							</c:forEach>
+
+							</c:if>
+
+						],
+						previewSettings : {
+							image : {
+								width : "600px",
+								height : "200px"
+							},
+						},
+		// 去掉图片上的缩略图按钮
+		layoutTemplates : {
+			//actionDelete : '', //去除上传预览的缩略图中的删除图标
+			actionUpload : '',//去除上传预览缩略图中的上传图片；
+			//actionZoom : '' //去除上传预览缩略图中的查看详情预览的缩略图标。
+		},
+
+		});
+	
+	
+	
+	$("#aboutUsbananafile").fileinput({
+		language : 'zh',
+		uploadUrl : '#',
+		allowedFileExtensions : [ 'jpg', 'png', 'gif', 'jpeg', 'bmp' ],
+		showUpload : false,//是否显示上传按钮
+		showCaption : false,//是否显示标题
+		showPreview : true,//显示预览
+		showRemove:false,
+		dropZoneEnabled : false,//是否显示拖拽区域
+		maxFileSize : 1024 * 10, // 单位为kb，如果为0表示不限制文件大小
+		// browseClass : "btn btn-primary btn-lg",//上传选择按钮样式
+		overwriteInitial : false,
+		initialPreviewAsData : false, // 配置上传后是否显示预览
+						initialPreview : [
+							<c:if test="${not empty index.aboutUsbanana }">
+							<c:forEach items="${index.aboutUsbanana }" var="item" varStatus="status">
+						"<div class='kv-file-content'><img src='${index.aboutUsbanana}' class='kv-preview-data file-preview-image' title='p3.jpg' alt='p3.jpg' style='width:600px;height:200px;'></div>"+
+						"<div class='file-thumbnail-footer'>"+
+						"<div class='file-thumb-progress hide'><div class='progress '></div></div>"+
+						"<div class='file-actions'>"+
+						"<div class='file-footer-buttons'>"+
+						"<button type='button' class='kv-file-remove btn btn-xs btn-default' onclick=todelete('aboutUsbanana'); title='Remove file'>"+
+						"<i class='glyphicon glyphicon-trash text-danger'></i></button></div>"+ 
+						"<div class='clearfix'></div></div></div>",		
+							</c:forEach>
+
+							</c:if>
+
+						],
+						previewSettings : {
+							image : {
+								width : "600px",
+								height : "200px"
+							},
+						},
+		// 去掉图片上的缩略图按钮
+		layoutTemplates : {
+			//actionDelete : '', //去除上传预览的缩略图中的删除图标
+			actionUpload : '',//去除上传预览缩略图中的上传图片；
+			//actionZoom : '' //去除上传预览缩略图中的查看详情预览的缩略图标。
+		},
+
+		});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//执行删除图片
+	function todelete(o){
+			
+			window.location.href="delete?type="+o;
+		}	
+		
 
  
 	</script>

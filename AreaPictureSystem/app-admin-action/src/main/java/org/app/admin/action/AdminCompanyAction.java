@@ -280,7 +280,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		try {
 			Map<String, Object> map = new HashMap<String, Object>();
 			// 别名
-			String upname = "WEB-INF" + File.separator + "FileUpload" + File.separator + "company";
+			String upname = File.separator+"WEB-INF" + File.separator + "FileUpload" + File.separator + "company";
 
 			// 可以上传的文件格式
 			log.info("准备上传企业单位数据");

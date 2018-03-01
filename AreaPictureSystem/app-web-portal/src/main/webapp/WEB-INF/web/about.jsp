@@ -20,9 +20,9 @@
 	rel="stylesheet" type="text/css" media="all" />
 <!--fonts-->
 <style type="text/css">
-.inner-banner {
-	background: url('${index.banana}') no-repeat 0px 0px;
-	background-size: cover;
+.inner-banner{
+	background:url('${webIndexBanana.aboutUsbanana}') no-repeat 0px 0px;
+	background-size:cover;
 	-webkit-background-size: cover;
 	-o-background-size: cover;
 	-ms-background-size: cover;
@@ -30,8 +30,11 @@
 	min-height: 150px;
 }
 </style>
+
+
 <!--//fonts-->
 <script type="application/x-javascript">
+	
 	 addEventListener("load", function () {
         setTimeout(hideURLbar, 0);
     }, false);
@@ -39,6 +42,7 @@
     function hideURLbar() {
         window.scrollTo(0, 1);
     } 
+
 </script>
 <!-- //for-mobile-apps -->
 <!-- js -->
@@ -89,7 +93,7 @@
 	<!-- 菜单头部 -->
 	<jsp:include page="public/top.jsp" />
 	<!-- banner -->
-	<jsp:include page="public/inner-banana.jsp" />
+<div class="inner-banner"></div>
 
 	<!--奉贤区教工摄影介绍-->
 	<div class="about two">
@@ -98,15 +102,12 @@
 			<div class="about-top">
 				<div class="col-md-7 about-top-right">
 					<h4>奉贤区教育学院摄影教工</h4>
-					<p>
-						${aboutus.aboutUsContent }
-					</p>
+					<p>${aboutus.aboutUsContent }</p>
 				</div>
 				<div class="col-md-5 about-top-left">
-					<img src="${aboutus.aboutUsPic }" style="width:355px;height: 355px;"
-						class="img-responsive" alt="" />
+					<img src="${aboutus.aboutUsPic }"
+						style="width: 355px; height: 272px;" class="img-responsive" alt="" />
 				</div>
-				<div class="clearfix"></div>
 			</div>
 		</div>
 	</div>
@@ -114,65 +115,69 @@
 
 
 	<!--top-games-section-->
-	<div class="top-games-section">
-		<div class="container">
-			<!--sreen-gallery-cursual-->
-			<div class="top-games">
-				<h3>教工摄影团队</h3>
-			</div>
-			<div class="g-views" style="margin-bottom: 20px;">
-				<ul id="flexiselDemo3">
-				
-				<c:forEach items="${aboutus.listTeachers }" var="item" varStatus="status">
-					<li>
-						<div class="biseller-column">
-							<a class="lightbox" href="#goofy"> <img style="width: 256px;height: 177px;"
-								src="${item.originalPath}" />
-							</a>
-							<div class="lightbox-target" id="goofy">
-								<img
-									src="${item.originalPath}" />
-								<a class="lightbox-close" href="#"> </a>
+	<c:if test="${not empty aboutus.listTeachers  }">
 
-								<div class="clearfix"></div>
-							</div>
-						</div>
-					</li>
-					</c:forEach>
-					
-				</ul>
-				<script type="text/javascript">
-					$(window).load(function() {
-						$("#flexiselDemo3").flexisel({
-							visibleItems : 4,
-							animationSpeed : 1000,
-							autoPlay : true,
-							autoPlaySpeed : 3000,
-							pauseOnHover : false,
-							enableResponsiveBreakpoints : true,
-							responsiveBreakpoints : {
-								portrait : {
-									changePoint : 480,
-									visibleItems : 3
-								},
-								landscape : {
-									changePoint : 640,
-									visibleItems : 3
-								},
-								tablet : {
-									changePoint : 768,
-									visibleItems : 3
+
+		<div class="top-games-section">
+			<div class="container">
+				<!--sreen-gallery-cursual-->
+				<div class="top-games">
+					<h3>教工摄影团队</h3>
+				</div>
+				<div class="g-views" style="margin-bottom: 20px;">
+					<ul id="flexiselDemo3">
+
+						<c:forEach items="${aboutus.listTeachers }" var="item"
+							varStatus="status">
+							<li>
+								<div class="biseller-column">
+									<a class="lightbox" href="#goofy"> <img
+										style="width: 256px; height: 177px;"
+										src="${item.originalPath}" />
+									</a>
+									<div class="lightbox-target" id="goofy">
+										<img src="${item.originalPath}" /> <a class="lightbox-close"
+											href="#"> </a>
+
+										<div class="clearfix"></div>
+									</div>
+								</div>
+							</li>
+						</c:forEach>
+
+					</ul>
+					<script type="text/javascript">
+						$(window).load(function() {
+							$("#flexiselDemo3").flexisel({
+								visibleItems : 4,
+								animationSpeed : 1000,
+								autoPlay : true,
+								autoPlaySpeed : 3000,
+								pauseOnHover : false,
+								enableResponsiveBreakpoints : true,
+								responsiveBreakpoints : {
+									portrait : {
+										changePoint : 480,
+										visibleItems : 3
+									},
+									landscape : {
+										changePoint : 640,
+										visibleItems : 3
+									},
+									tablet : {
+										changePoint : 768,
+										visibleItems : 3
+									}
 								}
-							}
+							});
 						});
-					});
-				</script>
-				<script type="text/javascript"
-					src="${pageContext.request.contextPath}/assets/js/jquery.flexisel.js"></script>
+					</script>
+					<script type="text/javascript"
+						src="${pageContext.request.contextPath}/assets/js/jquery.flexisel.js"></script>
+				</div>
 			</div>
 		</div>
-	</div>
-
+	</c:if>
 
 	<!-- 底部 -->
 	<jsp:include page="public/botton.jsp" />

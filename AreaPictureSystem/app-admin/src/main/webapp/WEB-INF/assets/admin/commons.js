@@ -326,19 +326,19 @@ function tocopy() {
 						dataType : "text",
 
 						success : function(data) {
-
-							if (data == 'true') {
-								$("#modalMessage").text("图片同步成功！");
+							var jsondata = $.parseJSON(data);
+							
+							if(jsondata.status == 200){
+								$("#modalMessage").text(jsondata.msg);
 
 								$('#deleteModal').modal('show');
-
-							} else {
-
-								$("#modalMessage").text("图片同步失败！");
+								
+							}else{
+								
+								$("#modalMessage").text(jsondata.msg);
 
 								$('#deleteModal').modal('show');
 							}
-
 						}
 
 					});

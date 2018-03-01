@@ -42,12 +42,27 @@
             $('.gallery a').Chocolat();
         });
     </script>
+
+<style type="text/css">
+.inner-banner {
+	background: url('${webIndexBanana.photographybanana}') no-repeat 0px 0px;
+	background-size: cover;
+	-webkit-background-size: cover;
+	-o-background-size: cover;
+	-ms-background-size: cover;
+	-moz-background-size: cover;
+	min-height: 150px;
+}
+</style>
+
+
+
 </head>
 <body>
-<!-- 菜单头部 -->
-<jsp:include page="public/top.jsp"/>
+		<!-- 菜单头部 -->
+	<jsp:include page="public/top.jsp" />
 	<!-- banner -->
-	<jsp:include page="public/inner-banana.jsp" />
+	<div class="inner-banner"></div>
 <!--相册内容-->
 <div class="gallery">
     <div class="container">

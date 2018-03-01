@@ -17,11 +17,13 @@ import org.app.admin.annotation.SystemErrorLog;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
+import org.app.admin.pojo.Resource;
 import org.app.admin.pojo.Type;
 import org.app.admin.service.AdminCompanyService;
 import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.service.TypeService;
+import org.app.admin.util.BaseType;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
@@ -29,6 +31,8 @@ import org.app.framework.util.CommonEnum;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -57,6 +61,9 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 
 	@Autowired
 	private TypeService typeService;
+	
+	@Autowired
+	private ResourceService resourceService;
 
 	/**
 	 * 通过ajax获取相同目录下是否存在重复文件夹名称的信息
@@ -151,11 +158,51 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 
 		modelAndView.setViewName("redirect:/forderActivity/list");
 
-		if (Common.isNotEmpty(id)) {
+		/*if (Common.isNotEmpty(id)) {
 
 			this.forderActivityService.delete(id);
 
+		}*/
+		
+		//删除活动
+		
+		ForderActivity forderActivity = this.forderActivityService.findOneById(id, ForderActivity.class);
+		
+		if(forderActivity!=null){
+		
+			//删除图片资源
+			//1.如果是个人收藏
+			Query query = new Query();
+			if(forderActivity.getListType().get(0).getType().equals(BaseType.Type.PERSION)){
+				query.addCriteria(Criteria.where("personActivityId").is(forderActivity.getPersonActivityId()));
+				
+			}
+			//2如果是其他图片
+			
+			else{
+				query.addCriteria(Criteria.where("forderActivityId").is(forderActivity.getId()));
+			}
+			List<Resource> listres = this.resourceService.find(query, Resource.class);
+			
+			for(Resource res:listres){
+				this.resourceService.remove(res);
+			}
+			
+			
+			//删除活动
+			this.forderActivityService.remove(forderActivity);
+			
+			
 		}
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		return modelAndView;
 
 	}
