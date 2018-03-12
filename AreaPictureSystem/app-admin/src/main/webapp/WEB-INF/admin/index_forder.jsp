@@ -20,7 +20,7 @@
 				</div>
 				
 
-				<div class="file-box collection col-sm-2" style="height: 227px;" >
+				<div class="file-box collection col-sm-2" style="height: 227px;margin-bottom: 20px;"  >
 
 					<div class="file">
 
@@ -49,13 +49,13 @@
 									<c:choose>
 										<c:when test="${fn:length(item.forderActivityName)<20}">
 											<small>
-											活动名称：${item.forderActivityName}
+											拍摄活动：${item.forderActivityName}
 
 											</small>
 										</c:when>
 										<c:otherwise>
 											<small>
-												活动名称：${fn:substring(item.forderActivityName,0,20)}...</small>
+												拍摄活动：${fn:substring(item.forderActivityName,0,20)}...</small>
 										</c:otherwise>
 									</c:choose>
 									<br />

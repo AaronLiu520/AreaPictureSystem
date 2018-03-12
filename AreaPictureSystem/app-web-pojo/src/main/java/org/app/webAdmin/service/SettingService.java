@@ -74,6 +74,8 @@ public class SettingService extends GeneralServiceImpl<Setting> {
 				getSetting.setCopyRight(setting.getCopyRight());
 				if(Common.isNotEmpty(setting.getIcon())){
 					getSetting.setIcon(setting.getIcon().replaceAll("\\\\", "/"));
+				}else{
+					getSetting.setIcon("");
 				}
 				getSetting.setTitle(setting.getTitle());
 				getSetting.setWebName(setting.getWebName());

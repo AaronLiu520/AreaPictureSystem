@@ -3,6 +3,7 @@ package org.app.admin.photo.action;
 import org.apache.commons.lang.StringUtils;
 import org.app.admin.annotation.SystemControllerLog;
 import org.app.admin.annotation.SystemErrorLog;
+import org.app.admin.interceptor.LoginInterceptor;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.util.BaseType;
@@ -61,7 +62,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         modelAndView.addObject("uploadList", list);
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
-        modelAndView.addObject("photoTimeList",  getPhotoTimeList(BaseType.Type.AREA.toString(),null,true));
+        modelAndView.addObject("photoTimeList",  getPhotoTimeList(BaseType.Type.AREA.toString(),null,true,session));
         return modelAndView;// 返回
     }
     
@@ -82,7 +83,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         modelAndView.addObject("uploadList1", list);
         //TODO 根据type类型，加载不同类型的一级文件夹，然后按时间轴，进行分类。
         // 按日期进行分类 创建枚举类 QUYU表示区域级 ZHISHU 直属 GEREN 个人
-        modelAndView.addObject("photoTimeList1",getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId(),false));
+        modelAndView.addObject("photoTimeList1",getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,adminUser.getId(),false,session));
         return modelAndView;// 返回
     }
     
@@ -146,7 +147,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         List<String> forderActivityList=this.getforderActivityList(BaseType.Type.DIRECTLYUTIS.toString(),adminUser.getAdminCompany().getId());
         List list = this.resourceService.getMonthUploadNum(forderActivityList,null);
         modelAndView.addObject("uploadList1", list);
-        modelAndView.addObject("photoTimeList",getPhotoTimeList(BaseType.Type.DIRECTLYUTIS.toString(),null,true));
+        modelAndView.addObject("photoTimeList",getPhotoTimeList(BaseType.Type.DIRECTLYUTIS.toString(),null,true,session));
         return modelAndView;// 返回
     }
 
@@ -156,11 +157,12 @@ public class photoAction extends GeneralAction<AdminUser> {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("admin/photo-gallery/basicLevel/index");//登录页面
 //        AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-        List<PhotoTime> lpt= getPhotoTimeList(String.valueOf(BaseType.Type.BASEUTIS.toString()),null,false);
+        List<PhotoTime> lpt= getPhotoTimeList(String.valueOf(BaseType.Type.BASEUTIS.toString()),null,false,session);
         //加载所有的企业
         List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);
-        List<LayerAdmonCompany> llac= LayerAdmonCompany.LayerAdmonCompany(lac,lpt);
-        List<BaseTreeTime> lbpt= BaseTreeTime.getBaseTreeTime(llac);
+        LoginInterceptor  lo = new LoginInterceptor();
+        List<LayerAdmonCompany> llac= lo.LayerAdmonCompany(lac,session,"");
+        List<BaseTreeTime> lbpt= BaseTreeTime.getBaseTreeTime(llac,session);
         List<BasesultBean> list = this.statisticsService.sortupload(null,BaseType.Type.BASEUTIS.toString());
         Random random=new Random();
         for (BasesultBean basesultBean : list) {
@@ -213,11 +215,11 @@ public class photoAction extends GeneralAction<AdminUser> {
    
 
 
-    public List<PhotoTime> getPhotoTimeList(String type,String check,boolean flag){
+    public List<PhotoTime> getPhotoTimeList(String type,String check,boolean flag,HttpSession session){
         Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0");
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
         //todo
-        return PhotoTime.getPhotoTime(listFA,check,flag);
+        return PhotoTime.getPhotoTime(listFA,session);
     }
     
 /*    public List<PhotoTime> getPhotoTimeList1(String type,String check){
@@ -233,11 +235,11 @@ public class photoAction extends GeneralAction<AdminUser> {
    * @param boundId
    * @return  
    */
-    public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId,boolean flag){
+    public List<PhotoTime> getPhotoTimeListByPersionId(String type,String check,String boundId,boolean flag,HttpSession session){
         Query query=super.craeteQueryWhere("listType.type",type,"parentId", "0","boundId",boundId);
         List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
         //TODO
-        return PhotoTime.getPhotoTime(listFA,check,flag);
+        return PhotoTime.getPhotoTime(listFA,session);
     }
 
 }

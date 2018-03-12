@@ -42,7 +42,7 @@ public class UsersUploadsService extends GeneralServiceImpl<UsersUploads> {
 	private FileOperateUtil operateUtil;
 	@Autowired
 	private ContestImagesService contestImagesService;
-	
+
 	@Autowired
 	private VoteConService voteConService;
 
@@ -123,7 +123,8 @@ public class UsersUploadsService extends GeneralServiceImpl<UsersUploads> {
 	/**
 	 * 
 	 * @Title: findOneByContestId @Description: TODO(根据比赛信息获取投稿) @param @param
-	 * contestId @param @return 设定文件 @return BasicDataResult 返回类型 @throws
+	 *         contestId @param @return 设定文件 @return BasicDataResult
+	 *         返回类型 @throws
 	 */
 	public BasicDataResult findOneByContestId(String contestId, HttpSession session) {
 
@@ -142,12 +143,13 @@ public class UsersUploadsService extends GeneralServiceImpl<UsersUploads> {
 
 		List<ContestImages> list = this.contestImagesService.find(query, ContestImages.class);
 
-	/*	if (list.size() > 0&& list !=null) {
-
-			up.setNowNum(list.size());
-
-		}
-*/
+		/*
+		 * if (list.size() > 0&& list !=null) {
+		 * 
+		 * up.setNowNum(list.size());
+		 * 
+		 * }
+		 */
 		return BasicDataResult.build(200, "", up);
 	}
 
@@ -193,58 +195,75 @@ public class UsersUploadsService extends GeneralServiceImpl<UsersUploads> {
 		}
 
 	}
-	
-	
+
 	/**
 	 * 
-	* @Title: findUsersUploadsByContestId 
-	* @Description: TODO(根据比赛id查询改比赛下的所有报名情况) 
-	* @param @param contestId
-	* @param @return    设定文件 
-	* @return List<UsersUploads>    返回类型 
-	* @throws
+	 * @Title: findUsersUploadsByContestId @Description:
+	 *         TODO(根据比赛id查询改比赛下的所有报名情况) @param @param contestId @param @return
+	 *         设定文件 @return List<UsersUploads> 返回类型 @throws
 	 */
-	public List<UsersUploads> findUsersUploadsToSortByContestId(String contestId){
-		
-		Query query  =  new Query();
-		
+	public List<UsersUploads> findUsersUploadsToSortByContestId(String contestId) {
+
+		Query query = new Query();
+
 		query.addCriteria(Criteria.where("contestId").is(contestId));
-		
+
 		List<UsersUploads> list = this.find(query, UsersUploads.class);
-		
+
 		List<UsersUploads> relist = new ArrayList<UsersUploads>();
-		
-		for(UsersUploads users :list){
-			
-			 query  =  new Query();
-			
+
+		for (UsersUploads users : list) {
+
+			query = new Query();
+
 			query.addCriteria(Criteria.where("contestId").is(contestId));
-			
+
 			query.addCriteria(Criteria.where("usersUploadsId").is(users.getId()));
-			
+
 			List<VoteCon> listVote = this.voteConService.find(query, VoteCon.class);
-			
-			if(listVote.size()>0){
+
+			if (listVote.size() > 0) {
 				users.setPoll(listVote.size());
-			}else{
+			} else {
 				users.setPoll(0);
 			}
 			this.save(users);
 			relist.add(users);
 		}
-		
-		
+
 		return relist;
-		
+
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * 
+	* @Title: findUsersByUsersId 
+	* @Description: TODO(根据用户id查询) 
+	* @param @param usersId
+	* @param @return    设定文件 
+	* @return List<UsersUploads>    返回类型 
+	* @throws
+	 */
+	public List<UsersUploads> findUsersByUsersId(String usersId,String contestId) {
+
+		Query query = new Query();
+		
+		if(Common.isNotEmpty(usersId)){
+			
+			query.addCriteria(Criteria.where("users.$id").is(new ObjectId(usersId)));
+		}
+		else if(Common.isNotEmpty(contestId)){
+			
+			query.addCriteria(Criteria.where("contest.$id").is(new ObjectId(contestId)));
+			
+		}
+		
+		List<UsersUploads> list = this.find(query, UsersUploads.class);
+
+		if (list != null)
+			return list;
+		else
+			return null;
+	}
 
 }

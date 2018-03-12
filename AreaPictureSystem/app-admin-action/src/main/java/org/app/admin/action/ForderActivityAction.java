@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import org.app.admin.annotation.SystemControllerLog;
 import org.app.admin.annotation.SystemErrorLog;
+import org.app.admin.interceptor.LoginInterceptor;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.ForderActivity;
@@ -24,6 +25,7 @@ import org.app.admin.service.ForderActivityService;
 import org.app.admin.service.ResourceService;
 import org.app.admin.service.TypeService;
 import org.app.admin.util.BaseType;
+import org.app.admin.util.PhotoTime;
 import org.app.framework.action.GeneralAction;
 import org.app.framework.util.BasicDataResult;
 import org.app.framework.util.Common;
@@ -130,9 +132,20 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	public BasicDataResult creatOrEditActivity(HttpSession session, ForderActivity forderActivity,
 			@RequestParam(value = "edit", defaultValue = "") String edit, RedirectAttributes ra) {
 		log.info("进去create!");
-
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
+		
 		ModelAndView modelAndView = new ModelAndView();
 
+	
+		
 		modelAndView.setViewName("redirect:/forderActivity/list");
 		
 		if(Common.isEmpty(forderActivity.getType())){
@@ -146,17 +159,42 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		
 		BasicDataResult result = this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit, listsType);
 
+	
+		
 		
 		return result;
 	}
+	
+	
+	public List<PhotoTime> getPhotoTimeListByPersionId(String type, String check, String boundId,boolean flag,HttpSession session) {
+
+		Query query = super.craeteQueryWhere("listType.type", type, "parentId", "0", "boundId", boundId);
+		
+		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
+		
+		return PhotoTime.getPhotoTime(listFA,session);
+	}
+	
+	
+	
 
 	@RequestMapping("/delete")
 	@SystemErrorLog(description = "删除活动出错")
 	@SystemControllerLog(description = "删除活动信息")
-	public ModelAndView delete(RedirectAttributes model, @RequestParam(value = "id", defaultValue = "") String id) {
+	public ModelAndView delete(RedirectAttributes model,HttpSession session, @RequestParam(value = "id", defaultValue = "") String id) {
 		ModelAndView modelAndView = new ModelAndView();
-
+		
 		modelAndView.setViewName("redirect:/forderActivity/list");
+		
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
 
 		/*if (Common.isNotEmpty(id)) {
 
@@ -165,7 +203,6 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		}*/
 		
 		//删除活动
-		
 		ForderActivity forderActivity = this.forderActivityService.findOneById(id, ForderActivity.class);
 		
 		if(forderActivity!=null){
@@ -192,16 +229,8 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 			//删除活动
 			this.forderActivityService.remove(forderActivity);
 			
-			
 		}
-		
-		
-		
-		
-		
-		
-		
-		
+	
 		
 		return modelAndView;
 

@@ -1,6 +1,7 @@
 package org.app.admin.util.basetreetime;
 
 import org.app.admin.pojo.AdminCompany;
+import org.app.admin.util.BaseType;
 import org.app.admin.util.PhotoTime;
 
 import java.util.ArrayList;
@@ -48,28 +49,7 @@ public class LayerAdmonCompany {
                 '}';
     }
 
-    public static List<LayerAdmonCompany> LayerAdmonCompany(List<AdminCompany> lac, List<PhotoTime> lpt){
-        List<LayerAdmonCompany> list=new ArrayList<LayerAdmonCompany>();
-
-        for(AdminCompany ac:lac){
-            LayerAdmonCompany layerAdmonCompany=new LayerAdmonCompany();
-
-            layerAdmonCompany.setId(ac.getType().toString());//性质  //2017年12月12日 14:36:40 添加了.toString
-            layerAdmonCompany.setName(ac.getName());//名称
-
-            for(PhotoTime pt:lpt){
-                if(ac.getId().equals(pt.getId())){//这个活动，属于当前单位。
-                    if(layerAdmonCompany.getTimeList()==null)
-                        layerAdmonCompany.setTimeList(new ArrayList<PhotoTime>());
-
-                    layerAdmonCompany.getTimeList().add(pt);
-                }
-            }
-            list.add(layerAdmonCompany);
-        }
-
-        return list;
-    }
+  
 
 
 }

@@ -113,8 +113,22 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	@SystemErrorLog(description="添加企业信息出错")
 	@SystemControllerLog(description = "添加企业信息")
 	public ModelAndView list(HttpSession session, AdminCompany adminCompany) {
+		
+		
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
+		
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("redirect:/adminCompany/list");
+		
 		try {
 			if (adminCompany != null) {
 				if (adminCompany.getId() == null) {
@@ -199,6 +213,16 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	@SystemControllerLog(description = "删除企业信息")
 	public ModelAndView delete(HttpSession session, @RequestParam(value = "id", defaultValue = "0") String id,
 			@RequestParam(value = "ids", defaultValue = "0") String ids) {
+		
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("redirect:/adminCompany/list");
 		try {
@@ -273,6 +297,15 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 	@SystemControllerLog(description = "批量导入企业信息")
 	public ModelAndView upload(AdminCompany adminCompany, HttpServletRequest request, HttpSession session,
 			RedirectAttributes attr) {
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
 		log.info("开始上传文件");
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("redirect:/adminCompany/list");

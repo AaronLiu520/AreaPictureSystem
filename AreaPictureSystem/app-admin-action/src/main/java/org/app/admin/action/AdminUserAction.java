@@ -328,6 +328,18 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public ModelAndView loginOut(HttpSession session) {
 
 		ModelAndView modelAndView = new ModelAndView();
+		
+		
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
+		
 		// 重定向到登录页面。
 		modelAndView.setViewName("redirect:/adminUser/login");
 		// 注销session(后台登录）

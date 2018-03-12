@@ -403,6 +403,17 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
 					editforderActivity.setType(forderActivity.getType());
 					editforderActivity.setListType(listsType.get(0));
+					
+					String today=forderActivity.getActivityTime();
+					String year = today.substring(0, today.indexOf("-"));
+					editforderActivity.setYear(year);
+					String month = today.substring(today.indexOf("-")+1,today.lastIndexOf("-"));
+					editforderActivity.setMonth(month);
+					String day = today.substring(today.lastIndexOf("-")+1,today.length());
+					editforderActivity.setDay(day);
+					
+					
+					
 					if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
 						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
 						// 根据boundCompany获取企业信息
@@ -436,6 +447,15 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					fo.setAddress(forderActivity.getAddress());
 					fo.setPersonActivityId(new ObjectId(new Date()).toString());
 					fo.setBaseutisActivityId(new ObjectId(new Date()).toString());
+					String today=forderActivity.getActivityTime();
+					String year = today.substring(0, today.indexOf("-"));
+					fo.setYear(year);
+					String month = today.substring(today.indexOf("-")+1,today.lastIndexOf("-"));
+					fo.setMonth(month);
+					String day = today.substring(today.lastIndexOf("-")+1,today.length());
+					fo.setDay(day);
+					
+					
 					if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())) {
 						fo.setAdminCompany(adminUser.getAdminCompany());
 						fo.setBoundCompany(adminUser.getAdminCompany().getId());

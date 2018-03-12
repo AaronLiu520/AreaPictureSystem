@@ -42,8 +42,10 @@
 								<h5>网站基础配置</h5>
 							</div>
 							<div class="ibox-content">
-								<form role="form" id="signupForm" action="${pageContext.request.contextPath}/setting/saveSetting"
-									method="post" class="form-horizontal m-t" enctype="multipart/form-data"> 
+								<form role="form" id="signupForm"
+									action="${pageContext.request.contextPath}/setting/saveSetting"
+									method="post" class="form-horizontal m-t"
+									enctype="multipart/form-data">
 									<div class="row">
 
 										<div class="col-sm-8">
@@ -73,9 +75,9 @@
 										<div class="col-sm-8">
 											<label class="col-sm-4 control-label">版权</label>
 											<div class="col-sm-8 form-group">
-												<input type="text" id="copyRight" value="${setting.copyRight}"
-													name="copyRight" class="form-control" placeholder=""
-													required>
+												<input type="text" id="copyRight"
+													value="${setting.copyRight}" name="copyRight"
+													class="form-control" placeholder="" required>
 											</div>
 										</div>
 									</div>
@@ -86,13 +88,15 @@
 										<div class="col-sm-8">
 											<label class="col-sm-4 control-label">网站icon</label>
 											<div class="col-sm-8 form-group">
-												<input id="myfile" name="iconFile" type="file"><!--  multiple="true" -->
+												<input id="myfile" name="iconFile" type="file">
+												<!--  multiple="true" -->
 											</div>
 										</div>
 									</div>
 
-
-									<input type="hidden" name="editid" value="${setting.id }">
+									<input type="hidden" value="${ setting.icon }" name="icon"
+										id="icon"> <input type="hidden" name="editid"
+										value="${setting.id }">
 									<div class="col-sm-8">
 										<div class="modal-footer" style="margin-top: 20px;">
 											<button type="submit" id="save-btn-news"
@@ -157,6 +161,8 @@
     language : 'zh'
 }) */
 
+
+
 	$("#myfile").fileinput({
 			 maxFileCount : 1, //表示允许同时上传的最大文件个数
 			allowedFileExtensions : [ 'jpg', 'gif', 'png', 'jpeg' ],//接收的文件后缀
@@ -176,6 +182,15 @@
 
 
 
+	//点击删除按钮之后将图片所在input清空
+	$(".fileinput-remove-button").click(function(e){
+		$("#icon").val("");
+	})
+	//点击删除按钮之后将图片所在input清空
+	$(".fileinput-remove").click(function(e){
+		$("#icon").val("");
+	})
+	
 
  
 	</script>

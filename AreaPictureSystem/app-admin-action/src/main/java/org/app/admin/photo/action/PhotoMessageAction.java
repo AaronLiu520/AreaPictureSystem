@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang.StringUtils;
 import org.app.admin.annotation.SystemControllerLog;
 import org.app.admin.annotation.SystemErrorLog;
+import org.app.admin.interceptor.LoginInterceptor;
 import org.app.admin.pojo.AdminCompany;
 import org.app.admin.pojo.AdminUser;
 import org.app.admin.pojo.Favorites;
@@ -80,7 +81,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	private InformationRegisterService informationRegisterService;
 	@Autowired
 	private TypeService typeService;
-	
 
 	/**
 	 * 查找图片页面
@@ -110,24 +110,26 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 
-			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, null,false);
+			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, session);
 			// 加载所有的企业
 			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
 
 			modelAndView.addObject("listAdminCompany", lac);
-
-			List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
-			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
+			LoginInterceptor lo = new LoginInterceptor();
+			List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac, session,"");
+			// List<LayerAdmonCompany> llac =
+			// LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
+			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac, session);
 			log.info(lbpt.toString());
 			modelAndView.addObject("basePhotoTimeList", lbpt);
 
 		} else if (type.equals(BaseType.Type.PERSION.toString())) {
-			modelAndView.addObject("photoTimeList",
-					getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null, adminUser.getId(),true));
+			modelAndView.addObject("photoTimeList", getPhotoTimeListByPersionId(BaseType.Type.PERSION.toString(), null,
+					adminUser.getId(), true, session));
 		} else {
 			// 按日期进行分类,并且中当前菜单
-			//TODO
-			modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, null,false));
+			// TODO
+			modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, session));
 		}
 
 		// TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
@@ -141,11 +143,14 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		return modelAndView;// 返回
 	}
 
-	public List<PhotoTime> getPhotoTimeListByPersionId(String type, String check, String boundId,boolean flag) {
+	public List<PhotoTime> getPhotoTimeListByPersionId(String type, String check, String boundId, boolean flag,
+			HttpSession session) {
 
 		Query query = super.craeteQueryWhere("listType.type", type, "parentId", "0", "boundId", boundId);
+
 		List<ForderActivity> listFA = this.forderActivityService.find(query, ForderActivity.class);
-		return PhotoTime.getPhotoTime(listFA, check,flag);
+
+		return PhotoTime.getPhotoTime(listFA, session);
 	}
 
 	/**
@@ -161,12 +166,25 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	@RequestMapping("/checkActivity/{type}")
 	public ModelAndView checkActivity(@PathVariable("type") String type,
 			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "12") Integer pageSize,
+			@RequestParam(value = "pageSize", defaultValue = "21") Integer pageSize,
 			@RequestParam(value = "sort", defaultValue = "DESC") String sort,
-			@RequestParam(value = "mfregex", defaultValue = "") String mfregex, HttpSession session, String checkId) {
+			@RequestParam(value = "mfregex", defaultValue = "") String mfregex,
+			HttpSession session, 
+			@RequestParam(value = "checkId", defaultValue = "")String checkId,
+			@RequestParam(value = "year", defaultValue = "") String year,
+			@RequestParam(value = "month", defaultValue = "") String month,
+			@RequestParam(value = "day", defaultValue = "") String day,
+			@RequestParam(value = "nature", defaultValue = "") String nature,
+			@RequestParam(value = "company", defaultValue = "") String company) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
-		
+
+		session.setAttribute("yearId", year);
+		session.setAttribute("monthId", month);
+		session.setAttribute("dayId", day);
+		session.setAttribute("companyName", company);
+		session.setAttribute("nature", nature);
+
 		String selectActivityId = "";
 		// 检查类型
 		if (!BaseType.checkType(type))
@@ -186,35 +204,45 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		if (checkId != null)
 			session.setAttribute("checkActivityId", checkId);
-		Query querylistFA = new Query();
-		// 如果用户是个人
-		if (type.equals(BaseType.Type.PERSION.toString())) {
-			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type, "boundId", adminUser.getId());
-
-		} else {
-			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type);
-		}
-		
-		List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
-
-		// 如果用户是 BASEUTIS
-
-		if (type.equals(BaseType.Type.BASEUTIS.toString())) {
-
-			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, fa.getActivityTime(),false);
-			// 加载所有的企业
-			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
-			modelAndView.addObject("listAdminCompany", lac);
-			List<LayerAdmonCompany> llac = LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
-			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac);
-			log.info(lbpt.toString());
-			modelAndView.addObject("basePhotoTimeList", lbpt);
-
-		} else {
-
-			// 按日期进行分类,并且中当前菜单
-			modelAndView.addObject("photoTimeList", PhotoTime.getPhotoTime(listFA, fa.getActivityTime(),true));
-		}
+//		Query querylistFA = new Query();
+//		// 如果用户是个人
+//		if (type.equals(BaseType.Type.PERSION.toString())) {
+//			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type, "boundId", adminUser.getId());
+//
+//		} else {
+//			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type);
+//		}
+//
+//		List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
+//
+//		// 如果用户是 BASEUTIS
+//
+//		if (type.equals(BaseType.Type.BASEUTIS.toString())) {
+//
+//			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, session);
+//			// List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA,
+//			// fa.getActivityTime(),false);
+//			// 加载所有的企业
+//			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
+//			modelAndView.addObject("listAdminCompany", lac);
+//			LoginInterceptor lo = new LoginInterceptor();
+//
+//			List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac, session,checkId);
+//			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac, session);
+//			log.info(lbpt.toString());
+//
+//			modelAndView.addObject("basePhotoTimeList", session.getAttribute("basePhotoTimeList"));
+//			// modelAndView.addObject("basePhotoTimeList", lbpt);
+//
+//		} else {
+//
+//			// 按日期进行分类,并且中当前菜单
+//			// modelAndView.addObject("photoTimeList",
+//			// PhotoTime.getPhotoTime(listFA,session));
+//			modelAndView.addObject("photoTimeList", session.getAttribute("photoTimeList"));
+//			// modelAndView.addObject("photoTimeList",
+//			// PhotoTime.getPhotoTime(listFA, fa.getActivityTime(),true));
+//		}
 
 		// TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
 		// 标签
@@ -230,16 +258,15 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 				query = Query.query(Criteria.where("originalName").regex(pattern));
 				modelAndView.addObject("mfregex", mfregex);
 			}
-			
-			if(type.equals(BaseType.Type.PERSION.toString())){
+
+			if (type.equals(BaseType.Type.PERSION.toString())) {
 				query.addCriteria(Criteria.where("personActivityId").is(fa.getPersonActivityId()));
-			}else if(type.equals(BaseType.Type.BASEUTIS.toString())){
+			} else if (type.equals(BaseType.Type.BASEUTIS.toString())) {
 				query.addCriteria(Criteria.where("baseutisActivityId").is(fa.getBaseutisActivityId()));
-			}else{
+			} else {
 				query.addCriteria(Criteria.where("forderActivityId").is(checkId));
 			}
-			
-			
+
 			query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
 					"createTime"));
 			pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
@@ -281,22 +308,21 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	 */
 	@SystemErrorLog(description = "文件上传出错")
 	@RequestMapping("/uploadFile/{type}")
-	public void uploadFile(HttpServletRequest request,@PathVariable("type") String type, PrintWriter printWriter, HttpSession session,
-			@RequestParam(defaultValue="",value="forderActivityId")String forderActivityId,
+	public void uploadFile(HttpServletRequest request, @PathVariable("type") String type, PrintWriter printWriter,
+			HttpSession session, @RequestParam(defaultValue = "", value = "forderActivityId") String forderActivityId,
 			@RequestParam(value = "file[]", required = false) MultipartFile[] multipartFiles) {
-		
-		String typeId ="";
-	
+
+		String typeId = "";
+
 		// 获取 用户 session
 		AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
 		ForderActivity f = forderActivityService.findForderById(forderActivityId);
-		
-	
+
 		log.info("上传图片+活动ID" + forderActivityId);
 
 		for (MultipartFile mpfile : multipartFiles) {
 
-			Resource rf = UploadUtil.processResource(mpfile, au,f,type);
+			Resource rf = UploadUtil.processResource(mpfile, au, f, type);
 			log.info("文件信息:" + rf.toString());
 			// 更新到数据库
 			this.resourceService.insert(rf);
@@ -339,9 +365,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			r.getEditorImgInfo().setResourceAddress(resourceAddress);
 			r.getEditorImgInfo().setDescription(description);
 			this.resourceService.save(r);
-			
+
 			this.informationRegisterService.addInformationRegister(resourceName, person, photographer, resourceAddress);
-			
+
 		}
 		modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + activityId);
 
@@ -382,37 +408,34 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	 * @param session
 	 * @param fa
 	 * @return
-	 */ 
-	/*@SystemErrorLog(description = "创建活动出错")
-	@RequestMapping("/createActivity/{type}")
-	public ModelAndView createActivity(@PathVariable("type") String type, HttpSession session, ForderActivity fa) {
-		ModelAndView modelAndView = new ModelAndView();
-
-		AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-		if (au == null)
-			return null;
-		else
-			fa.setCreatUser(au);
-		if (au.getAdminCompany() != null) {
-			fa.setAdminCompany(au.getAdminCompany());
-		}
-		if (Common.isEmpty(fa.getBoundCompany())) {
-			fa.setBoundCompany(au.getAdminCompany().getId());
-		}
-
-		log.info(fa.getBoundId());
-		this.forderActivityService.insert(fa);
-
-		Query query = super.craeteQueryWhere("forderActivityName", fa.getForderActivityName());
-		ForderActivity forderActivity = this.forderActivityService.findOneByQuery(query, ForderActivity.class);
-
-		modelAndView.setViewName(
-				"redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + forderActivity.getId());
-
-		return modelAndView;
-
-	}
-*/
+	 */
+	/*
+	 * @SystemErrorLog(description = "创建活动出错")
+	 * 
+	 * @RequestMapping("/createActivity/{type}") public ModelAndView
+	 * createActivity(@PathVariable("type") String type, HttpSession session,
+	 * ForderActivity fa) { ModelAndView modelAndView = new ModelAndView();
+	 * 
+	 * AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+	 * if (au == null) return null; else fa.setCreatUser(au); if
+	 * (au.getAdminCompany() != null) {
+	 * fa.setAdminCompany(au.getAdminCompany()); } if
+	 * (Common.isEmpty(fa.getBoundCompany())) {
+	 * fa.setBoundCompany(au.getAdminCompany().getId()); }
+	 * 
+	 * log.info(fa.getBoundId()); this.forderActivityService.insert(fa);
+	 * 
+	 * Query query = super.craeteQueryWhere("forderActivityName",
+	 * fa.getForderActivityName()); ForderActivity forderActivity =
+	 * this.forderActivityService.findOneByQuery(query, ForderActivity.class);
+	 * 
+	 * modelAndView.setViewName( "redirect:/photoMessageAction/checkActivity/" +
+	 * type + "?checkId=" + forderActivity.getId());
+	 * 
+	 * return modelAndView;
+	 * 
+	 * }
+	 */
 	/**
 	 * @param @param
 	 *            resourceId
@@ -483,13 +506,22 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	public BasicDataResult copyToMyPictures(@RequestParam(defaultValue = "", value = "resourceId") String resourceId,
 			HttpSession session) {
 
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
+
 		String[] resourcesId = resourceId.split(",");
 
 		// 如果需要同步的资源大小大于0
 		if (resourcesId.length > 0) {
 
 			AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-
 
 			for (int i = 0; i < resourcesId.length; i++) {
 
@@ -498,33 +530,34 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 				if (res != null) {
 
 					// 2,如果该图片已经收藏了，不会再次同步到个人图片库
-					Resource resource = this.resourceService.findResourceByResourceName(adminUser.getId(), res.getGenerateName());
-					
+					Resource resource = this.resourceService.findResourceByResourceName(adminUser.getId(),
+							res.getGenerateName());
+
 					// 3,通过图片的名称，以及图片的所属活动id进行查询
-					if(Common.isEmpty(res.getForderActivityId())){
+					if (Common.isEmpty(res.getForderActivityId())) {
 						continue;
 					}
-					
-					String oldForderActivityId ="";
-					if(Common.isNotEmpty(res.getForderActivityId())){
-						oldForderActivityId=res.getForderActivityId();
+
+					String oldForderActivityId = "";
+					if (Common.isNotEmpty(res.getForderActivityId())) {
+						oldForderActivityId = res.getForderActivityId();
 					}
-					//获取活动信息
+					// 获取活动信息
 					ForderActivity oldForderActivity = this.forderActivityService.findOneById(oldForderActivityId,
 							ForderActivity.class);
-					
-					//查询是否存在该个人的活动
-					ForderActivity forderActivity = this.forderActivityService
-							.findForderActivityByActivityNameType(oldForderActivity.getForderActivityName(), adminUser.getId());
 
-					//如果图片没有收藏
-					if(resource == null){
-						ForderActivity  newForderActivity = new ForderActivity();
-						//如果没有该活动则创建一个新的个人活动
+					// 查询是否存在该个人的活动
+					ForderActivity forderActivity = this.forderActivityService.findForderActivityByActivityNameType(
+							oldForderActivity.getForderActivityName(), adminUser.getId());
+
+					// 如果图片没有收藏
+					if (resource == null) {
+						ForderActivity newForderActivity = new ForderActivity();
+						// 如果没有该活动则创建一个新的个人活动
 						// 4,如果查询出来为空，那么执行添加
-						String personActivityId=null;
-						if(forderActivity == null){
-							 personActivityId=new ObjectId(new Date()).toString();
+						String personActivityId = null;
+						if (forderActivity == null) {
+							personActivityId = new ObjectId(new Date()).toString();
 							newForderActivity.setActivityTime(oldForderActivity.getActivityTime());
 							newForderActivity.setAddress(oldForderActivity.getAddress());
 							newForderActivity.setAdminCompany(adminUser.getAdminCompany());
@@ -536,20 +569,29 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							newForderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
 							newForderActivity.setPersonActivityId(personActivityId);
 							newForderActivity.setParentId("0");
+
+							String today = oldForderActivity.getActivityTime();
+							String year = today.substring(0, today.indexOf("-"));
+							newForderActivity.setYear(year);
+							String month = today.substring(today.indexOf("-") + 1, today.lastIndexOf("-"));
+							newForderActivity.setMonth(month);
+							String day = today.substring(today.lastIndexOf("-") + 1, today.length());
+							newForderActivity.setDay(day);
 							List<Type> listType = new ArrayList<Type>();
+							
 							Type t = new Type();
 							t.setType(BaseType.Type.PERSION);
 							listType.add(t);
 							newForderActivity.setListType(listType);
-							newForderActivity.setType(BaseType.Type.PERSION.toString());	
+							newForderActivity.setType(BaseType.Type.PERSION.toString());
 							this.forderActivityService.insert(newForderActivity);
 						}
-						
-						if(Common.isNotEmpty(personActivityId)){
+
+						if (Common.isNotEmpty(personActivityId)) {
 							forderActivity = new ForderActivity();
 							forderActivity.setPersonActivityId(personActivityId);
 						}
-						
+
 						Resource newResource = new Resource();
 						newResource.setAdminCompanyId("");
 						newResource.setAdminUser(adminUser);
@@ -564,74 +606,65 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 						newResource.setOriginalPath(res.getOriginalPath());
 						newResource.setSource(res.getSource());
 						newResource.setUploadPerson(res.getUploadPerson());
-						
-						
+
 						newResource.setPersonActivityId(forderActivity.getPersonActivityId());
 						this.resourceService.insert(newResource);
-					
+
 					}
-					
+
 				}
 			}
 			return BasicDataResult.build(200, "同步成功", true);
-				
-		}else{
-			
+
+		} else {
+
 			return BasicDataResult.build(203, "请选择需要同步的图片", false);
 		}
-			
 
-		
-		
-		
 		/*
-		if (resource == null) {
-			ForderActivity  newForderActivity = new ForderActivity();
-			//如果没有该活动则创建一个新的个人活动
-			// 4,如果查询出来为空，那么执行添加
-			if(forderActivity == null){
-				newForderActivity.setActivityTime(oldForderActivity.getActivityTime());
-				newForderActivity.setAddress(oldForderActivity.getAddress());
-				newForderActivity.setAdminCompany(adminUser.getAdminCompany());
-				newForderActivity.setBoundCompany(adminUser.getAdminCompany().getId());
-				newForderActivity.setBoundId(adminUser.getId());
-				newForderActivity.setAdminUser(adminUser);
-				newForderActivity.setDescription(oldForderActivity.getDescription());
-				newForderActivity.setForderActivityName(oldForderActivity.getForderActivityName());
-				newForderActivity.setBaseutisActivityId(new ObjectId(new Date()).toString());
-				newForderActivity.setPersonActivityId(new ObjectId(new Date()).toString());
-				newForderActivity.setParentId("0");
-				List<Type> listType = new ArrayList<Type>();
-				Type t = new Type();
-				t.setType(BaseType.Type.PERSION);
-				listType.add(t);
-				newForderActivity.setListType(listType);
-				newForderActivity.setType(BaseType.Type.PERSION.toString());	
-				
-			}else{
-				
-				newForderActivity = forderActivity;
-			}
-			
-			this.forderActivityService.save(newForderActivity);
-
-			Resource newResource = new Resource();
-			newResource.setAdminCompanyId("");
-			newResource.setAdminUser(adminUser);
-			newResource.setBoundId(adminUser.getId());
-			newResource.setEditorImgInfo(res.getEditorImgInfo());
-			newResource.setExtensionName(res.getExtensionName());
-			newResource.setFileType(res.getFileType());
-			newResource.setGenerateName(res.getGenerateName());
-			newResource.setImgCompressionBean(res.getImgCompressionBean());
-			newResource.setImgInfoBean(res.getImgInfoBean());
-			newResource.setOriginalName(res.getOriginalName());
-			newResource.setOriginalPath(res.getOriginalPath());
-			newResource.setSource(res.getSource());
-			newResource.setUploadPerson(res.getUploadPerson());
-			newResource.setPersonActivityId(forderActivity.getPersonActivityId());
-			this.resourceService.insert(newResource);
-		}*/
+		 * if (resource == null) { ForderActivity newForderActivity = new
+		 * ForderActivity(); //如果没有该活动则创建一个新的个人活动 // 4,如果查询出来为空，那么执行添加
+		 * if(forderActivity == null){
+		 * newForderActivity.setActivityTime(oldForderActivity.getActivityTime()
+		 * ); newForderActivity.setAddress(oldForderActivity.getAddress());
+		 * newForderActivity.setAdminCompany(adminUser.getAdminCompany());
+		 * newForderActivity.setBoundCompany(adminUser.getAdminCompany().getId()
+		 * ); newForderActivity.setBoundId(adminUser.getId());
+		 * newForderActivity.setAdminUser(adminUser);
+		 * newForderActivity.setDescription(oldForderActivity.getDescription());
+		 * newForderActivity.setForderActivityName(oldForderActivity.
+		 * getForderActivityName()); newForderActivity.setBaseutisActivityId(new
+		 * ObjectId(new Date()).toString());
+		 * newForderActivity.setPersonActivityId(new ObjectId(new
+		 * Date()).toString()); newForderActivity.setParentId("0"); List<Type>
+		 * listType = new ArrayList<Type>(); Type t = new Type();
+		 * t.setType(BaseType.Type.PERSION); listType.add(t);
+		 * newForderActivity.setListType(listType);
+		 * newForderActivity.setType(BaseType.Type.PERSION.toString());
+		 * 
+		 * }else{
+		 * 
+		 * newForderActivity = forderActivity; }
+		 * 
+		 * this.forderActivityService.save(newForderActivity);
+		 * 
+		 * Resource newResource = new Resource();
+		 * newResource.setAdminCompanyId("");
+		 * newResource.setAdminUser(adminUser);
+		 * newResource.setBoundId(adminUser.getId());
+		 * newResource.setEditorImgInfo(res.getEditorImgInfo());
+		 * newResource.setExtensionName(res.getExtensionName());
+		 * newResource.setFileType(res.getFileType());
+		 * newResource.setGenerateName(res.getGenerateName());
+		 * newResource.setImgCompressionBean(res.getImgCompressionBean());
+		 * newResource.setImgInfoBean(res.getImgInfoBean());
+		 * newResource.setOriginalName(res.getOriginalName());
+		 * newResource.setOriginalPath(res.getOriginalPath());
+		 * newResource.setSource(res.getSource());
+		 * newResource.setUploadPerson(res.getUploadPerson());
+		 * newResource.setPersonActivityId(forderActivity.getPersonActivityId())
+		 * ; this.resourceService.insert(newResource); }
+		 */
 
 	}
 
@@ -740,89 +773,64 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		return modelAndView;
 
 	}
-	
-	
-	
-	
-	
+
 	@RequestMapping(value = "/getInformationRegister")
 	@ResponseBody
-	@SystemErrorLog(description="查询快捷选项")
+	@SystemErrorLog(description = "查询快捷选项")
 	@SystemControllerLog(description = "查询快捷选项")
 	public BasicDataResult getInformationRegister() {
 
-		BasicDataResult result  =  this.informationRegisterService.togetInformationRegister();
-		System.out.println(result);
+		BasicDataResult result = this.informationRegisterService.togetInformationRegister();
 		return result;
 
-	
-		
-
 	}
-	
-	
-	
-	@SystemErrorLog(description="查询图片出错")
+
+	@SystemErrorLog(description = "查询图片出错")
 	@RequestMapping("/searchImgsByQuerys")
-	public ModelAndView searchImgsByQuerys(@RequestParam(defaultValue="",value="selectQuery")String selectQuery,
+	public ModelAndView searchImgsByQuerys(@RequestParam(defaultValue = "", value = "selectQuery") String selectQuery,
+			@RequestParam(defaultValue = "", value = "selectVal") String selectVal,
 			@RequestParam(value = "sort", defaultValue = "DESC") String sort,
 			@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "50") int pageSize
-			){
-		
+			@RequestParam(value = "pageSize", defaultValue = "50") int pageSize) {
+
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/photo-gallery/photoMessage/searchIndex");
 
-		
 		Pagination<Resource> pageList = new Pagination<Resource>();
 
 		Query query = new Query();
 
-		if (Common.isNotEmpty(selectQuery)) {
-			
-			Criteria cr = new Criteria();
-			
-			query.addCriteria(cr.orOperator(Criteria.where("originalName").regex(selectQuery),
-					Criteria.where("createDate").regex(selectQuery),
-					Criteria.where("extensionName").regex(selectQuery),
-					Criteria.where("uploadPerson").regex(selectQuery),
-					Criteria.where("editorImgInfo.resourceName").regex(selectQuery),
-					Criteria.where("editorImgInfo.person").regex(selectQuery),
-					Criteria.where("editorImgInfo.photographer").regex(selectQuery),
-					Criteria.where("editorImgInfo.resourceAddress").regex(selectQuery)));
-			
+		if (Common.isNotEmpty(selectQuery) && Common.isNotEmpty(selectVal)) {
+
+			query.addCriteria(Criteria.where(selectQuery).regex(selectVal));
+
+			/*
+			 * Criteria cr = new Criteria();
+			 * 
+			 * query.addCriteria(cr.orOperator(Criteria.where("originalName").
+			 * regex(selectQuery),
+			 * Criteria.where("createDate").regex(selectQuery),
+			 * Criteria.where("extensionName").regex(selectQuery),
+			 * Criteria.where("uploadPerson").regex(selectQuery),
+			 * Criteria.where("editorImgInfo.resourceName").regex(selectQuery),
+			 * Criteria.where("editorImgInfo.person").regex(selectQuery),
+			 * Criteria.where("editorImgInfo.photographer").regex(selectQuery),
+			 * Criteria.where("editorImgInfo.resourceAddress").regex(selectQuery
+			 * )));
+			 */
+
 		}
 		query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
 				"createTime"));
-		
+
 		query.addCriteria(Criteria.where("personActivityId").is(null));
-		
+
 		pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
 		modelAndView.addObject("searchList", pageList);
+		modelAndView.addObject("selectVal", selectVal);
 		modelAndView.addObject("selectQuery", selectQuery);
 
-		
 		return modelAndView;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

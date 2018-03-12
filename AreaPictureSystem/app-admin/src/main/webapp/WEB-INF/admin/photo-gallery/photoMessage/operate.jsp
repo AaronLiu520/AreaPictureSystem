@@ -14,6 +14,9 @@
             uploadMultiple: true,
             parallelUploads: 100,
             maxFiles: 100,
+            addRemoveLinks: true,
+            dictRemoveFile: "删除文件",
+            dictDefaultMessage: "拖放文件来上传",
             // Dropzone settings
             init: function () {
                 var myDropzone = this;
@@ -30,6 +33,8 @@
                 this.on("errormultiple", function (files, response) {
 
                 });
+                
+                
             }
 
         }

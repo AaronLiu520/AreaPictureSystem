@@ -52,9 +52,12 @@ public class InformationRegisterService extends GeneralServiceImpl<InformationRe
 		if(inf!=null){
 			return basic.build(200, "success", inf);
 		}
+		if(inf ==null){
+			return basic.build(200, "success", null);
+		}
 		
 		
-		return basic.build(0, "error", null);
+		return basic.build(400, "error", null);
 		
 	}
 	

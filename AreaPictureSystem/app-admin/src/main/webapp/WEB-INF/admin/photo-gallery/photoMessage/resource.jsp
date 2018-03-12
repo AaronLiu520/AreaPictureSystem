@@ -84,7 +84,7 @@ p {
 
 <body>
 	<!-- 资源管理模块 -->
-	<div class="col-lg-9 animated fadeInRight">
+	<div class="col-lg-12 animated fadeInRight">
 		<div class="mail-box-header">
 
 			<!-- 创建子文件夹 -->
@@ -112,6 +112,7 @@ p {
 								<c:if test="${webType=='AREA'}"> 区域 </c:if>
 								<c:if test="${webType=='BASEUTIS'}"> 基层单位 </c:if>
 								<c:if test="${webType=='DIRECTLYUTIS'}"> 直属单位 </c:if>
+								<c:if test="${webType=='PERSION'}"> 个人</c:if>
 								《 ${fa.forderActivityName} 》
 							</h2>
 

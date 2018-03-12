@@ -57,6 +57,10 @@ public class ForderActivity extends GeneralBean {
 	private String parentId;// 付文件夹Id
 	private String personActivityId;//个人活动的ID
 	private String baseutisActivityId;//直属活动的ID
+	private String year;
+	private String month;
+	private String day;
+	
 	
 	public String getForderActivityName() {
 		return forderActivityName;
@@ -154,11 +158,25 @@ public class ForderActivity extends GeneralBean {
 	public void setBaseutisActivityId(String baseutisActivityId) {
 		this.baseutisActivityId = baseutisActivityId;
 	}
-	
-	
-	
-	
-	
+	public String getYear() {
+		return year;
+	}
+	public void setYear(String year) {
+		this.year = year;
+	}
+	public String getMonth() {
+		return month;
+	}
+	public void setMonth(String month) {
+		this.month = month;
+	}
+	public String getDay() {
+		return day;
+	}
+	public void setDay(String day) {
+		this.day = day;
+	}
+
 
 
 

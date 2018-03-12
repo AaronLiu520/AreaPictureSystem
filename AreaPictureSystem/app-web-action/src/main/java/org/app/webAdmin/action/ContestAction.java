@@ -17,7 +17,9 @@ import org.app.framework.action.GeneralAction;
 import org.app.framework.util.Common;
 import org.app.framework.util.FileOperateUtil;
 import org.app.webAdmin.pojo.Contest;
+import org.app.webAdmin.pojo.ContestImages;
 import org.app.webAdmin.pojo.UsersUploads;
+import org.app.webAdmin.service.ContestImagesService;
 import org.app.webAdmin.service.ContestService;
 import org.app.webAdmin.service.UsersUploadsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,9 @@ public class ContestAction extends GeneralAction<Contest> {
 
 	@Autowired
 	private UsersUploadsService usersUploadService;
+	
+	@Autowired
+	private ContestImagesService contestImagesService;
 	
 
 	@RequestMapping("/listContest")
@@ -117,12 +122,26 @@ public class ContestAction extends GeneralAction<Contest> {
 			if (Common.isNotEmpty(delIds[i])) {
 
 				Contest contest = this.contestService.findOneById(delIds[i], Contest.class);
+				//删除比赛同时删除投稿的信息
+				
+				List<UsersUploads> list = this.usersUploadService.findUsersByUsersId(null, contest.getId());
+				
+				for(UsersUploads up:list){
+					this.usersUploadService.remove(up);
+				}
+				
+				List<ContestImages> ci = this.contestImagesService.listContestImages(null, contest.getId());
+
+				for(ContestImages c:ci){
+					this.contestImagesService.remove(c);
+				}
 
 				if (contest != null) {
 
 					this.contestService.remove(contest);
 
 				}
+				
 			}
 
 		}

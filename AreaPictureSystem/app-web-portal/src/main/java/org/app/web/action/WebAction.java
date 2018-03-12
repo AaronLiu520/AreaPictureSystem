@@ -712,7 +712,7 @@ public class WebAction extends GeneralAction<WebPortal> {
 		email.setFromAddress(username);
 		email.setSubject("您正在使用教职工摄影网进行修改密码操作");
 		email.setToAddress(emailPath);
-		email.setContent("您的验证码是："+code+"，验证码有效期为30分钟，为了您帐号的安全，请不要将验证码给他人。。"+Common.fromDateH());
+		email.setContent("您的帐号"+users.getAccountName()+"正在修改密码，验证码是："+code+"，验证码有效期为30分钟，为了您帐号的安全，请不要将验证码给他人。。"+Common.fromDateH());
 		
 		this.emailService.sendMail(email);
 		

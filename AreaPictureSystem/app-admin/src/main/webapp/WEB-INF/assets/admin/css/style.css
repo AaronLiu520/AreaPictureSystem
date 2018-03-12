@@ -69,7 +69,8 @@ h5 {
   border: 0;
 }
 .navbar-default {
-  background-color: transparent;
+ /*  background-color: transparent; */
+   background-color: #293846;
   border-color: #2f4050;
 }
 .navbar-top-links li {
@@ -161,7 +162,7 @@ body.body-small .navbar-top-links li:last-child {
 }
 .nav-header {
   padding: 33px 25px;
-  background: url("patterns/header-profile.png") no-repeat;
+  background: url("patterns/header-profile.png");
 }
 .pace-done .nav-header {
   transition: all 0.5s;
@@ -6298,13 +6299,13 @@ body.skin-3 {
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
-    margin: 0 0 0 220px;
+    margin: 0 0 0 320px;
     min-height: 600px;
   }
   .navbar-static-side {
     z-index: 2001;
     position: absolute;
-    width: 220px;
+    width: 320px;
   }
   .navbar-top-links .dropdown-messages,
   .navbar-top-links .dropdown-tasks,

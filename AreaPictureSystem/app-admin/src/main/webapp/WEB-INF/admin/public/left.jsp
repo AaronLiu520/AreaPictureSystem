@@ -64,10 +64,18 @@ li_style {
 li_style:hover {
 	background-color: blue;
 }
+
 </style>
+
+
 <body>
-	<nav class="navbar-default navbar-static-side" role="navigation">
-		<div class="sidebar-collapse">
+
+	<nav class="navbar-default navbar-static-side" role="navigation" >
+
+		<div  id="left-width"   style=" overflow:auto;   width: auto; border: 1px solid #999;" style="background-color: #2f4050">
+
+
+
 			<ul class="nav" id="side-menu">
 				<li class="nav-header">
 
@@ -86,9 +94,6 @@ li_style:hover {
 
 
 
-
-
-
 						</span> <a data-toggle="dropdown" class="dropdown-toggle"
 							href="index.html#"> <span class="clear"> <span
 								class="block m-t-xs"> <strong class="font-bold">
@@ -100,9 +105,9 @@ li_style:hover {
 						</a>
 						<ul class="dropdown-menu animated fadeInRight m-t-xs">
 
-							<li><a
+							<%-- 	<li><a
 								href="${pageContext.request.contextPath}/photoMessageAction/index/PERSION">个人图片库</a></li>
-
+ --%>
 							<li><a
 								href="${pageContext.request.contextPath}/photoMessageAction/findMyFavorites">我的收藏夹</a></li>
 
@@ -213,37 +218,44 @@ li_style:hover {
 								<div class="modal-dialog">
 									<div class="modal-content animated bounceInRight">
 										<div class="modal-header">
-											<button type="button" class="close" data-dismiss="modal" id="EditPasswordClose">
+											<button type="button" class="close" data-dismiss="modal"
+												id="EditPasswordClose">
 												<span aria-hidden="true">&times;</span><span class="sr-only">关闭</span>
 											</button>
 											<h4 class="modal-title">密码修改</h4>
 										</div>
 
-											<div class="modal-body">
+										<div class="modal-body">
 
-												<div class="form-group">
-													<label>旧密码：</label> <label for="foroldPassword" style="float: right;"
-														id="foroldPassword" class="control-label"></label> <input
-														type="text" placeholder="旧密码" name="oldPassword"
-														id="oldPassword" class="form-control"
-														onkeyup="return checkOldPassword();" required="required">
-												</div>
-												<div class="form-group">
-													<label>新密码：</label><label for="forpassword" style="float: right;"
-														id="forpassword" class="control-label"></label>  <input type="password" placeholder="新密码" required onkeyup="return checkinput();"
-														name="password" id="password" class="form-control">
-												</div>
-												<div class="form-group">
-													<label>确认密码：</label><label for="forpasswords" style="float: right;"
-														id="forpasswords" class="control-label"></label> <input type="password" placeholder="确认密码" onkeyup="return checkinput();"
-														name="passwords" id="passwords" required
-														class="form-control">
-												</div>
+											<div class="form-group">
+												<label>旧密码：</label> <label for="foroldPassword"
+													style="float: right;" id="foroldPassword"
+													class="control-label"></label> <input type="text"
+													placeholder="旧密码" name="oldPassword" id="oldPassword"
+													class="form-control" onkeyup="return checkOldPassword();"
+													required="required">
+											</div>
+											<div class="form-group">
+												<label>新密码：</label><label for="forpassword"
+													style="float: right;" id="forpassword"
+													class="control-label"></label> <input type="password"
+													placeholder="新密码" required onkeyup="return checkinput();"
+													name="password" id="password" class="form-control">
+											</div>
+											<div class="form-group">
+												<label>确认密码：</label><label for="forpasswords"
+													style="float: right;" id="forpasswords"
+													class="control-label"></label> <input type="password"
+													placeholder="确认密码" onkeyup="return checkinput();"
+													name="passwords" id="passwords" required
+													class="form-control">
+											</div>
 
-											</div>
-											<div class="modal-footer">
-												<button type="button" onclick="return ajaxUpdatePassword();" id="submit" class="btn btn-primary">保存</button>
-											</div>
+										</div>
+										<div class="modal-footer">
+											<button type="button" onclick="return ajaxUpdatePassword();"
+												id="submit" class="btn btn-primary">保存</button>
+										</div>
 									</div>
 								</div>
 
@@ -265,18 +277,20 @@ li_style:hover {
 				</li>
 
 
+
+
 				<!-- 区域图片库-->
 				<li class="active"><a><i class="fa fa-th-large"
 						style="margin-left: -10px;"></i> <span class="nav-label">区域图片库</span>
 						<span class="fa arrow"></span> </a>
-					<ul style="color: #c7c7c7; margin-left: -20px;">
+					<ul style="color: #c7c7c7; margin-left: -30px;">
 						<%@include file="areatreetime.jsp"%>
 					</ul></li>
 				<!--直属单位-->
 				<li class="active"><a><i class="fa fa-columns"
 						style="margin-left: -10px;"></i> <span class="nav-label">直属单位</span>
 						<span class="fa arrow"></span> </a>
-					<ul style="color: #c7c7c7; margin-left: -20px;">
+					<ul style="color: #c7c7c7; margin-left: -30px;">
 						<%@include file="directlytreetime.jsp"%>
 					</ul></li>
 				<!--基层单位-->
@@ -286,9 +300,19 @@ li_style:hover {
 					<ul style="color: #c7c7c7; margin-left: -30px;">
 						<%@include file="basetreetime.jsp"%>
 					</ul></li>
+				<!-- 个人图片库-->
+				<li class="active"><a><i class="fa fa-th-large"
+						style="margin-left: -10px;"></i> <span class="nav-label">个人图片库</span>
+						<span class="fa arrow"></span> </a>
+					<ul style="color: #c7c7c7; margin-left: -30px;">
+						<%@include file="persontreetime.jsp"%>
+					</ul></li>
+
+
+
 
 				<!-- 以上菜单为固定菜单，以下菜单为动态数据库权限菜单-->
-				<c:forEach items="${listMenu}" var="item" varStatus="status">
+				<%-- <c:forEach items="${listMenu}" var="item" varStatus="status">
 
 					<!-- 一级菜单，根目录   updateFormValue(id,name,type,icon,url,orderby,remark,pid)-->
 					<c:if test="${item.pid == '0'}">
@@ -402,16 +426,16 @@ li_style:hover {
 			</c:if>
 			</c:forEach>
 
-
+ --%>
 
 			</ul>
 
 		</div>
 
 	</nav>
-	
-	
-	
+
+
+
 	<!-- 弹出层提示 -->
 	<div class="modal inmodal fade" id="titleMessage" tabindex="-1"
 		role="dialog" aria-hidden="true" style="padding: 15%">
@@ -427,25 +451,25 @@ li_style:hover {
 					<!-- <h3>您确认是否要删除此记录吗?</h3> -->
 				</div>
 				<div class="modal-footer">
-		
+
 					<button type="button" data-dismiss="modal"
 						class="btn btn-primary delete-confirm-btn">确认</button>
 				</div>
 			</div>
 		</div>
 	</div>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
+
+
+
+
+
+
 
 	<!-- 主要的 scripts -->
 	<script
@@ -472,7 +496,7 @@ li_style:hover {
 	<!-- 全文搜索与查询 -->
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/summernote/summernote.min.js"></script>
-	<script	
+	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/plugins/summernote/summernote-zh-CN.js"></script>
 	<!-- 树 -->
 	<script
@@ -495,6 +519,17 @@ li_style:hover {
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/assets/admin/commons.js">
 	</script>
+
+<script type="text/javascript">
+
+	$(function(){
+		
+		var h = document.body.clientHeight;
+		$("#left-width").height(h);
+	})
+
+</script>
+
 
 
 
@@ -597,14 +632,45 @@ li_style:hover {
 
 				}
 			});
+			<!--个人时间轴-->
+			$('#photoTimeList').jstree({
+				'core' : {
+					'check_callback' : true
+				},
+				'plugins' : [ 'types', 'dnd' ],
+				'types' : {
+					'default' : {
+						'icon' : 'fa fa-folder'
+					},
+					'html' : {
+						'icon' : 'fa fa-file-code-o'
+					},
+					'svg' : {
+						'icon' : 'fa fa-file-picture-o'
+					},
+					'css' : {
+						'icon' : 'fa fa-file-code-o'
+					},
+					'img' : {
+						'icon' : 'fa fa-file-image-o'
+					},
+					'js' : {
+						'icon' : 'fa fa-file-text-o'
+					}
+
+				}
+			});
 		});
 
 		// 时间轴（活动的单事件）
-		function checkActivityType(id, webType) {
+		function checkActivityType(id, webType,year,month,day) {
 			window.location.href = "${pageContext.request.contextPath}/photoMessageAction/checkActivity/"
-					+ webType + "?checkId=" + id
+					+ webType + "?checkId=" + id+ "&year=" + year+ "&month=" + month+ "&day=" + day;
 		}
-
+		function checkActivityTypeBase(id, webType,year,month,day,nature,company) {
+			window.location.href = "${pageContext.request.contextPath}/photoMessageAction/checkActivity/"
+				+ webType + "?checkId=" + id+ "&year=" + year+ "&month=" + month+ "&day=" + day+ "&nature=" + nature+ "&company=" + company;
+	}
 		// 时间轴（首页）
 		function ActivityIndex(webType) {
 			window.location.href = "${pageContext.request.contextPath}/photoMessageAction/index/"

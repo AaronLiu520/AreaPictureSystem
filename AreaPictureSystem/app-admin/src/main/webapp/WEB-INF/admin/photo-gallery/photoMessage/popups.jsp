@@ -281,30 +281,33 @@
 					var a = "";
 					var aa=null;
 					if(o !=""){
-						var made_o="made_"+o
 						
-						if(o=="resourceName"){
-							aa=msg.data.resourceNameList;
+						if(msg.data!=null){
+							var made_o="made_"+o
+							if(o=="resourceName"){
+								aa=msg.data.resourceNameList;
+							}
+							if(o=="person"){
+								aa=msg.data.personList;
+							}
+							if(o=="photographer"){
+								aa=msg.data.photographerList;
+							}
+							if(o=="resourceAddress"){
+								aa=msg.data.resourceAddressList;
+							}
+							
+							$.each(aa,function(index,value){
+								a+="<li><a href='javascript:void(0);' onclick=setvalue('"+made_o+"','"+value+"');>"+value+"</a></li>"
+								});
+						}else{
+							a="<li><a href='javascript:void(0);'></a></li>"
 						}
-						if(o=="person"){
-							aa=msg.data.personList;
-						}
-						if(o=="photographer"){
-							aa=msg.data.photographerList;
-						}
-						if(o=="resourceAddress"){
-							aa=msg.data.resourceAddressList;
-						}
-						
-						$.each(aa,function(index,value){
-							a+="<li><a href='javascript:void(0);' onclick=setvalue('"+made_o+"','"+value+"');>"+value+"</a></li>"
-							});
 							$("#"+o).html(a);
 					}
 					
-					
 				}else{
-					alert("连接服务器失败请与管理员联系");
+					alert("获取信息过程中发生错误，请与管理员联系！");
 					
 				}
 			}

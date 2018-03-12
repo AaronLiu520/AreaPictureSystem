@@ -42,15 +42,16 @@
     <div id="wrapper">
      <!-- .aside left menu -->
 	<%@include file="../../public/left.jsp" %>
-        <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div id="page-wrapper" class="gray-bg dashbard-1" >
         <!-- .aside top jsp -->
            <%@include file="../../public/top.jsp" %>
 
 
             <div class="wrapper wrapper-content">
                 <div class="row">
+                
                     <!--left -->
-                    <div class="col-lg-3">
+                  <%--   <div class="col-lg-3">
                         <div class="ibox float-e-margins">
                             <div class="ibox-content mailbox-content">
                                 <div class="file-manager">
@@ -71,25 +72,25 @@
 
 
                                     <!-- 如果是基层单位 显示（类型）
-                                    <%--<c:if test="${webType=='BASEUTIS'}">--%>
-                                        <%--<%@include file="baseuitls.jsp" %>--%>
-                                    <%--</c:if>--%>
+                                    <c:if test="${webType=='BASEUTIS'}">
+                                        <%@include file="baseuitls.jsp" %>
+                                    </c:if>
                                     <!-- 标签内容 -->
-                                    <%--<c:if test="${not empty lableList}">--%>
-                                        <%--<h5 class="tag-title">标签</h5>--%>
-                                        <%--<ul class="tag-list" style="padding: 0">--%>
-                                            <%--<c:forEach items="${lableList}" var="item" varStatus="status">--%>
-                                                <%--<li><a href=""><i class="fa fa-tag"></i> ${item.labelName}</a>--%>
-                                                <%--</li>--%>
-                                            <%--</c:forEach>--%>
-                                        <%--</ul>--%>
-                                    <%--</c:if>--%>
-                                    <%--<div class="clearfix"></div>--%>
+                                    <c:if test="${not empty lableList}">
+                                        <h5 class="tag-title">标签</h5>
+                                        <ul class="tag-list" style="padding: 0">
+                                            <c:forEach items="${lableList}" var="item" varStatus="status">
+                                                <li><a href=""><i class="fa fa-tag"></i> ${item.labelName}</a>
+                                                </li>
+                                            </c:forEach>
+                                        </ul>
+                                    </c:if>
+                                    <div class="clearfix"></div>
 
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --%>
                     <!-- 资源管理 -->
                     <%@include file="resource.jsp" %>
 

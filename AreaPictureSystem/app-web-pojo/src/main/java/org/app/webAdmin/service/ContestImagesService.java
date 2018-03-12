@@ -16,6 +16,7 @@ import org.app.webAdmin.pojo.Contest;
 import org.app.webAdmin.pojo.ContestImages;
 import org.app.webAdmin.pojo.Users;
 import org.app.webAdmin.pojo.UsersUploads;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -41,6 +42,7 @@ public class ContestImagesService extends GeneralServiceImpl<ContestImages> {
 
 	@Autowired
 	private UsersUploadsService usersUploadsService;
+	
 
 	/**
 	 * 
@@ -94,5 +96,49 @@ public class ContestImagesService extends GeneralServiceImpl<ContestImages> {
 		return BasicDataResult.build(200, "上传图片成功", null);
 
 	}
+	
+	
+	
+	
+	/**
+	 * 
+	* @Title: listContestImages 
+	* @Description: TODO(根据用户id查询所有用户资源) 
+	* @param @param usersId
+	* @param @return    设定文件 
+	* @return List<ContestImages>    返回类型 
+	* @throws
+	 */
+	public List<ContestImages> listContestImages(String usersId,String contestId) {
+
+		Query query = new Query();
+		
+		if(Common.isNotEmpty(usersId)){
+			
+			query.addCriteria(Criteria.where("users.$id").is(new ObjectId(usersId)));
+		}
+		else if(Common.isNotEmpty(contestId)){
+			
+			query.addCriteria(Criteria.where("contest.$id").is(new ObjectId(contestId)));
+			
+		}
+		
+		List<ContestImages> list = this.find(query, ContestImages.class);
+		
+		if(list!=null)
+			return list;
+		else 
+			return null;
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 
 }
