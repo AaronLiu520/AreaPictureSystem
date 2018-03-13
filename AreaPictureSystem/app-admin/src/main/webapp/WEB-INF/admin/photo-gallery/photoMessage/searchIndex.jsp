@@ -348,7 +348,7 @@
                                             </c:otherwise>
 												</c:choose>
 
-												<br /> <small> <!-- 只有：管理员 与 自己上传的图片才修改、删除--> <c:choose>
+												<br /> <small> <!-- (id_,searchQuery_,searchVal_,pageNo_,pageSize_) 只有：管理员 与 自己上传的图片才修改、删除--> <c:choose>
 														<c:when
 															test="${sessionScope.userSession.userType eq 'ADMINISTRATORS'  || sessionScope.userSession.id == item.boundId }">
 															<span> <a
@@ -357,11 +357,11 @@
 																	'${item.editorImgInfo.description}')"
 																data-toggle="modal" data-target="#File_Made"> 描述 </a>
 															</span>
-															<span style="padding-left: 10%;"> <a
-																onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">删除
-															</a>
-															</span>
-														</c:when>
+																			<span style="padding-left: 10%;"> <a
+																				onclick="deleteAlertIndex('${item.id}','${selectQuery}','${selectVal}','${pageNo }','${pageSize}')">删除
+																			</a>
+																			</span>
+																		</c:when>
 														<c:otherwise>
 															<span style="padding-left: 10%;"> </span>
 
@@ -402,7 +402,7 @@
 					<c:if test="${not empty searchList.datas}">
 						<div class="btn-group" style="margin: 0 auto;">
 							<a
-								href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&pageNo=${searchList.upPage}"
+								href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&selectVal=${selectVal }&pageNo=${searchList.upPage}"
 								type="button" class="btn btn-white"> <i
 								class="fa fa-chevron-left"></i>
 							</a>
@@ -414,14 +414,14 @@
 									</c:when>
 									<c:otherwise>
 										<a
-											href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&pageNo=${nav}"
+											href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&selectVal=${selectVal }&pageNo=${nav}"
 											class="btn btn-white">${nav}</a>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 
 							<a
-								href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&pageNo=${searchList.nextPage}"
+								href="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys?selectQuery=${selectQuery}&selectVal=${selectVal }&pageNo=${searchList.nextPage}"
 								type="button" class="btn btn-white"> <i
 								class="fa fa-chevron-right"></i>
 							</a>

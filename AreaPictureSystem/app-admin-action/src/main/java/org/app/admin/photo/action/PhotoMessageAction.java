@@ -116,7 +116,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 			modelAndView.addObject("listAdminCompany", lac);
 			LoginInterceptor lo = new LoginInterceptor();
-			List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac, session,"");
+			List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac, session, "");
 			// List<LayerAdmonCompany> llac =
 			// LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
 			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac, session);
@@ -168,9 +168,8 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
 			@RequestParam(value = "pageSize", defaultValue = "21") Integer pageSize,
 			@RequestParam(value = "sort", defaultValue = "DESC") String sort,
-			@RequestParam(value = "mfregex", defaultValue = "") String mfregex,
-			HttpSession session, 
-			@RequestParam(value = "checkId", defaultValue = "")String checkId,
+			@RequestParam(value = "mfregex", defaultValue = "") String mfregex, HttpSession session,
+			@RequestParam(value = "checkId", defaultValue = "") String checkId,
 			@RequestParam(value = "year", defaultValue = "") String year,
 			@RequestParam(value = "month", defaultValue = "") String month,
 			@RequestParam(value = "day", defaultValue = "") String day,
@@ -204,45 +203,53 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 		if (checkId != null)
 			session.setAttribute("checkActivityId", checkId);
-//		Query querylistFA = new Query();
-//		// 如果用户是个人
-//		if (type.equals(BaseType.Type.PERSION.toString())) {
-//			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type, "boundId", adminUser.getId());
-//
-//		} else {
-//			querylistFA = super.craeteQueryWhere("parentId", "0", "listType.type", type);
-//		}
-//
-//		List<ForderActivity> listFA = this.forderActivityService.find(querylistFA, ForderActivity.class);
-//
-//		// 如果用户是 BASEUTIS
-//
-//		if (type.equals(BaseType.Type.BASEUTIS.toString())) {
-//
-//			List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, session);
-//			// List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA,
-//			// fa.getActivityTime(),false);
-//			// 加载所有的企业
-//			List<AdminCompany> lac = this.AdminCompanyService.find(new Query(), AdminCompany.class);
-//			modelAndView.addObject("listAdminCompany", lac);
-//			LoginInterceptor lo = new LoginInterceptor();
-//
-//			List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac, session,checkId);
-//			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac, session);
-//			log.info(lbpt.toString());
-//
-//			modelAndView.addObject("basePhotoTimeList", session.getAttribute("basePhotoTimeList"));
-//			// modelAndView.addObject("basePhotoTimeList", lbpt);
-//
-//		} else {
-//
-//			// 按日期进行分类,并且中当前菜单
-//			// modelAndView.addObject("photoTimeList",
-//			// PhotoTime.getPhotoTime(listFA,session));
-//			modelAndView.addObject("photoTimeList", session.getAttribute("photoTimeList"));
-//			// modelAndView.addObject("photoTimeList",
-//			// PhotoTime.getPhotoTime(listFA, fa.getActivityTime(),true));
-//		}
+		// Query querylistFA = new Query();
+		// // 如果用户是个人
+		// if (type.equals(BaseType.Type.PERSION.toString())) {
+		// querylistFA = super.craeteQueryWhere("parentId", "0",
+		// "listType.type", type, "boundId", adminUser.getId());
+		//
+		// } else {
+		// querylistFA = super.craeteQueryWhere("parentId", "0",
+		// "listType.type", type);
+		// }
+		//
+		// List<ForderActivity> listFA =
+		// this.forderActivityService.find(querylistFA, ForderActivity.class);
+		//
+		// // 如果用户是 BASEUTIS
+		//
+		// if (type.equals(BaseType.Type.BASEUTIS.toString())) {
+		//
+		// List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA, session);
+		// // List<PhotoTime> lpt = PhotoTime.getPhotoTime(listFA,
+		// // fa.getActivityTime(),false);
+		// // 加载所有的企业
+		// List<AdminCompany> lac = this.AdminCompanyService.find(new Query(),
+		// AdminCompany.class);
+		// modelAndView.addObject("listAdminCompany", lac);
+		// LoginInterceptor lo = new LoginInterceptor();
+		//
+		// List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac,
+		// session,checkId);
+		// List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac,
+		// session);
+		// log.info(lbpt.toString());
+		//
+		// modelAndView.addObject("basePhotoTimeList",
+		// session.getAttribute("basePhotoTimeList"));
+		// // modelAndView.addObject("basePhotoTimeList", lbpt);
+		//
+		// } else {
+		//
+		// // 按日期进行分类,并且中当前菜单
+		// // modelAndView.addObject("photoTimeList",
+		// // PhotoTime.getPhotoTime(listFA,session));
+		// modelAndView.addObject("photoTimeList",
+		// session.getAttribute("photoTimeList"));
+		// // modelAndView.addObject("photoTimeList",
+		// // PhotoTime.getPhotoTime(listFA, fa.getActivityTime(),true));
+		// }
 
 		// TODO 如果 type 是 基本层单位，（中学，小学，幼儿园）
 		// 标签
@@ -383,11 +390,25 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	 * @return
 	 */
 	@RequestMapping("/delete/{type}")
-	public ModelAndView delete(String activityId, @PathVariable("type") String type,
-			@RequestParam(value = "id", defaultValue = "0") String id,
-			@RequestParam(value = "ids", defaultValue = "0") String ids) {
+	public ModelAndView delete(@RequestParam(value = "activityId", defaultValue = "0") String activityId,
+			@PathVariable("type") String type, @RequestParam(value = "id", defaultValue = "0") String id,
+			@RequestParam(value = "ids", defaultValue = "0") String ids,
+			@RequestParam(value = "selectQuery", defaultValue = "") String selectQuery,
+			@RequestParam(value = "selectVal", defaultValue = "") String selectVal,
+			@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+			@RequestParam(value = "pageSize", defaultValue = "21") int pageSize)
+
+	{
 		ModelAndView modelAndView = new ModelAndView();
-		modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + activityId);
+
+		if(type.equals("index")){
+			modelAndView.setViewName("redirect:/photoMessageAction/searchImgsByQuerys?selectQuery=" + selectQuery
+					+"&selectVal="+selectVal+"&pageNo="+pageNo+"&pageSize="+pageSize);
+		}else{
+			
+			modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + activityId);
+		}
+
 		try {
 			String deleteId[] = id.split(",");
 			for (int i = 0; i < deleteId.length; i++) {
@@ -402,40 +423,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		return modelAndView;
 	}
 
-	/**
-	 * 创建活动
-	 *
-	 * @param session
-	 * @param fa
-	 * @return
-	 */
-	/*
-	 * @SystemErrorLog(description = "创建活动出错")
-	 * 
-	 * @RequestMapping("/createActivity/{type}") public ModelAndView
-	 * createActivity(@PathVariable("type") String type, HttpSession session,
-	 * ForderActivity fa) { ModelAndView modelAndView = new ModelAndView();
-	 * 
-	 * AdminUser au = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
-	 * if (au == null) return null; else fa.setCreatUser(au); if
-	 * (au.getAdminCompany() != null) {
-	 * fa.setAdminCompany(au.getAdminCompany()); } if
-	 * (Common.isEmpty(fa.getBoundCompany())) {
-	 * fa.setBoundCompany(au.getAdminCompany().getId()); }
-	 * 
-	 * log.info(fa.getBoundId()); this.forderActivityService.insert(fa);
-	 * 
-	 * Query query = super.craeteQueryWhere("forderActivityName",
-	 * fa.getForderActivityName()); ForderActivity forderActivity =
-	 * this.forderActivityService.findOneByQuery(query, ForderActivity.class);
-	 * 
-	 * modelAndView.setViewName( "redirect:/photoMessageAction/checkActivity/" +
-	 * type + "?checkId=" + forderActivity.getId());
-	 * 
-	 * return modelAndView;
-	 * 
-	 * }
-	 */
 	/**
 	 * @param @param
 	 *            resourceId
@@ -578,7 +565,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 							String day = today.substring(today.lastIndexOf("-") + 1, today.length());
 							newForderActivity.setDay(day);
 							List<Type> listType = new ArrayList<Type>();
-							
+
 							Type t = new Type();
 							t.setType(BaseType.Type.PERSION);
 							listType.add(t);
@@ -620,51 +607,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 			return BasicDataResult.build(203, "请选择需要同步的图片", false);
 		}
-
-		/*
-		 * if (resource == null) { ForderActivity newForderActivity = new
-		 * ForderActivity(); //如果没有该活动则创建一个新的个人活动 // 4,如果查询出来为空，那么执行添加
-		 * if(forderActivity == null){
-		 * newForderActivity.setActivityTime(oldForderActivity.getActivityTime()
-		 * ); newForderActivity.setAddress(oldForderActivity.getAddress());
-		 * newForderActivity.setAdminCompany(adminUser.getAdminCompany());
-		 * newForderActivity.setBoundCompany(adminUser.getAdminCompany().getId()
-		 * ); newForderActivity.setBoundId(adminUser.getId());
-		 * newForderActivity.setAdminUser(adminUser);
-		 * newForderActivity.setDescription(oldForderActivity.getDescription());
-		 * newForderActivity.setForderActivityName(oldForderActivity.
-		 * getForderActivityName()); newForderActivity.setBaseutisActivityId(new
-		 * ObjectId(new Date()).toString());
-		 * newForderActivity.setPersonActivityId(new ObjectId(new
-		 * Date()).toString()); newForderActivity.setParentId("0"); List<Type>
-		 * listType = new ArrayList<Type>(); Type t = new Type();
-		 * t.setType(BaseType.Type.PERSION); listType.add(t);
-		 * newForderActivity.setListType(listType);
-		 * newForderActivity.setType(BaseType.Type.PERSION.toString());
-		 * 
-		 * }else{
-		 * 
-		 * newForderActivity = forderActivity; }
-		 * 
-		 * this.forderActivityService.save(newForderActivity);
-		 * 
-		 * Resource newResource = new Resource();
-		 * newResource.setAdminCompanyId("");
-		 * newResource.setAdminUser(adminUser);
-		 * newResource.setBoundId(adminUser.getId());
-		 * newResource.setEditorImgInfo(res.getEditorImgInfo());
-		 * newResource.setExtensionName(res.getExtensionName());
-		 * newResource.setFileType(res.getFileType());
-		 * newResource.setGenerateName(res.getGenerateName());
-		 * newResource.setImgCompressionBean(res.getImgCompressionBean());
-		 * newResource.setImgInfoBean(res.getImgInfoBean());
-		 * newResource.setOriginalName(res.getOriginalName());
-		 * newResource.setOriginalPath(res.getOriginalPath());
-		 * newResource.setSource(res.getSource());
-		 * newResource.setUploadPerson(res.getUploadPerson());
-		 * newResource.setPersonActivityId(forderActivity.getPersonActivityId())
-		 * ; this.resourceService.insert(newResource); }
-		 */
 
 	}
 
@@ -796,13 +738,32 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/photo-gallery/photoMessage/searchIndex");
 
+		modelAndView.addObject("webType", "index");
+
 		Pagination<Resource> pageList = new Pagination<Resource>();
 
 		Query query = new Query();
 
 		if (Common.isNotEmpty(selectQuery) && Common.isNotEmpty(selectVal)) {
+			
+			if(selectQuery.equals("forderActivityAddress")){
 
-			query.addCriteria(Criteria.where(selectQuery).regex(selectVal));
+				Query addressQuery = new Query();
+				
+				addressQuery.addCriteria(Criteria.where("address").regex(selectVal));
+				
+				List<ForderActivity> listForderActivity = this.forderActivityService.find(addressQuery, ForderActivity.class);
+				
+				List<String> listIds = new ArrayList<String>();
+				
+				for(ForderActivity f : listForderActivity){
+					listIds.add(f.getId());
+				}
+				query.addCriteria(Criteria.where("forderActivityId").in(listIds));
+				
+			}else{
+				query.addCriteria(Criteria.where(selectQuery).regex(selectVal));
+			}
 
 			/*
 			 * Criteria cr = new Criteria();
@@ -824,6 +785,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 				"createTime"));
 
 		query.addCriteria(Criteria.where("personActivityId").is(null));
+		
 
 		pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
 		modelAndView.addObject("searchList", pageList);

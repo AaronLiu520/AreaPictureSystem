@@ -60,8 +60,14 @@ public class ForderActivity extends GeneralBean {
 	private String year;
 	private String month;
 	private String day;
+	private String showImg;
 	
-	
+	public String getShowImg() {
+		return showImg;
+	}
+	public void setShowImg(String showImg) {
+		this.showImg = showImg;
+	}
 	public String getForderActivityName() {
 		return forderActivityName;
 	}

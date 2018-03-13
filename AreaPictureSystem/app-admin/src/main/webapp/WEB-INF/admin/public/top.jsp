@@ -16,11 +16,13 @@
 	border: medium none;
 	font-size: 14px;
 	height: 60px;
-	width: 200px;
+	width: 145px;
 	margin: 0;
 	z-index: 2000;
 }
 </style>
+
+
 </head>
 <script type="text/javascript">
 	function tocleanForm() {
@@ -52,6 +54,7 @@
 </script>
 
 
+
 <body>
 
 	<div class="row border-bottom white-bg">
@@ -60,9 +63,9 @@
 				<div style="width: 80%;">
 					<!-- 				 <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i>123 </a>  -->
 					<!-- 				 显示与隐常左边的菜单 -->
-					<div style="width: 200px; float: left;">
+					<div style="width: 130px; float: left;">
 						<button class=" minimalize-styl-2 btn btn-primary"
-							onclick="return tocleanForm();" style="width: 200px;">
+							onclick="return tocleanForm();" style="width: 130px;">
 							<i class="fa fa-plus">&nbsp;&nbsp;<b>上传图片</b></i>
 						</button>
 
@@ -76,24 +79,26 @@
 					<div style="width: 60%; float: left; margin-left: 20px;">
 						<form role="search" class="navbar-form-custom " method="post"
 							action="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys">
-							<div class="row" style="width: 500px;">
+							<div class="row" style="width: 400px;">
 
 								<select class="form-control m-b" name="selectQuery"
-									id="selectQuery" style="float: left; margin-left: 20px;">
+									id="selectQuery" style="float: left; margin-left: 10px;">
 									<option value="">请选择查询条件</option>
 									<option value="createDate">日期</option>
 									<option value="uploadPerson">上传者</option>
 									<option value="editorImgInfo.resourceName">图片名称</option>
 									<option value="editorImgInfo.person">图片主要人物</option>
 									<option value="editorImgInfo.photographer">拍摄者</option>
-									<option value="editorImgInfo.resourceAddress">地址</option>
-								</select> <input type="text" placeholder="请输入您需要查找的内容 …"
+									<option value="editorImgInfo.resourceAddress">图片所在地址</option>
+									<option value="forderActivityAddress">活动地址</option>
+								</select>
+								 <input type="text" placeholder="输入查询内容..."
 									style="float: left;" class="form-control" name="selectVal"
 									id="selectVal" value="${selectVal}">
 
 								<button name="name"
-									style="float: right; margin-left: 20px; margin-top: 10px;"
-									class="btn btn-primary">搜索</button>
+									style="float: left; margin-left: 10px; margin-top: 10px;"
+									class=" btn btn-primary">搜索</button>
 
 								<script type="text/javascript">
 									$(function() {
@@ -119,7 +124,7 @@
 			</div>
 			<div class="navbar-collapse collapse" id="navbar"
 				style="float: right;">
-				<ul class="nav navbar-nav" style="margin-left: 20px;">
+				<ul class="nav navbar-nav" style="margin-left: 20px;margin-top: 3px;">
 					<!-- 以上菜单为固定菜单，以下菜单为动态数据库权限菜单-->
 
 
@@ -167,7 +172,7 @@
 
 
 				<ul class="nav navbar-top-links navbar-right"
-					style="margin-top: -5px;">
+					style="margin-top: -5px;float: right;">
 
 					<li><a
 						href="${pageContext.request.contextPath}/adminUser/index"
@@ -182,59 +187,6 @@
 			</div>
 		</nav>
 	</div>
-
-
-
-
-
-
-
-	<%-- 
-
-	<div class="row border-bottom">
-		<nav class="navbar navbar-static-top" role="navigation"
-			style="margin-bottom: 0">
-			<div class="navbar-header">
-				<!--  显示与隐常左边的菜单 -->
-				<button class=" minimalize-styl-2 btn btn-primary"
-					onclick="return tocleanForm();" style="width: 200px;">
-					<i class="fa fa-plus">&nbsp;&nbsp;<b>创建活动 </b></i>
-				</button>
-				<a class=" minimalize-styl-2 btn btn-primary" id="toModal-form"
-					data-toggle="modal" style="display: none;"
-					data-target="#CrateActivity" style="width: 200px;"> </a>
-
-
-			</div>
-
-			<form role="search" class="navbar-form-custom " method="post"
-				action="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys">
-
-				<div class="form-group ">
-					<input type="text" placeholder="请输入您需要查找的内容 …" class="form-control"
-						name="selectQuery" id="selectQuery" value="${selectQuery}">
-				</div>
-
-
-			</form>
-
-			<ul class="nav navbar-top-links navbar-right">
-				<li><span class="m-r-sm text-muted welcome-message"> <a
-						href="${pageContext.request.contextPath}/adminUser/index"
-						title="返回首页"> <i class="fa fa-home"></i></a>
-				</span></li>
-
-				<li><a
-					href="${pageContext.request.contextPath}/adminUser/loginOut"
-					target="mainframer"> <i class="fa fa-sign-out"></i> 退出
-				</a></li>
-			</ul>
-
-		</nav>
-	</div>
- --%>
-
-
 
 
 
@@ -262,17 +214,15 @@
 						</div>
 						<input type="hidden" id="forderActivityNamehid">
 
+
+
+
 						<div class="form-group">
 							<label>拍摄地址：</label> <input type="text" placeholder="活动地址"
 								name="address" id="address" class="form-control">
 						</div>
-
-
-						<!-- 	<div class="form-group">
-									<label>图片上传最大数量：</label> <input type="text"
-										placeholder="图片上传最大数量" name="sumPotoCount" id="sumPotoCount"
-										class="form-control" required>
-								</div> -->
+						
+						
 
 						<div class="form-group"
 							onchange="return getrepletes('forderActivityName');">

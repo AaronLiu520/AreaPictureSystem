@@ -121,6 +121,10 @@
 <!-- delete -->
     var deleteId=null;
     var activityId=null;
+    var selectQuery = null;
+    var selectVal = null;
+    var pageNo = null;
+    var pageSize = null;
     //删除提示窗口
     function deleteAlert(id,activityid) {
         deleteId=id;
@@ -128,12 +132,41 @@
         $('#File_Delete').modal('show');
 
     }
+    //删除提示窗口
+    function deleteAlertIndex(id_,selectQuery_,selectVal_,pageNo_,pageSize_) {
+    	
+    	
+        deleteId=id_;
+        selectQuery = selectQuery_;
+        selectVal = selectVal_;
+        pageNo = pageNo_;
+        pageSize = pageSize_;
+        $('#File_Delete').modal('show');
+
+    }
 
     //删除记录
     function deleteById() {
-        if(deleteId!=null && activityId!=null){
-            window.location.href = "${pageContext.request.contextPath}/photoMessageAction/delete/${webType}?id="+deleteId
-                +"&activityId="+activityId;
+    	var query="";
+    	
+        if(deleteId!=null){
+        	
+        	if(activityId!=null){
+        		query="&activityId="+activityId;
+        	}
+        	if(selectQuery!=null){
+        		query = query+"&selectQuery="+selectQuery;
+        	}
+			if(selectVal!=null){
+				query = query+"&selectVal="+selectVal;
+			}
+			if(pageNo!=null){
+				query = query+"&pageNo="+pageNo;
+			}
+			if(pageSize!=null){
+				query = query+"&pageSize="+pageSize;
+			}
+            window.location.href = "${pageContext.request.contextPath}/photoMessageAction/delete/${webType}?id="+deleteId+query;
         }
 
     }

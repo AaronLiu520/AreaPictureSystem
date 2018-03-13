@@ -1,5 +1,6 @@
 package org.app.admin.action;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -192,30 +193,6 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		
 		return BasicDataResult.build(203, "用户名或密码错误", false);
 	}
-/*	public ModelAndView checkLogin(HttpSession session, String username, String password) {
-		ModelAndView modelAndView = new ModelAndView();
-		// modelAndView.setViewName("redirect:/adminUser/index");
-		modelAndView.setViewName("redirect:/adminUser/index");
-		// 清除菜单
-		session.removeAttribute(CommonEnum.WEBMENUSESSION);
-		try {
-			// 检查帐号登录
-			AdminUser au = this.adminUserService.findOneByQuery(
-					super.craeteQueryWhere("userName", username, "password", password), AdminUser.class);
-			if (au != null) {// 不等于空,保存用户帐号信息
-				// 加载权限
-				session.setAttribute("listMenu", au.getAdminRole().getListMenu());
-				session.setAttribute(CommonEnum.USERSESSION, au);
-
-			} else {
-				// 返回到登录。对应跟目录地址
-				modelAndView.setViewName("redirect:/adminUser/login");
-			}
-		} catch (Exception e) {
-			log.error("用户登录异常：" + e.toString());
-		}
-		return modelAndView;// 返回
-	}*/
 
 	/**
 	 * 登录成功后，重定向
@@ -269,6 +246,16 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 		Pagination<ForderActivity> pagination = this.forderActivityService.findPaginationByQuery(query, 1, 12,
 				ForderActivity.class);
+		
+		List<ForderActivity> listforder =  new ArrayList<ForderActivity>();
+		for(ForderActivity f : pagination.getDatas()){
+			//根据文件夹啊的id查询图片资源
+			Resource  re = this.resourceService.findListResourceByforderActivityId(f.getId());
+			f.setShowImg(re!=null?re.getId():null);
+			listforder.add(f);
+		}
+		pagination.setDatas(listforder);
+		
 
 		modelAndView.addObject("forderActivityList", pagination);
 
@@ -285,6 +272,19 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		return modelAndView;// 返回
 	}
 
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	/**
 	 * 
 	 * @Title: findPicturesofActivity @Description:
@@ -471,8 +471,20 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 		}
 		return BasicDataResult.build(200, "", false);
-		
 
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 }

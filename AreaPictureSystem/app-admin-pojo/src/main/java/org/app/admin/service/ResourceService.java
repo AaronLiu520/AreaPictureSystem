@@ -62,16 +62,16 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		for (Resource resource : lrs) {
 			ForderActivity f = forderActivityService.findForderById(resource.getForderActivityId());
 			if (f != null) {
-				for(int i=0;i<f.getListType().size();i++){
+				for (int i = 0; i < f.getListType().size(); i++) {
 					UploadFileLog ufl = new UploadFileLog();
 					ufl.setDate(resource.getCreateDate());
 					ufl.setImgSize(resource.getImgInfoBean().getImgSize());
 					ufl.setName(resource.getOriginalName());
 					ufl.setPlace(returnUploadType(f.getListType().get(i).toString()));
 					lufl.add(ufl);
-					
+
 				}
-				
+
 			}
 		}
 		return lufl;
@@ -105,34 +105,6 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		return result;
 	}
 
-	/**
-	 * 
-	 * @Title: maxUploadThisMonth @Description: TODO(获取本月上传文件最大的) @param @return
-	 *         设定文件 @return int 返回类型 @throws
-	 */
-	// public int maxUploadThisMonthForDay(String date, String boundId) {
-	//
-	// Query query = new Query();
-	//
-	// if (Common.isNotEmpty(boundId)) {
-	//
-	// query.addCriteria(Criteria.where("boundId").is(boundId));
-	// }
-	//
-	// if (Common.isNotEmpty(date)) {
-	//
-	// query.addCriteria(Criteria.where("createDate").is(date));
-	// }
-	//
-	// List<Resource> list = this.find(query, Resource.class);
-	//
-	// if (list.size() > 0){
-	//
-	// return list.size();
-	// }
-	// else
-	// return 0;
-	// }
 
 	/**
 	 * @Title: maxUploadThisMonth @Description: TODO(获取本月上传文件最大的) @param @return
@@ -162,40 +134,7 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 		return 0;
 	}
 
-	/**
-	 * 
-	 * @Title: getMonthUploadNum @Description: TODO(获取当前月的上传记录) @param @param
-	 *         year @param @param month @param @param day @param @return
-	 *         设定文件 @return List 返回类型 @throws
-	 */
-	// public List getMonthUploadNum(String idtype) {
-	//
-	// LinkedList list = new LinkedList();
-	//
-	// Calendar now = Calendar.getInstance();
-	//
-	// int year = now.get(Calendar.YEAR);
-	//
-	// int month = now.get(Calendar.MONTH) + 1;
-	//
-	// // int day = now.get(Calendar.DAY_OF_MONTH);
-	// int day = getMaxDayByYearMonth(year, month);
-	//
-	// for (int i = 1; i <= day; i++) {
-	// String day_ = "";
-	// if (i < 10) {
-	// day_ = "0" + i;
-	// } else {
-	// day_ = String.valueOf(i);
-	// }
-	// int num=this.maxUploadThisMonthForDay(year + "-" + month + "-" + day_,
-	// idtype);
-	// list.add("[" + i + "," + num + "]");
-	//
-	// }
-	//
-	// return list;
-	// }
+
 
 	/**
 	 * 
@@ -268,82 +207,43 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 
 	}
 
-	/**
-	 * 
-	 * @Title: getImageFile @Description: TODO(获取图片的路径并且转换成File) @param @param
-	 *         id @param @return 设定文件 @return List<File> 返回类型 @throws
-	 */
-/*	public List<Map<String,String>> getImageFile(String id) {
-		List<Map<String,String>> listFile = new ArrayList<Map<String,String>>();
-
-		if (Common.isNotEmpty(id)) {
-
-			String[] ids = id.split(",");
-
-			for (int i = 0; i < ids.length; i++) {
-				
-				Map<String,String> map = new HashMap<String,String>();
-
-				Resource rs = this.findResourceByResourceId(ids[i]);
-
-				if (rs != null) {
-
-					String imgPath = null;
-					if (rs.getImgCompressionBean() != null) {
-						imgPath = rs.getOriginalPath() + rs.getImgCompressionBean().getMax_generateName();
-					} else {
-						imgPath = rs.getOriginalPath()+rs.getGenerateName();
-					}
-
-					File file = new File(imgPath);
-					
-					
-					
-					
-					
-					
-
-					listFile.add(file);
-
-				}
-
-			}
-		}
-
-		return listFile;
-
-	}*/
 	public List<File> getImageFile(String id) {
 		List<File> listFile = new ArrayList();
-		
+
 		if (Common.isNotEmpty(id)) {
-			
+
 			String[] ids = id.split(",");
-			
+
 			for (int i = 0; i < ids.length; i++) {
-				
+
 				Resource rs = this.findResourceByResourceId(ids[i]);
-				
+
 				if (rs != null) {
-					
+
 					String imgPath = null;
-					if (rs.getImgCompressionBean() != null) {
-						imgPath = rs.getOriginalPath() + rs.getImgCompressionBean().getMax_generateName();
-					} else {
-						imgPath = rs.getOriginalPath()+rs.getGenerateName();
+					/*
+					 * if (rs.getImgCompressionBean() != null) { imgPath =
+					 * rs.getOriginalPath() +
+					 * rs.getImgCompressionBean().getMax_generateName(); } else
+					 * { imgPath = rs.getOriginalPath()+rs.getGenerateName(); }
+					 */
+					// 下载图片需要下载原图
+
+					if (Common.isNotEmpty(rs.getGenerateName())) {
+						imgPath = rs.getOriginalPath()+File.separator+ rs.getGenerateName();
 					}
-					
+
 					File file = new File(imgPath);
-					
+
 					listFile.add(file);
-					
+
 				}
-				
+
 			}
 		}
-		
+
 		return listFile;
-		
+
 	}
 
 	public List<Resource> findListResourceByCompanyId(String adminComanyId) {
@@ -360,6 +260,26 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 			return null;
 
 	}
+	
+	/**
+	 * 
+	* @Title: findListResourceByCompanyId 
+	* @Description: TODO(根据活动id查询图片) 
+	* @param @param adminComanyId
+	* @param @return    设定文件 
+	* @return List<Resource>    返回类型 
+	* @throws
+	 */
+	public Resource findListResourceByforderActivityId(String id) {
+		
+		Query query = new Query();
+		
+		query.addCriteria(Criteria.where("forderActivityId").is(id));
+		
+		List<Resource> list = this.find(query, Resource.class);
+		
+		return list.size()>0?list.get(0):null;
+	}
 
 	/**
 	 * 
@@ -368,14 +288,13 @@ public class ResourceService extends GeneralServiceImpl<Resource> {
 	 *         forderActivityId @param @param generateName @param @return
 	 *         设定文件 @return List<Resource> 返回类型 @throws
 	 */
-	public Resource findResourceByResourceName(String boundId,String generateName) {
+	public Resource findResourceByResourceName(String boundId, String generateName) {
 
 		Query query = new Query();
-		
+
 		query.addCriteria(Criteria.where("boundId").is(boundId))
-		.addCriteria(Criteria.where("generateName").is(generateName))
-		.addCriteria(Criteria.where("personActivityId").ne(null));
-		
+				.addCriteria(Criteria.where("generateName").is(generateName))
+				.addCriteria(Criteria.where("personActivityId").ne(null));
 
 		Resource res = this.findOneByQuery(query, Resource.class);
 
