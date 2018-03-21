@@ -9,7 +9,6 @@ import org.app.framework.pojo.GeneralBean;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 /**
  * @author aaron
  * @ClassName: Resource
@@ -19,109 +18,102 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document
 public class Resource extends GeneralBean {
 
-    /**
-     * @Fields serialVersionUID : TODO(序列号)
-     */
-    private static final long serialVersionUID = -6185701038252677452L;
+	/**
+	 * @Fields serialVersionUID : TODO(序列号)
+	 */
+	private static final long serialVersionUID = -6185701038252677452L;
 
+	private String uploadPerson; // 1 上传者
+	private String boundId; // 1 个人Id
+	private String forderActivityId; // 1 文件夹Id或活动Id
+	private String originalName; // 1 原名
+	private String originalPath; // 1 路径
+	private String extensionName; // 1 扩展名
+	private String fileType; // 1 文件类型
+	private String generateName; // 1 生成名（新名字）
 
-    private String uploadPerson;        // 1 上传者
-    private String boundId;             // 1 个人Id
-    private String forderActivityId;    // 1 文件夹Id或活动Id
-    private String originalName;        // 1 原名
-    private String originalPath;        // 1 路径
-    private String extensionName;       // 1 扩展名
-    private String fileType;            // 1 文件类型
-    private String generateName;        // 1 生成名（新名字）
+	@DBRef
+	private AdminUser adminUser; // 用户Id
+	@DBRef
+	private Source source; // 资源流
 
-    @DBRef
-    private AdminUser adminUser;        //用户Id
-    @DBRef
-    private Source source;        //资源流
+	private ImgInfoBean imgInfoBean; // 图片信息
 
-    private ImgInfoBean imgInfoBean;    //图片信息
+	private EditorImgBean editorImgInfo;// 用户修改信息
 
-    private EditorImgBean editorImgInfo;//用户修改信息
+	private ImgCompressionBean imgCompressionBean;// 加工图片
 
-    private ImgCompressionBean imgCompressionBean;//加工图片
+	private String adminCompanyId;// 企业ID
 
+	private String personActivityId;// 个人活动的ID
 
-    private String adminCompanyId;//企业ID
+	private String baseutisActivityId;// 直属活动的ID
 
-	private String personActivityId;//个人活动的ID
-	
-	private String baseutisActivityId;//直属活动的ID
+	public String getUploadPerson() {
+		return uploadPerson;
+	}
 
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
+	public void setUploadPerson(String uploadPerson) {
+		this.uploadPerson = uploadPerson;
+	}
 
-    public String getUploadPerson() {
-        return uploadPerson;
-    }
+	public String getBoundId() {
+		return boundId;
+	}
 
-    public void setUploadPerson(String uploadPerson) {
-        this.uploadPerson = uploadPerson;
-    }
+	public void setBoundId(String boundId) {
+		this.boundId = boundId;
+	}
 
-    public String getBoundId() {
-        return boundId;
-    }
+	public String getForderActivityId() {
+		return forderActivityId;
+	}
 
-    public void setBoundId(String boundId) {
-        this.boundId = boundId;
-    }
+	public void setForderActivityId(String forderActivityId) {
+		this.forderActivityId = forderActivityId;
+	}
 
-    public String getForderActivityId() {
-        return forderActivityId;
-    }
+	public String getOriginalName() {
+		return originalName;
+	}
 
-    public void setForderActivityId(String forderActivityId) {
-        this.forderActivityId = forderActivityId;
-    }
+	public void setOriginalName(String originalName) {
+		this.originalName = originalName;
+	}
 
-    public String getOriginalName() {
-        return originalName;
-    }
+	public String getOriginalPath() {
+		return originalPath;
+	}
 
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
-    }
+	public void setOriginalPath(String originalPath) {
+		this.originalPath = originalPath;
+	}
 
-    public String getOriginalPath() {
-        return originalPath;
-    }
+	public String getExtensionName() {
+		return extensionName;
+	}
 
-    public void setOriginalPath(String originalPath) {
-        this.originalPath = originalPath;
-    }
+	public void setExtensionName(String extensionName) {
+		this.extensionName = extensionName;
+	}
 
-    public String getExtensionName() {
-        return extensionName;
-    }
+	public String getFileType() {
+		return fileType;
+	}
 
-    public void setExtensionName(String extensionName) {
-        this.extensionName = extensionName;
-    }
+	public void setFileType(String fileType) {
+		this.fileType = fileType;
+	}
 
-    public String getFileType() {
-        return fileType;
-    }
+	public String getGenerateName() {
+		return generateName;
+	}
 
-    public void setFileType(String fileType) {
-        this.fileType = fileType;
-    }
+	public void setGenerateName(String generateName) {
+		this.generateName = generateName;
+	}
 
-    public String getGenerateName() {
-        return generateName;
-    }
-
-    public void setGenerateName(String generateName) {
-        this.generateName = generateName;
-    }
-
-
-    public AdminUser getAdminUser() {
+	public AdminUser getAdminUser() {
 		return adminUser;
 	}
 
@@ -130,46 +122,46 @@ public class Resource extends GeneralBean {
 	}
 
 	public Source getSource() {
-        return source;
-    }
+		return source;
+	}
 
-    public void setSource(Source source) {
-        this.source = source;
-    }
+	public void setSource(Source source) {
+		this.source = source;
+	}
 
-    public ImgInfoBean getImgInfoBean() {
-        return imgInfoBean;
-    }
+	public ImgInfoBean getImgInfoBean() {
+		return imgInfoBean;
+	}
 
-    public void setImgInfoBean(ImgInfoBean imgInfoBean) {
-        this.imgInfoBean = imgInfoBean;
-    }
+	public void setImgInfoBean(ImgInfoBean imgInfoBean) {
+		this.imgInfoBean = imgInfoBean;
+	}
 
-    public EditorImgBean getEditorImgInfo() {
-        return editorImgInfo;
-    }
+	public EditorImgBean getEditorImgInfo() {
+		return editorImgInfo;
+	}
 
-    public void setEditorImgInfo(EditorImgBean editorImgInfo) {
-        this.editorImgInfo = editorImgInfo;
-    }
+	public void setEditorImgInfo(EditorImgBean editorImgInfo) {
+		this.editorImgInfo = editorImgInfo;
+	}
 
-    public ImgCompressionBean getImgCompressionBean() {
-        return imgCompressionBean;
-    }
+	public ImgCompressionBean getImgCompressionBean() {
+		return imgCompressionBean;
+	}
 
-    public void setImgCompressionBean(ImgCompressionBean imgCompressionBean) {
-        this.imgCompressionBean = imgCompressionBean;
-    }
+	public void setImgCompressionBean(ImgCompressionBean imgCompressionBean) {
+		this.imgCompressionBean = imgCompressionBean;
+	}
 
-    public String getAdminCompanyId() {
-        return adminCompanyId;
-    }
+	public String getAdminCompanyId() {
+		return adminCompanyId;
+	}
 
-    public void setAdminCompanyId(String adminCompanyId) {
-        this.adminCompanyId = adminCompanyId;
-    }
+	public void setAdminCompanyId(String adminCompanyId) {
+		this.adminCompanyId = adminCompanyId;
+	}
 
-    public String getPersonActivityId() {
+	public String getPersonActivityId() {
 		return personActivityId;
 	}
 
@@ -195,13 +187,5 @@ public class Resource extends GeneralBean {
 				+ ", adminCompanyId=" + adminCompanyId + ", personActivityId=" + personActivityId
 				+ ", baseutisActivityId=" + baseutisActivityId + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-}
 
+}

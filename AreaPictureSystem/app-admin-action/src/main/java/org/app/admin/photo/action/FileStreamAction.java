@@ -40,7 +40,7 @@ public class FileStreamAction {
      * @param response
      */
 	@SystemErrorLog(description="获取缩略图出错")
-	@SystemControllerLog(description = "获取缩略图")
+//	@SystemControllerLog(description = "获取缩略图")
     @RequestMapping("/getImg/{id}")
     public void getThumbnailsImage(@PathVariable(value = "id")  String id , String type,
                                    HttpServletResponse response, HttpServletRequest request) {

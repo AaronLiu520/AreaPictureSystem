@@ -109,13 +109,14 @@
 <!-- update file and delete file-->
 <script>
     <!-- update -->
-    function updateImg(id,resourceName,person,photographer,resourceAddress,description){
+    function updateImg(id,resourceName,person,photographer,resourceAddress,description,sort){
         $("#made_id").val(id);
         $("#made_resourceName").val(resourceName);
         $("#made_person").val(person);
         $("#made_photographer").val(photographer);
         $("#made_resourceAddress").val(resourceAddress);
         $("#made_description").val(description);
+        $("#sort").val(sort);
     }
 
 <!-- delete -->

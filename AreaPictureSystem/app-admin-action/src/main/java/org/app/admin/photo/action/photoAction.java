@@ -161,7 +161,7 @@ public class photoAction extends GeneralAction<AdminUser> {
         //加载所有的企业
         List<AdminCompany> lac=this.AdminCompanyService.find(new Query(),AdminCompany.class);
         LoginInterceptor  lo = new LoginInterceptor();
-        List<LayerAdmonCompany> llac= lo.LayerAdmonCompany(lac,session,"");
+        List<LayerAdmonCompany> llac= lo.LayerAdmonCompany(lac,session);
         List<BaseTreeTime> lbpt= BaseTreeTime.getBaseTreeTime(llac,session);
         List<BasesultBean> list = this.statisticsService.sortupload(null,BaseType.Type.BASEUTIS.toString());
         Random random=new Random();

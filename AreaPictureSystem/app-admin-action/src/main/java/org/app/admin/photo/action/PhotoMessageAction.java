@@ -116,7 +116,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 
 			modelAndView.addObject("listAdminCompany", lac);
 			LoginInterceptor lo = new LoginInterceptor();
-			List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac, session, "");
+			List<LayerAdmonCompany> llac = lo.LayerAdmonCompany(lac, session);
 			// List<LayerAdmonCompany> llac =
 			// LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
 			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac, session);
@@ -274,6 +274,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 				query.addCriteria(Criteria.where("forderActivityId").is(checkId));
 			}
 
+			query.with(new Sort(Sort.Direction.DESC, "editorImgInfo.sort"));// 从1开始
 			query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
 					"createTime"));
 			pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
@@ -359,7 +360,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	@SystemErrorLog(description = "资源更新出错")
 	@RequestMapping("/update/{type}")
 	public ModelAndView update(@PathVariable("type") String type, String activityId, String id, String resourceName,
-			String person, String photographer, String resourceAddress, String description) {
+			String person, String photographer, String resourceAddress, String description, int sort) {
 		ModelAndView modelAndView = new ModelAndView();
 
 		if (id != null) {
@@ -371,6 +372,7 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			r.getEditorImgInfo().setPhotographer(photographer);
 			r.getEditorImgInfo().setResourceAddress(resourceAddress);
 			r.getEditorImgInfo().setDescription(description);
+			r.getEditorImgInfo().setSort(sort);
 			this.resourceService.save(r);
 
 			this.informationRegisterService.addInformationRegister(resourceName, person, photographer, resourceAddress);
@@ -401,11 +403,11 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	{
 		ModelAndView modelAndView = new ModelAndView();
 
-		if(type.equals("index")){
+		if (type.equals("index")) {
 			modelAndView.setViewName("redirect:/photoMessageAction/searchImgsByQuerys?selectQuery=" + selectQuery
-					+"&selectVal="+selectVal+"&pageNo="+pageNo+"&pageSize="+pageSize);
-		}else{
-			
+					+ "&selectVal=" + selectVal + "&pageNo=" + pageNo + "&pageSize=" + pageSize);
+		} else {
+
 			modelAndView.setViewName("redirect:/photoMessageAction/checkActivity/" + type + "?checkId=" + activityId);
 		}
 
@@ -452,6 +454,37 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			return listResource;
 		}
 		return null;
+	}
+
+	@SystemErrorLog(description = "收藏图片出错")
+	@RequestMapping("/setTheCover")
+	@ResponseBody
+	public BasicDataResult setTheCover(
+			@RequestParam(defaultValue = "", value = "forderActivityId") String forderActivityId,
+			@RequestParam(defaultValue = "", value = "id") String id, HttpSession session) {
+
+		//根据id来查询图片的信息
+		Resource r  = this.resourceService.findOneById(id, Resource.class);
+		
+		if(r == null){
+			return BasicDataResult.build(400, "未能获取到设为封面的图片资源", null);
+		}
+		
+		//根据活动id获取活动信息
+		
+		ForderActivity f = this.forderActivityService.findOneById(forderActivityId, ForderActivity.class);
+		
+		if(f == null){
+			return BasicDataResult.build(400, "未能获取到相关活动的信息，请刷新页面", null);
+		}
+		
+		f.setCover(r.getId());
+		
+		this.forderActivityService.save(f);
+		
+		return BasicDataResult.build(200, "设置封面成功", null);
+		
+		
 	}
 
 	/**
@@ -745,23 +778,24 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 		Query query = new Query();
 
 		if (Common.isNotEmpty(selectQuery) && Common.isNotEmpty(selectVal)) {
-			
-			if(selectQuery.equals("forderActivityAddress")){
+
+			if (selectQuery.equals("forderActivityAddress")) {
 
 				Query addressQuery = new Query();
-				
+
 				addressQuery.addCriteria(Criteria.where("address").regex(selectVal));
-				
-				List<ForderActivity> listForderActivity = this.forderActivityService.find(addressQuery, ForderActivity.class);
-				
+
+				List<ForderActivity> listForderActivity = this.forderActivityService.find(addressQuery,
+						ForderActivity.class);
+
 				List<String> listIds = new ArrayList<String>();
-				
-				for(ForderActivity f : listForderActivity){
+
+				for (ForderActivity f : listForderActivity) {
 					listIds.add(f.getId());
 				}
 				query.addCriteria(Criteria.where("forderActivityId").in(listIds));
-				
-			}else{
+
+			} else {
 				query.addCriteria(Criteria.where(selectQuery).regex(selectVal));
 			}
 
@@ -785,7 +819,6 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 				"createTime"));
 
 		query.addCriteria(Criteria.where("personActivityId").is(null));
-		
 
 		pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
 		modelAndView.addObject("searchList", pageList);

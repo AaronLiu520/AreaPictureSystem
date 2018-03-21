@@ -9,6 +9,17 @@ public class EditorImgBean {
     private String resourceAddress;     // 3 资源地址
     private String description;         // 3 描述
 
+	private int sort;// 图片自定义排序
+
+	public int getSort() {
+		return sort;
+	}
+
+	public void setSort(int sort) {
+		this.sort = sort;
+	}
+
+    
     public String getResourceName() {
         return resourceName;
     }

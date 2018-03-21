@@ -354,7 +354,7 @@
 															<span> <a
 																onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
 																	'${item.editorImgInfo.photographer}','${item.editorImgInfo.resourceAddress}',
-																	'${item.editorImgInfo.description}')"
+																	'${item.editorImgInfo.description}','${item.editorImgInfo.sort }')"
 																data-toggle="modal" data-target="#File_Made"> 描述 </a>
 															</span>
 																			<span style="padding-left: 10%;"> <a

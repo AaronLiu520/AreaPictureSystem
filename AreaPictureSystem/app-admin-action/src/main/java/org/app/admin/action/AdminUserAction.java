@@ -33,6 +33,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
@@ -243,18 +244,22 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 		query.addCriteria(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
 				BaseType.Type.DIRECTLYUTIS));
-
+		
+		query.with(new Sort(Sort.Direction.DESC, "activityTime"));
+		
 		Pagination<ForderActivity> pagination = this.forderActivityService.findPaginationByQuery(query, 1, 12,
 				ForderActivity.class);
 		
 		List<ForderActivity> listforder =  new ArrayList<ForderActivity>();
+		
+/*		
 		for(ForderActivity f : pagination.getDatas()){
 			//根据文件夹啊的id查询图片资源
 			Resource  re = this.resourceService.findListResourceByforderActivityId(f.getId());
 			f.setShowImg(re!=null?re.getId():null);
 			listforder.add(f);
 		}
-		pagination.setDatas(listforder);
+		pagination.setDatas(listforder);*/
 		
 
 		modelAndView.addObject("forderActivityList", pagination);

@@ -36,13 +36,13 @@
 
 							
 
-								<c:if test="${ empty item.showImg}">
+								<c:if test="${ empty item.cover}">
 									<img alt="image" class="img-responsive" style="margin: 0 auto;"
 										src="${pageContext.request.contextPath}/assets/admin/img/forder.png">
 
-								</c:if> <c:if test="${not empty item.showImg}">
+								</c:if> <c:if test="${not empty item.cover}">
 									<img alt="image" class="img-responsive" style="margin-top:10px; border-radius: 9px;-webkit-border-radius: 9px;-moz-border-radius: 9px;"
-										src="${pageContext.request.contextPath}/file/getImg/${item.showImg}?type=min">
+										src="${pageContext.request.contextPath}/file/getImg/${item.cover}?type=min">
 
 								</c:if>
 						</div>

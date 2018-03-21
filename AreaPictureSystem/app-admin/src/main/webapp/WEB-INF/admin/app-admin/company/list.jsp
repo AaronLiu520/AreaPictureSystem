@@ -5,7 +5,7 @@
 <html lang="en" class="app">
 <head>
 <meta charset="utf-8" />
-<title>企业单位</title>
+<title>学校单位管理</title>
 
 
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,7 +36,7 @@
 					<div class="col-lg-12">
 						<div class="ibox float-e-margins">
 							<div class="ibox-title">
-								<h5>企业单位管理</h5>
+								<h5>学校单位管理</h5>
 								<div class="ibox-tools">
 									<a class="collapse-link"> <i class="fa fa-chevron-up"></i>
 									</a>

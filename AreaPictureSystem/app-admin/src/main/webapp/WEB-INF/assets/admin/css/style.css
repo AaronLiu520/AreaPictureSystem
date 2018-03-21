@@ -40,7 +40,7 @@ h5 {
 .nav > li > a {
   color: #a7b1c2;
   font-weight: 600;
-  padding: 14px 20px 14px 25px;
+ /*  padding: 14px 20px 14px 25px; */
 }
 .nav.navbar-right > li > a {
   color: #999c9e;
@@ -2871,7 +2871,8 @@ a.forum-item-title:hover {
 }
 body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #2f4050;
+  background-color: #333;
+/*   background-color: #2f4050; */
   font-size: 13px;
   color: #676a6c;
 
@@ -6296,16 +6297,20 @@ body.skin-3 {
 .skin-3 .nav.nav-tabs > li.active {
   background: transparent;
 }
+
+  /**修改left页面宽度**/
 @media (min-width: 768px) {
   #page-wrapper {
     position: inherit;
-    margin: 0 0 0 320px;
+    margin: 0 0 0 350px;
     min-height: 600px;
   }
+  
+  /**修改left页面宽度**/
   .navbar-static-side {
     z-index: 2001;
     position: absolute;
-    width: 320px;
+    width: 350px;
   }
   .navbar-top-links .dropdown-messages,
   .navbar-top-links .dropdown-tasks,

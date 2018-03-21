@@ -21,6 +21,7 @@ p {
 			$("#deletes").show();
 			$("#downloads").show();
 			$("#favorites").show();
+			$("#setTheCover").show();
 			$("#choose").html("<i class='fa fa-square-o'>&nbsp;取消选择</i>");
 			$(".collection").show();
 			i = 1;
@@ -30,6 +31,7 @@ p {
 			$("#deletes").hide();
 			$("#downloads").hide();
 			$("#favorites").hide();
+			$("#setTheCover").hide();
 			$("#choose").html("<i class='fa fa-check-square-o'>&nbsp;选择</i>");
 			$(".collection").hide();
 			i = 0;
@@ -108,19 +110,19 @@ p {
 				<div class="col-sm-8">
 					<c:choose>
 						<c:when test="${not empty fa}">
-							<h2>
+							<h3>
 								<c:if test="${webType=='AREA'}"> 区域 </c:if>
 								<c:if test="${webType=='BASEUTIS'}"> 基层单位 </c:if>
 								<c:if test="${webType=='DIRECTLYUTIS'}"> 直属单位 </c:if>
 								<c:if test="${webType=='PERSION'}"> 个人</c:if>
 								《 ${fa.forderActivityName} 》
-							</h2>
+							</h3>
 
 
 						</c:when>
 						<c:otherwise>
 							<h3>请先： 选择活动 或 创建活动</h3>
-						</c:otherwise>
+						</c:otherwise> 
 					</c:choose>
 
 				</div>
@@ -201,6 +203,15 @@ p {
 						<i class="fa fa-heart"> </i> 收藏 
 					</button>
 					</c:if>
+					
+						
+					<button class="btn btn-primary " onclick="return setTheCover('${sessionScope.checkActivityId}');"
+						 id="setTheCover" style="display: none;" type="button">
+						<i class="fa fa-heart"> </i> 设为封面 
+					</button>
+					
+					
+					
 
 					<button class="btn btn-default " id="choose" type="button"
 						onclick="return choose();">
@@ -415,8 +426,8 @@ p {
 															<span> <a
 																onclick="updateImg('${item.id}','${item.editorImgInfo.resourceName}','${item.editorImgInfo.person}',
 																	'${item.editorImgInfo.photographer}','${item.editorImgInfo.resourceAddress}',
-																	'${item.editorImgInfo.description}')"
-																data-toggle="modal" data-target="#File_Made"> 描述 </a>
+																	'${item.editorImgInfo.description}','${item.editorImgInfo.sort }')"
+																data-toggle="modal" data-target="#File_Made"> 修改 </a>
 															</span>
 															<span style="padding-left: 10%;"> <a
 																onclick="deleteAlert('${item.id}','${sessionScope.checkActivityId}')">删除

@@ -1,32 +1,33 @@
-	$(function() {
+$(function() {
 
-		$("#checkall").click(function() {
-			var flag = $("[name=checkall]:checkbox").is(':checked');
-			$("[name=ids]:checkbox").each(function() {
-				$(this).prop("checked", flag);
-			})
+	$("#checkall").click(function() {
+		var flag = $("[name=checkall]:checkbox").is(':checked');
+		$("[name=ids]:checkbox").each(function() {
+			$(this).prop("checked", flag);
 		})
-
 	})
 
-//left.jsp 修改密码检验就密码是否相同
-//js获取项目根路径，如： http://localhost:80	83/uimcardprj  
-function getRootPath(){  
-    //获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp  
-    var curWwwPath=window.document.location.href;  
-    //获取主机地址之后的目录，如： uimcardprj/share/meun.jsp  
-    var pathName=window.document.location.pathname;  
-    var pos=curWwwPath.indexOf(pathName);  
-    //获取主机地址，如： http://localhost:8083  
-    var localhostPaht=curWwwPath.substring(0,pos);  
-    //获取带"/"的项目名，如：/uimcardprj  
-    var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);  
-    return(localhostPaht+projectName);  
-} 
+})
+
+// left.jsp 修改密码检验就密码是否相同
+// js获取项目根路径，如： http://localhost:80 83/uimcardprj
+function getRootPath() {
+	// 获取当前网址，如： http://localhost:8083/uimcardprj/share/meun.jsp
+	var curWwwPath = window.document.location.href;
+	// 获取主机地址之后的目录，如： uimcardprj/share/meun.jsp
+	var pathName = window.document.location.pathname;
+	var pos = curWwwPath.indexOf(pathName);
+	// 获取主机地址，如： http://localhost:8083
+	var localhostPaht = curWwwPath.substring(0, pos);
+	// 获取带"/"的项目名，如：/uimcardprj
+	var projectName = pathName
+			.substring(0, pathName.substr(1).indexOf('/') + 1);
+	return (localhostPaht + projectName);
+}
 
 function checkOldPassword() {
 	var oldPassword = $("#oldPassword").val().trim();
-	var path =getRootPath()+"/adminUser/checkPassword".toString();
+	var path = getRootPath() + "/adminUser/checkPassword".toString();
 	if (oldPassword != "") {
 		// success fa fa-check-square
 		// error <i class='fa fa-times-circle'></i>
@@ -34,7 +35,7 @@ function checkOldPassword() {
 		var data = "password=" + oldPassword;
 		$.ajax({
 			type : "POST",
-			url :path,
+			url : path,
 			data : data,
 			dataType : "json",
 			success : function(msg) {
@@ -55,17 +56,16 @@ function checkOldPassword() {
 }
 
 flag = false;
-var password="";
+var password = "";
 
 function checkinput() {
-	
-	
+
 	var result1 = "";
 	var result2 = "";
 	var result3 = "";
 	var oldPassword = $("#oldPassword").val().trim();
 
-	 password = $("#password").val().trim();
+	password = $("#password").val().trim();
 	var passwords = $("#passwords").val().trim();
 
 	if (oldPassword == "") {
@@ -111,20 +111,18 @@ function checkinput() {
 	$("#forpasswords").html(result3);
 }
 
-//清空文本框信息
-function clear(){
+// 清空文本框信息
+function clear() {
 	$("#oldPassword").val("");
-	 $("#password").val("");
-	 $("#passwords").val("");
+	$("#password").val("");
+	$("#passwords").val("");
 }
-
-
 
 function ajaxUpdatePassword() {
 	checkinput();
-	var path =getRootPath()+"/adminUser/updatePassword".toString();
+	var path = getRootPath() + "/adminUser/updatePassword".toString();
 	if (flag) {
-		if(password!=""){
+		if (password != "") {
 			var data = "password=" + password;
 			$.ajax({
 				type : "POST",
@@ -132,16 +130,16 @@ function ajaxUpdatePassword() {
 				data : data,
 				dataType : "json",
 				success : function(msg) {
-					if(msg.status =="200"){
+					if (msg.status == "200") {
 						$("#EditPasswordClose").trigger("click");
 						$('#titleMessage').modal('show');
 						$("#title").text("信息提示");
-						$("#content").html("<h3>"+msg.msg+"</h3>")
+						$("#content").html("<h3>" + msg.msg + "</h3>")
 						clear();
-					}else{
+					} else {
 						$('#titleMessage').modal('show');
 						$("#title").text("信息提示");
-						$("#content").html("<h3>"+msg.msg+"</h3>")
+						$("#content").html("<h3>" + msg.msg + "</h3>")
 						clear();
 					}
 				}
@@ -150,16 +148,13 @@ function ajaxUpdatePassword() {
 	}
 }
 
-
-
-
-//<!--取消收藏-->
+// <!--取消收藏-->
 function cancelfavorites(o) {
 	var favoritesIds = "";
 
 	if (o == null) {
 
-		//获取所有选中状态下的收藏图片的id      
+		// 获取所有选中状态下的收藏图片的id
 
 		var favorites = $("input[name='ids']:checked");
 
@@ -175,48 +170,39 @@ function cancelfavorites(o) {
 
 	}
 
-	$
-			.ajax({
+	$.ajax({
 
-				type : "POST",
+		type : "POST",
 
-				url :getRootPath()+ "/photoMessageAction/cancelMyFavorties",
+		url : getRootPath() + "/photoMessageAction/cancelMyFavorties",
 
-				data : "resourceId=" + favoritesIds,
+		data : "resourceId=" + favoritesIds,
 
-				dataType : "json",
+		dataType : "json",
 
-				success : function(data) {
+		success : function(data) {
 
-					for (var i = 0; i < data.length; i++) {
+			for (var i = 0; i < data.length; i++) {
 
-						var a = "collection_" + data[i].id;
+				var a = "collection_" + data[i].id;
 
-						$("." + a).remove();
+				$("." + a).remove();
 
-					}
+			}
 
-					/* 收藏成功提示 $('#successFavorites').modal('show'); */
+			/* 收藏成功提示 $('#successFavorites').modal('show'); */
 
-				}
+		}
 
-			});
+	});
 
 }
 
-
-
-
-
-
-
-
-
-//ajax收藏图片资源
+// ajax收藏图片资源
 function tofavorites(o) {
 	var favoritesIds = "";
 	if (o == null) {
-		//获取所有选中状态下的收藏图片的id      
+		// 获取所有选中状态下的收藏图片的id
 		var favorites = $("input[name='ids']:checked");
 		$(favorites).each(function() {
 			favoritesIds += this.value + ",";
@@ -226,25 +212,21 @@ function tofavorites(o) {
 	}
 
 	$.ajax({
-				type : "POST",
-				url :  getRootPath()+"/photoMessageAction/toMyFavorties",
-				data : "resourceId=" + favoritesIds,
-				dataType : "json",
-				success : function(data) {
-					for (var i = 0; i < data.length; i++) {
-						var a = "collection_" + data[i].id;
-						$("#" + a)
-								.html(
-										"<a><i class='fa fa-heart'></i>已收藏</a>");
-					}
-					/* 收藏成功提示 $('#successFavorites').modal('show'); */
-				}
-			});
+		type : "POST",
+		url : getRootPath() + "/photoMessageAction/toMyFavorties",
+		data : "resourceId=" + favoritesIds,
+		dataType : "json",
+		success : function(data) {
+			for (var i = 0; i < data.length; i++) {
+				var a = "collection_" + data[i].id;
+				$("#" + a).html("<a><i class='fa fa-heart'></i>已收藏</a>");
+			}
+			/* 收藏成功提示 $('#successFavorites').modal('show'); */
+		}
+	});
 }
 
-
-
-//图片下载
+// 图片下载
 function todownload() {
 	var a = $("input[name='ids']:checked").length;
 
@@ -252,14 +234,14 @@ function todownload() {
 		$("#delete").hide();
 
 		$("#modalMessage").text("请先选中需要下载的图片！");
-		
+
 		$('#deleteModal').modal('show');
 
-	}else{
-		
+	} else {
+
 		var downloadIds = $("input[name='ids']:checked");
 
-		//获取所有的id执行删除操作，使用ajax
+		// 获取所有的id执行删除操作，使用ajax
 		var str = "";
 		$(downloadIds).each(function() {
 			str += this.value + ",";
@@ -267,30 +249,24 @@ function todownload() {
 
 		if (str != "") {
 			var id = str.substring(0, str.length - 1);
-			 window.location.href = getRootPath()+"/photoMessageAction/download?id="
-					+ id ; 
-			  $("#downloads").attr("disabled","disabled");
-				 setTimeout(function(){
-		            $("#downloads").removeAttr("disabled");
-		        },5000)
-			 
-			 
-			 
+			window.location.href = getRootPath()
+					+ "/photoMessageAction/download?id=" + id;
+			$("#downloads").attr("disabled", "disabled");
+			setTimeout(function() {
+				$("#downloads").removeAttr("disabled");
+			}, 5000)
+
 		} else {
 			window.location.href = document.URL;
 		}
-		
-	} 
 
-	
+	}
 
 }
 
-
-
-//图片同步
+// 图片同步
 function tocopy() {
-	//将收藏的资源同步到自己的资源库中
+	// 将收藏的资源同步到自己的资源库中
 	var a = $("input[name='ids']:checked").length;
 
 	if (a == 0) {
@@ -304,7 +280,7 @@ function tocopy() {
 	} else {
 
 		var tb = $("input[name='ids']:checked");
-		//获取所有的id执行删除操作，使用ajax
+		// 获取所有的id执行删除操作，使用ajax
 		var str = "";
 		$(tb).each(function() {
 			str += this.value + ",";
@@ -314,34 +290,33 @@ function tocopy() {
 
 			var tbId = str.substring(0, str.length - 1);
 
-			$
-					.ajax({
+			$.ajax({
 
-						type : "POST",
+				type : "POST",
 
-						url :  getRootPath()+"/photoMessageAction/copyToMyPictures",
+				url : getRootPath() + "/photoMessageAction/copyToMyPictures",
 
-						data : "resourceId=" + tbId,
+				data : "resourceId=" + tbId,
 
-						dataType : "text",
+				dataType : "text",
 
-						success : function(data) {
-							var jsondata = $.parseJSON(data);
-							
-							if(jsondata.status == 200){
-								$("#modalMessage").text(jsondata.msg);
+				success : function(data) {
+					var jsondata = $.parseJSON(data);
 
-								$('#deleteModal').modal('show');
-								
-							}else{
-								
-								$("#modalMessage").text(jsondata.msg);
+					if (jsondata.status == 200) {
+						$("#modalMessage").text(jsondata.msg);
 
-								$('#deleteModal').modal('show');
-							}
-						}
+						$('#deleteModal').modal('show');
 
-					});
+					} else {
+
+						$("#modalMessage").text(jsondata.msg);
+
+						$('#deleteModal').modal('show');
+					}
+				}
+
+			});
 
 		}
 
@@ -349,12 +324,47 @@ function tocopy() {
 
 }
 
+// ajax收藏图片资源
+function setTheCover(o) {
+
+	if (o == null) {
+
+		$("#modalMessage").text("未能获取到活动的信息，请刷新页面");
+		$('#deleteModal').modal('show');
+		return;
+	}
+
+	var len = $("input[name='ids']:checked").length;
 
 
+	if (len == 0) {
 
+		$("#modelLabel").text("信息提示");
+		$("#modelContent").text("至少选择一张图片作为封面");
+		$('#titleModel').modal('show');
+		return;
+	}
 
+	if (len > 1) {
+		$("#modelLabel").text("信息提示");
+		$("#modelContent").text("不能将多张图片设为最新活动封面");
+		$('#titleModel').modal('show');
+		return;
+	}
 
+	$.ajax({
+		type : "POST",
+		url : getRootPath() + "/photoMessageAction/setTheCover",
+		data : "forderActivityId=" + o+"&id="+$("input[name='ids']:checked").val(),
+		dataType : "json",
+		success : function(data) {
 
+			if(data !=null){
+				$("#modelLabel").text("信息提示");
+				$("#modelContent").text(data.msg);
+				$('#titleModel').modal('show');
+			}
 
-
-
+		}
+	});
+}

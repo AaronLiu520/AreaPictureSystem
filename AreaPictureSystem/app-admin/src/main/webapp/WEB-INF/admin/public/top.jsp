@@ -10,6 +10,14 @@
 <link
 	href="${pageContext.request.contextPath}/assets/admin/js/plugins/datapicker/css/bootstrap-datetimepicker.min.css"
 	rel="stylesheet" media="screen">
+	
+	
+	
+	    <!--[if lt IE 8]>
+    <script>
+        alert('H+已不支持IE6-8，请使用谷歌、火狐等浏览器\n或360、QQ等国产浏览器的极速模式浏览本页面！');
+    </script>
+    <![endif]-->
 <style type="text/css">
 .navbar-form-custom .form-control {
 	background: none repeat scroll 0 0 rgba(0, 0, 0, 0);
@@ -57,16 +65,22 @@
 
 <body>
 
+
+
+
+
 	<div class="row border-bottom white-bg">
 		<nav class="navbar navbar-static-top" role="navigation">
-			<div class="navbar-header">
+
+
+			 <div class="navbar-header">
 				<div style="width: 80%;">
 					<!-- 				 <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i>123 </a>  -->
 					<!-- 				 显示与隐常左边的菜单 -->
 					<div style="width: 130px; float: left;">
 						<button class=" minimalize-styl-2 btn btn-primary"
 							onclick="return tocleanForm();" style="width: 130px;">
-							<i class="fa fa-plus">&nbsp;&nbsp;<b>上传图片</b></i>
+							<i class="fa fa-plus">&nbsp;&nbsp;<b>创建文件夹</b></i>
 						</button>
 
 						<a class=" minimalize-styl-2 btn btn-primary" id="toModal-form"
@@ -81,8 +95,8 @@
 							action="${pageContext.request.contextPath}/photoMessageAction/searchImgsByQuerys">
 							<div class="row" style="width: 400px;">
 
-								<select class="form-control m-b" name="selectQuery"
-									id="selectQuery" style="float: left; margin-left: 10px;">
+								<select class="input-sm form-control input-s-sm inline" name="selectQuery"
+									id="selectQuery" style="float: left; margin-left: 10px;height: 30px;margin-top: 15px;">
 									<option value="">请选择查询条件</option>
 									<option value="createDate">日期</option>
 									<option value="uploadPerson">上传者</option>
@@ -124,7 +138,8 @@
 			</div>
 			<div class="navbar-collapse collapse" id="navbar"
 				style="float: right;">
-				<ul class="nav navbar-nav" style="margin-left: 20px;margin-top: 3px;">
+				<ul class="nav navbar-nav"
+					style="margin-left: 20px; margin-top: 3px;">
 					<!-- 以上菜单为固定菜单，以下菜单为动态数据库权限菜单-->
 
 
@@ -172,7 +187,7 @@
 
 
 				<ul class="nav navbar-top-links navbar-right"
-					style="margin-top: -5px;float: right;">
+					style="margin-top: -5px; float: right;">
 
 					<li><a
 						href="${pageContext.request.contextPath}/adminUser/index"
@@ -221,8 +236,8 @@
 							<label>拍摄地址：</label> <input type="text" placeholder="活动地址"
 								name="address" id="address" class="form-control">
 						</div>
-						
-						
+
+
 
 						<div class="form-group"
 							onchange="return getrepletes('forderActivityName');">
@@ -239,7 +254,7 @@
 
 
 						<div class="form-group">
-							<label>拍摄时间：</label> <input type="text" placeholder="活动时间"
+							<label>拍摄时间：</label> <input type="text" placeholder="拍摄时间"
 								name="activityTime" id="activityTime" readonly="readonly"
 								onchange="return getrepletes('forderActivityName');"
 								class="form-control datainput" data-date-format="yyyy-mm-dd"
@@ -538,7 +553,7 @@
 															+ "请选择所属单位",
 													activityTime : {
 														required : a
-																+ "请选择活动时间"
+																+ "请选择拍摄时间"
 													},
 													/* sumPotoCount : {
 														required : a + "请输入上传图片最大数量",
@@ -561,15 +576,13 @@
 																success : function(
 																		data) {
 																	if (data.status == 200) {
-																		$("#CrateActivityForm")[0]
-																				.reset()
+																		$("#CrateActivityForm")[0].reset()
 																		/* 	$("#modelLabel").html("信息提示");
 																			$("#modelContent").html(
 																					"<center>" + data.msg
 																							+ "</center>");
 																			$('#titleModel').modal('show'); */
-																		location
-																				.reload(1000);
+																		location.reload(1000);
 																		//$("#CrateActivityForm").modal("hide");
 																	} else {
 																		$(

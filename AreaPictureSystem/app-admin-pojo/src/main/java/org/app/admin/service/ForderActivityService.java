@@ -403,17 +403,15 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					editforderActivity.setSumPotoCount(forderActivity.getSumPotoCount());
 					editforderActivity.setType(forderActivity.getType());
 					editforderActivity.setListType(listsType.get(0));
-					
-					String today=forderActivity.getActivityTime();
+
+					String today = forderActivity.getActivityTime();
 					String year = today.substring(0, today.indexOf("-"));
 					editforderActivity.setYear(year);
-					String month = today.substring(today.indexOf("-")+1,today.lastIndexOf("-"));
+					String month = today.substring(today.indexOf("-") + 1, today.lastIndexOf("-"));
 					editforderActivity.setMonth(month);
-					String day = today.substring(today.lastIndexOf("-")+1,today.length());
+					String day = today.substring(today.lastIndexOf("-") + 1, today.length());
 					editforderActivity.setDay(day);
-					
-					
-					
+
 					if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
 						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
 						// 根据boundCompany获取企业信息
@@ -447,15 +445,14 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					fo.setAddress(forderActivity.getAddress());
 					fo.setPersonActivityId(new ObjectId(new Date()).toString());
 					fo.setBaseutisActivityId(new ObjectId(new Date()).toString());
-					String today=forderActivity.getActivityTime();
+					String today = forderActivity.getActivityTime();
 					String year = today.substring(0, today.indexOf("-"));
 					fo.setYear(year);
-					String month = today.substring(today.indexOf("-")+1,today.lastIndexOf("-"));
+					String month = today.substring(today.indexOf("-") + 1, today.lastIndexOf("-"));
 					fo.setMonth(month);
-					String day = today.substring(today.lastIndexOf("-")+1,today.length());
+					String day = today.substring(today.lastIndexOf("-") + 1, today.length());
 					fo.setDay(day);
-					
-					
+
 					if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())) {
 						fo.setAdminCompany(adminUser.getAdminCompany());
 						fo.setBoundCompany(adminUser.getAdminCompany().getId());
@@ -558,59 +555,54 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 	public BasicDataResult findForderActivityByforderActivityName(String forderActivityName, AdminUser adminUser,
 			String companyId, List<List<Type>> types, String activityTime) {
 
-		if (adminUser != null && Common.isNotEmpty(forderActivityName)&&Common.isNotEmpty(activityTime)) {
-
-		
+		if (adminUser != null && Common.isNotEmpty(forderActivityName) && Common.isNotEmpty(activityTime)) {
 
 			if (types.size() > 0) {
-				
+
 				for (List<Type> list : types) {
-					
-					Query query = new Query();
 
-					query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
+					for (int i = 0; i < list.size(); i++) {
 
-					if (Common.isNotEmpty(activityTime)) {
-						query.addCriteria(Criteria.where("activityTime").is(activityTime));
-					}
-					
-					for(int i =0;i<list.size();i++){
-						System.out.println(list.get(i).getType());
-						
+						Query query = new Query();
+
+						query.addCriteria(Criteria.where("forderActivityName").is(forderActivityName));
+
+						if (Common.isNotEmpty(activityTime)) {
+							query.addCriteria(Criteria.where("activityTime").is(activityTime));
+						}
+
 						if (list.get(i).getType().equals(BaseType.Type.BASEUTIS)) {
 							query.addCriteria(Criteria.where("boundCompany").is(companyId));
 						}
 						ForderActivity forderActivity = null;
 						query.addCriteria(Criteria.where("listType.type").is(list.get(i).getType()));
 						forderActivity = this.findOneByQuery(query, ForderActivity.class);
-						
-						String aa="";
-						if (forderActivity != null){
-							if(list.get(i).getType().equals(BaseType.Type.BASEUTIS)){
-								aa="相同时间已经创建过所选单位的<b>基层单位</b>活动了";
+
+						String aa = "";
+						if (forderActivity != null) {
+							if (list.get(i).getType().equals(BaseType.Type.BASEUTIS)) {
+								aa = "相同时间已经创建过所选单位的<b>基层单位</b>活动了";
 							}
-							if(list.get(i).getType().equals(BaseType.Type.AREA)){
-								aa="相同时间<b>区域单位</b>已经有一个相同的活动了";
+							if (list.get(i).getType().equals(BaseType.Type.AREA)) {
+								aa = "相同时间<b>区域单位</b>已经有一个相同的活动了";
 							}
-							if(list.get(i).getType().equals(BaseType.Type.DIRECTLYUTIS)){
-								aa="相同时间<b>直属单位</b>已经有一个相同的活动了";
+							if (list.get(i).getType().equals(BaseType.Type.DIRECTLYUTIS)) {
+								aa = "相同时间<b>直属单位</b>已经有一个相同的活动了";
 							}
-							
-							if(list.get(i).getType().equals(BaseType.Type.PERSION)){
-								aa="您已经创建过一个相同名称<b>个人</b>活动了！";
+
+							if (list.get(i).getType().equals(BaseType.Type.PERSION)) {
+								aa = "您已经创建过一个相同名称<b>个人</b>活动了！";
 							}
-							
+
 							return BasicDataResult.build(203, aa, null);
 						}
-							
-							
+
 					}
-					
+
 				}
-				
+
 				return BasicDataResult.build(200, "未找到重复活动", null);
-				
-				
+
 			}
 		}
 

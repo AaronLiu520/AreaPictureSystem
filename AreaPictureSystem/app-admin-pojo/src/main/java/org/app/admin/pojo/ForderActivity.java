@@ -1,5 +1,7 @@
 package org.app.admin.pojo;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.app.admin.util.BaseType;
@@ -16,7 +18,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 *
  */
 @Document
-public class ForderActivity extends GeneralBean {
+public class ForderActivity extends GeneralBean implements Comparable<ForderActivity> {
 
 	/**
 	 * 
@@ -60,16 +62,27 @@ public class ForderActivity extends GeneralBean {
 	private String year;
 	private String month;
 	private String day;
-	private String showImg;
+	private String cover;//封面
+/*	private String showImg;
+	
+	
+	
+	
 	
 	public String getShowImg() {
 		return showImg;
 	}
 	public void setShowImg(String showImg) {
 		this.showImg = showImg;
-	}
+	}*/
 	public String getForderActivityName() {
 		return forderActivityName;
+	}
+	public String getCover() {
+		return cover;
+	}
+	public void setCover(String cover) {
+		this.cover = cover;
 	}
 	public void setForderActivityName(String forderActivityName) {
 		this.forderActivityName = forderActivityName;
@@ -181,6 +194,23 @@ public class ForderActivity extends GeneralBean {
 	}
 	public void setDay(String day) {
 		this.day = day;
+	}
+	/* (非 Javadoc) 
+	* <p>Title: compareTo</p> 
+	* <p>Description: </p> 
+	* @param o
+	* @return 
+	* @see java.lang.Comparable#compareTo(java.lang.Object) 
+	*/
+	@Override
+	public int compareTo(ForderActivity o) {
+		
+		System.out.println(this.getActivityTime());
+		System.out.println(o.getActivityTime());
+		
+		
+
+		return -1;
 	}
 
 

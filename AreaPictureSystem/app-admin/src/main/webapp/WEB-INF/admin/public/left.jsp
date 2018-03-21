@@ -282,29 +282,29 @@ li_style:hover {
 				<!-- 区域图片库-->
 				<li class="active"><a><i class="fa fa-th-large"
 						style="margin-left: -10px;"></i> <span class="nav-label">区域图片库</span>
-						<span class="fa arrow"></span> </a>
-					<ul style="color: #c7c7c7; margin-left: -30px;">
+						<!-- <span class="fa arrow"></span> --> </a>
+					<ul style="color: #c7c7c7;">
 						<%@include file="areatreetime.jsp"%>
 					</ul></li>
 				<!--直属单位-->
 				<li class="active"><a><i class="fa fa-columns"
 						style="margin-left: -10px;"></i> <span class="nav-label">直属单位</span>
-						<span class="fa arrow"></span> </a>
-					<ul style="color: #c7c7c7; margin-left: -30px;">
+						<!-- <span class="fa arrow"></span> --> </a>
+					<ul style="color: #c7c7c7;">
 						<%@include file="directlytreetime.jsp"%>
 					</ul></li>
 				<!--基层单位-->
 				<li class="active"><a><i class="fa fa-sitemap"
-						style="margin-left: -10px;"></i> <span class="nav-label">基层单位</span><span
-						class="fa arrow"></span> </a>
-					<ul style="color: #c7c7c7; margin-left: -30px;">
+						style="margin-left: -10px;"></i> <span class="nav-label">基层单位</span><!-- <span
+						class="fa arrow"></span> --> </a>
+					<ul style="color: #c7c7c7;">
 						<%@include file="basetreetime.jsp"%>
 					</ul></li>
 				<!-- 个人图片库-->
 				<li class="active"><a><i class="fa fa-th-large"
 						style="margin-left: -10px;"></i> <span class="nav-label">个人图片库</span>
-						<span class="fa arrow"></span> </a>
-					<ul style="color: #c7c7c7; margin-left: -30px;">
+						<!-- <span class="fa arrow"></span> --> </a>
+					<ul style="color: #c7c7c7;">
 						<%@include file="persontreetime.jsp"%>
 					</ul></li>
 
@@ -463,14 +463,6 @@ li_style:hover {
 
 
 
-
-
-
-
-
-
-
-
 	<!-- 主要的 scripts -->
 	<script
 		src="${pageContext.request.contextPath}/assets/admin/js/jquery-2.1.1.min.js"></script>
@@ -553,7 +545,7 @@ li_style:hover {
 				'core' : {
 					'check_callback' : true
 				},
-				'plugins' : [ 'types', 'dnd' ],
+				'plugins' : [ 'types' ],
 				'types' : {
 					'default' : {
 						'icon' : 'fa fa-folder'
@@ -581,7 +573,7 @@ li_style:hover {
 				'core' : {
 					'check_callback' : true
 				},
-				'plugins' : [ 'types', 'dnd' ],
+				'plugins' : [ 'types' ],
 				'types' : {
 					'default' : {
 						'icon' : 'fa fa-folder'
@@ -609,7 +601,7 @@ li_style:hover {
 				'core' : {
 					'check_callback' : true
 				},
-				'plugins' : [ 'types', 'dnd' ],
+				'plugins' : [ 'types' ],
 				'types' : {
 					'default' : {
 						'icon' : 'fa fa-folder'
@@ -637,7 +629,7 @@ li_style:hover {
 				'core' : {
 					'check_callback' : true
 				},
-				'plugins' : [ 'types', 'dnd' ],
+				'plugins' : [ 'types' ],
 				'types' : {
 					'default' : {
 						'icon' : 'fa fa-folder'

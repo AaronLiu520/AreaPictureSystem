@@ -147,18 +147,22 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 
 		session.setAttribute("company", lac);
 
+		
+		
 		if (session.getAttribute("basePhotoTimeList") == null) {
-			List<LayerAdmonCompany> llac = LayerAdmonCompany(lac, session, "");
-
-			// List<LayerAdmonCompany> llac =
-			// LayerAdmonCompany.LayerAdmonCompany(lac, lpt);
+			
+			
+			
+			List<LayerAdmonCompany> llac = LayerAdmonCompany(lac, session);
 
 			List<BaseTreeTime> lbpt = BaseTreeTime.getBaseTreeTime(llac, session);
 
 			session.setAttribute("basePhotoTimeList", lbpt);
 
 		}
-
+		
+		
+// ---------------------------------------------------------------------------------------------
 		if (session.getAttribute("photoTimeList") == null) {
 			// 个人 PERSION
 			if (adminUser != null) {
@@ -171,7 +175,7 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	}
 
 	public List<LayerAdmonCompany> LayerAdmonCompany(
-			List<AdminCompany> lac/* , List<PhotoTime> lpt */, HttpSession session, String id) {
+			List<AdminCompany> lac/* , List<PhotoTime> lpt */, HttpSession session) {
 		List<LayerAdmonCompany> list = new ArrayList<LayerAdmonCompany>();
 
 		for (AdminCompany ac : lac) {
@@ -182,11 +186,15 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 																// 添加了.toString
 			layerAdmonCompany.setName(ac.getName());// 名称
 
-			List<PhotoTime> lpt = PhotoTime.getPhotoTime(loadForderActivityType(BaseType.Type.BASEUTIS.toString(), id),
+			List<PhotoTime> lpt = PhotoTime.getPhotoTime(loadForderActivityType(BaseType.Type.BASEUTIS.toString(), ac.getId()),
 					session);
 
 			if (lpt == null)
 				layerAdmonCompany.setTimeList(new ArrayList<PhotoTime>());
+			
+			
+			
+			
 
 			layerAdmonCompany.setTimeList(lpt);
 			/*
@@ -210,13 +218,19 @@ public class LoginInterceptor extends HandlerInterceptorAdapter {
 	 * @param number
 	 * @return
 	 */
-	public List<ForderActivity> loadForderActivityType(String type, String id) {
+	public List<ForderActivity> loadForderActivityType(String type, String companyId) {
 		Query query = new Query();
 
+		if(Common.isNotEmpty(companyId)){
+			query.addCriteria(Criteria.where("adminCompany.$id").is(new ObjectId(companyId)));
+		}
+		
 		query.addCriteria(Criteria.where("parentId").is("0"));
 		query.addCriteria(Criteria.where("listType.type").is(type));
-		query.with(new Sort(Sort.Direction.DESC, "activityTime"));
-
+		
+		
+		query.with(new Sort(Sort.Direction.ASC, "activityTime"));
+		
 		List<ForderActivity> list = this.forderActivityService.find(query, ForderActivity.class);
 		// 获取所有属于type类型的活动
 

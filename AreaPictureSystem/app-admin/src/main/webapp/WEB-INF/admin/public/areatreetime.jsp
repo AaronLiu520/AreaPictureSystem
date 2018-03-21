@@ -10,7 +10,7 @@
 	$('#html').jstree();
 </script>
 
-<div id="areatreetime">
+<div id="areatreetime" style="margin-left: -50px;" >
 
 	<ul style="color: #c7c7c7;"  >
 		<c:forEach items="${areaphotoTimeList}" var="item" varStatus="status">
@@ -18,16 +18,17 @@
 		
 			<li	<c:if test="${item.id eq yearId }"> class="jstree-open"</c:if>><i  class="fa "></i>${item.year} 年 <c:forEach
 					items="${item.listPhotoTime }" var="getMonth" varStatus="status">
-					<ul>
+					<ul >
 					<c:forEach items="${getMonth.listPhotoTime }" var="getDay"
 									varStatus="status">
 									
 									<c:forEach items="${getDay.list}" var="activity"
 												varStatus="status">
-												<li   data-jstree='{"type":"img"}'  
-													title="活动地点：${activity.address}"><span
+												<li   data-jstree='{"type":"img"}'    
+													title="活动名称：${activity.forderActivityName }&#13;活动地点：${activity.address}"><span
 													onclick="checkActivityType('${activity.id}','AREA','${item.id }','${getMonth.id }','${getDay.id }');">
-														<i class="fa"></i><font size="-1px;">
+														<i class="fa"></i>
+														<font size="-1px;" >
 														   ${item.year}_${getMonth.month}_${getDay.day }&nbsp;${fn:substring(activity.forderActivityName,0,25)}..
 														</font>
 												</span></li>

@@ -4,6 +4,8 @@ import org.app.admin.pojo.ForderActivity;
 import org.app.framework.util.Common;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +13,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-public class PhotoTime {
+public class PhotoTime  implements Comparable<PhotoTime>{
 	// 新添加的字段
 	private String year;
 
@@ -124,7 +126,6 @@ public class PhotoTime {
 		for (ForderActivity f : listFA) {
 			year.add(f.getYear());
 		} // 1
-
 		for (String y : year) {
 			// 遍历已经过滤过的年份
 			PhotoTime py = new PhotoTime();
@@ -161,6 +162,7 @@ public class PhotoTime {
 							listF.add(f);
 						}
 					}
+					pm.setListPhotoTime(listM);
 					pd.setList(listF);
 					String dayId = (String) session.getAttribute("dayId");
 					if (Common.isEmpty(dayId)) {
@@ -169,6 +171,7 @@ public class PhotoTime {
 					}
 					listM.add(pd);
 				}
+				Collections.sort(listM);
 				pm.setListPhotoTime(listM);
 				String monthId = (String) session.getAttribute("monthId");
 				if (Common.isEmpty(monthId)) {
@@ -178,6 +181,7 @@ public class PhotoTime {
 				listY.add(pm);
 			}
 			// 添加子集
+			Collections.sort(listY);
 			py.setListPhotoTime(listY);
 			String yearId = (String) session.getAttribute("yearId");
 			if (Common.isEmpty(yearId)) {
@@ -196,6 +200,49 @@ public class PhotoTime {
 		int code = (int) (Math.random() * (400000000 - 100000000)) + 100000000; // 产生1000-9999之间的一个随机数
 		String codestr = String.valueOf(code);
 		return codestr;
+	}
+
+	/* (非 Javadoc) 
+	* <p>Title: compareTo</p> 
+	* <p>Description: </p> 
+	* @param o
+	* @return 
+	* @see java.lang.Comparable#compareTo(java.lang.Object) 
+	*/
+	@Override
+	public int compareTo(PhotoTime o) {
+		
+		if(o.getDay()!=null){
+			if(Integer.valueOf(this.day) > Integer.valueOf(o.getDay())){
+				return -1;
+			}
+			if(Integer.valueOf(this.day) < Integer.valueOf(o.getDay())){
+				return 1;
+			}
+		}
+		
+		
+		if(o.getMonth()!=null){
+			if(Integer.valueOf(this.month) > Integer.valueOf(o.getMonth())){
+				return -1;
+			}
+			if(Integer.valueOf(this.month) < Integer.valueOf(o.getMonth())){
+				return 1;
+			}
+		}
+		
+		
+		if(o.getYear()!=null){
+			if(Integer.valueOf(this.year) > Integer.valueOf(o.getYear())){
+				return -1;
+			}
+			if(Integer.valueOf(this.year) < Integer.valueOf(o.getYear())){
+				return 1;
+			}
+		}
+		
+		return 0;
+		
 	}
 
 	// public static List<PhotoTime> getPhotoTime(List<ForderActivity>
