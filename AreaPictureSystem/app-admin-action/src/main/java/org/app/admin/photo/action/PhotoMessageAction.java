@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -177,6 +178,14 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			@RequestParam(value = "company", defaultValue = "") String company) {
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("admin/photo-gallery/photoMessage/list");
+
+		try {
+			nature = java.net.URLDecoder.decode(nature, "utf-8");
+			company = java.net.URLDecoder.decode(company, "utf-8");
+		} catch (UnsupportedEncodingException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
 
 		session.setAttribute("yearId", year);
 		session.setAttribute("monthId", month);
@@ -360,9 +369,9 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 	@SystemErrorLog(description = "资源更新出错")
 	@RequestMapping("/update/{type}")
 	public ModelAndView update(@PathVariable("type") String type, String activityId, String id, String resourceName,
-			String person, String photographer, String resourceAddress, String description, int sort) {
+			String person, String photographer, String resourceAddress, String description,
+			@RequestParam(value = "sort", defaultValue = "0") long sort) {
 		ModelAndView modelAndView = new ModelAndView();
-
 		if (id != null) {
 			Resource r = this.resourceService.findOneById(id, Resource.class);
 			if (r.getEditorImgInfo() == null)
@@ -463,28 +472,27 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			@RequestParam(defaultValue = "", value = "forderActivityId") String forderActivityId,
 			@RequestParam(defaultValue = "", value = "id") String id, HttpSession session) {
 
-		//根据id来查询图片的信息
-		Resource r  = this.resourceService.findOneById(id, Resource.class);
-		
-		if(r == null){
+		// 根据id来查询图片的信息
+		Resource r = this.resourceService.findOneById(id, Resource.class);
+
+		if (r == null) {
 			return BasicDataResult.build(400, "未能获取到设为封面的图片资源", null);
 		}
-		
-		//根据活动id获取活动信息
-		
+
+		// 根据活动id获取活动信息
+
 		ForderActivity f = this.forderActivityService.findOneById(forderActivityId, ForderActivity.class);
-		
-		if(f == null){
+
+		if (f == null) {
 			return BasicDataResult.build(400, "未能获取到相关活动的信息，请刷新页面", null);
 		}
-		
+
 		f.setCover(r.getId());
-		
+
 		this.forderActivityService.save(f);
-		
+
 		return BasicDataResult.build(200, "设置封面成功", null);
-		
-		
+
 	}
 
 	/**
@@ -766,9 +774,40 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			@RequestParam(defaultValue = "", value = "selectVal") String selectVal,
 			@RequestParam(value = "sort", defaultValue = "DESC") String sort,
 			@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "50") int pageSize) {
-
+			@RequestParam(value = "pageSize", defaultValue = "50") int pageSize,
+			@RequestParam(value = "time1", defaultValue = "") String time1,
+			@RequestParam(value = "time2", defaultValue = "") String time2
+			
+			) {
 		ModelAndView modelAndView = new ModelAndView();
+		
+		
+	
+		if(selectQuery.equals("forderActivityName")){
+			//模糊查询活动主题
+			if(Common.isNotEmpty(selectVal)){
+				
+				
+				
+				try {
+					modelAndView.setViewName("redirect:/adminUser/index?selectVal="+URLEncoder.encode(selectVal, "utf-8")+"&selectQuery="+selectQuery);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return modelAndView;
+			}
+			
+		}else if(selectQuery.equals("forderActivityDate")){
+			if(Common.isNotEmpty(time1)||Common.isNotEmpty(time2)){
+				//查询时间段内的活动信息
+				modelAndView.setViewName("redirect:/adminUser/index?time1="+time1+"&time2="+time2+"&selectQuery="+selectQuery);
+				return modelAndView;
+			}
+			
+		}
+		
+		
 		modelAndView.setViewName("admin/photo-gallery/photoMessage/searchIndex");
 
 		modelAndView.addObject("webType", "index");
@@ -813,17 +852,16 @@ public class PhotoMessageAction extends GeneralAction<ForderActivity> {
 			 * Criteria.where("editorImgInfo.resourceAddress").regex(selectQuery
 			 * )));
 			 */
+			query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
+					"createTime"));
 
+			query.addCriteria(Criteria.where("personActivityId").is(null));
+
+			pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
+			modelAndView.addObject("searchList", pageList);
+			modelAndView.addObject("selectVal", selectVal);
+			modelAndView.addObject("selectQuery", selectQuery);
 		}
-		query.with(new Sort((sort.equals(String.valueOf("DESC"))) ? Sort.Direction.DESC : Sort.Direction.ASC,
-				"createTime"));
-
-		query.addCriteria(Criteria.where("personActivityId").is(null));
-
-		pageList = this.resourceService.findPaginationByQuery(query, pageNo, pageSize, Resource.class);
-		modelAndView.addObject("searchList", pageList);
-		modelAndView.addObject("selectVal", selectVal);
-		modelAndView.addObject("selectQuery", selectQuery);
 
 		return modelAndView;
 	}

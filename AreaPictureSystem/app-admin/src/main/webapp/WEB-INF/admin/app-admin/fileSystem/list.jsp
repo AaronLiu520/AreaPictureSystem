@@ -159,23 +159,6 @@
 
 
 							<div class="ibox-content">
-								<c:if test="${not empty errorImport }">
-									<div class="alert alert-danger alert-dismissable">
-										<button aria-hidden="true" data-dismiss="alert" class="close"
-											type="button">×</button>
-										${errorImport }
-									</div>
-
-								</c:if>
-								<!-- 		<p>
-									添加区域帐号 onclick="addFormValue();"
-									<a href="#modal-form" id="toModal-form" data-toggle="modal">
-									</a>
-									<button class="btn btn-primary " onclick="return save();"
-										type="button">
-										<i class="fa fa-plus"></i>&nbsp;添加
-									</button>
-								<p> -->
 								<table
 									class="table table-striped table-bordered table-hover dataTables-example">
 									<thead>

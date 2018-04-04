@@ -223,6 +223,7 @@ public class AdminCompanyAction extends GeneralAction<AdminCompany> {
 		session.removeAttribute("dayId");
 		session.removeAttribute("companyName");
 		session.removeAttribute("nature");
+		
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("redirect:/adminCompany/list");
 		try {

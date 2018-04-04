@@ -13,7 +13,7 @@ p {
 	$('#html').jstree();
 </script>
 
-<div id="photoTimeList" style="margin-left: -50px;" >
+<div id="photoTimeList" style="margin-left: -50px; font-size: 10px;" >
 
 	<ul style="color: #c7c7c7;">
 		<c:forEach items="${photoTimeList}" var="item" varStatus="status">
@@ -27,12 +27,11 @@ p {
 									
 									<c:forEach items="${getDay.list}" var="activity"
 												varStatus="status">
-												<li   data-jstree='{"type":"img"}'  
+												<li   data-jstree='{"type":"img"}'    style="font-size: 10px;" 
 													title="活动名称：${activity.forderActivityName }&#13;活动地点：${activity.address}"><span
 													onclick="checkActivityType('${activity.id}','PERSION','${item.id }','${getMonth.id }','${getDay.id }');">
-														<i class="fa"></i><font size="-1px;">
-														   ${item.year}_${getMonth.month}_${getDay.day }&nbsp;${fn:substring(activity.forderActivityName,0,25)}..
-														</font>
+														<i class="fa"></i>
+														   ${item.year}_${getMonth.month}_${getDay.day }&nbsp;${fn:substring(activity.forderActivityName,0,40)}..
 												</span></li>
 											</c:forEach>
 									

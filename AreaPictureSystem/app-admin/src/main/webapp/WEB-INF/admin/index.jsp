@@ -53,7 +53,7 @@
 									<div class="clients-list">
 										<ul class="nav nav-tabs">
 											<li class="active"><a data-toggle="tab" href="#tab-1"
-												id="a"><i class="fa fa-folder-open-o"></i>最新活动列表</a></li>
+												id="a"><i class="fa fa-folder-open-o"></i>活动列表</a></li>
 											<li class=""><a data-toggle="tab" href="#tab-2" id="b"><i
 													class="fa fa-bar-chart-o"></i>上传统计</a></li>
 										</ul>
@@ -65,7 +65,6 @@
 													<div class="col-sm-12" style="margin-top: 10px;">
 														<div class="ibox float-e-margins">
 															<!-- 引入最新的活动 -->
-
 
 															<c:if test="${not empty forderActivityList }">
 
@@ -96,10 +95,10 @@
 														<div class="col-md-3">
 
 															<div class="form-group">
-																<label class="col-sm-4 control-label"
-																	style="margin-top: 10px;">统计月数：</label>
+																<label class="col-sm-5 control-label"
+																	style="margin-top: 10px;">月数：</label>
 
-																<div class="col-sm-8">
+																<div class="col-sm-7">
 																	<select class="form-control m-b" name="month"
 																		id="month">
 																		<option value=""></option>

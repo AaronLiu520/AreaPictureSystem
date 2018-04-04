@@ -135,7 +135,7 @@ input::-ms-clear {
 	color:#333;border-radius:2px;
 	font-family:Verdana, Tahoma, Arial;
 	font-size:16px;
-	ime-mode:disabled;
+	/* ime-mode:disabled; */
 }
 .web_login input.inputstyle2:focus,.web_login input.inputstyle:focus{border:1px solid #198BD4;box-shadow:0 0 2px #198BD4;}
 .web_login .inputstyle2 {
@@ -148,7 +148,7 @@ input::-ms-clear {
 	color:#333;border-radius:2px;
 	font-family:Verdana, Tahoma, Arial;
 	font-size:16px;
-	ime-mode:disabled;
+/* 	ime-mode:disabled; */
 }
 .web_login .uinArea {
 	height:55px;

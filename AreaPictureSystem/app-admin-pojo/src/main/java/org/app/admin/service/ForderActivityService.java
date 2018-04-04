@@ -287,12 +287,15 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 			// 企业ID
 			String companyId = "";
 			if (adminUser.getAdminCompany() != null) {
+				
 				companyId = adminUser.getAdminCompany().getId();
+				
 			}
 			// 用户ID
 			String userId = adminUser.getId();
 
-			List<ForderActivity> listForderActivity = new ArrayList();
+			List<ForderActivity> listForderActivity = new ArrayList<ForderActivity>();
+			
 			// 超级管理员
 			if (getuserType.equals(UserType.ADMINISTRATORS)) {
 
@@ -304,73 +307,29 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 				listForderActivity = this.find(query, ForderActivity.class);
 
 			} else if (getuserType.equals(UserType.SCHOOLADMIN)) {
-
+				
+				
+				
+				
 				Criteria cr = new Criteria();
 
-				query.addCriteria(cr.orOperator(
-						Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
-								BaseType.Type.DIRECTLYUTIS),
-						Criteria.where("boundId").is(userId)
-								.andOperator(Criteria.where("listType.type").is(BaseType.Type.PERSION.toString()))));
+				query.addCriteria(cr.orOperator(/*Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS),*/
+						//Criteria.where("boundId").is(userId),
+						//Criteria.where("listType.type").is(BaseType.Type.PERSION.toString()).andOperator(Criteria.where("adminUser.$id").is(new ObjectId(userId))),
+						Criteria.where("adminUser.$id").is(new ObjectId(userId)),
+						Criteria.where("boundCompany").is(companyId)
+					/*	Criteria.where("adminCompany.$id").is(new ObjectId(companyId)
+						)*/
+						));
 
-				query.addCriteria(Criteria.where("boundCompany").is(companyId));
-
-				/*
-				 * query.addCriteria(Criteria.where("listType.type").in(BaseType
-				 * .Type.BASEUTIS, BaseType.Type.DIRECTLYUTIS,
-				 * BaseType.Type.AREA)).addCriteria(Criteria.where(
-				 * "boundCompany").is(companyId));
-				 */
-
-				/* List<ForderActivity> list */ listForderActivity = this.find(query, ForderActivity.class);
-
-				/*
-				 * query = new Query();
-				 * query.addCriteria(Criteria.where("boundId").is(userId))
-				 * .addCriteria(Criteria.where("listType.type").is(BaseType.Type
-				 * .PERSION));
-				 * 
-				 * listForderActivity = this.find(query, ForderActivity.class);
-				 * 
-				 * listForderActivity.addAll(list);
-				 */
-
-			} else if (getuserType.equals(UserType.TEACHER)) {
-
-				/*
-				 * Criteria cr = new Criteria();
-				 * 
-				 * query.addCriteria(cr.orOperator(Criteria.where(
-				 * "listType.type").in(BaseType.Type.AREA,
-				 * BaseType.Type.BASEUTIS,
-				 * BaseType.Type.DIRECTLYUTIS),Criteria.where("boundId").is(
-				 * userId).andOperator(Criteria.where("listType.type").is(
-				 * BaseType.Type.PERSION.toString()))));
-				 */
-				query.addCriteria(Criteria.where("boundCompany").is(companyId));
-
-				query.addCriteria(Criteria.where("boundId").is(userId));
 
 				listForderActivity = this.find(query, ForderActivity.class);
-				/*
-				 * query.addCriteria(Criteria.where("boundCompany").is(companyId
-				 * ))
-				 * 
-				 * .addCriteria(Criteria.where("listType.type").in(BaseType.Type
-				 * .BASEUTIS, BaseType.Type.DIRECTLYUTIS, BaseType.Type.AREA));
-				 * 
-				 * List<ForderActivity> list = this.find(query,
-				 * ForderActivity.class);
-				 * 
-				 * query = new Query();
-				 * query.addCriteria(Criteria.where("boundId").is(userId))
-				 * .addCriteria(Criteria.where("type").is(BaseType.Type.PERSION)
-				 * );
-				 * 
-				 * listForderActivity = this.find(query, ForderActivity.class);
-				 * 
-				 * listForderActivity.addAll(list);
-				 */
+
+			} else if (getuserType.equals(UserType.TEACHER)) {
+				
+				query.addCriteria(Criteria.where("adminUser.$id").is(new ObjectId(userId)));
+
+				listForderActivity = this.find(query, ForderActivity.class);
 
 			}
 
@@ -411,15 +370,24 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					editforderActivity.setMonth(month);
 					String day = today.substring(today.lastIndexOf("-") + 1, today.length());
 					editforderActivity.setDay(day);
-
-					if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
-						editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
-						// 根据boundCompany获取企业信息
+					if(listsType.get(0).equals(BaseType.Type.PERSION.toString())){
 						AdminCompany adminCompany = this.adminCompanyService
 								.findAdminCompanyById(forderActivity.getBoundCompany());
 						editforderActivity.setAdminCompany(adminCompany);
-					}
+						editforderActivity.setBoundCompany(null);
+					}else{
+						if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
+							editforderActivity.setBoundCompany(forderActivity.getBoundCompany());
+							// 根据boundCompany获取企业信息
+							AdminCompany adminCompany = this.adminCompanyService
+									.findAdminCompanyById(forderActivity.getBoundCompany());
+							editforderActivity.setAdminCompany(adminCompany);
+						}
 
+					}
+					
+					
+				
 					this.save(editforderActivity);
 					return BasicDataResult.build(200, "修改活动成功", true);
 				}
@@ -432,12 +400,12 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 						return BasicDataResult.build(203, "您所使用的账户未分配所属企业，请联系管理员！", null);
 					}
 
-					if (adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU.toString())) {
+			/*		if (adminUser.getAdminCompany().getNature().equals(BaseType.CompanyNature.ZHISHU)) {
 						// 直属单位不能创建基层单位的活动
-						if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())) {
+						if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS)) {
 							return BasicDataResult.build(203, "您是直属单位，不能创建属于基层单位的活动！", null);
 						}
-					}
+					}*/
 
 					ForderActivity fo = new ForderActivity();
 					fo.setListType(listsType.get(i));
@@ -453,10 +421,17 @@ public class ForderActivityService extends GeneralServiceImpl<ForderActivity> {
 					String day = today.substring(today.lastIndexOf("-") + 1, today.length());
 					fo.setDay(day);
 
-					if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS.toString())) {
+					/*if (listsType.get(i).get(0).getType().equals(BaseType.Type.BASEUTIS)) {
+						
+						
 						fo.setAdminCompany(adminUser.getAdminCompany());
 						fo.setBoundCompany(adminUser.getAdminCompany().getId());
-					} else {
+					}else*/ if(listsType.get(i).get(0).getType().equals(BaseType.Type.PERSION)){
+						AdminCompany adminCompany = this.adminCompanyService
+								.findAdminCompanyById(forderActivity.getBoundCompany());
+						fo.setAdminCompany(adminCompany);
+						fo.setBoundCompany(null);
+					}else {
 
 						if (Common.isNotEmpty(forderActivity.getBoundCompany())) {
 							fo.setBoundCompany(forderActivity.getBoundCompany());

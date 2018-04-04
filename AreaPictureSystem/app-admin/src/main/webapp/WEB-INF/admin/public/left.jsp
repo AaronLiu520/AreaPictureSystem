@@ -72,11 +72,9 @@ li_style:hover {
 
 	<nav class="navbar-default navbar-static-side" role="navigation" >
 
-		<div  id="left-width"   style=" overflow:auto;   width: auto; border: 1px solid #999;" style="background-color: #2f4050">
+		<div  id="left-width"   style="overflow:-Scroll;overflow-x:hidden; height:auto; 1px solid #999;" style="background-color: #2f4050">
 
-
-
-			<ul class="nav" id="side-menu">
+ 			<ul class="nav" id="side-menu">
 				<li class="nav-header">
 
 					<div class="dropdown profile-element">
@@ -281,28 +279,28 @@ li_style:hover {
 
 				<!-- 区域图片库-->
 				<li class="active"><a><i class="fa fa-th-large"
-						style="margin-left: -10px;"></i> <span class="nav-label">区域图片库</span>
+						style="margin-left: -10px;"></i> <span class="nav-label" style="font-size: 12px;">区域图片库</span>
 						<!-- <span class="fa arrow"></span> --> </a>
 					<ul style="color: #c7c7c7;">
 						<%@include file="areatreetime.jsp"%>
 					</ul></li>
 				<!--直属单位-->
 				<li class="active"><a><i class="fa fa-columns"
-						style="margin-left: -10px;"></i> <span class="nav-label">直属单位</span>
+						style="margin-left: -10px;"></i> <span class="nav-label" style="font-size: 12px;">直属单位</span>
 						<!-- <span class="fa arrow"></span> --> </a>
 					<ul style="color: #c7c7c7;">
 						<%@include file="directlytreetime.jsp"%>
 					</ul></li>
 				<!--基层单位-->
 				<li class="active"><a><i class="fa fa-sitemap"
-						style="margin-left: -10px;"></i> <span class="nav-label">基层单位</span><!-- <span
+						style="margin-left: -10px;"></i> <span class="nav-label" style="font-size: 12px;">基层单位</span><!-- <span
 						class="fa arrow"></span> --> </a>
 					<ul style="color: #c7c7c7;">
 						<%@include file="basetreetime.jsp"%>
 					</ul></li>
 				<!-- 个人图片库-->
 				<li class="active"><a><i class="fa fa-th-large"
-						style="margin-left: -10px;"></i> <span class="nav-label">个人图片库</span>
+						style="margin-left: -10px;"></i> <span class="nav-label" style="font-size: 12px;">个人图片库</span>
 						<!-- <span class="fa arrow"></span> --> </a>
 					<ul style="color: #c7c7c7;">
 						<%@include file="persontreetime.jsp"%>

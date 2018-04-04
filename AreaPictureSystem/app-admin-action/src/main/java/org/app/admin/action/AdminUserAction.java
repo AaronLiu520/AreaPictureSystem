@@ -1,5 +1,7 @@
 package org.app.admin.action;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -138,13 +140,17 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 				if (adminUser.getId() == null) {// create or update
 					// check AdminUser.userName
 					if (this.adminUserService.findCountByQuery(
-							super.craeteQueryWhere("userName", adminUser.getUserName()), AdminUser.class) > 0) {
+							super.craeteQueryWhere("userName", adminUser.getUserName().trim()), AdminUser.class) > 0) {
 						session.setAttribute("error", "添加失败，您添加的帐号信息已经存在。");
 					} else {
+						adminUser.setPassword(adminUser.getPassword().trim());
+						adminUser.setUserName(adminUser.getUserName().trim());
 						this.adminUserService.insert(adminUser);
 					}
 				} else
-					this.adminUserService.save(adminUser);
+					adminUser.setPassword(adminUser.getPassword().trim());
+				adminUser.setUserName(adminUser.getUserName().trim());
+				this.adminUserService.save(adminUser);
 			}
 			log.info(adminUser.toString());
 		} catch (Exception e) {
@@ -177,21 +183,30 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@RequestMapping("/checkLogin")
 	@ResponseBody
 	public BasicDataResult checkLogin(HttpSession session, String username, String password) {
-		
+
+		try {
+			if (Common.isNotEmpty(username))
+				username = java.net.URLDecoder.decode(username, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		Query query = new Query();
-		
-		query.addCriteria(Criteria.where("userName").is(username)).addCriteria(Criteria.where("password").is(password));
-		
+
+		query.addCriteria(Criteria.where("userName").is(username.trim()))
+				.addCriteria(Criteria.where("password").is(password.trim()));
+
 		// 检查帐号登录
 		AdminUser au = this.adminUserService.findOneByQuery(
-				super.craeteQueryWhere("userName", username, "password", password), AdminUser.class);
+				super.craeteQueryWhere("userName", username.trim(), "password", password.trim()), AdminUser.class);
 		if (au != null) {// 不等于空,保存用户帐号信息
 			// 加载权限
 			session.setAttribute("listMenu", au.getAdminRole().getListMenu());
 			session.setAttribute(CommonEnum.USERSESSION, au);
 			return BasicDataResult.build(200, "登录成功", true);
 		}
-		
+
 		return BasicDataResult.build(203, "用户名或密码错误", false);
 	}
 
@@ -208,9 +223,24 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 			@RequestParam(value = "month", defaultValue = "") String month,
 			@RequestParam(value = "start", defaultValue = "") String start,
 			@RequestParam(value = "end", defaultValue = "") String end,
-			@RequestParam(value = "type", defaultValue = "") String type) {
+			@RequestParam(value = "type", defaultValue = "") String type,
+			@RequestParam(value = "pageNo", defaultValue = "1") int pageNo,
+			@RequestParam(value = "pageSize", defaultValue = "30") int pageSize,
+			@RequestParam(value = "selectVal", defaultValue = "") String selectVal,
+			@RequestParam(value = "selectQuery", defaultValue = "") String selectQuery,
+			@RequestParam(value = "time1", defaultValue = "") String time1,
+			@RequestParam(value = "time2", defaultValue = "") String time2) {
 
 		ModelAndView modelAndView = new ModelAndView();
+
+		if (Common.isNotEmpty(selectVal)) {
+			try {
+				selectVal = URLDecoder.decode(selectVal, "utf-8");
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
 		// 查询条件反馈给页面
 		if (Common.isNotEmpty(companyName)) {
@@ -244,23 +274,43 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 
 		query.addCriteria(Criteria.where("listType.type").in(BaseType.Type.AREA, BaseType.Type.BASEUTIS,
 				BaseType.Type.DIRECTLYUTIS));
-		
-		query.with(new Sort(Sort.Direction.DESC, "activityTime"));
-		
-		Pagination<ForderActivity> pagination = this.forderActivityService.findPaginationByQuery(query, 1, 12,
-				ForderActivity.class);
-		
-		List<ForderActivity> listforder =  new ArrayList<ForderActivity>();
-		
-/*		
-		for(ForderActivity f : pagination.getDatas()){
-			//根据文件夹啊的id查询图片资源
-			Resource  re = this.resourceService.findListResourceByforderActivityId(f.getId());
-			f.setShowImg(re!=null?re.getId():null);
-			listforder.add(f);
+
+		query.with(new Sort(Sort.Direction.DESC, "createTime"));
+
+		if (Common.isNotEmpty(time1) && Common.isNotEmpty(time2)) {
+			
+			int result = Common.compare_date(time1, time2);
+			if (result == -1) {
+				String time = time1;
+				time1 = time2;
+				time2 = time;
+
+			}
+			
+			query.addCriteria(Criteria.where("createDate").gte(time1).lte(time2));
 		}
-		pagination.setDatas(listforder);*/
-		
+		if (Common.isNotEmpty(time1) && Common.isEmpty(time2)) {
+			query.addCriteria(Criteria.where("createDate").gte(time1));
+		}
+		if (Common.isNotEmpty(time2) && Common.isEmpty(time1)) {
+			query.addCriteria(Criteria.where("createDate").lte(time2));
+		}
+
+		if (Common.isNotEmpty(selectVal)) {
+			query.addCriteria(Criteria.where("forderActivityName").regex(selectVal));
+		}
+
+		Pagination<ForderActivity> pagination = this.forderActivityService.findPaginationByQuery(query, pageNo,
+				pageSize, ForderActivity.class);
+
+		/*
+		 * List<ForderActivity> listforder = new ArrayList<ForderActivity>();
+		 * for(ForderActivity f : pagination.getDatas()){ //根据文件夹啊的id查询图片资源
+		 * Resource re =
+		 * this.resourceService.findListResourceByforderActivityId(f.getId());
+		 * f.setShowImg(re!=null?re.getId():null); listforder.add(f); }
+		 * pagination.setDatas(listforder);
+		 */
 
 		modelAndView.addObject("forderActivityList", pagination);
 
@@ -273,23 +323,13 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 			listsort = this.statisticsService.sortfindUserUploadsNum(statisticsList);
 		}
 		modelAndView.addObject("listsort", listsort);
-
+		modelAndView.addObject("selectVal", selectVal);
+		modelAndView.addObject("selectQuery", selectQuery);		
+		modelAndView.addObject("time1", time1);
+		modelAndView.addObject("time2", time2);
 		return modelAndView;// 返回
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	/**
 	 * 
 	 * @Title: findPicturesofActivity @Description:
@@ -299,7 +339,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@RequestMapping("/findPictures/{id}")
 	public ModelAndView findPicturesofActivity(@PathVariable String id,
 			@RequestParam(value = "pageNo", defaultValue = "1") Integer pageNo,
-			@RequestParam(value = "pageSize", defaultValue = "21") Integer pageSize) {
+			@RequestParam(value = "pageSize", defaultValue = "30") Integer pageSize) {
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -333,8 +373,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public ModelAndView loginOut(HttpSession session) {
 
 		ModelAndView modelAndView = new ModelAndView();
-		
-		
+
 		session.removeAttribute("areaphotoTimeList");
 		session.removeAttribute("directlyphotoTimeList");
 		session.removeAttribute("basePhotoTimeList");
@@ -344,7 +383,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		session.removeAttribute("dayId");
 		session.removeAttribute("companyName");
 		session.removeAttribute("nature");
-		
+
 		// 重定向到登录页面。
 		modelAndView.setViewName("redirect:/adminUser/login");
 		// 注销session(后台登录）
@@ -361,7 +400,17 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@SystemErrorLog(description = "删除用户出错")
 	@SystemControllerLog(description = "删除用户")
 	@RequestMapping("/delete")
-	public ModelAndView delete(@RequestParam(defaultValue = "", value = "id") String id) {
+	public ModelAndView delete(@RequestParam(defaultValue = "", value = "id") String id, HttpSession session) {
+
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
 
 		ModelAndView modelAndView = new ModelAndView();
 
@@ -377,7 +426,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 				if (adminUser != null) {
 
 					Query query = new Query();
-					
+
 					query.addCriteria(Criteria.where("adminUser.$id").is(new ObjectId(adminUser.getId())));
 					// 我的收藏
 					List<Favorites> listFavorites = this.favoritesService.find(query, Favorites.class);
@@ -385,32 +434,26 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 						// 删除我的收藏
 						this.favoritesService.remove(favorites);
 					}
-					
-					
-					
-					//删除企业所有的活动
-					List<ForderActivity> listForderActivity = this.forderActivityService.find(query, ForderActivity.class);
-					
-					for(ForderActivity f:listForderActivity){
-						//删除对应的活动
+
+					// 删除企业所有的活动
+					List<ForderActivity> listForderActivity = this.forderActivityService.find(query,
+							ForderActivity.class);
+
+					for (ForderActivity f : listForderActivity) {
+						// 删除对应的活动
 						this.forderActivityService.remove(f);
 					}
-					
-					
-					
+
 					// 我的资源
 					query = new Query();
-					
+
 					query.addCriteria(Criteria.where("boundId").is(adminUser.getId()));
-					
+
 					List<Resource> listResource = this.resourceService.find(query, Resource.class);
 					for (Resource resource : listResource) {
 						// 删除我的收藏
 						this.resourceService.remove(resource);
 					}
-				
-					
-					
 
 					this.adminUserService.remove(adminUser);
 
@@ -433,7 +476,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	@ResponseBody
 	public BasicDataResult checkPassword(@RequestParam(defaultValue = "", value = "password") String password,
 			HttpSession session) {
-		BasicDataResult result = this.adminUserService.passwordByUserId(session, password);
+		BasicDataResult result = this.adminUserService.passwordByUserId(session, password.trim());
 		return result;
 
 	}
@@ -443,7 +486,7 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public BasicDataResult updatePassword(HttpSession session,
 			@RequestParam(defaultValue = "", value = "password") String password) {
 
-		BasicDataResult result = this.adminUserService.updatePassword(session, password);
+		BasicDataResult result = this.adminUserService.updatePassword(session, password.trim());
 
 		if (result.getStatus().equals(200)) {
 			// 注销session(后台登录）
@@ -458,15 +501,15 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 	public BasicDataResult checkUserName(HttpSession session,
 			@RequestParam(defaultValue = "", value = "userName") String userName,
 			@RequestParam(defaultValue = "", value = "hidUserName") String hidUserName) {
-		
-		if(!hidUserName.trim().equals(userName.trim())){
+
+		if (!hidUserName.trim().equals(userName.trim())) {
 			if (Common.isEmpty(userName)) {
 				return BasicDataResult.build(203, "请先添加用户名", null);
 			}
 
 			Query query = new Query();
 
-			query.addCriteria(Criteria.where("userName").is(userName));
+			query.addCriteria(Criteria.where("userName").is(userName.trim()));
 
 			Boolean b = this.adminUserService.exists(query, AdminUser.class);
 
@@ -478,18 +521,5 @@ public class AdminUserAction extends GeneralAction<AdminUser> {
 		return BasicDataResult.build(200, "", false);
 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

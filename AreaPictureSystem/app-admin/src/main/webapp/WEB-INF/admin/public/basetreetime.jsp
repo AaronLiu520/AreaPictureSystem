@@ -11,7 +11,7 @@ p {
 
 <body>
 
-	<div id="basetreetime" style="margin-left: -50px;" >
+	<div id="basetreetime" style="margin-left: -50px; font-size: 10px;" >
 		<!-- jstree-open 打开树形菜单 -->
 		<ul>
 			<!--
@@ -51,12 +51,11 @@ p {
 
 															<c:forEach items="${getDay.list}" var="activity"
 																varStatus="status">
-																<li data-jstree='{"type":"img"}'
+																<li data-jstree='{"type":"img"}'  style="font-size: 10px;" 
 																	title="活动名称：${activity.forderActivityName }&#13;活动地点：${activity.address}"><span
 																	onclick="checkActivityTypeBase('${activity.id}','BASEUTIS','${item.id }','${getMonth.id }','${getDay.id }','${ac.id }','${ac.name}');">
-																		<i class="fa"></i><font size="-1px;">
-																			${item.year}_${getMonth.month}_${getDay.day }&nbsp;${fn:substring(activity.forderActivityName,0,25)}..
-																	</font>
+																		<i class="fa"></i>
+																			${item.year}_${getMonth.month}_${getDay.day }&nbsp;${fn:substring(activity.forderActivityName,0,40)}..
 																</span></li>
 															</c:forEach>
 

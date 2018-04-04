@@ -78,7 +78,7 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 	@RequestMapping(value = "/ajaxgetRepletes")
 	@ResponseBody
 	@SystemErrorLog(description = "查询重复活动出错")
-	@SystemControllerLog(description = "查询重复活动信息")
+	//@SystemControllerLog(description = "查询重复活动信息")
 	public BasicDataResult ajaxgetRepletes(
 			@RequestParam(value = "forderActivityName", defaultValue = "") String forderActivityName,
 			@RequestParam(value = "companyId", defaultValue = "") String companyId,
@@ -112,15 +112,20 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		modelAndView.setViewName("admin/app-admin/fileSystem/list");
 
 		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		
+		
 
-		List<ForderActivity> listForderActivity = this.forderActivityService.findForderActivityByUserType(null,
-				adminUser);
+		List<ForderActivity> listForderActivity = this.forderActivityService.findForderActivityByUserType(null,adminUser);
 
-		List<AdminCompany> listAdminCompany = this.adminCompanyService.listCompay();// 获取所有的企业信息
+		
+		
+		
+		
+//		List<AdminCompany> listAdminCompany = this.adminCompanyService.listCompay();// 获取所有的企业信息
 
 		modelAndView.addObject("pageList", listForderActivity);
 
-		modelAndView.addObject("company", listAdminCompany);
+//		modelAndView.addObject("company", listAdminCompany);
 
 		return modelAndView;
 	}
@@ -165,7 +170,47 @@ public class ForderActivityAction extends GeneralAction<ForderActivity> {
 		return result;
 	}
 	
+/*	@SystemControllerLog(description = "创建活动")
+	@SystemErrorLog(description = "创建活动出错")
+	@RequestMapping("/creatOrEditActivity")
+	@ResponseBody
+	public BasicDataResult creatOrEditActivity(HttpSession session, ForderActivity forderActivity,
+			@RequestParam(value = "edit", defaultValue = "") String edit, RedirectAttributes ra) {
+		log.info("进去create!");
+		session.removeAttribute("areaphotoTimeList");
+		session.removeAttribute("directlyphotoTimeList");
+		session.removeAttribute("basePhotoTimeList");
+		session.removeAttribute("photoTimeList");
+		session.removeAttribute("yearId");
+		session.removeAttribute("monthId");
+		session.removeAttribute("dayId");
+		session.removeAttribute("companyName");
+		session.removeAttribute("nature");
+		
+		ModelAndView modelAndView = new ModelAndView();
+		
+		
+		
+		modelAndView.setViewName("redirect:/forderActivity/list");
+		
+		if(Common.isEmpty(forderActivity.getType())){
+			return BasicDataResult.build(203, "请选择活动所属", null);
+		}
+		
+		List<List<Type>> listsType = this.typeService.addType(forderActivity.getType());
+		
+		AdminUser adminUser = (AdminUser) session.getAttribute(CommonEnum.USERSESSION);
+		
+		
+		BasicDataResult result = this.forderActivityService.creatOrEditActivity(forderActivity, adminUser, edit, listsType);
+		
+		
+		
+		
+		return result;
+	}
 	
+*/	
 	public List<PhotoTime> getPhotoTimeListByPersionId(String type, String check, String boundId,boolean flag,HttpSession session) {
 
 		Query query = super.craeteQueryWhere("listType.type", type, "parentId", "0", "boundId", boundId);

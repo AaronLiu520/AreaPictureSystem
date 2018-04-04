@@ -2871,8 +2871,8 @@ a.forum-item-title:hover {
 }
 body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  background-color: #333;
-/*   background-color: #2f4050; */
+  background-color: #293846; 
+/*   background-color: #2f4050;  */
   font-size: 13px;
   color: #676a6c;
 
@@ -4520,7 +4520,7 @@ dd.project-people {
   height: 620px;
 }
 .clients-list table tr td {
-  height: 46px;
+ /*  height: 46px; */
   vertical-align: middle;
   border: none ;
 }
