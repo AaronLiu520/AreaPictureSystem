@@ -184,7 +184,7 @@ p {
                 <button class="btn btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button>
                 -->
 					<c:if
-						test="${sessionScope.userSession.userType eq 'ADMINISTRATORS' or webType  eq 'PERSION' }">
+						test="${sessionScope.userSession.userType eq 'ADMINISTRATORS' || webType  eq 'PERSION'  || sessionScope.userSession.id == fa.boundId}">
 						<button onclick="return tobatchDelete()" class="btn btn-danger "
 							style="display: none;" id="deletes" type="button">
 							<i class="fa fa-warning"> </i><span class="bold">批量删除</span>
@@ -330,10 +330,14 @@ p {
 												</tr>
 
 												<tr>
-													<td title="${item.originalName}"><c:if
-															test="${not empty item.originalName}">
-															  ${fn:substring(item.originalName,0,20)}
-														</c:if></td>
+													<td title="${item.originalName}">
+													<c:if test="${not empty item.originalName}">
+															  ${fn:substring(item.originalName,0,10)}
+														</c:if>
+														
+														
+														
+														</td>
 													<td><c:if test="${not empty item.imgInfoBean.imgSize}">${item.imgInfoBean.imgSize }MB </c:if></td>
 													<td><c:choose>
 															<c:when

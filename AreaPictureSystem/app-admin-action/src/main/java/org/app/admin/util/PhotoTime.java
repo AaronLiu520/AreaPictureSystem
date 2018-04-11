@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpSession;
 
@@ -121,12 +122,20 @@ public class PhotoTime  implements Comparable<PhotoTime>{
 	public static List<PhotoTime> getPhotoTime(List<ForderActivity> listFA, HttpSession session) {
 
 		List<PhotoTime> list = new ArrayList<PhotoTime>();
-
-		Set<String> year = new HashSet<String>();
+		TreeSet<String> year = new TreeSet<String>();//解决年份排序
+		List<String> listyear = new ArrayList<String>();
+		//Set<String> year = new HashSet<String>();
 		for (ForderActivity f : listFA) {
 			year.add(f.getYear());
 		} // 1
-		for (String y : year) {
+		
+		for(String y :year){
+			listyear.add(y);
+		}
+
+		Collections.reverse(listyear);
+		
+		for (String y : listyear) {
 			// 遍历已经过滤过的年份
 			PhotoTime py = new PhotoTime();
 			py.setYear(y);
@@ -296,4 +305,32 @@ public class PhotoTime  implements Comparable<PhotoTime>{
 	// return list;
 	// }
 
+	
+	public static void main(String[] args) {
+		TreeSet<String> t = new TreeSet<String>();
+		
+		t.add("2018");
+		t.add("2017");
+		t.add("2016");
+		t.add("2020");
+		t.add("2017");
+		t.add("2015");
+		t.add("2019");
+		List listyear = new ArrayList();
+		
+		for (String y : t) {
+			
+			listyear.add(y);
+		}
+
+		Collections.reverse(listyear);
+		
+		for(int i=0;i<listyear.size();i++){
+			System.out.println(listyear.get(i));
+		}
+		
+		
+	}
+ 	
+	
 }

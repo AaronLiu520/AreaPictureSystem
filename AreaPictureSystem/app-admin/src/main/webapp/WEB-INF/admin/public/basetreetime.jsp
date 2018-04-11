@@ -11,7 +11,7 @@ p {
 
 <body>
 
-	<div id="basetreetime" style="margin-left: -50px; font-size: 10px;" >
+	<div id="basetreetime" style="margin-left: -50px; font-size: 12px;" >
 		<!-- jstree-open 打开树形菜单 -->
 		<ul>
 			<!--

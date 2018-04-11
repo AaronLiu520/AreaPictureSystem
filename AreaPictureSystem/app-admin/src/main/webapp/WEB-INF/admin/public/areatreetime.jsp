@@ -10,7 +10,7 @@
 	$('#html').jstree();
 </script>
 
-<div id="areatreetime" style="margin-left: -50px; font-size: 10px;" >
+<div id="areatreetime" style="margin-left: -50px; font-size: 12px;" >
 	
 	<ul style="color: #c7c7c7;"  >
 		<c:forEach items="${areaphotoTimeList}" var="item" varStatus="status">

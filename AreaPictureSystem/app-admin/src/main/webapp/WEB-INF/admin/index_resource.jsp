@@ -91,7 +91,7 @@
 											<img alt="image" class="img-responsive" 
 												style="margin: 0 auto; width: 258px;height: 172px;"
 												onclick="return findImg('${item.id}')"
-												src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=">
+												src="${pageContext.request.contextPath}/file/getImg/${item.id}?type=max">
 										</div>
 										
 										

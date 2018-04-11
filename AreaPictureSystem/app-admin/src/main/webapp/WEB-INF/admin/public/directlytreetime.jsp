@@ -11,7 +11,7 @@ p {
 
 <body>
 
-	<div id="directlytreetime" style="margin-left: -50px; font-size: 10px;" >
+	<div id="directlytreetime" style="margin-left: -50px; font-size: 12px;" >
 		<!-- jstree-open 打开树形菜单 -->
 		<ul style="color: #c7c7c7;">
 			<c:forEach items="${directlyphotoTimeList}" var="item"

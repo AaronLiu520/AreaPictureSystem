@@ -28,7 +28,7 @@
 
 
 							<div class="file-box collection col-sm-2"
-								style="height: 227px; width: 200px; margin-bottom: 30px;">
+								style="height: 227px; width: 200px; margin-top: 20px;margin-bottom: 30px;">
 
 								<div class="file">
 
@@ -66,18 +66,27 @@
 
 
 												<c:choose>
-													<c:when test="${fn:length(item.forderActivityName)<20}">
-														<small> 拍摄主题：${item.forderActivityName} </small>
+													<c:when test="${fn:length(item.forderActivityName)<15}">
+														<small title="${item.forderActivityName}"> ${item.forderActivityName} </small>
 													</c:when>
 													<c:otherwise>
-														<small>
-															拍摄主题：${fn:substring(item.forderActivityName,0,20)}...</small>
+														<small title="${item.forderActivityName}">
+															${fn:substring(item.forderActivityName,0,15)}...</small>
 													</c:otherwise>
 												</c:choose>
 												<%-- <br /> <small> 所属单位：${item.adminCompany.name} </small> --%>
 
-												<br /> <small> 拍摄地点：${item.address} </small> <br /> <small>
-													创建人：${item.adminUser.name} </small> <br /> <small><c:forEach
+												<br /> <small title="地点：${item.address}"> 地点：${item.address} </small> <br /> <small>
+													创建：${item.adminUser.name} </small> 
+													
+
+												<br /> <small>
+													时间：${item.activityTime} </small> 
+													
+													<br />
+													
+													
+													 <small><c:forEach
 														items="${item.listType}" var="it" varStatus="status">
 														<c:if test="${it.type eq 'AREA' }">区域、</c:if>
 														<c:if test="${it.type eq 'BASEUTIS' }">基层单位</c:if>
